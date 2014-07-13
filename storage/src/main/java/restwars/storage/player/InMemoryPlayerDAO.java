@@ -21,6 +21,8 @@ public class InMemoryPlayerDAO implements PlayerDAO {
 
     @Override
     public Optional<Player> findWithUsername(String username) {
+        Preconditions.checkNotNull(username, "username");
+
         java.util.Optional<Player> player = players.values().stream().filter(p -> p.getUsername().equals(username)).findFirst();
 
         if (player.isPresent()) {
