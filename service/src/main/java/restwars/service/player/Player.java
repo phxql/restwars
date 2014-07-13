@@ -1,5 +1,7 @@
 package restwars.service.player;
 
+import com.google.common.base.Preconditions;
+
 import java.util.UUID;
 
 public class Player {
@@ -10,9 +12,9 @@ public class Player {
     private final String password;
 
     public Player(UUID id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
+        this.id = Preconditions.checkNotNull(id, "id");
+        this.username = Preconditions.checkNotNull(username, "username");
+        this.password = Preconditions.checkNotNull(password, "password");
     }
 
     public UUID getId() {
