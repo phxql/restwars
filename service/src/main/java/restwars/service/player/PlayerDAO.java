@@ -7,7 +7,7 @@ import java.util.Optional;
  */
 public interface PlayerDAO {
     /**
-     * Inserts a player.
+     * Inserts the given player.
      *
      * @param player Player.
      */

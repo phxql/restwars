@@ -2,8 +2,9 @@ package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.player.Me;
-import restwars.rest.api.player.RegisterPlayer;
+import restwars.rest.api.player.PlayerDTO;
+import restwars.rest.api.player.RegisterPlayerDTO;
+import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
 
@@ -19,21 +20,23 @@ import javax.ws.rs.core.UriInfo;
 @Produces(MediaType.APPLICATION_JSON)
 public class PlayerResource {
     private final PlayerService playerService;
+    private final PlanetService planetService;
 
     @Context
     private UriInfo uriInfo;
 
-    public PlayerResource(PlayerService playerService) {
+    public PlayerResource(PlayerService playerService, PlanetService planetService) {
+        this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.playerService = Preconditions.checkNotNull(playerService, "playerService");
     }
 
     @GET
-    public Me me(@Auth Player player) {
-        return new Me(player.getUsername());
+    public PlayerDTO me(@Auth Player player) {
+        return new PlayerDTO(player.getUsername());
     }
 
     @POST
-    public Response register(@Valid RegisterPlayer registration) {
+    public Response register(@Valid RegisterPlayerDTO registration) {
         Preconditions.checkNotNull(registration, "registration");
 
         playerService.createPlayer(registration.getUsername(), registration.getPassword());

@@ -1,9 +1,9 @@
 package restwars.rest.api.player;
 
-public class Me {
+public class PlayerDTO {
     private final String username;
 
-    public Me(String username) {
+    public PlayerDTO(String username) {
         this.username = username;
     }
 

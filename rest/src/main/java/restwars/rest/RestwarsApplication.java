@@ -11,9 +11,13 @@ import restwars.rest.resources.PlayerResource;
 import restwars.rest.resources.SystemResource;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.infrastructure.impl.UUIDFactoryImpl;
+import restwars.service.planet.PlanetDAO;
+import restwars.service.planet.PlanetService;
+import restwars.service.planet.impl.PlanetServiceImpl;
 import restwars.service.player.PlayerDAO;
 import restwars.service.player.PlayerService;
 import restwars.service.player.impl.PlayerServiceImpl;
+import restwars.storage.planet.InMemoryPlanetDAO;
 import restwars.storage.player.InMemoryPlayerDAO;
 
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
@@ -37,10 +41,13 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         UUIDFactory uuidFactory = new UUIDFactoryImpl();
         PlayerDAO playerDAO = new InMemoryPlayerDAO();
         PlayerService playerService = new PlayerServiceImpl(uuidFactory, playerDAO);
+        PlanetDAO planetDAO = new InMemoryPlanetDAO();
+        PlanetService planetService = new PlanetServiceImpl(uuidFactory, planetDAO);
+
 
         environment.jersey().register(new BasicAuthProvider<>(new PlayerAuthenticator(playerService), "RESTwars"));
 
         environment.jersey().register(new SystemResource());
-        environment.jersey().register(new PlayerResource(playerService));
+        environment.jersey().register(new PlayerResource(playerService, planetService));
     }
 }
