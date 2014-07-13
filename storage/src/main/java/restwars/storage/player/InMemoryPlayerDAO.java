@@ -1,12 +1,12 @@
 package restwars.storage.player;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class InMemoryPlayerDAO implements PlayerDAO {
@@ -23,12 +23,6 @@ public class InMemoryPlayerDAO implements PlayerDAO {
     public Optional<Player> findWithUsername(String username) {
         Preconditions.checkNotNull(username, "username");
 
-        java.util.Optional<Player> player = players.values().stream().filter(p -> p.getUsername().equals(username)).findFirst();
-
-        if (player.isPresent()) {
-            return Optional.of(player.get());
-        } else {
-            return Optional.absent();
-        }
+        return players.values().stream().filter(p -> p.getUsername().equals(username)).findFirst();
     }
 }

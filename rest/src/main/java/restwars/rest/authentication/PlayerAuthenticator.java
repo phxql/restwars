@@ -1,12 +1,13 @@
 package restwars.rest.authentication;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
+
+import java.util.Optional;
 
 public class PlayerAuthenticator implements Authenticator<BasicCredentials, Player> {
     private final PlayerService playerService;
@@ -16,7 +17,7 @@ public class PlayerAuthenticator implements Authenticator<BasicCredentials, Play
     }
 
     @Override
-    public Optional<Player> authenticate(BasicCredentials basicCredentials) throws AuthenticationException {
+    public com.google.common.base.Optional<Player> authenticate(BasicCredentials basicCredentials) throws AuthenticationException {
         Preconditions.checkNotNull(basicCredentials, "basicCredentials");
 
         Optional<Player> player = playerService.findWithUsername(basicCredentials.getUsername());
@@ -24,10 +25,10 @@ public class PlayerAuthenticator implements Authenticator<BasicCredentials, Play
             // TODO: Fix timing attacks
             // TODO: Bcrypt password
             if (player.get().getPassword().equals(basicCredentials.getPassword())) {
-                return player;
+                return com.google.common.base.Optional.of(player.get());
             }
         }
 
-        return Optional.absent();
+        return com.google.common.base.Optional.absent();
     }
 }

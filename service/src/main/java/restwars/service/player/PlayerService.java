@@ -1,6 +1,6 @@
 package restwars.service.player;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 /**
  * Service to manage players.

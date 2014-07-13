@@ -1,6 +1,5 @@
 package restwars.service.player.impl;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +8,7 @@ import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 import restwars.service.player.PlayerService;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class PlayerServiceImpl implements PlayerService {
