@@ -1,10 +1,12 @@
 package restwars.rest;
 
 import io.dropwizard.Application;
+import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.rest.authentication.PlayerAuthenticator;
 import restwars.rest.resources.PlayerResource;
 import restwars.rest.resources.SystemResource;
 import restwars.service.infrastructure.UUIDFactory;
@@ -35,6 +37,8 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         UUIDFactory uuidFactory = new UUIDFactoryImpl();
         PlayerDAO playerDAO = new InMemoryPlayerDAO();
         PlayerService playerService = new PlayerServiceImpl(uuidFactory, playerDAO);
+
+        environment.jersey().register(new BasicAuthProvider<>(new PlayerAuthenticator(playerService), "RESTwars"));
 
         environment.jersey().register(new SystemResource());
         environment.jersey().register(new PlayerResource(playerService));

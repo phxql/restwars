@@ -1,14 +1,14 @@
 package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
+import io.dropwizard.auth.Auth;
+import restwars.rest.api.player.Me;
 import restwars.rest.api.player.RegisterPlayer;
+import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
 
 import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -25,6 +25,11 @@ public class PlayerResource {
 
     public PlayerResource(PlayerService playerService) {
         this.playerService = Preconditions.checkNotNull(playerService, "playerService");
+    }
+
+    @GET
+    public Me me(@Auth Player player) {
+        return new Me(player.getUsername());
     }
 
     @POST
