@@ -1,5 +1,6 @@
 package restwars.service.player.impl;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,5 +37,12 @@ public class PlayerServiceImpl implements PlayerService {
         LOGGER.debug("Created player {}", player);
 
         return player;
+    }
+
+    @Override
+    public Optional<Player> findWithUsername(String username) {
+        Preconditions.checkNotNull(username, "username");
+
+        return playerDAO.findWithUsername(username);
     }
 }
