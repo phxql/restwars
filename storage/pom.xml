@@ -12,4 +12,11 @@
     <artifactId>storage</artifactId>
     <name>RESTwars - Storage layer</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>restwars</groupId>
+            <artifactId>service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
