@@ -12,4 +12,16 @@
     <artifactId>rest</artifactId>
     <name>RESTwars - REST interface</name>
 
+    <properties>
+        <dropwizard.version>0.7.1</dropwizard.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-core</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
