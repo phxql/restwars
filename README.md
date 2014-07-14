@@ -23,6 +23,15 @@ Energy is needed for every building, ship and research. Energy is also consumed 
 ### Command center
 Allows the construction of other buildings. Upgrading the command center speeds up the construction of other buildings as well as increasing the storage capacity for all resources.
 
+### Crystal mine
+Generates crystals. Upgrading the mine increases up the generation rate.
+
+### Gas refinery
+Generates gas. Upgrading the refinery increases the generation rate.
+
+### Solar panels
+Generates energy. Upgrading the panels increases the generation rate.
+
 ### Shipyard
 Allows the construction of ships. Upgrading the shipyard speeds up the construction of ships.
 
