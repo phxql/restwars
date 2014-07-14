@@ -30,4 +30,9 @@ public class Location {
     public int getPlanet() {
         return planet;
     }
+
+    @Override
+    public String toString() {
+        return galaxy + "." + solarSystem + "." + planet;
+    }
 }

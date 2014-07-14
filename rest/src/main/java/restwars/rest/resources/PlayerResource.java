@@ -2,8 +2,10 @@ package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
+import restwars.rest.api.planet.PlanetDTO;
 import restwars.rest.api.player.PlayerDTO;
 import restwars.rest.api.player.RegisterPlayerDTO;
+import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
@@ -14,6 +16,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/v1/player")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -32,7 +36,9 @@ public class PlayerResource {
 
     @GET
     public PlayerDTO me(@Auth Player player) {
-        return new PlayerDTO(player.getUsername());
+        List<Planet> planets = planetService.findWithOwner(player);
+
+        return new PlayerDTO(player.getUsername(), planets.stream().map(PlanetDTO::fromPlanet).collect(Collectors.toList()));
     }
 
     @POST
