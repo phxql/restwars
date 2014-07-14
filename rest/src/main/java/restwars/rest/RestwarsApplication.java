@@ -44,12 +44,12 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         UUIDFactory uuidFactory = new UUIDFactoryImpl();
         LocationFactory locationFactory = new LocationFactoryImpl();
 
-        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2);
+        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L);
 
         PlanetDAO planetDAO = new InMemoryPlanetDAO();
-        PlanetService planetService = new PlanetServiceImpl(uuidFactory, planetDAO);
+        PlanetService planetService = new PlanetServiceImpl(uuidFactory, planetDAO, locationFactory, universeConfiguration);
         PlayerDAO playerDAO = new InMemoryPlayerDAO();
-        PlayerService playerService = new PlayerServiceImpl(uuidFactory, playerDAO, planetService, locationFactory, universeConfiguration);
+        PlayerService playerService = new PlayerServiceImpl(uuidFactory, playerDAO, planetService);
 
         environment.jersey().register(new BasicAuthProvider<>(new PlayerAuthenticator(playerService), "RESTwars"));
 

@@ -3,7 +3,9 @@ package restwars.service.planet.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.UniverseConfiguration;
 import restwars.service.infrastructure.UUIDFactory;
+import restwars.service.location.LocationFactory;
 import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
@@ -19,20 +21,24 @@ public class PlanetServiceImpl implements PlanetService {
 
     private final UUIDFactory uuidFactory;
     private final PlanetDAO planetDAO;
+    private final LocationFactory locationFactory;
+    private final UniverseConfiguration universeConfiguration;
 
-    public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO) {
+    public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO, LocationFactory locationFactory, UniverseConfiguration universeConfiguration) {
+        this.locationFactory = Preconditions.checkNotNull(locationFactory, "locationFactory");
+        this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
     }
 
     @Override
-    public Planet createPlanet(Location location, Player owner) {
-        Preconditions.checkNotNull(location, "location");
+    public Planet createStartPlanet(Player owner) {
         Preconditions.checkNotNull(owner, "owner");
 
         UUID id = uuidFactory.create();
 
-        Planet planet = new Planet(id, location, Optional.of(owner.getId()));
+        Location location = locationFactory.random(universeConfiguration.getGalaxyCount(), universeConfiguration.getSolarSystemsPerGalaxy(), universeConfiguration.getPlanetsPerSolarSystem());
+        Planet planet = new Planet(id, location, Optional.of(owner.getId()), universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(), universeConfiguration.getStartingEnergy());
         planetDAO.insert(planet);
 
         LOGGER.debug("Created planet {}", planet);

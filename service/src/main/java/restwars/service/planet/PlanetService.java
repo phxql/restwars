@@ -11,11 +11,10 @@ public interface PlanetService {
     /**
      * Creates a new planet at the given location.
      *
-     * @param location Location.
      * @param owner    Owner of the planet.
      * @return Created planet.
      */
-    Planet createPlanet(Location location, Player owner);
+    Planet createStartPlanet(Player owner);
 
     /**
      * Finds all planets which are owned by the given player.
