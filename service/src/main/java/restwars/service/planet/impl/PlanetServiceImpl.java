@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.UniverseConfiguration;
+import restwars.service.building.BuildingService;
+import restwars.service.building.BuildingType;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.location.LocationFactory;
 import restwars.service.planet.Location;
@@ -23,8 +25,10 @@ public class PlanetServiceImpl implements PlanetService {
     private final PlanetDAO planetDAO;
     private final LocationFactory locationFactory;
     private final UniverseConfiguration universeConfiguration;
+    private final BuildingService buildingService;
 
-    public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO, LocationFactory locationFactory, UniverseConfiguration universeConfiguration) {
+    public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO, LocationFactory locationFactory, UniverseConfiguration universeConfiguration, BuildingService buildingService) {
+        this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
         this.locationFactory = Preconditions.checkNotNull(locationFactory, "locationFactory");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
@@ -40,6 +44,8 @@ public class PlanetServiceImpl implements PlanetService {
         Location location = locationFactory.random(universeConfiguration.getGalaxyCount(), universeConfiguration.getSolarSystemsPerGalaxy(), universeConfiguration.getPlanetsPerSolarSystem());
         Planet planet = new Planet(id, location, Optional.of(owner.getId()), universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(), universeConfiguration.getStartingEnergy());
         planetDAO.insert(planet);
+
+        buildingService.addBuilding(planet, BuildingType.COMMAND_CENTER, 1);
 
         LOGGER.debug("Created planet {}", planet);
 
