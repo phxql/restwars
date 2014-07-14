@@ -22,6 +22,7 @@
 
         <guava.version>17.0</guava.version>
         <slf4j.version>1.7.7</slf4j.version>
+        <joda-time.version>2.3</joda-time.version>
     </properties>
 
     <dependencies>
@@ -35,6 +36,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda-time.version}</version>
         </dependency>
     </dependencies>
 
