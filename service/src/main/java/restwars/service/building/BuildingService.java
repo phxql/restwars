@@ -9,12 +9,20 @@ import java.util.List;
  */
 public interface BuildingService {
     /**
-     * Returns the buildings on the given planets.
+     * Returns the buildings on the given planet.
      *
      * @param planet Planet.
      * @return Buildings.
      */
-    List<Building> findWithPlanet(Planet planet);
+    List<Building> findBuildingsOnPlanet(Planet planet);
+
+    /**
+     * Returns the construction sites on the given planet.
+     *
+     * @param planet Planet.
+     * @return Construction sites.
+     */
+    List<ConstructionSite> findConstructionSitesOnPlanet(Planet planet);
 
     /**
      * Constructs the given building on the given planet.

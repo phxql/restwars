@@ -11,7 +11,6 @@ import restwars.service.player.Player;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("/v1/planet")
@@ -20,8 +19,10 @@ import java.util.stream.Collectors;
 public class PlanetResource {
     private final PlanetService planetService;
     private final BuildingSubResource buildingSubResource;
+    private final ConstructionSiteSubResource constructionSiteSubResource;
 
-    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource) {
+    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource) {
+        this.constructionSiteSubResource = Preconditions.checkNotNull(constructionSiteSubResource, "constructionSiteSubResource");
         this.buildingSubResource = Preconditions.checkNotNull(buildingSubResource, "buildingSubResource");
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
     }
@@ -40,12 +41,7 @@ public class PlanetResource {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Optional<Planet> maybePlanet = planetService.findWithLocation(location.getValue());
-        Planet planet = maybePlanet.orElseThrow(PlanetNotFoundWebException::new);
-
-        if (!planet.isOwnedFrom(player)) {
-            throw new NotYourPlanetWebException();
-        }
+        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
 
         return PlanetDTO.fromPlanet(planet);
     }
@@ -53,5 +49,10 @@ public class PlanetResource {
     @Path("/{location}/building")
     public BuildingSubResource getBuildings() {
         return this.buildingSubResource;
+    }
+
+    @Path("/{location}/construction-site")
+    public ConstructionSiteSubResource getConstructionSites() {
+        return this.constructionSiteSubResource;
     }
 }

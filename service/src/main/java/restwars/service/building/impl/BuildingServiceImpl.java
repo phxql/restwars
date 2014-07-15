@@ -27,10 +27,17 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public List<Building> findWithPlanet(Planet planet) {
+    public List<Building> findBuildingsOnPlanet(Planet planet) {
         Preconditions.checkNotNull(planet, "planet");
 
         return buildingDAO.findWithPlanetId(planet.getId());
+    }
+
+    @Override
+    public List<ConstructionSite> findConstructionSitesOnPlanet(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        return constructionSiteDAO.findWithPlanetId(planet.getId());
     }
 
     @Override

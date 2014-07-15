@@ -7,10 +7,7 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.rest.authentication.PlayerAuthenticator;
-import restwars.rest.resources.BuildingSubResource;
-import restwars.rest.resources.PlanetResource;
-import restwars.rest.resources.PlayerResource;
-import restwars.rest.resources.SystemResource;
+import restwars.rest.resources.*;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingService;
@@ -72,10 +69,11 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         environment.jersey().register(new BasicAuthProvider<>(new PlayerAuthenticator(playerService), "RESTwars"));
 
         BuildingSubResource buildingSubResource = new BuildingSubResource(buildingService, planetService);
+        ConstructionSiteSubResource constructionSiteSubResource = new ConstructionSiteSubResource(planetService, buildingService);
 
         environment.jersey().register(new SystemResource());
         environment.jersey().register(new PlayerResource(playerService, planetService));
-        environment.jersey().register(new PlanetResource(planetService, buildingSubResource));
+        environment.jersey().register(new PlanetResource(planetService, buildingSubResource, constructionSiteSubResource));
 
         loadDemoData(playerService, planetService);
     }
