@@ -2,9 +2,9 @@ package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.planet.PlanetDTO;
-import restwars.rest.api.player.PlayerDTO;
-import restwars.rest.api.player.RegisterPlayerDTO;
+import restwars.rest.api.planet.PlanetResponse;
+import restwars.rest.api.player.PlayerResponse;
+import restwars.rest.api.player.RegisterPlayerRequest;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -35,14 +35,14 @@ public class PlayerResource {
     }
 
     @GET
-    public PlayerDTO me(@Auth Player player) {
+    public PlayerResponse me(@Auth Player player) {
         List<Planet> planets = planetService.findWithOwner(player);
 
-        return new PlayerDTO(player.getUsername(), planets.stream().map(PlanetDTO::fromPlanet).collect(Collectors.toList()));
+        return new PlayerResponse(player.getUsername(), planets.stream().map(PlanetResponse::fromPlanet).collect(Collectors.toList()));
     }
 
     @POST
-    public Response register(@Valid RegisterPlayerDTO registration) {
+    public Response register(@Valid RegisterPlayerRequest registration) {
         Preconditions.checkNotNull(registration, "registration");
 
         playerService.createPlayer(registration.getUsername(), registration.getPassword());

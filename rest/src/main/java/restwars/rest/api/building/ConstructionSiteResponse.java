@@ -3,7 +3,7 @@ package restwars.rest.api.building;
 import com.google.common.base.Preconditions;
 import restwars.service.building.ConstructionSite;
 
-public class ConstructionSiteDTO {
+public class ConstructionSiteResponse {
     private final String type;
 
     private final int level;
@@ -12,7 +12,7 @@ public class ConstructionSiteDTO {
 
     private final long done;
 
-    public ConstructionSiteDTO(String type, int level, long started, long done) {
+    public ConstructionSiteResponse(String type, int level, long started, long done) {
         this.type = type;
         this.level = level;
         this.started = started;
@@ -35,9 +35,9 @@ public class ConstructionSiteDTO {
         return done;
     }
 
-    public static ConstructionSiteDTO fromConstructionSite(ConstructionSite constructionSite) {
+    public static ConstructionSiteResponse fromConstructionSite(ConstructionSite constructionSite) {
         Preconditions.checkNotNull(constructionSite, "constructionSite");
 
-        return new ConstructionSiteDTO(constructionSite.getType().toString(), constructionSite.getLevel(), constructionSite.getStarted(), constructionSite.getDone());
+        return new ConstructionSiteResponse(constructionSite.getType().toString(), constructionSite.getLevel(), constructionSite.getStarted(), constructionSite.getDone());
     }
 }

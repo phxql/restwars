@@ -1,16 +1,16 @@
 package restwars.rest.api.player;
 
 import com.google.common.base.Preconditions;
-import restwars.rest.api.planet.PlanetDTO;
+import restwars.rest.api.planet.PlanetResponse;
 
 import java.util.List;
 
-public class PlayerDTO {
+public class PlayerResponse {
     private final String username;
 
-    private final List<PlanetDTO> planets;
+    private final List<PlanetResponse> planets;
 
-    public PlayerDTO(String username, List<PlanetDTO> planets) {
+    public PlayerResponse(String username, List<PlanetResponse> planets) {
         this.username = Preconditions.checkNotNull(username, "planets");
         this.planets = Preconditions.checkNotNull(planets, "planets");
     }
@@ -19,7 +19,7 @@ public class PlayerDTO {
         return username;
     }
 
-    public List<PlanetDTO> getPlanets() {
+    public List<PlanetResponse> getPlanets() {
         return planets;
     }
 }

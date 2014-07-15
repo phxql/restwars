@@ -2,7 +2,7 @@ package restwars.rest.api.player;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class RegisterPlayerDTO {
+public class RegisterPlayerRequest {
     @NotEmpty
     private String username;
 

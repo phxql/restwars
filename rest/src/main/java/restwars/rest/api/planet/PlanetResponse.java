@@ -3,7 +3,7 @@ package restwars.rest.api.planet;
 import com.google.common.base.Preconditions;
 import restwars.service.planet.Planet;
 
-public class PlanetDTO {
+public class PlanetResponse {
     private final String location;
 
     private final long crystal;
@@ -12,7 +12,7 @@ public class PlanetDTO {
 
     private final long energy;
 
-    public PlanetDTO(String location, long crystal, long gas, long energy) {
+    public PlanetResponse(String location, long crystal, long gas, long energy) {
         this.location = location;
         this.crystal = crystal;
         this.gas = gas;
@@ -35,10 +35,10 @@ public class PlanetDTO {
         return energy;
     }
 
-    public static PlanetDTO fromPlanet(Planet planet) {
+    public static PlanetResponse fromPlanet(Planet planet) {
         Preconditions.checkNotNull(planet, "planet");
 
-        return new PlanetDTO(
+        return new PlanetResponse(
                 planet.getLocation().toString(), planet.getCrystals(), planet.getGas(), planet.getEnergy()
         );
     }

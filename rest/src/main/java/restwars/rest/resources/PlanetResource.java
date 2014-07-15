@@ -2,7 +2,7 @@ package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.planet.PlanetDTO;
+import restwars.rest.api.planet.PlanetResponse;
 import restwars.rest.resources.param.LocationParam;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
@@ -28,22 +28,22 @@ public class PlanetResource {
     }
 
     @GET
-    public List<PlanetDTO> index(@Auth Player player) {
+    public List<PlanetResponse> index(@Auth Player player) {
         Preconditions.checkNotNull(player, "player");
         List<Planet> planets = planetService.findWithOwner(player);
 
-        return planets.stream().map(PlanetDTO::fromPlanet).collect(Collectors.toList());
+        return planets.stream().map(PlanetResponse::fromPlanet).collect(Collectors.toList());
     }
 
     @GET
     @Path("/{location}")
-    public PlanetDTO getPlanet(@Auth Player player, @PathParam("location") LocationParam location) {
+    public PlanetResponse getPlanet(@Auth Player player, @PathParam("location") LocationParam location) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
 
-        return PlanetDTO.fromPlanet(planet);
+        return PlanetResponse.fromPlanet(planet);
     }
 
     @Path("/{location}/building")

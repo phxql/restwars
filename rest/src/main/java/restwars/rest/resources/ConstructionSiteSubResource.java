@@ -2,7 +2,7 @@ package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.building.ConstructionSiteDTO;
+import restwars.rest.api.building.ConstructionSiteResponse;
 import restwars.rest.resources.param.LocationParam;
 import restwars.service.building.BuildingService;
 import restwars.service.building.ConstructionSite;
@@ -25,13 +25,13 @@ public class ConstructionSiteSubResource {
     }
 
     @GET
-    public List<ConstructionSiteDTO> getConstructionSites(@Auth Player player, @PathParam("location") LocationParam location) {
+    public List<ConstructionSiteResponse> getConstructionSites(@Auth Player player, @PathParam("location") LocationParam location) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<ConstructionSite> constructionSites = buildingService.findConstructionSitesOnPlanet(planet);
 
-        return constructionSites.stream().map(ConstructionSiteDTO::fromConstructionSite).collect(Collectors.toList());
+        return constructionSites.stream().map(ConstructionSiteResponse::fromConstructionSite).collect(Collectors.toList());
     }
 }
