@@ -2,6 +2,7 @@ package restwars.storage.planet;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 
@@ -19,6 +20,13 @@ public class InMemoryPlanetDAO implements PlanetDAO {
         Preconditions.checkNotNull(planet, "planet");
 
         planets.put(planet.getId(), planet);
+    }
+
+    @Override
+    public Optional<Planet> findWithLocation(Location location) {
+        Preconditions.checkNotNull(location, "location");
+
+        return planets.values().stream().filter(p -> p.getLocation().equals(location)).findFirst();
     }
 
     @Override

@@ -5,7 +5,6 @@ import io.dropwizard.auth.Auth;
 import restwars.rest.api.planet.PlanetDTO;
 import restwars.rest.api.player.PlayerDTO;
 import restwars.rest.api.player.RegisterPlayerDTO;
-import restwars.service.building.BuildingService;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -26,13 +25,11 @@ import java.util.stream.Collectors;
 public class PlayerResource {
     private final PlayerService playerService;
     private final PlanetService planetService;
-    private final BuildingService buildingService;
 
     @Context
     private UriInfo uriInfo;
 
-    public PlayerResource(PlayerService playerService, PlanetService planetService, BuildingService buildingService) {
-        this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
+    public PlayerResource(PlayerService playerService, PlanetService planetService) {
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.playerService = Preconditions.checkNotNull(playerService, "playerService");
     }
@@ -41,9 +38,7 @@ public class PlayerResource {
     public PlayerDTO me(@Auth Player player) {
         List<Planet> planets = planetService.findWithOwner(player);
 
-        return new PlayerDTO(player.getUsername(), planets.stream().map(p ->
-                        PlanetDTO.fromPlanet(p, buildingService.findWithPlanet(p))
-        ).collect(Collectors.toList()));
+        return new PlayerDTO(player.getUsername(), planets.stream().map(PlanetDTO::fromPlanet).collect(Collectors.toList()));
     }
 
     @POST

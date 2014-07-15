@@ -58,4 +58,11 @@ public class PlanetServiceImpl implements PlanetService {
 
         return planetDAO.findWithOwnerId(owner.getId());
     }
+
+    @Override
+    public Optional<Planet> findWithLocation(Location location) {
+        Preconditions.checkNotNull(location, "location");
+
+        return planetDAO.findWithLocation(location);
+    }
 }

@@ -1,5 +1,6 @@
 package restwars.service.planet;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 public class Location {
@@ -29,6 +30,38 @@ public class Location {
 
     public int getPlanet() {
         return planet;
+    }
+
+    public static Location parse(String value) {
+        Preconditions.checkNotNull(value, "value");
+
+        String[] parts = value.split("\\.");
+        if (parts.length != 3) {
+            throw new IllegalArgumentException("Cannot parse '" + value + "'");
+        }
+
+        int galaxy = Integer.parseInt(parts[0]);
+        int solarSystem = Integer.parseInt(parts[1]);
+        int planet = Integer.parseInt(parts[2]);
+
+        return new Location(galaxy, solarSystem, planet);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Location that = (Location) o;
+
+        return Objects.equal(this.galaxy, that.galaxy) &&
+                Objects.equal(this.solarSystem, that.solarSystem) &&
+                Objects.equal(this.planet, that.planet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(galaxy, solarSystem, planet);
     }
 
     @Override

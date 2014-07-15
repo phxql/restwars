@@ -7,6 +7,8 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.rest.authentication.PlayerAuthenticator;
+import restwars.rest.resources.BuildingSubResource;
+import restwars.rest.resources.PlanetResource;
 import restwars.rest.resources.PlayerResource;
 import restwars.rest.resources.SystemResource;
 import restwars.service.UniverseConfiguration;
@@ -20,9 +22,11 @@ import restwars.service.infrastructure.impl.RoundServiceImpl;
 import restwars.service.infrastructure.impl.UUIDFactoryImpl;
 import restwars.service.location.LocationFactory;
 import restwars.service.location.impl.LocationFactoryImpl;
+import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.planet.PlanetService;
 import restwars.service.planet.impl.PlanetServiceImpl;
+import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 import restwars.service.player.PlayerService;
 import restwars.service.player.impl.PlayerServiceImpl;
@@ -30,6 +34,8 @@ import restwars.storage.building.InMemoryBuildingDAO;
 import restwars.storage.building.InMemoryConstructionSiteDAO;
 import restwars.storage.planet.InMemoryPlanetDAO;
 import restwars.storage.player.InMemoryPlayerDAO;
+
+import java.util.List;
 
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RestwarsApplication.class);
@@ -65,7 +71,21 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         environment.jersey().register(new BasicAuthProvider<>(new PlayerAuthenticator(playerService), "RESTwars"));
 
+        BuildingSubResource buildingSubResource = new BuildingSubResource(buildingService, planetService);
+
         environment.jersey().register(new SystemResource());
-        environment.jersey().register(new PlayerResource(playerService, planetService, buildingService));
+        environment.jersey().register(new PlayerResource(playerService, planetService));
+        environment.jersey().register(new PlanetResource(planetService, buildingSubResource));
+
+        loadDemoData(playerService, planetService);
+    }
+
+    private void loadDemoData(PlayerService playerService, PlanetService planetService) {
+        Player moe = playerService.createPlayer("moe", "moe");
+        List<Planet> planets = planetService.findWithOwner(moe);
+
+        for (Planet planet : planets) {
+            LOGGER.info("Moe has a planet at {}", planet.getLocation());
+        }
     }
 }

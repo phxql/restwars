@@ -1,6 +1,7 @@
 package restwars.service.planet;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -21,4 +22,12 @@ public interface PlanetDAO {
      * @return List of all planets.
      */
     List<Planet> findWithOwnerId(UUID ownerId);
+
+    /**
+     * Finds the planet with the given location.
+     *
+     * @param location Location.
+     * @return Planet if found.
+     */
+    Optional<Planet> findWithLocation(Location location);
 }

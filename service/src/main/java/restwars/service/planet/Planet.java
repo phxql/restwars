@@ -1,6 +1,7 @@
 package restwars.service.planet;
 
 import com.google.common.base.Preconditions;
+import restwars.service.player.Player;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -53,5 +54,15 @@ public class Planet {
 
     public long getEnergy() {
         return energy;
+    }
+
+    public boolean isOwnedFrom(Player player) {
+        Preconditions.checkNotNull(player, "player");
+
+        if (ownerId.isPresent()) {
+            return ownerId.get().equals(player.getId());
+        }
+
+        return false;
     }
 }
