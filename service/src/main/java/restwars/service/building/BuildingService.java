@@ -68,4 +68,9 @@ public interface BuildingService {
      * @return Build time in rounds.
      */
     long calculateBuildTime(BuildingType type, int level);
+
+    /**
+     * Finishes all construction sites.
+     */
+    void finishConstructionSites();
 }

@@ -21,4 +21,19 @@ public interface ConstructionSiteDAO {
      * @return Construction sites.
      */
     List<ConstructionSite> findWithPlanetId(UUID planetId);
+
+    /**
+     * Finds all construction sites which are done at the given round.
+     *
+     * @param round Round.
+     * @return Construction sites.
+     */
+    List<ConstructionSite> findWithDone(long round);
+
+    /**
+     * Deletes the given construction site.
+     *
+     * @param constructionSite Construction site to delete.
+     */
+    void delete(ConstructionSite constructionSite);
 }

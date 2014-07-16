@@ -1,5 +1,6 @@
 package restwars.service.building;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 import java.util.UUID;
@@ -53,5 +54,25 @@ public class ConstructionSite {
 
     public long getDone() {
         return done;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ConstructionSite that = (ConstructionSite) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.type, that.type) &&
+                Objects.equal(this.level, that.level) &&
+                Objects.equal(this.planetId, that.planetId) &&
+                Objects.equal(this.started, that.started) &&
+                Objects.equal(this.done, that.done);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, type, level, planetId, started, done);
     }
 }

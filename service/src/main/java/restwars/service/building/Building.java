@@ -37,4 +37,8 @@ public class Building {
     public int getLevel() {
         return level;
     }
+
+    public Building withLevel(int level) {
+        return new Building(id, type, level, planetId);
+    }
 }

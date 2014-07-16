@@ -48,6 +48,8 @@ public class Clock implements Managed, Runnable {
     public void run() {
         long round = roundService.nextRound();
 
+        buildingService.finishConstructionSites();
+
         LOGGER.info("Starting round {}", round);
     }
 }

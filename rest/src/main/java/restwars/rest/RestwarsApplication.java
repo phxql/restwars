@@ -11,6 +11,7 @@ import restwars.rest.resources.*;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingService;
+import restwars.service.building.BuildingType;
 import restwars.service.building.ConstructionSiteDAO;
 import restwars.service.building.impl.BuildingServiceImpl;
 import restwars.service.infrastructure.RoundService;
@@ -74,17 +75,19 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         environment.jersey().register(new PlayerResource(playerService, planetService));
         environment.jersey().register(new PlanetResource(planetService, buildingSubResource, constructionSiteSubResource));
 
-        loadDemoData(playerService, planetService);
+        loadDemoData(playerService, planetService, buildingService);
 
         environment.lifecycle().manage(new Clock(buildingService, roundService, universeConfiguration));
     }
 
-    private void loadDemoData(PlayerService playerService, PlanetService planetService) {
+    private void loadDemoData(PlayerService playerService, PlanetService planetService, BuildingService buildingService) {
         Player moe = playerService.createPlayer("moe", "moe");
         List<Planet> planets = planetService.findWithOwner(moe);
 
         for (Planet planet : planets) {
             LOGGER.info("Moe has a planet at {}", planet.getLocation());
+
+            buildingService.constructBuilding(planet, BuildingType.CRYSTAL_MINE);
         }
     }
 }

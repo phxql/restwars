@@ -113,6 +113,33 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
+    public void finishConstructionSites() {
+        long round = roundService.getCurrentRound();
+
+        List<ConstructionSite> finishedConstructionSites = constructionSiteDAO.findWithDone(round);
+        for (ConstructionSite constructionSite : finishedConstructionSites) {
+            LOGGER.debug("Found finished construction site {}", constructionSite);
+
+            if (constructionSite.getLevel() == 1) {
+                UUID id = uuidFactory.create();
+                Building building = new Building(id, constructionSite.getType(), constructionSite.getLevel(), constructionSite.getPlanetId());
+
+
+                LOGGER.debug("Construction new building {}", building);
+                buildingDAO.insert(building);
+            } else {
+                Building existingBuilding = buildingDAO.findWithPlanetIdAndType(constructionSite.getPlanetId(), constructionSite.getType()).orElseThrow(AssertionError::new);
+                Building updatedBuilding = existingBuilding.withLevel(constructionSite.getLevel());
+
+                LOGGER.debug("Updating building {}", updatedBuilding);
+                buildingDAO.update(updatedBuilding);
+            }
+
+            constructionSiteDAO.delete(constructionSite);
+        }
+    }
+
+    @Override
     public long calculateBuildTime(BuildingType type, int level) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");

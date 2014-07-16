@@ -22,6 +22,20 @@ public class InMemoryConstructionSiteDAO implements ConstructionSiteDAO {
 
     @Override
     public List<ConstructionSite> findWithPlanetId(UUID planetId) {
+        Preconditions.checkNotNull(planetId, "planetId");
+
         return constructionSites.values().stream().filter(c -> c.getPlanetId().equals(planetId)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ConstructionSite> findWithDone(long round) {
+        return constructionSites.values().stream().filter(c -> c.getDone() == round).collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(ConstructionSite constructionSite) {
+        Preconditions.checkNotNull(constructionSite, "constructionSite");
+
+        constructionSites.values().remove(constructionSite);
     }
 }
