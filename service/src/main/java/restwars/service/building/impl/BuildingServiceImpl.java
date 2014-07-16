@@ -9,6 +9,7 @@ import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class BuildingServiceImpl implements BuildingService {
@@ -59,16 +60,56 @@ public class BuildingServiceImpl implements BuildingService {
 
         // TODO: Check and decrease resources
 
+        return createConstructionSite(planet, type, 1);
+    }
+
+    private ConstructionSite createConstructionSite(Planet planet, BuildingType type, int level) {
+        assert planet != null;
+        assert type != null;
+        assert level > 0;
+
         UUID id = uuidFactory.create();
-        long buildTime = calculateBuildTime(type, 1);
+        long buildTime = calculateBuildTime(type, level);
         long currentRound = roundService.getCurrentRound();
-        ConstructionSite constructionSite = new ConstructionSite(id, type, 1, planet.getId(), currentRound, currentRound + buildTime);
+        ConstructionSite constructionSite = new ConstructionSite(id, type, level, planet.getId(), currentRound, currentRound + buildTime);
 
         LOGGER.debug("Creating construction site {} on planet {}", constructionSite, planet);
 
         constructionSiteDAO.insert(constructionSite);
 
         return constructionSite;
+    }
+
+    @Override
+    public ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException {
+        Preconditions.checkNotNull(planet, "planet");
+        Preconditions.checkNotNull(type, "type");
+
+        List<Building> buildings = findBuildingsOnPlanet(planet);
+        Optional<Building> existingBuilding = buildings.stream().filter(b -> b.getType().equals(type)).findFirst();
+
+        Building building = existingBuilding.orElseThrow(BuildingNotFoundException::new);
+
+        return createConstructionSite(planet, type, building.getLevel() + 1);
+    }
+
+    @Override
+    public ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type) {
+        Preconditions.checkNotNull(planet, "planet");
+        Preconditions.checkNotNull(type, "type");
+
+        List<Building> buildings = findBuildingsOnPlanet(planet);
+        Optional<Building> existingBuilding = buildings.stream().filter(b -> b.getType().equals(type)).findFirst();
+
+        if (existingBuilding.isPresent()) {
+            try {
+                return upgradeBuilding(planet, type);
+            } catch (BuildingNotFoundException e) {
+                throw new AssertionError("Can't happen");
+            }
+        } else {
+            return constructBuilding(planet, type);
+        }
     }
 
     @Override

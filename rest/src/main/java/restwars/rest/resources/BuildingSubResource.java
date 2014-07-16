@@ -50,8 +50,7 @@ public class BuildingSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         BuildingType type = Helper.parseBuildingType(data.getType());
 
-        // TODO: Check if building exists. If it exists, upgrade it!
-        ConstructionSite constructionSite = buildingService.constructBuilding(planet, type);
+        ConstructionSite constructionSite = buildingService.constructOrUpgradeBuilding(planet, type);
 
         return ConstructionSiteResponse.fromConstructionSite(constructionSite);
     }

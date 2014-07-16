@@ -34,6 +34,24 @@ public interface BuildingService {
     ConstructionSite constructBuilding(Planet planet, BuildingType type);
 
     /**
+     * Upgrades the given building on the given planet.
+     *
+     * @param planet Planet.
+     * @param type   Building type.
+     * @return Construction site for the building.
+     */
+    ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException;
+
+    /**
+     * Constructs or upgrades the given building on the given planet.
+     *
+     * @param planet Planet.
+     * @param type   Building type.
+     * @return Construction site for the building.
+     */
+    ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type);
+
+    /**
      * Adds the given building to the given planet.
      *
      * @param planet Planet.
