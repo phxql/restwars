@@ -13,7 +13,7 @@ public class RoundServiceImpl implements RoundService {
     }
 
     @Override
-    public void nextRound() {
-        currentRound.incrementAndGet();
+    public long nextRound() {
+        return currentRound.incrementAndGet();
     }
 }

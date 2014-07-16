@@ -47,7 +47,6 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
     @Override
     public void initialize(Bootstrap<RestwarsConfiguration> restwarsConfigurationBootstrap) {
-
     }
 
     @Override
@@ -55,7 +54,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         UUIDFactory uuidFactory = new UUIDFactoryImpl();
         LocationFactory locationFactory = new LocationFactoryImpl();
 
-        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L);
+        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 1);
 
         BuildingDAO buildingDAO = new InMemoryBuildingDAO();
         RoundService roundService = new RoundServiceImpl();
@@ -76,6 +75,8 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         environment.jersey().register(new PlanetResource(planetService, buildingSubResource, constructionSiteSubResource));
 
         loadDemoData(playerService, planetService);
+
+        environment.lifecycle().manage(new Clock(buildingService, roundService, universeConfiguration));
     }
 
     private void loadDemoData(PlayerService playerService, PlanetService planetService) {

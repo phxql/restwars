@@ -9,14 +9,16 @@ public class UniverseConfiguration {
     private final long startingCrystals;
     private final long startingGas;
     private final long startingEnergy;
+    private final int roundTimeInSeconds;
 
-    public UniverseConfiguration(int galaxyCount, int solarSystemsPerGalaxy, int planetsPerSolarSystem, long startingCrystals, long startingGas, long startingEnergy) {
+    public UniverseConfiguration(int galaxyCount, int solarSystemsPerGalaxy, int planetsPerSolarSystem, long startingCrystals, long startingGas, long startingEnergy, int roundTimeInSeconds) {
         Preconditions.checkArgument(startingCrystals >= 0, "startingCrystals must be >= 0");
         Preconditions.checkArgument(startingGas >= 0, "startingGas must be >= 0");
         Preconditions.checkArgument(startingEnergy >= 0, "startingEnergy must be >= 0");
         Preconditions.checkArgument(galaxyCount > 0, "galaxyCount must be > 0");
         Preconditions.checkArgument(solarSystemsPerGalaxy > 0, "solarSystemsPerGalaxy must be > 0");
         Preconditions.checkArgument(planetsPerSolarSystem > 0, "planetsPerSolarSystem must be > 0");
+        Preconditions.checkArgument(roundTimeInSeconds > 0, "roundTimeInSeconds must be > 0");
 
         this.startingCrystals = startingCrystals;
         this.startingGas = startingGas;
@@ -24,6 +26,7 @@ public class UniverseConfiguration {
         this.galaxyCount = galaxyCount;
         this.solarSystemsPerGalaxy = solarSystemsPerGalaxy;
         this.planetsPerSolarSystem = planetsPerSolarSystem;
+        this.roundTimeInSeconds = roundTimeInSeconds;
     }
 
     public int getGalaxyCount() {
@@ -48,5 +51,9 @@ public class UniverseConfiguration {
 
     public long getStartingEnergy() {
         return startingEnergy;
+    }
+
+    public int getRoundTimeInSeconds() {
+        return roundTimeInSeconds;
     }
 }

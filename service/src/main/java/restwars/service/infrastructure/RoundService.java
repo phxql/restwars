@@ -13,6 +13,8 @@ public interface RoundService {
 
     /**
      * Starts the next round.
+     *
+     * @return Next round.
      */
-    void nextRound();
+    long nextRound();
 }
