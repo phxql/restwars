@@ -1,0 +1,56 @@
+package restwars.service.technology;
+
+import com.google.common.base.Preconditions;
+
+import java.util.UUID;
+
+public class Research {
+    private final UUID id;
+
+    private final TechnologyType type;
+
+    private final int level;
+
+    private final long started;
+
+    private final long done;
+
+    private final UUID planetId;
+
+    public Research(UUID id, TechnologyType type, int level, long started, long done, UUID planetId) {
+        Preconditions.checkArgument(level > 0, "level must be > 0");
+        Preconditions.checkArgument(started > 0, "started must be > 0");
+        Preconditions.checkArgument(done > 0, "done must be > 0");
+
+        this.id = Preconditions.checkNotNull(id, "id");
+        this.type = Preconditions.checkNotNull(type, "type");
+        this.level = level;
+        this.started = started;
+        this.done = done;
+        this.planetId = Preconditions.checkNotNull(planetId, "planetId");
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public TechnologyType getType() {
+        return type;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public long getStarted() {
+        return started;
+    }
+
+    public long getDone() {
+        return done;
+    }
+
+    public UUID getPlanetId() {
+        return planetId;
+    }
+}

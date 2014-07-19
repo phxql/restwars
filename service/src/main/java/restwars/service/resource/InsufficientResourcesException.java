@@ -1,4 +1,4 @@
-package restwars.service.building;
+package restwars.service.resource;
 
 import restwars.service.ServiceException;
 

@@ -1,6 +1,7 @@
 package restwars.service.building;
 
 import restwars.service.planet.Planet;
+import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public interface BuildingService {
      * @param planet Planet.
      * @param type   Building type.
      * @return Construction site for the building.
-     * @throws InsufficientResourcesException If the given planet has not enough resources for the construction.
+     * @throws restwars.service.resource.InsufficientResourcesException If the given planet has not enough resources for the construction.
      */
     ConstructionSite constructBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException;
 
@@ -41,8 +42,7 @@ public interface BuildingService {
      * @param planet Planet.
      * @param type   Building type.
      * @return Construction site for the building.
-     *
-     * @throws BuildingNotFoundException If a non-existent building should be upgraded.
+     * @throws BuildingNotFoundException      If a non-existent building should be upgraded.
      * @throws InsufficientResourcesException If the given planet has not enough resources for the upgrade.
      */
     ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException, InsufficientResourcesException;
