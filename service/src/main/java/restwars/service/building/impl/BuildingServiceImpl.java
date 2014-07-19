@@ -75,14 +75,15 @@ public class BuildingServiceImpl implements BuildingService {
             throw new InsufficientResourcesException(buildCost.getCrystals(), buildCost.getGas(), buildCost.getEnergy(), planet.getCrystals(), planet.getGas(), planet.getEnergy());
         }
 
-        // TODO: Decrease resources
+        Planet updatedPlanet = planet.withResources(planet.getCrystals() - buildCost.getCrystals(), planet.getGas() - buildCost.getGas(), planet.getEnergy() - buildCost.getEnergy());
+        planetDAO.update(updatedPlanet);
 
         UUID id = uuidFactory.create();
         long buildTime = calculateBuildTime(type, level);
         long currentRound = roundService.getCurrentRound();
-        ConstructionSite constructionSite = new ConstructionSite(id, type, level, planet.getId(), currentRound, currentRound + buildTime);
+        ConstructionSite constructionSite = new ConstructionSite(id, type, level, updatedPlanet.getId(), currentRound, currentRound + buildTime);
 
-        LOGGER.debug("Creating construction site {} on planet {}", constructionSite, planet);
+        LOGGER.debug("Creating construction site {} on planet {}", constructionSite, updatedPlanet);
 
         constructionSiteDAO.insert(constructionSite);
 
