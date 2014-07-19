@@ -35,4 +35,11 @@ public class InMemoryPlanetDAO implements PlanetDAO {
 
         return planets.values().stream().filter(p -> p.getOwnerId().equals(Optional.of(ownerId))).collect(Collectors.toList());
     }
+
+    @Override
+    public void update(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        planets.put(planet.getId(), planet);
+    }
 }

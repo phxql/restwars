@@ -30,4 +30,11 @@ public interface PlanetDAO {
      * @return Planet if found.
      */
     Optional<Planet> findWithLocation(Location location);
+
+    /**
+     * Updates the given planet.
+     *
+     * @param planet Planet.
+     */
+    void update(Planet planet);
 }

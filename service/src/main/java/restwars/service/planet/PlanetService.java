@@ -32,4 +32,11 @@ public interface PlanetService {
      * @return Planet if found.
      */
     Optional<Planet> findWithLocation(Location location);
+
+    /**
+     * Updates the given planet.
+     *
+     * @param planet Planet to update.
+     */
+    void update(Planet planet);
 }

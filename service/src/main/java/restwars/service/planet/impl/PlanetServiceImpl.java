@@ -65,4 +65,11 @@ public class PlanetServiceImpl implements PlanetService {
 
         return planetDAO.findWithLocation(location);
     }
+
+    @Override
+    public void update(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        planetDAO.update(planet);
+    }
 }
