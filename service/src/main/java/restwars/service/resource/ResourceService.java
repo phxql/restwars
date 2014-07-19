@@ -1,5 +1,6 @@
 package restwars.service.resource;
 
+import restwars.service.building.Building;
 import restwars.service.planet.Planet;
 
 /**
@@ -17,4 +18,12 @@ public interface ResourceService {
      * @param planet Planet.
      */
     void gatherResources(Planet planet);
+
+    /**
+     * Calculates the resources which are gathered from the given building in one round.
+     *
+     * @param building Building.
+     * @return Gathered resources.
+     */
+    Resources calculateGatheredResources(Building building);
 }

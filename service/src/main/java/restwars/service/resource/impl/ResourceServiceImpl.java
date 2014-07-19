@@ -8,6 +8,7 @@ import restwars.service.building.BuildingService;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.resource.ResourceService;
+import restwars.service.resource.Resources;
 
 import java.util.List;
 
@@ -20,6 +21,22 @@ public class ResourceServiceImpl implements ResourceService {
     public ResourceServiceImpl(BuildingService buildingService, PlanetService planetService) {
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
+    }
+
+    @Override
+    public Resources calculateGatheredResources(Building building) {
+        Preconditions.checkNotNull(building, "building");
+
+        switch (building.getType()) {
+            case CRYSTAL_MINE:
+                return new Resources(building.getLevel(), 0, 0);
+            case GAS_REFINERY:
+                return new Resources(0, building.getLevel(), 0);
+            case SOLAR_PANELS:
+                return new Resources(0, 0, building.getLevel() * 10);
+            default:
+                return Resources.NONE;
+        }
     }
 
     @Override
@@ -42,47 +59,16 @@ public class ResourceServiceImpl implements ResourceService {
 
         List<Building> buildings = buildingService.findBuildingsOnPlanet(planet);
         for (Building building : buildings) {
-            crystals += calculateGatheredCrystals(building);
-            gas += calculateGatheredGas(building);
-            energy += calculateGatheredEnergy(building);
+            Resources gatheredResources = calculateGatheredResources(building);
+
+            crystals += gatheredResources.getCrystals();
+            gas += gatheredResources.getGas();
+            energy += gatheredResources.getEnergy();
         }
 
         Planet updatedPlanet = planet.withResources(crystals, gas, energy);
         planetService.update(updatedPlanet);
 
         LOGGER.debug("Planet has now {} crystals, {} gas, {} energy", updatedPlanet.getCrystals(), updatedPlanet.getGas(), updatedPlanet.getEnergy());
-    }
-
-    private long calculateGatheredCrystals(Building building) {
-        assert building != null;
-
-        switch (building.getType()) {
-            case CRYSTAL_MINE:
-                return building.getLevel();
-            default:
-                return 0;
-        }
-    }
-
-    private long calculateGatheredGas(Building building) {
-        assert building != null;
-
-        switch (building.getType()) {
-            case GAS_REFINERY:
-                return building.getLevel();
-            default:
-                return 0;
-        }
-    }
-
-    private long calculateGatheredEnergy(Building building) {
-        assert building != null;
-
-        switch (building.getType()) {
-            case SOLAR_PANELS:
-                return building.getLevel() * 10;
-            default:
-                return 0;
-        }
     }
 }
