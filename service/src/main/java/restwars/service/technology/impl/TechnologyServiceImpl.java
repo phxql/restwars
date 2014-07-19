@@ -52,6 +52,28 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
+    public void finishResearches() {
+        long round = roundService.getCurrentRound();
+
+        List<Research> finishedResearches = researchDAO.findWithDone(round);
+
+        for (Research research : finishedResearches) {
+            if (research.getLevel() == 1) {
+                // Create new technology
+                Technology technology = new Technology(uuidFactory.create(), research.getType(), research.getLevel(), research.getPlayerId());
+                technologyDAO.insert(technology);
+            } else {
+                // Update existing technology
+                Optional<Technology> existingTechnology = technologyDAO.findWithPlayerId(research.getPlayerId(), research.getType());
+                Technology updatedTechnology = existingTechnology.get().withLevel(research.getLevel());
+                technologyDAO.update(updatedTechnology);
+            }
+
+            researchDAO.delete(research);
+        }
+    }
+
+    @Override
     public Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws InsufficientResourcesException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(technology, "technology");
@@ -77,7 +99,7 @@ public class TechnologyServiceImpl implements TechnologyService {
         UUID id = uuidFactory.create();
         long researchTime = calculateResearchTime(technology, level);
         long currentRound = roundService.getCurrentRound();
-        Research research = new Research(id, technology, level, currentRound, currentRound + researchTime, updatedPlanet.getId());
+        Research research = new Research(id, technology, level, currentRound, currentRound + researchTime, updatedPlanet.getId(), player.getId());
 
         LOGGER.debug("Creating research {} on planet {}", research, updatedPlanet);
         researchDAO.insert(research);

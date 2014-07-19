@@ -17,7 +17,9 @@ public class Research {
 
     private final UUID planetId;
 
-    public Research(UUID id, TechnologyType type, int level, long started, long done, UUID planetId) {
+    private final UUID playerId;
+
+    public Research(UUID id, TechnologyType type, int level, long started, long done, UUID planetId, UUID playerId) {
         Preconditions.checkArgument(level > 0, "level must be > 0");
         Preconditions.checkArgument(started > 0, "started must be > 0");
         Preconditions.checkArgument(done > 0, "done must be > 0");
@@ -28,6 +30,7 @@ public class Research {
         this.started = started;
         this.done = done;
         this.planetId = Preconditions.checkNotNull(planetId, "planetId");
+        this.playerId = Preconditions.checkNotNull(playerId, "playerId");
     }
 
     public UUID getId() {
@@ -52,5 +55,9 @@ public class Research {
 
     public UUID getPlanetId() {
         return planetId;
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
     }
 }

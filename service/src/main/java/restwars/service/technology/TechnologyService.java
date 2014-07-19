@@ -56,4 +56,9 @@ public interface TechnologyService {
      * @return Technology for the given player.
      */
     Optional<Technology> findForPlayer(Player player, TechnologyType type);
+
+    /**
+     * Finishes all researches which are done in the current round.
+     */
+    void finishResearches();
 }

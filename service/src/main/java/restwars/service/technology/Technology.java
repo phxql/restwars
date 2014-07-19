@@ -37,4 +37,8 @@ public class Technology {
     public UUID getPlayerId() {
         return playerId;
     }
+
+    public Technology withLevel(int level) {
+        return new Technology(id, type, level, playerId);
+    }
 }

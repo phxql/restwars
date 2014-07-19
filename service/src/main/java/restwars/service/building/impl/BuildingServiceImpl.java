@@ -135,7 +135,6 @@ public class BuildingServiceImpl implements BuildingService {
                 UUID id = uuidFactory.create();
                 Building building = new Building(id, constructionSite.getType(), constructionSite.getLevel(), constructionSite.getPlanetId());
 
-
                 LOGGER.debug("Construction new building {}", building);
                 buildingDAO.insert(building);
             } else {

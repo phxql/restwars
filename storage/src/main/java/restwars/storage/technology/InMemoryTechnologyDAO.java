@@ -26,4 +26,18 @@ public class InMemoryTechnologyDAO implements TechnologyDAO {
     public Optional<Technology> findWithPlayerId(UUID playerId, TechnologyType type) {
         return technologies.values().stream().filter(t -> t.getPlayerId().equals(playerId) && t.getType().equals(type)).findFirst();
     }
+
+    @Override
+    public void update(Technology technology) {
+        Preconditions.checkNotNull(technology, "technology");
+
+        technologies.put(technology.getId(), technology);
+    }
+
+    @Override
+    public void insert(Technology technology) {
+        Preconditions.checkNotNull(technology, "technology");
+
+        technologies.put(technology.getId(), technology);
+    }
 }

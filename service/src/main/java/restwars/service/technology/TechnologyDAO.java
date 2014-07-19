@@ -11,4 +11,18 @@ public interface TechnologyDAO {
     List<Technology> findAllWithPlayerId(UUID playerId);
 
     Optional<Technology> findWithPlayerId(UUID playerId, TechnologyType type);
+
+    /**
+     * Updates the given technology.
+     *
+     * @param technology Technology.
+     */
+    void update(Technology technology);
+
+    /**
+     * Inserts the given technology.
+     *
+     * @param technology Technology.
+     */
+    void insert(Technology technology);
 }

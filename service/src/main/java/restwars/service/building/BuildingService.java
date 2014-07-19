@@ -85,7 +85,7 @@ public interface BuildingService {
     Resources calculateBuildCost(BuildingType type, int level);
 
     /**
-     * Finishes all construction sites.
+     * Finishes all construction sites which are done in the current round.
      */
     void finishConstructionSites();
 }

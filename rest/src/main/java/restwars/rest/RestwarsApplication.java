@@ -92,7 +92,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         loadDemoData(playerService, planetService, buildingService, technologyService);
 
-        environment.lifecycle().manage(new Clock(buildingService, roundService, universeConfiguration, resourceService));
+        environment.lifecycle().manage(new Clock(buildingService, roundService, universeConfiguration, resourceService, technologyService));
     }
 
     private void loadDemoData(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService) {
