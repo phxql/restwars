@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import restwars.rest.authentication.PlayerAuthenticator;
 import restwars.rest.resources.*;
 import restwars.service.UniverseConfiguration;
-import restwars.service.building.BuildingDAO;
-import restwars.service.building.BuildingService;
-import restwars.service.building.BuildingType;
-import restwars.service.building.ConstructionSiteDAO;
+import restwars.service.building.*;
 import restwars.service.building.impl.BuildingServiceImpl;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
@@ -60,12 +57,13 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 1);
 
         BuildingDAO buildingDAO = new InMemoryBuildingDAO();
-        RoundService roundService = new RoundServiceImpl();
-        ConstructionSiteDAO constructionSiteDAO = new InMemoryConstructionSiteDAO();
-        BuildingService buildingService = new BuildingServiceImpl(uuidFactory, buildingDAO, roundService, constructionSiteDAO);
         PlanetDAO planetDAO = new InMemoryPlanetDAO();
-        PlanetService planetService = new PlanetServiceImpl(uuidFactory, planetDAO, locationFactory, universeConfiguration, buildingService);
         PlayerDAO playerDAO = new InMemoryPlayerDAO();
+        ConstructionSiteDAO constructionSiteDAO = new InMemoryConstructionSiteDAO();
+
+        RoundService roundService = new RoundServiceImpl();
+        BuildingService buildingService = new BuildingServiceImpl(uuidFactory, buildingDAO, roundService, constructionSiteDAO, planetDAO);
+        PlanetService planetService = new PlanetServiceImpl(uuidFactory, planetDAO, locationFactory, universeConfiguration, buildingService);
         PlayerService playerService = new PlayerServiceImpl(uuidFactory, playerDAO, planetService);
         ResourceService resourceService = new ResourceServiceImpl(buildingService, planetService);
 
@@ -90,7 +88,11 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         for (Planet planet : planets) {
             LOGGER.info("Moe has a planet at {}", planet.getLocation());
 
-            buildingService.constructBuilding(planet, BuildingType.CRYSTAL_MINE);
+            try {
+                buildingService.constructBuilding(planet, BuildingType.CRYSTAL_MINE);
+            } catch (InsufficientResourcesException e) {
+                LOGGER.error("Exception while constructing a crystal mine", e);
+            }
         }
     }
 }

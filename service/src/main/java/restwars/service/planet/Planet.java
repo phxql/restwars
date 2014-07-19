@@ -2,6 +2,7 @@ package restwars.service.planet;
 
 import com.google.common.base.Preconditions;
 import restwars.service.player.Player;
+import restwars.service.resource.Resources;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -68,5 +69,11 @@ public class Planet {
         }
 
         return false;
+    }
+
+    public boolean hasResources(Resources resources) {
+        Preconditions.checkNotNull(resources, "resources");
+
+        return crystals >= resources.getCrystals() && gas >= resources.getGas() && energy >= resources.getEnergy();
     }
 }

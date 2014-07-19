@@ -1,6 +1,6 @@
 package restwars.service.resource;
 
-import restwars.service.building.Building;
+import restwars.service.building.BuildingType;
 import restwars.service.planet.Planet;
 
 /**
@@ -20,10 +20,11 @@ public interface ResourceService {
     void gatherResources(Planet planet);
 
     /**
-     * Calculates the resources which are gathered from the given building in one round.
+     * Calculates the resources which are gathered from the given building type with the given level in one round.
      *
-     * @param building Building.
-     * @return Gathered resources.
+     * @param type  Building type.
+     * @param level Level.
+     * @return Gathered resources in one round.
      */
-    Resources calculateGatheredResources(Building building);
+    Resources calculateGatheredResources(BuildingType type, int level);
 }

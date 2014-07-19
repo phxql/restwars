@@ -6,10 +6,7 @@ import restwars.rest.api.building.BuildingResponse;
 import restwars.rest.api.building.ConstructionSiteResponse;
 import restwars.rest.api.building.CreateBuildingRequest;
 import restwars.rest.resources.param.LocationParam;
-import restwars.service.building.Building;
-import restwars.service.building.BuildingService;
-import restwars.service.building.BuildingType;
-import restwars.service.building.ConstructionSite;
+import restwars.service.building.*;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -18,6 +15,7 @@ import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.WebApplicationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,8 +48,13 @@ public class BuildingSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         BuildingType type = Helper.parseBuildingType(data.getType());
 
-        ConstructionSite constructionSite = buildingService.constructOrUpgradeBuilding(planet, type);
+        try {
+            ConstructionSite constructionSite = buildingService.constructOrUpgradeBuilding(planet, type);
 
-        return ConstructionSiteResponse.fromConstructionSite(constructionSite);
+            return ConstructionSiteResponse.fromConstructionSite(constructionSite);
+        } catch (InsufficientResourcesException e) {
+            // TODO: Create a real exception!
+            throw new WebApplicationException();
+        }
     }
 }

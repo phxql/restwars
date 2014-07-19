@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingService;
+import restwars.service.building.BuildingType;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.resource.ResourceService;
@@ -24,16 +25,17 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resources calculateGatheredResources(Building building) {
-        Preconditions.checkNotNull(building, "building");
+    public Resources calculateGatheredResources(BuildingType type, int level) {
+        Preconditions.checkNotNull(type, "type");
+        Preconditions.checkArgument(level > 0, "level must be > 0");
 
-        switch (building.getType()) {
+        switch (type) {
             case CRYSTAL_MINE:
-                return new Resources(building.getLevel(), 0, 0);
+                return new Resources(level, 0, 0);
             case GAS_REFINERY:
-                return new Resources(0, building.getLevel(), 0);
+                return new Resources(0, level, 0);
             case SOLAR_PANELS:
-                return new Resources(0, 0, building.getLevel() * 10);
+                return new Resources(0, 0, level * 10);
             default:
                 return Resources.NONE;
         }
@@ -59,7 +61,7 @@ public class ResourceServiceImpl implements ResourceService {
 
         List<Building> buildings = buildingService.findBuildingsOnPlanet(planet);
         for (Building building : buildings) {
-            Resources gatheredResources = calculateGatheredResources(building);
+            Resources gatheredResources = calculateGatheredResources(building.getType(), building.getLevel());
 
             crystals += gatheredResources.getCrystals();
             gas += gatheredResources.getGas();

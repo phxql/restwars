@@ -7,6 +7,8 @@ import restwars.service.building.*;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
+import restwars.service.planet.PlanetDAO;
+import restwars.service.resource.Resources;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +20,11 @@ public class BuildingServiceImpl implements BuildingService {
     private final UUIDFactory uuidFactory;
     private final BuildingDAO buildingDAO;
     private final RoundService roundService;
+    private final PlanetDAO planetDAO;
     private final ConstructionSiteDAO constructionSiteDAO;
 
-    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO) {
+    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO) {
+        this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.constructionSiteDAO = Preconditions.checkNotNull(constructionSiteDAO, "constructionSiteDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
@@ -54,19 +58,24 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public ConstructionSite constructBuilding(Planet planet, BuildingType type) {
+    public ConstructionSite constructBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
-
-        // TODO: Check and decrease resources
 
         return createConstructionSite(planet, type, 1);
     }
 
-    private ConstructionSite createConstructionSite(Planet planet, BuildingType type, int level) {
+    private ConstructionSite createConstructionSite(Planet planet, BuildingType type, int level) throws InsufficientResourcesException {
         assert planet != null;
         assert type != null;
         assert level > 0;
+
+        Resources buildCost = calculateBuildCost(type, level);
+        if (!planet.hasResources(buildCost)) {
+            throw new InsufficientResourcesException(buildCost.getCrystals(), buildCost.getGas(), buildCost.getEnergy(), planet.getCrystals(), planet.getGas(), planet.getEnergy());
+        }
+
+        // TODO: Decrease resources
 
         UUID id = uuidFactory.create();
         long buildTime = calculateBuildTime(type, level);
@@ -81,7 +90,7 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException {
+    public ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException, InsufficientResourcesException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
@@ -94,7 +103,7 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type) {
+    public ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
@@ -159,6 +168,29 @@ public class BuildingServiceImpl implements BuildingService {
                 return level;
             default:
                 throw new AssertionError("Unknown building type " + type);
+        }
+    }
+
+    @Override
+    public Resources calculateBuildCost(BuildingType type, int level) {
+        Preconditions.checkNotNull(type, "type");
+        Preconditions.checkArgument(level > 0, "level must be > 0");
+
+        switch (type) {
+            case COMMAND_CENTER:
+                return new Resources(level * 10, level * 10, level * 100);
+            case CRYSTAL_MINE:
+                return new Resources(level, level, level);
+            case GAS_REFINERY:
+                return new Resources(level, level, level);
+            case SOLAR_PANELS:
+                return new Resources(level, level, level);
+            case RESEARCH_CENTER:
+                return new Resources(level, level, level);
+            case SHIPYARD:
+                return new Resources(level, level, level);
+            default:
+                throw new AssertionError("Unknown building type: " + type);
         }
     }
 }
