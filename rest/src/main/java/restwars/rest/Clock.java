@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.infrastructure.RoundService;
+import restwars.service.resource.ResourceService;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.Executors;
@@ -18,12 +19,14 @@ public class Clock implements Managed, Runnable {
 
     private final BuildingService buildingService;
     private final RoundService roundService;
+    private final ResourceService resourceService;
     private final UniverseConfiguration universeConfiguration;
 
     @Nullable
     private ScheduledExecutorService scheduledExecutorService;
 
-    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration) {
+    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService) {
+        this.resourceService = Preconditions.checkNotNull(resourceService, "resourceService");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
@@ -49,6 +52,7 @@ public class Clock implements Managed, Runnable {
         long round = roundService.nextRound();
 
         buildingService.finishConstructionSites();
+        resourceService.gatherResourcesOnAllPlanets();
 
         LOGGER.info("Starting round {}", round);
     }

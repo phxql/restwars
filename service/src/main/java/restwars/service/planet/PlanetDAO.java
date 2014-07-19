@@ -37,4 +37,11 @@ public interface PlanetDAO {
      * @param planet Planet.
      */
     void update(Planet planet);
+
+    /**
+     * Finds all planets.
+     *
+     * @return All planets.
+     */
+    List<Planet> findAll();
 }

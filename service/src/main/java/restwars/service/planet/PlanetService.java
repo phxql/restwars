@@ -39,4 +39,11 @@ public interface PlanetService {
      * @param planet Planet to update.
      */
     void update(Planet planet);
+
+    /**
+     * Finds all planets.
+     *
+     * @return All planets.
+     */
+    List<Planet> findAll();
 }

@@ -7,6 +7,11 @@ import restwars.service.planet.Planet;
  */
 public interface ResourceService {
     /**
+     * Gathers resources on all planets.
+     */
+    void gatherResourcesOnAllPlanets();
+
+    /**
      * Gathers resources for the given planet.
      *
      * @param planet Planet.

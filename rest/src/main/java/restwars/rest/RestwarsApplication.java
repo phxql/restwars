@@ -28,6 +28,8 @@ import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 import restwars.service.player.PlayerService;
 import restwars.service.player.impl.PlayerServiceImpl;
+import restwars.service.resource.ResourceService;
+import restwars.service.resource.impl.ResourceServiceImpl;
 import restwars.storage.building.InMemoryBuildingDAO;
 import restwars.storage.building.InMemoryConstructionSiteDAO;
 import restwars.storage.planet.InMemoryPlanetDAO;
@@ -65,6 +67,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         PlanetService planetService = new PlanetServiceImpl(uuidFactory, planetDAO, locationFactory, universeConfiguration, buildingService);
         PlayerDAO playerDAO = new InMemoryPlayerDAO();
         PlayerService playerService = new PlayerServiceImpl(uuidFactory, playerDAO, planetService);
+        ResourceService resourceService = new ResourceServiceImpl(buildingService, planetService);
 
         environment.jersey().register(new BasicAuthProvider<>(new PlayerAuthenticator(playerService), "RESTwars"));
 
@@ -77,7 +80,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         loadDemoData(playerService, planetService, buildingService);
 
-        environment.lifecycle().manage(new Clock(buildingService, roundService, universeConfiguration));
+        environment.lifecycle().manage(new Clock(buildingService, roundService, universeConfiguration, resourceService));
     }
 
     private void loadDemoData(PlayerService playerService, PlanetService planetService, BuildingService buildingService) {

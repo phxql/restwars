@@ -67,6 +67,11 @@ public class PlanetServiceImpl implements PlanetService {
     }
 
     @Override
+    public List<Planet> findAll() {
+        return planetDAO.findAll();
+    }
+
+    @Override
     public void update(Planet planet) {
         Preconditions.checkNotNull(planet, "planet");
 

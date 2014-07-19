@@ -23,6 +23,14 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
+    public void gatherResourcesOnAllPlanets() {
+        List<Planet> planets = planetService.findAll();
+
+        LOGGER.debug("Gathering resources on {} planets", planets.size());
+        planets.forEach(this::gatherResources);
+    }
+
+    @Override
     public void gatherResources(Planet planet) {
         Preconditions.checkNotNull(planet, "planet");
 
