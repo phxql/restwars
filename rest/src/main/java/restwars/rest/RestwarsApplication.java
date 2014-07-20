@@ -31,6 +31,11 @@ import restwars.service.player.impl.PlayerServiceImpl;
 import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.ResourceService;
 import restwars.service.resource.impl.ResourceServiceImpl;
+import restwars.service.ship.HangarDAO;
+import restwars.service.ship.ShipInConstructionDAO;
+import restwars.service.ship.ShipService;
+import restwars.service.ship.ShipType;
+import restwars.service.ship.impl.ShipServiceImpl;
 import restwars.service.technology.ResearchDAO;
 import restwars.service.technology.TechnologyDAO;
 import restwars.service.technology.TechnologyService;
@@ -40,6 +45,8 @@ import restwars.storage.building.InMemoryBuildingDAO;
 import restwars.storage.building.InMemoryConstructionSiteDAO;
 import restwars.storage.planet.InMemoryPlanetDAO;
 import restwars.storage.player.InMemoryPlayerDAO;
+import restwars.storage.ship.InMemoryHangarDAO;
+import restwars.storage.ship.InMemoryShipInConstructionDAO;
 import restwars.storage.technology.InMemoryResearchDAO;
 import restwars.storage.technology.InMemoryTechnologyDAO;
 
@@ -73,6 +80,8 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         ConstructionSiteDAO constructionSiteDAO = new InMemoryConstructionSiteDAO();
         ResearchDAO researchDAO = new InMemoryResearchDAO();
         TechnologyDAO technologyDAO = new InMemoryTechnologyDAO();
+        HangarDAO hangarDAO = new InMemoryHangarDAO();
+        ShipInConstructionDAO shipInConstructionDAO = new InMemoryShipInConstructionDAO();
 
         RoundService roundService = new RoundServiceImpl();
         BuildingService buildingService = new BuildingServiceImpl(uuidFactory, buildingDAO, roundService, constructionSiteDAO, planetDAO);
@@ -80,6 +89,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         PlayerService playerService = new PlayerServiceImpl(uuidFactory, playerDAO, planetService);
         ResourceService resourceService = new ResourceServiceImpl(buildingService, planetService);
         TechnologyService technologyService = new TechnologyServiceImpl(uuidFactory, buildingService, technologyDAO, planetDAO, roundService, researchDAO);
+        ShipService shipService = new ShipServiceImpl(hangarDAO, shipInConstructionDAO, planetDAO, uuidFactory, roundService);
 
         environment.jersey().register(new BasicAuthProvider<>(new PlayerAuthenticator(playerService), "RESTwars"));
 
@@ -90,12 +100,12 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         environment.jersey().register(new PlayerResource(playerService, planetService));
         environment.jersey().register(new PlanetResource(planetService, buildingSubResource, constructionSiteSubResource));
 
-        loadDemoData(playerService, planetService, buildingService, technologyService);
+        loadDemoData(playerService, planetService, buildingService, technologyService, shipService);
 
-        environment.lifecycle().manage(new Clock(buildingService, roundService, universeConfiguration, resourceService, technologyService));
+        environment.lifecycle().manage(new Clock(buildingService, roundService, universeConfiguration, resourceService, technologyService, shipService));
     }
 
-    private void loadDemoData(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService) {
+    private void loadDemoData(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {
         Player moe = playerService.createPlayer("moe", "moe");
         List<Planet> planets = planetService.findWithOwner(moe);
 
@@ -114,6 +124,12 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
                 buildingService.constructBuilding(planet, BuildingType.CRYSTAL_MINE);
             } catch (InsufficientResourcesException e) {
                 LOGGER.error("Exception while constructing a crystal mine", e);
+            }
+
+            try {
+                shipService.buildShip(moe, planet, ShipType.MOSQUITO);
+            } catch (InsufficientResourcesException e) {
+                LOGGER.error("Exception while building a mosquito", e);
             }
         }
     }

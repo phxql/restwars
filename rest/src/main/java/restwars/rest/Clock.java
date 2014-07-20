@@ -8,6 +8,7 @@ import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.resource.ResourceService;
+import restwars.service.ship.ShipService;
 import restwars.service.technology.TechnologyService;
 
 import javax.annotation.Nullable;
@@ -22,12 +23,14 @@ public class Clock implements Managed, Runnable {
     private final RoundService roundService;
     private final ResourceService resourceService;
     private final TechnologyService technologyService;
+    private final ShipService shipService;
     private final UniverseConfiguration universeConfiguration;
 
     @Nullable
     private ScheduledExecutorService scheduledExecutorService;
 
-    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService, TechnologyService technologyService) {
+    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService, TechnologyService technologyService, ShipService shipService) {
+        this.shipService = Preconditions.checkNotNull(shipService, "shipService");
         this.technologyService = Preconditions.checkNotNull(technologyService, "technologyService");
         this.resourceService = Preconditions.checkNotNull(resourceService, "resourceService");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
@@ -56,6 +59,7 @@ public class Clock implements Managed, Runnable {
 
         buildingService.finishConstructionSites();
         technologyService.finishResearches();
+        shipService.finishShipsInConstruction();
         resourceService.gatherResourcesOnAllPlanets();
 
         LOGGER.info("Starting round {}", round);
