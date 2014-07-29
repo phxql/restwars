@@ -26,6 +26,13 @@ public class InMemoryResearchDAO implements ResearchDAO {
     }
 
     @Override
+    public List<Research> findWithPlanetId(UUID planetId) {
+        Preconditions.checkNotNull(planetId, "planetId");
+
+        return researches.values().stream().filter(r -> r.getPlanetId().equals(planetId)).collect(Collectors.toList());
+    }
+
+    @Override
     public void delete(Research research) {
         Preconditions.checkNotNull(research, "research");
 

@@ -72,7 +72,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         UUIDFactory uuidFactory = new UUIDFactoryImpl();
         LocationFactory locationFactory = new LocationFactoryImpl();
 
-        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 1);
+        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 30);
 
         BuildingDAO buildingDAO = new InMemoryBuildingDAO();
         PlanetDAO planetDAO = new InMemoryPlanetDAO();
@@ -95,10 +95,11 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         BuildingSubResource buildingSubResource = new BuildingSubResource(buildingService, planetService);
         ConstructionSiteSubResource constructionSiteSubResource = new ConstructionSiteSubResource(planetService, buildingService);
+        ResearchSubResource researchSubResource = new ResearchSubResource(technologyService, planetService);
 
         environment.jersey().register(new SystemResource());
         environment.jersey().register(new PlayerResource(playerService, planetService));
-        environment.jersey().register(new PlanetResource(planetService, buildingSubResource, constructionSiteSubResource));
+        environment.jersey().register(new PlanetResource(planetService, buildingSubResource, constructionSiteSubResource, researchSubResource));
 
         loadDemoData(playerService, planetService, buildingService, technologyService, shipService);
 

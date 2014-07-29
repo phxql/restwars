@@ -74,6 +74,13 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
+    public List<Research> findResearchesOnPlanet(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        return researchDAO.findWithPlanetId(planet.getId());
+    }
+
+    @Override
     public Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws InsufficientResourcesException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(technology, "technology");

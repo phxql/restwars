@@ -1,6 +1,7 @@
 package restwars.service.technology;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * DAO for researches.
@@ -27,4 +28,12 @@ public interface ResearchDAO {
      * @param research Research to delete.
      */
     void delete(Research research);
+
+    /**
+     * Finds all researches with the given planet id.
+     *
+     * @param planetId Id of the planet.
+     * @return Researches.
+     */
+    List<Research> findWithPlanetId(UUID planetId);
 }

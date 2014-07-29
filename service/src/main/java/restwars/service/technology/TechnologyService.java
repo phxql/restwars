@@ -23,6 +23,14 @@ public interface TechnologyService {
     Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws InsufficientResourcesException;
 
     /**
+     * Finds all running researches on the given planet.
+     *
+     * @param planet Planet.
+     * @return Researches.
+     */
+    List<Research> findResearchesOnPlanet(Planet planet);
+
+    /**
      * Calculates the research time for the given type and level of technology.
      *
      * @param type  Type of technology.
