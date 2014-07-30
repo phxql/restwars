@@ -100,6 +100,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         environment.jersey().register(new SystemResource());
         environment.jersey().register(new PlayerResource(playerService, planetService));
         environment.jersey().register(new PlanetResource(planetService, buildingSubResource, constructionSiteSubResource, researchSubResource));
+        environment.jersey().register(new TechnologyResource(technologyService));
 
         loadDemoData(playerService, planetService, buildingService, technologyService, shipService);
 
