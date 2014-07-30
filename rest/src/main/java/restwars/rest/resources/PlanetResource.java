@@ -11,7 +11,6 @@ import restwars.service.player.Player;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/v1/planet")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -36,7 +35,7 @@ public class PlanetResource {
         Preconditions.checkNotNull(player, "player");
         List<Planet> planets = planetService.findWithOwner(player);
 
-        return planets.stream().map(PlanetResponse::fromPlanet).collect(Collectors.toList());
+        return Helper.mapToList(planets, PlanetResponse::fromPlanet);
     }
 
     @GET

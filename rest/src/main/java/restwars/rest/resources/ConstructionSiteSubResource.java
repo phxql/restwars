@@ -19,7 +19,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ConstructionSiteSubResource {
     private final PlanetService planetService;
@@ -38,7 +37,7 @@ public class ConstructionSiteSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<ConstructionSite> constructionSites = buildingService.findConstructionSitesOnPlanet(planet);
 
-        return constructionSites.stream().map(ConstructionSiteResponse::fromConstructionSite).collect(Collectors.toList());
+        return Helper.mapToList(constructionSites, ConstructionSiteResponse::fromConstructionSite);
     }
 
     @POST

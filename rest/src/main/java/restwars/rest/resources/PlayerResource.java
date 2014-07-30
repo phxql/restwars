@@ -17,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/v1/player")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -38,7 +37,7 @@ public class PlayerResource {
     public PlayerResponse me(@Auth Player player) {
         List<Planet> planets = planetService.findWithOwner(player);
 
-        return new PlayerResponse(player.getUsername(), planets.stream().map(PlanetResponse::fromPlanet).collect(Collectors.toList()));
+        return new PlayerResponse(player.getUsername(), Helper.mapToList(planets, PlanetResponse::fromPlanet));
     }
 
     @POST

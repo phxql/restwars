@@ -13,7 +13,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/v1/technology")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -30,6 +29,6 @@ public class TechnologyResource {
         Preconditions.checkNotNull(player, "player");
 
         List<Technology> technologies = technologyService.findAllForPlayer(player);
-        return technologies.stream().map(TechnologyResponse::fromTechnology).collect(Collectors.toList());
+        return Helper.mapToList(technologies, TechnologyResponse::fromTechnology);
     }
 }

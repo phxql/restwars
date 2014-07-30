@@ -13,7 +13,6 @@ import restwars.service.player.Player;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BuildingSubResource {
     private final PlanetService planetService;
@@ -32,6 +31,6 @@ public class BuildingSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Building> buildings = buildingService.findBuildingsOnPlanet(planet);
 
-        return buildings.stream().map(BuildingResponse::fromBuilding).collect(Collectors.toList());
+        return Helper.mapToList(buildings, BuildingResponse::fromBuilding);
     }
 }

@@ -19,7 +19,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ResearchSubResource {
     private final TechnologyService technologyService;
@@ -38,7 +37,7 @@ public class ResearchSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Research> researches = technologyService.findResearchesOnPlanet(planet);
 
-        return researches.stream().map(ResearchResponse::fromResearch).collect(Collectors.toList());
+        return Helper.mapToList(researches, ResearchResponse::fromResearch);
     }
 
     @POST
