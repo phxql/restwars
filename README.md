@@ -1,6 +1,8 @@
 # RESTwars
 An online game (like the good old browsergames) which can be played via a REST interface.
 
+[![Build Status](https://travis-ci.org/phxql/restwars.svg?branch=master)](https://travis-ci.org/phxql/restwars)
+
 ## Universe
 The game takes place in a universe. The universe consists of galaxies which consists of solar systems which consists of planets.
 
