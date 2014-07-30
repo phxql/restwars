@@ -6,6 +6,7 @@ import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
+import restwars.service.technology.TechnologyType;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -34,6 +35,16 @@ public final class Helper {
 
         try {
             return BuildingType.valueOf(value);
+        } catch (IllegalArgumentException e) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+    }
+
+    public static TechnologyType parseTechnologyType(String value) {
+        Preconditions.checkNotNull(value, "value");
+
+        try {
+            return TechnologyType.valueOf(value);
         } catch (IllegalArgumentException e) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
