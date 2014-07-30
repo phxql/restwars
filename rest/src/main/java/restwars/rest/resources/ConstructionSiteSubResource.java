@@ -3,15 +3,21 @@ package restwars.rest.resources;
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.building.ConstructionSiteResponse;
+import restwars.rest.api.building.CreateBuildingRequest;
 import restwars.rest.resources.param.LocationParam;
 import restwars.service.building.BuildingService;
+import restwars.service.building.BuildingType;
 import restwars.service.building.ConstructionSite;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
+import restwars.service.resource.InsufficientResourcesException;
 
+import javax.validation.Valid;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.WebApplicationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,5 +39,24 @@ public class ConstructionSiteSubResource {
         List<ConstructionSite> constructionSites = buildingService.findConstructionSitesOnPlanet(planet);
 
         return constructionSites.stream().map(ConstructionSiteResponse::fromConstructionSite).collect(Collectors.toList());
+    }
+
+    @POST
+    public ConstructionSiteResponse build(@Auth Player player, @PathParam("location") LocationParam location, @Valid CreateBuildingRequest data) {
+        Preconditions.checkNotNull(player, "player");
+        Preconditions.checkNotNull(location, "location");
+        Preconditions.checkNotNull(data, "data");
+
+        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        BuildingType type = Helper.parseBuildingType(data.getType());
+
+        try {
+            ConstructionSite constructionSite = buildingService.constructOrUpgradeBuilding(planet, type);
+
+            return ConstructionSiteResponse.fromConstructionSite(constructionSite);
+        } catch (InsufficientResourcesException e) {
+            // TODO: Create a real exception!
+            throw new WebApplicationException();
+        }
     }
 }
