@@ -29,4 +29,11 @@ public interface ShipInConstructionDAO {
      * @return All ships in construction with the given planet id.
      */
     List<ShipInConstruction> findWithPlanetId(UUID planetId);
+
+    /**
+     * Deletes the given ship in construction.
+     *
+     * @param shipInConstruction Ship in construction to delete.
+     */
+    void delete(ShipInConstruction shipInConstruction);
 }

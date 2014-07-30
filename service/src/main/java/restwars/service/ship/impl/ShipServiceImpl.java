@@ -109,6 +109,7 @@ public class ShipServiceImpl implements ShipService {
             } else {
                 hangarDAO.update(hangar);
             }
+            shipInConstructionDAO.delete(ship);
         }
     }
 }

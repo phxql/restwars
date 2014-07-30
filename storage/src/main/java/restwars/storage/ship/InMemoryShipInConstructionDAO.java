@@ -26,6 +26,13 @@ public class InMemoryShipInConstructionDAO implements ShipInConstructionDAO {
     }
 
     @Override
+    public void delete(ShipInConstruction shipInConstruction) {
+        Preconditions.checkNotNull(shipInConstruction, "shipInConstruction");
+
+        shipsInConstruction.values().remove(shipInConstruction);
+    }
+
+    @Override
     public List<ShipInConstruction> findWithPlanetId(UUID planetId) {
         Preconditions.checkNotNull(planetId, "planetId");
 
