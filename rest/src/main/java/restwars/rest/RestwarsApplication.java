@@ -96,10 +96,11 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         BuildingSubResource buildingSubResource = new BuildingSubResource(buildingService, planetService);
         ConstructionSiteSubResource constructionSiteSubResource = new ConstructionSiteSubResource(planetService, buildingService);
         ResearchSubResource researchSubResource = new ResearchSubResource(technologyService, planetService);
+        ShipInConstructionSubResource shipInConstructionSubResource = new ShipInConstructionSubResource(shipService, planetService);
 
         environment.jersey().register(new SystemResource());
         environment.jersey().register(new PlayerResource(playerService, planetService));
-        environment.jersey().register(new PlanetResource(planetService, buildingSubResource, constructionSiteSubResource, researchSubResource));
+        environment.jersey().register(new PlanetResource(planetService, buildingSubResource, constructionSiteSubResource, researchSubResource, shipInConstructionSubResource));
         environment.jersey().register(new TechnologyResource(technologyService));
 
         loadDemoData(playerService, planetService, buildingService, technologyService, shipService);

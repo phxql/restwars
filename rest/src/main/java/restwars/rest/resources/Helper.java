@@ -10,7 +10,11 @@ import restwars.service.technology.TechnologyType;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public final class Helper {
     private Helper() {
@@ -48,5 +52,12 @@ public final class Helper {
         } catch (IllegalArgumentException e) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
+    }
+
+    public static <From, To> List<To> mapToList(Collection<From> input, Function<From, To> mapper) {
+        Preconditions.checkNotNull(input, "input");
+        Preconditions.checkNotNull(mapper, "mapper");
+
+        return input.stream().map(mapper).collect(Collectors.toList());
     }
 }

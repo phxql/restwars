@@ -1,6 +1,7 @@
 package restwars.service.ship;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * DAO for ships in construction.
@@ -20,4 +21,12 @@ public interface ShipInConstructionDAO {
      * @return All ships in construction which are done in the given round.
      */
     List<ShipInConstruction> findWithDone(long round);
+
+    /**
+     * Finds all ships in construction with the given planet id.
+     *
+     * @param planetId Id of the planet.
+     * @return All ships in construction with the given planet id.
+     */
+    List<ShipInConstruction> findWithPlanetId(UUID planetId);
 }

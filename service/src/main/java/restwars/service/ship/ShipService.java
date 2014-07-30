@@ -5,6 +5,8 @@ import restwars.service.player.Player;
 import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 
+import java.util.List;
+
 public interface ShipService {
     /**
      * Builds a ship.
@@ -15,6 +17,14 @@ public interface ShipService {
      * @return Ship in construction.
      */
     ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException;
+
+    /**
+     * Finds all ships in construction on the given planet.
+     *
+     * @param planet Planet.
+     * @return Ships in construction.
+     */
+    List<ShipInConstruction> findShipsInConstructionOnPlanet(Planet planet);
 
     /**
      * Calculates the build time for the given type of ship.

@@ -24,4 +24,11 @@ public class InMemoryShipInConstructionDAO implements ShipInConstructionDAO {
     public List<ShipInConstruction> findWithDone(long round) {
         return shipsInConstruction.values().stream().filter(s -> s.getDone() == round).collect(Collectors.toList());
     }
+
+    @Override
+    public List<ShipInConstruction> findWithPlanetId(UUID planetId) {
+        Preconditions.checkNotNull(planetId, "planetId");
+
+        return shipsInConstruction.values().stream().filter(s -> s.getPlanetId().equals(planetId)).collect(Collectors.toList());
+    }
 }

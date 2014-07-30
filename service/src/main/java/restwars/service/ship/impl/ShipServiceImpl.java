@@ -31,6 +31,13 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
+    public List<ShipInConstruction> findShipsInConstructionOnPlanet(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        return shipInConstructionDAO.findWithPlanetId(planet.getId());
+    }
+
+    @Override
     public ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(planet, "planet");
