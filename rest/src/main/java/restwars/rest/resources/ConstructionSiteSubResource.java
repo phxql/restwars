@@ -13,6 +13,7 @@ import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.resource.InsufficientResourcesException;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,6 +25,7 @@ public class ConstructionSiteSubResource {
     private final PlanetService planetService;
     private final BuildingService buildingService;
 
+    @Inject
     public ConstructionSiteSubResource(PlanetService planetService, BuildingService buildingService) {
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");

@@ -8,6 +8,7 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -23,6 +24,7 @@ public class PlanetResource {
     private final ShipInConstructionSubResource shipInConstructionSubResource;
     private final ShipSubResource shipSubResource;
 
+    @Inject
     public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource) {
         this.shipSubResource = Preconditions.checkNotNull(shipSubResource, "shipSubResource");
         this.shipInConstructionSubResource = Preconditions.checkNotNull(shipInConstructionSubResource, "shipInConstructionSubResource");

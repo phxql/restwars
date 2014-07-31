@@ -10,6 +10,7 @@ import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -28,6 +29,7 @@ public class PlayerResource {
     @Context
     private UriInfo uriInfo;
 
+    @Inject
     public PlayerResource(PlayerService playerService, PlanetService planetService) {
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.playerService = Preconditions.checkNotNull(playerService, "playerService");
