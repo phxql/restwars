@@ -5,10 +5,12 @@ import com.google.common.collect.Maps;
 import restwars.service.ship.Hangar;
 import restwars.service.ship.HangarDAO;
 
+import javax.inject.Singleton;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+@Singleton
 public class InMemoryHangarDAO implements HangarDAO {
     private final Map<UUID, Hangar> hangars = Maps.newHashMap();
 

@@ -7,12 +7,14 @@ import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Singleton
 public class InMemoryPlanetDAO implements PlanetDAO {
     private final Map<UUID, Planet> planets = Maps.newHashMap();
 

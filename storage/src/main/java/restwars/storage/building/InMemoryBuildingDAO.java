@@ -6,12 +6,14 @@ import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
 
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Singleton
 public class InMemoryBuildingDAO implements BuildingDAO {
     private final Map<UUID, Building> buildings = Maps.newHashMap();
 

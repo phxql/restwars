@@ -5,11 +5,13 @@ import com.google.common.collect.Maps;
 import restwars.service.building.ConstructionSite;
 import restwars.service.building.ConstructionSiteDAO;
 
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Singleton
 public class InMemoryConstructionSiteDAO implements ConstructionSiteDAO {
     private final Map<UUID, ConstructionSite> constructionSites = Maps.newHashMap();
 

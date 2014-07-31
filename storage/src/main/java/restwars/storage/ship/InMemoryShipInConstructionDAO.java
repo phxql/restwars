@@ -5,11 +5,13 @@ import com.google.common.collect.Maps;
 import restwars.service.ship.ShipInConstruction;
 import restwars.service.ship.ShipInConstructionDAO;
 
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Singleton
 public class InMemoryShipInConstructionDAO implements ShipInConstructionDAO {
     private final Map<UUID, ShipInConstruction> shipsInConstruction = Maps.newHashMap();
 

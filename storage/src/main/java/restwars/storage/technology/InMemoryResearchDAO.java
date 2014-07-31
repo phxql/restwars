@@ -5,11 +5,13 @@ import com.google.common.collect.Maps;
 import restwars.service.technology.Research;
 import restwars.service.technology.ResearchDAO;
 
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Singleton
 public class InMemoryResearchDAO implements ResearchDAO {
     private final Map<UUID, Research> researches = Maps.newHashMap();
 

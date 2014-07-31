@@ -5,10 +5,12 @@ import com.google.common.collect.Maps;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 
+import javax.inject.Singleton;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+@Singleton
 public class InMemoryPlayerDAO implements PlayerDAO {
     private final Map<UUID, Player> players = Maps.newHashMap();
 
