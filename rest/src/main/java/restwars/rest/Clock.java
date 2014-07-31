@@ -12,6 +12,7 @@ import restwars.service.ship.ShipService;
 import restwars.service.technology.TechnologyService;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +30,7 @@ public class Clock implements Managed, Runnable {
     @Nullable
     private ScheduledExecutorService scheduledExecutorService;
 
+    @Inject
     public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService, TechnologyService technologyService, ShipService shipService) {
         this.shipService = Preconditions.checkNotNull(shipService, "shipService");
         this.technologyService = Preconditions.checkNotNull(technologyService, "technologyService");

@@ -13,6 +13,7 @@ import restwars.service.technology.Research;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.TechnologyType;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,6 +25,7 @@ public class ResearchSubResource {
     private final TechnologyService technologyService;
     private final PlanetService planetService;
 
+    @Inject
     public ResearchSubResource(TechnologyService technologyService, PlanetService planetService) {
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.technologyService = Preconditions.checkNotNull(technologyService, "technologyService");

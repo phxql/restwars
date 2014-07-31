@@ -7,11 +7,13 @@ import io.dropwizard.auth.basic.BasicCredentials;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
 
+import javax.inject.Inject;
 import java.util.Optional;
 
 public class PlayerAuthenticator implements Authenticator<BasicCredentials, Player> {
     private final PlayerService playerService;
 
+    @Inject
     public PlayerAuthenticator(PlayerService playerService) {
         this.playerService = Preconditions.checkNotNull(playerService, "playerService");
     }

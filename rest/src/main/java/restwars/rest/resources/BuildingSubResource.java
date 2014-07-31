@@ -10,6 +10,7 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import java.util.List;
@@ -18,6 +19,7 @@ public class BuildingSubResource {
     private final PlanetService planetService;
     private final BuildingService buildingService;
 
+    @Inject
     public BuildingSubResource(BuildingService buildingService, PlanetService planetService) {
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");

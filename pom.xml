@@ -23,6 +23,8 @@
         <guava.version>17.0</guava.version>
         <slf4j.version>1.7.7</slf4j.version>
         <joda-time.version>2.3</joda-time.version>
+        <javax-inject.version>1</javax-inject.version>
+        <dagger.version>1.2.2</dagger.version>
     </properties>
 
     <dependencies>
@@ -42,6 +44,25 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>${joda-time.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>${javax-inject.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.dagger</groupId>
+            <artifactId>dagger</artifactId>
+            <version>${dagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.dagger</groupId>
+            <artifactId>dagger-compiler</artifactId>
+            <version>${dagger.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

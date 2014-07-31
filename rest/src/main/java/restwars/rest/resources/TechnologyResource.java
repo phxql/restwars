@@ -7,6 +7,7 @@ import restwars.service.player.Player;
 import restwars.service.technology.Technology;
 import restwars.service.technology.TechnologyService;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,6 +21,7 @@ import java.util.List;
 public class TechnologyResource {
     private final TechnologyService technologyService;
 
+    @Inject
     public TechnologyResource(TechnologyService technologyService) {
         this.technologyService = Preconditions.checkNotNull(technologyService, "technologyService");
     }
