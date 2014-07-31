@@ -21,8 +21,10 @@ public class PlanetResource {
     private final ConstructionSiteSubResource constructionSiteSubResource;
     private final ResearchSubResource researchSubResource;
     private final ShipInConstructionSubResource shipInConstructionSubResource;
+    private final ShipSubResource shipSubResource;
 
-    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource) {
+    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource) {
+        this.shipSubResource = Preconditions.checkNotNull(shipSubResource, "shipSubResource");
         this.shipInConstructionSubResource = Preconditions.checkNotNull(shipInConstructionSubResource, "shipInConstructionSubResource");
         this.researchSubResource = Preconditions.checkNotNull(researchSubResource, "researchSubResource");
         this.constructionSiteSubResource = Preconditions.checkNotNull(constructionSiteSubResource, "constructionSiteSubResource");
@@ -60,12 +62,18 @@ public class PlanetResource {
     }
 
     @Path("/{location}/research")
-    public ResearchSubResource getResearch() {
+    public ResearchSubResource getResearches() {
         return researchSubResource;
     }
 
     @Path("/{location}/ship-in-construction")
-    public ShipInConstructionSubResource getShipInConstruction() {
+    public ShipInConstructionSubResource getShipsInConstruction() {
         return shipInConstructionSubResource;
     }
+
+    @Path("/{location}/ship")
+    public ShipSubResource getShips() {
+        return shipSubResource;
+    }
+
 }

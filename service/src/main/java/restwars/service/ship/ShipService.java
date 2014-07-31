@@ -46,4 +46,12 @@ public interface ShipService {
      * Finishes all ships in construction which are done in the current round.
      */
     void finishShipsInConstruction();
+
+    /**
+     * Finds the ships on the given planet.
+     *
+     * @param planet Planet.
+     * @return Hangar.
+     */
+    List<Ship> findShipsOnPlanet(Planet planet);
 }

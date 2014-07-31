@@ -1,6 +1,7 @@
 package restwars.service.ship.impl;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
@@ -14,6 +15,7 @@ import restwars.service.ship.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ShipServiceImpl implements ShipService {
     private final UUIDFactory uuidFactory;
@@ -84,6 +86,18 @@ public class ShipServiceImpl implements ShipService {
                 return new Resources(1, 1, 1);
             default:
                 throw new AssertionError("Unknown ship type: " + type);
+        }
+    }
+
+    @Override
+    public List<Ship> findShipsOnPlanet(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        Optional<Hangar> hangar = hangarDAO.findWithPlanetId(planet.getId());
+        if (hangar.isPresent()) {
+            return hangar.get().getShips().entrySet().stream().map(e -> new Ship(e.getKey(), e.getValue())).collect(Collectors.toList());
+        } else {
+            return Lists.newArrayList();
         }
     }
 

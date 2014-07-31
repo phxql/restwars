@@ -20,6 +20,16 @@ public final class Helper {
     private Helper() {
     }
 
+    /**
+     * Finds the planet with the given location and ensures that is it owned from the given player.
+     *
+     * @param planetService Planet service.
+     * @param location      Location.
+     * @param owner         Owner.
+     * @return Planet.
+     * @throws PlanetNotFoundWebException If the planet wasn't found.
+     * @throws NotYourPlanetWebException  If the planet was found, but isn't owned from the given player.
+     */
     public static Planet findPlanetWithLocationAndOwner(PlanetService planetService, Location location, Player owner) {
         Preconditions.checkNotNull(planetService, "planetService");
         Preconditions.checkNotNull(location, "location");
