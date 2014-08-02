@@ -19,6 +19,7 @@ import restwars.service.player.PlayerService;
 import restwars.service.player.impl.PlayerServiceImpl;
 import restwars.service.resource.ResourceService;
 import restwars.service.resource.impl.ResourceServiceImpl;
+import restwars.service.ship.FlightDAO;
 import restwars.service.ship.HangarDAO;
 import restwars.service.ship.ShipInConstructionDAO;
 import restwars.service.ship.ShipService;
@@ -66,7 +67,7 @@ public class ServiceModule {
     }
 
     @Provides
-    ShipService providesShipService(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService) {
-        return new ShipServiceImpl(hangarDAO, shipInConstructionDAO, planetDAO, uuidFactory, roundService);
+    ShipService providesShipService(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO) {
+        return new ShipServiceImpl(hangarDAO, shipInConstructionDAO, planetDAO, uuidFactory, roundService, flightDAO);
     }
 }

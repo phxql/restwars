@@ -54,4 +54,14 @@ public interface ShipService {
      * @return Hangar.
      */
     List<Ship> findShipsOnPlanet(Planet planet);
+
+    /**
+     * Sends the given ships from the given start planet to the given destination planet.
+     *
+     * @param start       Start planet.
+     * @param destination Destination planet.
+     * @param ships       Ships.
+     * @return Flight.
+     */
+    Flight sendShipsToPlanet(Planet start, Planet destination, List<Ship> ships);
 }

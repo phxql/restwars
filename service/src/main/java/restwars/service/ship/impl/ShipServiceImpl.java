@@ -23,8 +23,10 @@ public class ShipServiceImpl implements ShipService {
     private final ShipInConstructionDAO shipInConstructionDAO;
     private final PlanetDAO planetDAO;
     private final RoundService roundService;
+    private final FlightDAO flightDAO;
 
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO) {
+        this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
@@ -99,6 +101,26 @@ public class ShipServiceImpl implements ShipService {
         } else {
             return Lists.newArrayList();
         }
+    }
+
+    @Override
+    public Flight sendShipsToPlanet(Planet start, Planet destination, List<Ship> ships) {
+        Preconditions.checkNotNull(start, "start");
+        Preconditions.checkNotNull(destination, "destination");
+        Preconditions.checkNotNull(ships, "ships");
+
+        long energyNeeded = 1; // TODO: Calculate energy cost
+        long started = roundService.getCurrentRound();
+        long arrives = started + 1; // TODO: Calculate flight duration
+
+        // TODO: Check if enough ships are available
+        // TODO: Decrease ships on planet
+
+        Flight flight = new Flight(uuidFactory.create(), start.getId(), destination.getId(), started, arrives, ships, energyNeeded);
+
+        flightDAO.insert(flight);
+
+        return flight;
     }
 
     @Override
