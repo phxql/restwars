@@ -125,10 +125,8 @@ public class ShipServiceImpl implements ShipService {
         // TODO: Check if enough ships are available
         // TODO: Decrease ships on planet
 
-        Flight flight = new Flight(uuidFactory.create(), start.getId(), destination.getId(), started, arrives, ships, energyNeeded, flightType, player.getId());
-
+        Flight flight = new Flight(uuidFactory.create(), start.getId(), destination.getId(), started, arrives, ships, energyNeeded, flightType, player.getId(), FlightDirection.OUTWARD);
         flightDAO.insert(flight);
-
         return flight;
     }
 
