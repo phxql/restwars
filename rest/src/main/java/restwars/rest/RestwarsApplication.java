@@ -42,7 +42,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
     @Override
     public void run(RestwarsConfiguration restwarsConfiguration, Environment environment) throws Exception {
-        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 30);
+        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 5);
         ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
 

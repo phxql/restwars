@@ -1,1 +1,6 @@
 serverName: localhost
+logging:
+    level: WARN
+    loggers:
+        "io.dropwizard.jersey.DropwizardResourceConfig": INFO
+        "restwars": TRACE

@@ -109,6 +109,8 @@ public class ShipServiceImpl implements ShipService {
 
     @Override
     public void finishFlights() {
+        LOGGER.trace("Enter: finishFlights()");
+
         List<Flight> flights = flightDAO.findWithArrival(roundService.getCurrentRound());
 
         for (Flight flight : flights) {
@@ -123,6 +125,8 @@ public class ShipServiceImpl implements ShipService {
                     throw new AssertionError("Unknown flight direction value: " + flight.getDirection());
             }
         }
+
+        LOGGER.trace("Leave: finishFlights()");
     }
 
     private void finishReturnFlight(Flight flight) {
