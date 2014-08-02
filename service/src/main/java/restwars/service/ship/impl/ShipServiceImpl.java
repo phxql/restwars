@@ -104,10 +104,19 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public Flight sendShipsToPlanet(Planet start, Planet destination, List<Ship> ships) {
+    public List<Flight> findFlightsForPlayer(Player player) {
+        Preconditions.checkNotNull(player, "player");
+
+        return flightDAO.findWithPlayerId(player.getId());
+    }
+
+    @Override
+    public Flight sendShipsToPlanet(Player player, Planet start, Planet destination, List<Ship> ships, FlightType flightType) {
+        Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");
         Preconditions.checkNotNull(ships, "ships");
+        Preconditions.checkNotNull(flightType, "flightType");
 
         long energyNeeded = 1; // TODO: Calculate energy cost
         long started = roundService.getCurrentRound();
@@ -116,7 +125,7 @@ public class ShipServiceImpl implements ShipService {
         // TODO: Check if enough ships are available
         // TODO: Decrease ships on planet
 
-        Flight flight = new Flight(uuidFactory.create(), start.getId(), destination.getId(), started, arrives, ships, energyNeeded);
+        Flight flight = new Flight(uuidFactory.create(), start.getId(), destination.getId(), started, arrives, ships, energyNeeded, flightType, player.getId());
 
         flightDAO.insert(flight);
 

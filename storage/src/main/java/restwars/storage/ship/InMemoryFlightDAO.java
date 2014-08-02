@@ -7,6 +7,8 @@ import restwars.service.ship.FlightDAO;
 
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Singleton
 public class InMemoryFlightDAO implements FlightDAO {
@@ -17,5 +19,12 @@ public class InMemoryFlightDAO implements FlightDAO {
         Preconditions.checkNotNull(flight, "flight");
 
         flights.add(flight);
+    }
+
+    @Override
+    public List<Flight> findWithPlayerId(UUID playerId) {
+        Preconditions.checkNotNull(playerId, "playerId");
+
+        return flights.stream().filter(f -> f.getPlayerId().equals(playerId)).collect(Collectors.toList());
     }
 }

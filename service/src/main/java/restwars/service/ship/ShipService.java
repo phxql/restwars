@@ -58,10 +58,20 @@ public interface ShipService {
     /**
      * Sends the given ships from the given start planet to the given destination planet.
      *
+     * @param player      Player.
      * @param start       Start planet.
      * @param destination Destination planet.
      * @param ships       Ships.
+     * @param flightType  Flight type.
      * @return Flight.
      */
-    Flight sendShipsToPlanet(Planet start, Planet destination, List<Ship> ships);
+    Flight sendShipsToPlanet(Player player, Planet start, Planet destination, List<Ship> ships, FlightType flightType);
+
+    /**
+     * Finds all flights for a given player.
+     *
+     * @param player Player.
+     * @return Player.
+     */
+    List<Flight> findFlightsForPlayer(Player player);
 }

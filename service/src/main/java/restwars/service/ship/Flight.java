@@ -8,6 +8,8 @@ import java.util.UUID;
 public class Flight {
     private final UUID id;
 
+    private final UUID playerId;
+
     private final UUID startPlanetId;
 
     private final UUID destinationPlanetId;
@@ -20,7 +22,9 @@ public class Flight {
 
     private final long energyNeeded;
 
-    public Flight(UUID id, UUID startPlanetId, UUID destinationPlanetId, long started, long arrives, List<Ship> ships, long energyNeeded) {
+    private final FlightType flightType;
+
+    public Flight(UUID id, UUID startPlanetId, UUID destinationPlanetId, long started, long arrives, List<Ship> ships, long energyNeeded, FlightType flightType, UUID playerId) {
         Preconditions.checkArgument(started > 0, "started must be > 0");
         Preconditions.checkArgument(arrives > 0, "arrives must be > 0");
         Preconditions.checkArgument(energyNeeded > 0, "energyNeeded must be > 0");
@@ -32,6 +36,8 @@ public class Flight {
         this.arrives = arrives;
         this.ships = Preconditions.checkNotNull(ships, "ships");
         this.energyNeeded = energyNeeded;
+        this.flightType = Preconditions.checkNotNull(flightType, "flightType");
+        this.playerId = Preconditions.checkNotNull(playerId, "playerId");
     }
 
     public UUID getId() {
@@ -60,5 +66,13 @@ public class Flight {
 
     public long getEnergyNeeded() {
         return energyNeeded;
+    }
+
+    public FlightType getFlightType() {
+        return flightType;
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
     }
 }
