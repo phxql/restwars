@@ -63,6 +63,7 @@ public class Clock implements Managed, Runnable {
         technologyService.finishResearches();
         shipService.finishShipsInConstruction();
         resourceService.gatherResourcesOnAllPlanets();
+        shipService.finishFlights();
 
         LOGGER.info("Starting round {}", round);
     }

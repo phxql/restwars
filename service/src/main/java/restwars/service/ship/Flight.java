@@ -16,7 +16,7 @@ public class Flight {
 
     private final long started;
 
-    private final long arrives;
+    private final long arrival;
 
     private final List<Ship> ships;
 
@@ -26,16 +26,16 @@ public class Flight {
 
     private final FlightDirection direction;
 
-    public Flight(UUID id, UUID startPlanetId, UUID destinationPlanetId, long started, long arrives, List<Ship> ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction) {
+    public Flight(UUID id, UUID startPlanetId, UUID destinationPlanetId, long started, long arrival, List<Ship> ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction) {
         Preconditions.checkArgument(started > 0, "started must be > 0");
-        Preconditions.checkArgument(arrives > 0, "arrives must be > 0");
+        Preconditions.checkArgument(arrival > 0, "arrival must be > 0");
         Preconditions.checkArgument(energyNeeded > 0, "energyNeeded must be > 0");
 
         this.id = Preconditions.checkNotNull(id, "id");
         this.startPlanetId = Preconditions.checkNotNull(startPlanetId, "startPlanetId");
         this.destinationPlanetId = Preconditions.checkNotNull(destinationPlanetId, "destinationPlanetId");
         this.started = started;
-        this.arrives = arrives;
+        this.arrival = arrival;
         this.ships = Preconditions.checkNotNull(ships, "ships");
         this.energyNeeded = energyNeeded;
         this.type = Preconditions.checkNotNull(type, "type");
@@ -59,8 +59,8 @@ public class Flight {
         return started;
     }
 
-    public long getArrives() {
-        return arrives;
+    public long getArrival() {
+        return arrival;
     }
 
     public List<Ship> getShips() {

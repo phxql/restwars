@@ -74,4 +74,9 @@ public interface ShipService {
      * @return Player.
      */
     List<Flight> findFlightsForPlayer(Player player);
+
+    /**
+     * Finishes all flights which are done in the current round.
+     */
+    void finishFlights();
 }

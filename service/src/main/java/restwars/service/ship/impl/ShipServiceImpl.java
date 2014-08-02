@@ -3,6 +3,8 @@ package restwars.service.ship.impl;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -18,6 +20,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ShipServiceImpl implements ShipService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShipServiceImpl.class);
+
     private final UUIDFactory uuidFactory;
     private final HangarDAO hangarDAO;
     private final ShipInConstructionDAO shipInConstructionDAO;
@@ -101,6 +105,54 @@ public class ShipServiceImpl implements ShipService {
         } else {
             return Lists.newArrayList();
         }
+    }
+
+    @Override
+    public void finishFlights() {
+        List<Flight> flights = flightDAO.findWithArrival(roundService.getCurrentRound());
+
+        for (Flight flight : flights) {
+            switch (flight.getDirection()) {
+                case OUTWARD:
+                    finishOutwardFlight(flight);
+                    break;
+                case RETURN:
+                    finishReturnFlight(flight);
+                    break;
+                default:
+                    throw new AssertionError("Unknown flight direction value: " + flight.getDirection());
+            }
+        }
+    }
+
+    private void finishReturnFlight(Flight flight) {
+        assert flight != null;
+
+        LOGGER.debug("Finishing return flight {}", flight);
+
+        // TODO: Add ships to planet
+        flightDAO.delete(flight);
+    }
+
+    private void finishOutwardFlight(Flight flight) {
+        assert flight != null;
+
+        // TODO: Handle flight type, eg start fight
+
+        LOGGER.debug("Finishing outward flight {}", flight);
+
+        long flightTime = flight.getArrival() - flight.getStarted();
+        long started = roundService.getCurrentRound();
+        long arrival = started + flightTime;
+
+        Flight returnFlight = new Flight(
+                flight.getId(), flight.getDestinationPlanetId(), flight.getStartPlanetId(),
+                started, arrival, flight.getShips(), flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
+                FlightDirection.RETURN
+        );
+        flightDAO.update(returnFlight);
+
+        LOGGER.debug("Created return flight {}", returnFlight);
     }
 
     @Override
