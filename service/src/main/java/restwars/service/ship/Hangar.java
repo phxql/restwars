@@ -2,6 +2,7 @@ package restwars.service.ship;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,6 +35,19 @@ public class Hangar {
     }
 
     public Map<ShipType, Long> getShips() {
-        return ships;
+        return Collections.unmodifiableMap(ships);
+    }
+
+    public long getShipCount(ShipType type) {
+        Preconditions.checkNotNull(type, "type");
+
+        Long value = ships.get(type);
+        return value == null ? 0L : value;
+    }
+
+    public Hangar withShips(Map<ShipType, Long> ships) {
+        Preconditions.checkNotNull(ships, "ships");
+
+        return new Hangar(id, planetId, playerId, ships);
     }
 }

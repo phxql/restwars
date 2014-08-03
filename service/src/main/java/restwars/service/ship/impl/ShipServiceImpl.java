@@ -15,6 +15,7 @@ import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -110,7 +111,17 @@ public class ShipServiceImpl implements ShipService {
 
         LOGGER.debug("Finishing return flight {}", flight);
 
-        // TODO: Add ships to planet
+        // TODO: Is it proven that a hangar exists when a flight returns?
+        Hangar hangar = hangarDAO.findWithPlanetId(flight.getDestinationPlanetId()).get();
+
+        Map<ShipType, Long> updatedShips = Maps.newHashMap(hangar.getShips());
+        for (Ship ship : flight.getShips()) {
+            updatedShips.put(ship.getType(), hangar.getShipCount(ship.getType()) + ship.getCount());
+        }
+
+        Hangar updatedHangar = hangar.withShips(updatedShips);
+        hangarDAO.update(updatedHangar);
+
         flightDAO.delete(flight);
     }
 
@@ -143,23 +154,50 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public Flight sendShipsToPlanet(Player player, Planet start, Planet destination, List<Ship> ships, FlightType flightType) {
+    public Flight sendShipsToPlanet(Player player, Planet start, Planet destination, List<Ship> ships, FlightType flightType) throws NotEnoughShipsException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");
         Preconditions.checkNotNull(ships, "ships");
         Preconditions.checkNotNull(flightType, "flightType");
 
-        long energyNeeded = 1; // TODO: Calculate energy cost
+        // TODO: Ensure that ships is not empty
+
+        long distance = start.getLocation().calculateDistance(destination.getLocation());
+        double energyNeeded = 0;
+        for (Ship ship : ships) {
+            energyNeeded += ship.getType().getFlightCostModifier() * distance * ship.getCount();
+        }
+        long speed = findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
-        long arrives = started + 1; // TODO: Calculate flight duration
+        long arrives = started + (long) Math.ceil(distance / speed);
 
-        // TODO: Check if enough ships are available
-        // TODO: Decrease ships on planet
+        // Check if enough ships are on the start planet
+        Hangar hangar = hangarDAO.findWithPlanetId(start.getId()).orElseThrow(NotEnoughShipsException::new);
+        for (Ship ship : ships) {
+            if (hangar.getShipCount(ship.getType()) < ship.getCount()) {
+                throw new NotEnoughShipsException();
+            }
+        }
 
-        Flight flight = new Flight(uuidFactory.create(), start.getId(), destination.getId(), started, arrives, ships, energyNeeded, flightType, player.getId(), FlightDirection.OUTWARD);
+        // Remove ships from the planet
+        Map<ShipType, Long> remainingShips = Maps.newHashMap();
+        for (Ship ship : ships) {
+            remainingShips.put(ship.getType(), hangar.getShipCount(ship.getType()) - ship.getCount());
+        }
+        Hangar updatedHangar = hangar.withShips(remainingShips);
+        hangarDAO.update(updatedHangar);
+
+        // Start the flight
+        Flight flight = new Flight(uuidFactory.create(), start.getId(), destination.getId(), started, arrives, ships, (long) Math.ceil(energyNeeded), flightType, player.getId(), FlightDirection.OUTWARD);
         flightDAO.insert(flight);
         return flight;
+    }
+
+    private long findSpeedOfSlowestShip(List<Ship> ships) {
+        assert ships != null;
+
+        return ships.stream().map(s -> s.getType().getSpeed()).min(Long::compare).get();
     }
 
     @Override
@@ -172,17 +210,15 @@ public class ShipServiceImpl implements ShipService {
             Hangar hangar = mayBeHangar.orElse(new Hangar(uuidFactory.create(), ship.getPlanetId(), ship.getPlayerId(), Maps.newHashMap()));
             boolean insert = !mayBeHangar.isPresent();
 
-            Long shipCount = hangar.getShips().get(ship.getType());
-            if (shipCount == null) {
-                shipCount = 0L;
-            }
-            shipCount += 1;
-            hangar.getShips().put(ship.getType(), shipCount);
+            Map<ShipType, Long> updatedShips = Maps.newHashMap(hangar.getShips());
+            long newShipCount = hangar.getShipCount(ship.getType()) + 1;
+            updatedShips.put(ship.getType(), newShipCount);
 
+            Hangar updatedHangar = hangar.withShips(updatedShips);
             if (insert) {
-                hangarDAO.insert(hangar);
+                hangarDAO.insert(updatedHangar);
             } else {
-                hangarDAO.update(hangar);
+                hangarDAO.update(updatedHangar);
             }
             shipInConstructionDAO.delete(ship);
         }

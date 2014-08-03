@@ -47,8 +47,9 @@ public interface ShipService {
      * @param ships       Ships.
      * @param flightType  Flight type.
      * @return Flight.
+     * @throws NotEnoughShipsException If not enough ships are available on the start planet.
      */
-    Flight sendShipsToPlanet(Player player, Planet start, Planet destination, List<Ship> ships, FlightType flightType);
+    Flight sendShipsToPlanet(Player player, Planet start, Planet destination, List<Ship> ships, FlightType flightType) throws NotEnoughShipsException;
 
     /**
      * Finds all flights for a given player.
