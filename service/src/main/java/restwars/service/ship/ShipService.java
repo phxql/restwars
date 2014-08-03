@@ -3,7 +3,6 @@ package restwars.service.ship;
 import restwars.service.planet.Planet;
 import restwars.service.player.Player;
 import restwars.service.resource.InsufficientResourcesException;
-import restwars.service.resource.Resources;
 
 import java.util.List;
 
@@ -25,22 +24,6 @@ public interface ShipService {
      * @return Ships in construction.
      */
     List<ShipInConstruction> findShipsInConstructionOnPlanet(Planet planet);
-
-    /**
-     * Calculates the build time for the given type of ship.
-     *
-     * @param type Type of ship.
-     * @return Build time in rounds.
-     */
-    long calculateBuildTime(ShipType type);
-
-    /**
-     * Calculates the build cost for the given ship type.
-     *
-     * @param type Type of ship.
-     * @return Build cost.
-     */
-    Resources calculateBuildCost(ShipType type);
 
     /**
      * Finishes all ships in construction which are done in the current round.

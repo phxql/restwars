@@ -54,7 +54,7 @@ public class ShipServiceImpl implements ShipService {
         // TODO: Check build queues
         // TODO: Check if the planet has a shipyard
 
-        Resources buildCost = calculateBuildCost(type);
+        Resources buildCost = type.getBuildCost();
         if (!planet.hasResources(buildCost)) {
             throw new InsufficientResourcesException(buildCost.getCrystals(), buildCost.getGas(), buildCost.getEnergy(), planet.getCrystals(), planet.getGas(), planet.getEnergy());
         }
@@ -63,36 +63,12 @@ public class ShipServiceImpl implements ShipService {
         planetDAO.update(updatedPlanet);
 
         UUID id = uuidFactory.create();
-        long buildTime = calculateBuildTime(type);
+        long buildTime = type.getBuildTime();
         long currentRound = roundService.getCurrentRound();
         ShipInConstruction shipInConstruction = new ShipInConstruction(id, type, planet.getId(), player.getId(), currentRound, currentRound + buildTime);
         shipInConstructionDAO.insert(shipInConstruction);
 
         return shipInConstruction;
-    }
-
-    @Override
-    public long calculateBuildTime(ShipType type) {
-        Preconditions.checkNotNull(type, "type");
-
-        switch (type) {
-            case MOSQUITO:
-                return 1;
-            default:
-                throw new AssertionError("Unknown ship type: " + type);
-        }
-    }
-
-    @Override
-    public Resources calculateBuildCost(ShipType type) {
-        Preconditions.checkNotNull(type, "type");
-
-        switch (type) {
-            case MOSQUITO:
-                return new Resources(1, 1, 1);
-            default:
-                throw new AssertionError("Unknown ship type: " + type);
-        }
     }
 
     @Override
