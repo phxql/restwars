@@ -172,6 +172,9 @@ public class ShipServiceImpl implements ShipService {
         long started = roundService.getCurrentRound();
         long arrives = started + (long) Math.ceil(distance / speed);
 
+        // TODO: Check if enough energy is available
+        // TODO: Decrease energy
+
         // Check if enough ships are on the start planet
         Hangar hangar = hangarDAO.findWithPlanetId(start.getId()).orElseThrow(NotEnoughShipsException::new);
         for (Ship ship : ships) {
