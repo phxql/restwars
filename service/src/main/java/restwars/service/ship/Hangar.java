@@ -38,13 +38,6 @@ public class Hangar {
         return Collections.unmodifiableMap(ships);
     }
 
-    public long getShipCount(ShipType type) {
-        Preconditions.checkNotNull(type, "type");
-
-        Long value = ships.get(type);
-        return value == null ? 0L : value;
-    }
-
     public Hangar withShips(Map<ShipType, Long> ships) {
         Preconditions.checkNotNull(ships, "ships");
 

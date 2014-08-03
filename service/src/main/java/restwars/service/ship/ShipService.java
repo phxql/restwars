@@ -63,4 +63,13 @@ public interface ShipService {
      * Finishes all flights which are done in the current round.
      */
     void finishFlights();
+
+    /**
+     * Manifests the given ships on the given planet.
+     *
+     * @param player Player.
+     * @param planet Planet.
+     * @param ships  Ships.
+     */
+    void manifestShips(Player player, Planet planet, List<Ship> ships);
 }

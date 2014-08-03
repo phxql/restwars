@@ -89,6 +89,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         }
 
         try {
+            shipService.manifestShips(player1, player1planets.get(0), Lists.newArrayList(new Ship(ShipType.MOSQUITO, 2)));
             shipService.sendShipsToPlanet(player1, player1planets.get(0), player2planets.get(0), Lists.newArrayList(new Ship(ShipType.MOSQUITO, 1)), FlightType.ATTACK);
         } catch (NotEnoughShipsException e) {
             LOGGER.error("Exception while sending ships to planet", e);

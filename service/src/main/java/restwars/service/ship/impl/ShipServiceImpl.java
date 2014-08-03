@@ -106,6 +106,32 @@ public class ShipServiceImpl implements ShipService {
         LOGGER.trace("Leave: finishFlights()");
     }
 
+    @Override
+    public void manifestShips(Player player, Planet planet, List<Ship> ships) {
+        Preconditions.checkNotNull(player, "player");
+        Preconditions.checkNotNull(planet, "planet");
+        Preconditions.checkNotNull(ships, "ships");
+
+        // TODO: Code duplication from finishShipsInConstruction, refactor!
+
+        Optional<Hangar> mayBeHangar = hangarDAO.findWithPlanetId(planet.getId());
+        Hangar hangar = mayBeHangar.orElse(new Hangar(uuidFactory.create(), planet.getId(), player.getId(), Maps.newHashMap()));
+        boolean insert = !mayBeHangar.isPresent();
+
+        Map<ShipType, Long> updatedShips = Maps.newHashMap(hangar.getShips());
+        for (Ship ship : ships) {
+            long newShipCount = updatedShips.getOrDefault(ship.getType(), 0L) + ship.getCount();
+            updatedShips.put(ship.getType(), newShipCount);
+
+            Hangar updatedHangar = hangar.withShips(updatedShips);
+            if (insert) {
+                hangarDAO.insert(updatedHangar);
+            } else {
+                hangarDAO.update(updatedHangar);
+            }
+        }
+    }
+
     private void finishReturnFlight(Flight flight) {
         assert flight != null;
 
@@ -116,7 +142,7 @@ public class ShipServiceImpl implements ShipService {
 
         Map<ShipType, Long> updatedShips = Maps.newHashMap(hangar.getShips());
         for (Ship ship : flight.getShips()) {
-            updatedShips.put(ship.getType(), hangar.getShipCount(ship.getType()) + ship.getCount());
+            updatedShips.put(ship.getType(), updatedShips.getOrDefault(ship.getType(), 0L) + ship.getCount());
         }
 
         Hangar updatedHangar = hangar.withShips(updatedShips);
@@ -178,15 +204,15 @@ public class ShipServiceImpl implements ShipService {
         // Check if enough ships are on the start planet
         Hangar hangar = hangarDAO.findWithPlanetId(start.getId()).orElseThrow(NotEnoughShipsException::new);
         for (Ship ship : ships) {
-            if (hangar.getShipCount(ship.getType()) < ship.getCount()) {
+            if (hangar.getShips().getOrDefault(ship.getType(), 0L) < ship.getCount()) {
                 throw new NotEnoughShipsException();
             }
         }
 
         // Remove ships from the planet
-        Map<ShipType, Long> remainingShips = Maps.newHashMap();
+        Map<ShipType, Long> remainingShips = Maps.newHashMap(hangar.getShips());
         for (Ship ship : ships) {
-            remainingShips.put(ship.getType(), hangar.getShipCount(ship.getType()) - ship.getCount());
+            remainingShips.put(ship.getType(), remainingShips.getOrDefault(ship.getType(), 0L) - ship.getCount());
         }
         Hangar updatedHangar = hangar.withShips(remainingShips);
         hangarDAO.update(updatedHangar);
@@ -214,7 +240,7 @@ public class ShipServiceImpl implements ShipService {
             boolean insert = !mayBeHangar.isPresent();
 
             Map<ShipType, Long> updatedShips = Maps.newHashMap(hangar.getShips());
-            long newShipCount = hangar.getShipCount(ship.getType()) + 1;
+            long newShipCount = updatedShips.getOrDefault(ship.getType(), 0L) + 1;
             updatedShips.put(ship.getType(), newShipCount);
 
             Hangar updatedHangar = hangar.withShips(updatedShips);
