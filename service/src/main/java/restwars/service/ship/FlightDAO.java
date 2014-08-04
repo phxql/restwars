@@ -1,5 +1,7 @@
 package restwars.service.ship;
 
+import restwars.service.planet.Location;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -13,4 +15,6 @@ public interface FlightDAO {
     void update(Flight flight);
 
     void delete(Flight flight);
+
+    List<Flight> findWithStart(Location location);
 }

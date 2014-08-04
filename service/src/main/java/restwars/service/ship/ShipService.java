@@ -61,6 +61,14 @@ public interface ShipService {
     List<Flight> findFlightsForPlayer(Player player);
 
     /**
+     * Find all flights which were started from a given planet.
+     *
+     * @param planet Planet.
+     * @return Flights.
+     */
+    List<Flight> findFlightsStartedFromPlanet(Planet planet);
+
+    /**
      * Finishes all flights which are done in the current round.
      */
     void finishFlights();

@@ -1,6 +1,8 @@
-package restwars.rest.resources;
+package restwars.rest.util;
 
 import com.google.common.base.Preconditions;
+import restwars.rest.resources.NotYourPlanetWebException;
+import restwars.rest.resources.PlanetNotFoundWebException;
 import restwars.service.building.BuildingType;
 import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
@@ -27,8 +29,8 @@ public final class Helper {
      * @param location      Location.
      * @param owner         Owner.
      * @return Planet.
-     * @throws PlanetNotFoundWebException If the planet wasn't found.
-     * @throws NotYourPlanetWebException  If the planet was found, but isn't owned from the given player.
+     * @throws restwars.rest.resources.PlanetNotFoundWebException If the planet wasn't found.
+     * @throws restwars.rest.resources.NotYourPlanetWebException  If the planet was found, but isn't owned from the given player.
      */
     public static Planet findPlanetWithLocationAndOwner(PlanetService planetService, Location location, Player owner) {
         Preconditions.checkNotNull(planetService, "planetService");

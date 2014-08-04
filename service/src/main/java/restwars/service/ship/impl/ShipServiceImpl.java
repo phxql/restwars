@@ -85,6 +85,13 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
+    public List<Flight> findFlightsStartedFromPlanet(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        return flightDAO.findWithStart(planet.getLocation());
+    }
+
+    @Override
     public void finishFlights() {
         LOGGER.trace("Enter: finishFlights()");
 
@@ -186,8 +193,8 @@ public class ShipServiceImpl implements ShipService {
         long arrival = started + flightTime;
 
         Flight returnFlight = new Flight(
-                flight.getId(), flight.getDestination(), flight.getStart(),
-                started, arrival, ships, flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
+                flight.getId(), flight.getStart(), flight.getDestination(),
+                flight.getStartedInRound(), arrival, ships, flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
                 FlightDirection.RETURN
         );
         flightDAO.update(returnFlight);

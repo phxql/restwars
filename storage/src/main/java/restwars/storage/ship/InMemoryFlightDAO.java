@@ -2,6 +2,7 @@ package restwars.storage.ship;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import restwars.service.planet.Location;
 import restwars.service.ship.Flight;
 import restwars.service.ship.FlightDAO;
 
@@ -32,6 +33,13 @@ public class InMemoryFlightDAO implements FlightDAO {
     @Override
     public List<Flight> findWithArrival(long arrival) {
         return flights.values().stream().filter(f -> f.getArrivalInRound() == arrival).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Flight> findWithStart(Location location) {
+        Preconditions.checkNotNull(location, "location");
+
+        return flights.values().stream().filter(f -> f.getStart().equals(location)).collect(Collectors.toList());
     }
 
     @Override
