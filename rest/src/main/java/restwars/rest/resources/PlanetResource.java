@@ -24,9 +24,11 @@ public class PlanetResource {
     private final ResearchSubResource researchSubResource;
     private final ShipInConstructionSubResource shipInConstructionSubResource;
     private final ShipSubResource shipSubResource;
+    private final FlightSubResource flightSubResource;
 
     @Inject
-    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource) {
+    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource, FlightSubResource flightSubResource) {
+        this.flightSubResource = Preconditions.checkNotNull(flightSubResource, "flightSubResource");
         this.shipSubResource = Preconditions.checkNotNull(shipSubResource, "shipSubResource");
         this.shipInConstructionSubResource = Preconditions.checkNotNull(shipInConstructionSubResource, "shipInConstructionSubResource");
         this.researchSubResource = Preconditions.checkNotNull(researchSubResource, "researchSubResource");
@@ -79,4 +81,8 @@ public class PlanetResource {
         return shipSubResource;
     }
 
+    @Path("/{location}/flight")
+    public FlightSubResource getFlights() {
+        return flightSubResource;
+    }
 }
