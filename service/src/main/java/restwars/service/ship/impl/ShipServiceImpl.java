@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import restwars.service.UniverseConfiguration;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
+import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.Player;
@@ -171,19 +172,18 @@ public class ShipServiceImpl implements ShipService {
         LOGGER.debug("Finishing colonizing flight");
 
         // TODO: Check if the target planet is already colonized
-        Planet planet = planetDAO.findWithLocation(flight.getDestination()).orElseThrow(() -> new AssertionError("Didn't find destination planet " + flight));
-        if (planet.getOwnerId().isPresent()) {
+        Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
+        if (planet.isPresent()) {
             // TODO: The planet is already colonized, create return flight!
         } else {
-            // The flight had energy for the return flight in case the colonization failed, transfer this energy to the planet
-            Planet updatedPlanet = planet.withOwnerId(Optional.of(flight.getPlayerId())).withResources(
+            Planet newPlanet = new Planet(uuidFactory.create(), flight.getDestination(), Optional.of(flight.getPlayerId()),
                     universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(),
-                    universeConfiguration.getStartingEnergy() + flight.getEnergyNeeded() / 2
-            );
-            planetDAO.update(updatedPlanet);
+                    universeConfiguration.getStartingEnergy() + flight.getEnergyNeeded() / 2);
+
+            planetDAO.insert(newPlanet);
 
             // Land the ships on the new planet
-            Hangar hangar = getOrCreateHangar(planet.getId(), flight.getPlayerId());
+            Hangar hangar = getOrCreateHangar(newPlanet.getId(), flight.getPlayerId());
             Map<ShipType, Long> landingShips = Maps.newHashMap();
             for (Ship ship : flight.getShips()) {
                 long count = ship.getCount();
@@ -239,7 +239,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public Flight sendShipsToPlanet(Player player, Planet start, Planet destination, List<Ship> ships, FlightType flightType) throws NotEnoughShipsException {
+    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, List<Ship> ships, FlightType flightType) throws NotEnoughShipsException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");
@@ -248,7 +248,7 @@ public class ShipServiceImpl implements ShipService {
 
         // TODO: Ensure that ships is not empty
 
-        long distance = start.getLocation().calculateDistance(destination.getLocation());
+        long distance = start.getLocation().calculateDistance(destination);
         double energyNeeded = 0;
         for (Ship ship : ships) {
             energyNeeded += ship.getType().getFlightCostModifier() * distance * ship.getCount();
@@ -278,7 +278,7 @@ public class ShipServiceImpl implements ShipService {
         hangarDAO.update(updatedHangar);
 
         // Start the flight
-        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination.getLocation(), started, arrives, ships, (long) Math.ceil(energyNeeded), flightType, player.getId(), FlightDirection.OUTWARD);
+        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, (long) Math.ceil(energyNeeded), flightType, player.getId(), FlightDirection.OUTWARD);
         flightDAO.insert(flight);
         return flight;
     }
