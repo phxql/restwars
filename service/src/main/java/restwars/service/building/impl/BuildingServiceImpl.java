@@ -11,6 +11,7 @@ import restwars.service.planet.PlanetDAO;
 import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class BuildingServiceImpl implements BuildingService {
     private final PlanetDAO planetDAO;
     private final ConstructionSiteDAO constructionSiteDAO;
 
+    @Inject
     public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO) {
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.constructionSiteDAO = Preconditions.checkNotNull(constructionSiteDAO, "constructionSiteDAO");

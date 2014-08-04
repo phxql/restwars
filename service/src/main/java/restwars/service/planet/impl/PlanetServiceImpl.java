@@ -14,6 +14,7 @@ import restwars.service.planet.PlanetDAO;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class PlanetServiceImpl implements PlanetService {
     private final UniverseConfiguration universeConfiguration;
     private final BuildingService buildingService;
 
+    @Inject
     public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO, LocationFactory locationFactory, UniverseConfiguration universeConfiguration, BuildingService buildingService) {
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
         this.locationFactory = Preconditions.checkNotNull(locationFactory, "locationFactory");

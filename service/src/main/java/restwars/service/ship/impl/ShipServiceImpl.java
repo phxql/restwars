@@ -14,6 +14,7 @@ import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,6 +30,7 @@ public class ShipServiceImpl implements ShipService {
     private final FlightDAO flightDAO;
     private final UniverseConfiguration universeConfiguration;
 
+    @Inject
     public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration) {
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");

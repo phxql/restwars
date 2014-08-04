@@ -11,6 +11,7 @@ import restwars.service.planet.PlanetService;
 import restwars.service.resource.ResourceService;
 import restwars.service.resource.Resources;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class ResourceServiceImpl implements ResourceService {
@@ -19,6 +20,7 @@ public class ResourceServiceImpl implements ResourceService {
     private final BuildingService buildingService;
     private final PlanetService planetService;
 
+    @Inject
     public ResourceServiceImpl(BuildingService buildingService, PlanetService planetService) {
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
