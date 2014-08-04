@@ -31,7 +31,7 @@ public class ShipSubResource {
         Preconditions.checkNotNull(location, "location");
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
-        List<Ship> ships = shipService.findShipsOnPlanet(planet);
+        List<Ship> ships = shipService.findShipsOnPlanet(planet).asList();
 
         return Helper.mapToList(ships, ShipResponse::fromShip);
     }

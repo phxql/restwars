@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import restwars.service.planet.Location;
 
-import java.util.List;
 import java.util.UUID;
 
 public class Flight {
@@ -20,7 +19,7 @@ public class Flight {
 
     private final long arrivalInRound;
 
-    private final List<Ship> ships;
+    private final Ships ships;
 
     private final long energyNeeded;
 
@@ -28,7 +27,7 @@ public class Flight {
 
     private final FlightDirection direction;
 
-    public Flight(UUID id, Location start, Location destination, long startedInRound, long arrivalInRound, List<Ship> ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction) {
+    public Flight(UUID id, Location start, Location destination, long startedInRound, long arrivalInRound, Ships ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction) {
         this.start = Preconditions.checkNotNull(start, "start");
         this.destination = Preconditions.checkNotNull(destination, "destination");
         Preconditions.checkArgument(startedInRound > 0, "startedInRound must be > 0");
@@ -57,7 +56,7 @@ public class Flight {
         return arrivalInRound;
     }
 
-    public List<Ship> getShips() {
+    public Ships getShips() {
         return ships;
     }
 

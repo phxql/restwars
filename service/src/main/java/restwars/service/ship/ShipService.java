@@ -37,7 +37,7 @@ public interface ShipService {
      * @param planet Planet.
      * @return Hangar.
      */
-    List<Ship> findShipsOnPlanet(Planet planet);
+    Ships findShipsOnPlanet(Planet planet);
 
     /**
      * Sends the given ships from the given start planet to the given destination planet.
@@ -50,7 +50,7 @@ public interface ShipService {
      * @return Flight.
      * @throws NotEnoughShipsException If not enough ships are available on the start planet.
      */
-    Flight sendShipsToPlanet(Player player, Planet start, Location destination, List<Ship> ships, FlightType flightType) throws NotEnoughShipsException;
+    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType) throws NotEnoughShipsException;
 
     /**
      * Finds all flights for a given player.
@@ -72,5 +72,5 @@ public interface ShipService {
      * @param planet Planet.
      * @param ships  Ships.
      */
-    void manifestShips(Player player, Planet planet, List<Ship> ships);
+    void manifestShips(Player player, Planet planet, Ships ships);
 }
