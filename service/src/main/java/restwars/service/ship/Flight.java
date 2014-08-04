@@ -1,5 +1,6 @@
 package restwars.service.ship;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 import java.util.List;
@@ -81,5 +82,21 @@ public class Flight {
 
     public FlightDirection getDirection() {
         return direction;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("playerId", playerId)
+                .add("startPlanetId", startPlanetId)
+                .add("destinationPlanetId", destinationPlanetId)
+                .add("started", started)
+                .add("arrival", arrival)
+                .add("ships", ships)
+                .add("energyNeeded", energyNeeded)
+                .add("type", type)
+                .add("direction", direction)
+                .toString();
     }
 }

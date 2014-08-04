@@ -4,7 +4,8 @@ import com.google.common.base.Preconditions;
 import restwars.service.resource.Resources;
 
 public enum ShipType {
-    MOSQUITO(new Resources(1, 1, 1), 1, 1.0, 1);
+    MOSQUITO(new Resources(1, 1, 1), 1, 1.0, 1),
+    COLONY(new Resources(1, 1, 1), 1, 1.0, 1);
 
     private final Resources buildCost;
 

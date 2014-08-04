@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.UniverseConfiguration;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -29,8 +30,10 @@ public class ShipServiceImpl implements ShipService {
     private final PlanetDAO planetDAO;
     private final RoundService roundService;
     private final FlightDAO flightDAO;
+    private final UniverseConfiguration universeConfiguration;
 
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration) {
+        this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
@@ -114,9 +117,7 @@ public class ShipServiceImpl implements ShipService {
 
         // TODO: Code duplication from finishShipsInConstruction, refactor!
 
-        Optional<Hangar> mayBeHangar = hangarDAO.findWithPlanetId(planet.getId());
-        Hangar hangar = mayBeHangar.orElse(new Hangar(uuidFactory.create(), planet.getId(), player.getId(), Maps.newHashMap()));
-        boolean insert = !mayBeHangar.isPresent();
+        Hangar hangar = getOrCreateHangar(planet.getId(), player.getId());
 
         Map<ShipType, Long> updatedShips = Maps.newHashMap(hangar.getShips());
         for (Ship ship : ships) {
@@ -124,21 +125,15 @@ public class ShipServiceImpl implements ShipService {
             updatedShips.put(ship.getType(), newShipCount);
 
             Hangar updatedHangar = hangar.withShips(updatedShips);
-            if (insert) {
-                hangarDAO.insert(updatedHangar);
-            } else {
-                hangarDAO.update(updatedHangar);
-            }
+            hangarDAO.update(updatedHangar);
         }
     }
 
     private void finishReturnFlight(Flight flight) {
         assert flight != null;
-
         LOGGER.debug("Finishing return flight {}", flight);
 
-        // TODO: Is it proven that a hangar exists when a flight returns?
-        Hangar hangar = hangarDAO.findWithPlanetId(flight.getDestinationPlanetId()).get();
+        Hangar hangar = getOrCreateHangar(flight.getDestinationPlanetId(), flight.getPlayerId());
 
         Map<ShipType, Long> updatedShips = Maps.newHashMap(hangar.getShips());
         for (Ship ship : flight.getShips()) {
@@ -158,18 +153,81 @@ public class ShipServiceImpl implements ShipService {
 
         LOGGER.debug("Finishing outward flight {}", flight);
 
+        switch (flight.getType()) {
+            case ATTACK:
+                handleAttack(flight);
+                break;
+            case COLONIZE:
+                handleColonize(flight);
+                break;
+            default:
+                throw new AssertionError("Unknown flight type: " + flight.getType());
+        }
+    }
+
+    private void handleColonize(Flight flight) {
+        assert flight != null;
+        LOGGER.debug("Finishing colonizing flight");
+
+        // TODO: Check if the target planet is already colonized
+        Planet planet = planetDAO.findWithId(flight.getDestinationPlanetId()).orElseThrow(() -> new AssertionError("Didn't find destination planet " + flight));
+        if (planet.getOwnerId().isPresent()) {
+            // TODO: The planet is already colonized, create return flight!
+        } else {
+            // The flight had energy for the return flight in case the colonization failed, transfer this energy to the planet
+            Planet updatedPlanet = planet.withOwnerId(Optional.of(flight.getPlayerId())).withResources(
+                    universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(),
+                    universeConfiguration.getStartingEnergy() + flight.getEnergyNeeded() / 2
+            );
+            planetDAO.update(updatedPlanet);
+
+            // Land the ships on the new planet
+            Hangar hangar = getOrCreateHangar(flight.getDestinationPlanetId(), flight.getPlayerId());
+            Map<ShipType, Long> landingShips = Maps.newHashMap();
+            for (Ship ship : flight.getShips()) {
+                long count = ship.getCount();
+                if (ship.getType().equals(ShipType.COLONY)) {
+                    // One colony ship was needed to colonize the planet
+                    count -= 1;
+                }
+                landingShips.put(ship.getType(), count);
+            }
+
+            Hangar updatedHangar = hangar.withShips(landingShips);
+            hangarDAO.update(updatedHangar);
+        }
+    }
+
+    // TODO: Refactor Map<ShipType, Long> and List<Ship> into a Ships class with useful methods to calculate with the ship numbers
+
+    private void createReturnFlight(Flight flight, List<Ship> ships) {
+        assert flight != null;
+        assert ships != null;
+
+        // TODO: Calculate travel speed on the remaining ships
         long flightTime = flight.getArrival() - flight.getStarted();
         long started = roundService.getCurrentRound();
         long arrival = started + flightTime;
 
         Flight returnFlight = new Flight(
                 flight.getId(), flight.getDestinationPlanetId(), flight.getStartPlanetId(),
-                started, arrival, flight.getShips(), flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
+                started, arrival, ships, flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
                 FlightDirection.RETURN
         );
         flightDAO.update(returnFlight);
 
         LOGGER.debug("Created return flight {}", returnFlight);
+    }
+
+    /**
+     * Handles an attack flight.
+     *
+     * @param flight Flight to handle.
+     */
+    private void handleAttack(Flight flight) {
+        assert flight != null;
+
+        createReturnFlight(flight, flight.getShips());
     }
 
     @Override
@@ -200,6 +258,7 @@ public class ShipServiceImpl implements ShipService {
 
         // TODO: Check if enough energy is available
         // TODO: Decrease energy
+        // TODO: For attack flights the double amount of energy is needed, because of the return flight
 
         // Check if enough ships are on the start planet
         Hangar hangar = hangarDAO.findWithPlanetId(start.getId()).orElseThrow(NotEnoughShipsException::new);
@@ -235,21 +294,26 @@ public class ShipServiceImpl implements ShipService {
 
         List<ShipInConstruction> doneShips = shipInConstructionDAO.findWithDone(round);
         for (ShipInConstruction ship : doneShips) {
-            Optional<Hangar> mayBeHangar = hangarDAO.findWithPlanetId(ship.getPlanetId());
-            Hangar hangar = mayBeHangar.orElse(new Hangar(uuidFactory.create(), ship.getPlanetId(), ship.getPlayerId(), Maps.newHashMap()));
-            boolean insert = !mayBeHangar.isPresent();
+            Hangar hangar = getOrCreateHangar(ship.getPlanetId(), ship.getPlayerId());
 
             Map<ShipType, Long> updatedShips = Maps.newHashMap(hangar.getShips());
             long newShipCount = updatedShips.getOrDefault(ship.getType(), 0L) + 1;
             updatedShips.put(ship.getType(), newShipCount);
 
             Hangar updatedHangar = hangar.withShips(updatedShips);
-            if (insert) {
-                hangarDAO.insert(updatedHangar);
-            } else {
-                hangarDAO.update(updatedHangar);
-            }
+            hangarDAO.update(updatedHangar);
             shipInConstructionDAO.delete(ship);
         }
+    }
+
+    private Hangar getOrCreateHangar(UUID planetId, UUID playerId) {
+        Optional<Hangar> mayBeHangar = hangarDAO.findWithPlanetId(planetId);
+        Hangar hangar = mayBeHangar.orElse(new Hangar(uuidFactory.create(), planetId, playerId, Maps.newHashMap()));
+
+        if (!mayBeHangar.isPresent()) {
+            hangarDAO.insert(hangar);
+        }
+
+        return hangar;
     }
 }

@@ -67,7 +67,7 @@ public class ServiceModule {
     }
 
     @Provides
-    ShipService providesShipService(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO) {
-        return new ShipServiceImpl(hangarDAO, shipInConstructionDAO, planetDAO, uuidFactory, roundService, flightDAO);
+    ShipService providesShipService(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration) {
+        return new ShipServiceImpl(hangarDAO, shipInConstructionDAO, planetDAO, uuidFactory, roundService, flightDAO, universeConfiguration);
     }
 }
