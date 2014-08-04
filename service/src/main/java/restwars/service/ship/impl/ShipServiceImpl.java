@@ -133,7 +133,8 @@ public class ShipServiceImpl implements ShipService {
         assert flight != null;
         LOGGER.debug("Finishing return flight {}", flight);
 
-        Hangar hangar = getOrCreateHangar(flight.getDestinationPlanetId(), flight.getPlayerId());
+        UUID destinationPlanetId = planetDAO.findWithLocation(flight.getDestination()).map(Planet::getId).get();
+        Hangar hangar = getOrCreateHangar(destinationPlanetId, flight.getPlayerId());
 
         Map<ShipType, Long> updatedShips = Maps.newHashMap(hangar.getShips());
         for (Ship ship : flight.getShips()) {
@@ -170,7 +171,7 @@ public class ShipServiceImpl implements ShipService {
         LOGGER.debug("Finishing colonizing flight");
 
         // TODO: Check if the target planet is already colonized
-        Planet planet = planetDAO.findWithId(flight.getDestinationPlanetId()).orElseThrow(() -> new AssertionError("Didn't find destination planet " + flight));
+        Planet planet = planetDAO.findWithLocation(flight.getDestination()).orElseThrow(() -> new AssertionError("Didn't find destination planet " + flight));
         if (planet.getOwnerId().isPresent()) {
             // TODO: The planet is already colonized, create return flight!
         } else {
@@ -182,7 +183,7 @@ public class ShipServiceImpl implements ShipService {
             planetDAO.update(updatedPlanet);
 
             // Land the ships on the new planet
-            Hangar hangar = getOrCreateHangar(flight.getDestinationPlanetId(), flight.getPlayerId());
+            Hangar hangar = getOrCreateHangar(planet.getId(), flight.getPlayerId());
             Map<ShipType, Long> landingShips = Maps.newHashMap();
             for (Ship ship : flight.getShips()) {
                 long count = ship.getCount();
@@ -205,12 +206,12 @@ public class ShipServiceImpl implements ShipService {
         assert ships != null;
 
         // TODO: Calculate travel speed on the remaining ships
-        long flightTime = flight.getArrival() - flight.getStarted();
+        long flightTime = flight.getArrivalInRound() - flight.getStartedInRound();
         long started = roundService.getCurrentRound();
         long arrival = started + flightTime;
 
         Flight returnFlight = new Flight(
-                flight.getId(), flight.getDestinationPlanetId(), flight.getStartPlanetId(),
+                flight.getId(), flight.getDestination(), flight.getStart(),
                 started, arrival, ships, flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
                 FlightDirection.RETURN
         );
@@ -277,7 +278,7 @@ public class ShipServiceImpl implements ShipService {
         hangarDAO.update(updatedHangar);
 
         // Start the flight
-        Flight flight = new Flight(uuidFactory.create(), start.getId(), destination.getId(), started, arrives, ships, (long) Math.ceil(energyNeeded), flightType, player.getId(), FlightDirection.OUTWARD);
+        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination.getLocation(), started, arrives, ships, (long) Math.ceil(energyNeeded), flightType, player.getId(), FlightDirection.OUTWARD);
         flightDAO.insert(flight);
         return flight;
     }

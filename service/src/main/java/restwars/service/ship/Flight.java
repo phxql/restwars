@@ -2,6 +2,7 @@ package restwars.service.ship;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import restwars.service.planet.Location;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,13 +12,13 @@ public class Flight {
 
     private final UUID playerId;
 
-    private final UUID startPlanetId;
+    private final Location start;
 
-    private final UUID destinationPlanetId;
+    private final Location destination;
 
-    private final long started;
+    private final long startedInRound;
 
-    private final long arrival;
+    private final long arrivalInRound;
 
     private final List<Ship> ships;
 
@@ -27,16 +28,16 @@ public class Flight {
 
     private final FlightDirection direction;
 
-    public Flight(UUID id, UUID startPlanetId, UUID destinationPlanetId, long started, long arrival, List<Ship> ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction) {
-        Preconditions.checkArgument(started > 0, "started must be > 0");
-        Preconditions.checkArgument(arrival > 0, "arrival must be > 0");
+    public Flight(UUID id, Location start, Location destination, long startedInRound, long arrivalInRound, List<Ship> ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction) {
+        this.start = Preconditions.checkNotNull(start, "start");
+        this.destination = Preconditions.checkNotNull(destination, "destination");
+        Preconditions.checkArgument(startedInRound > 0, "startedInRound must be > 0");
+        Preconditions.checkArgument(arrivalInRound > 0, "arrivalInRound must be > 0");
         Preconditions.checkArgument(energyNeeded > 0, "energyNeeded must be > 0");
 
         this.id = Preconditions.checkNotNull(id, "id");
-        this.startPlanetId = Preconditions.checkNotNull(startPlanetId, "startPlanetId");
-        this.destinationPlanetId = Preconditions.checkNotNull(destinationPlanetId, "destinationPlanetId");
-        this.started = started;
-        this.arrival = arrival;
+        this.startedInRound = startedInRound;
+        this.arrivalInRound = arrivalInRound;
         this.ships = Preconditions.checkNotNull(ships, "ships");
         this.energyNeeded = energyNeeded;
         this.type = Preconditions.checkNotNull(type, "type");
@@ -48,20 +49,12 @@ public class Flight {
         return id;
     }
 
-    public UUID getStartPlanetId() {
-        return startPlanetId;
+    public long getStartedInRound() {
+        return startedInRound;
     }
 
-    public UUID getDestinationPlanetId() {
-        return destinationPlanetId;
-    }
-
-    public long getStarted() {
-        return started;
-    }
-
-    public long getArrival() {
-        return arrival;
+    public long getArrivalInRound() {
+        return arrivalInRound;
     }
 
     public List<Ship> getShips() {
@@ -84,15 +77,23 @@ public class Flight {
         return direction;
     }
 
+    public Location getStart() {
+        return start;
+    }
+
+    public Location getDestination() {
+        return destination;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("id", id)
                 .add("playerId", playerId)
-                .add("startPlanetId", startPlanetId)
-                .add("destinationPlanetId", destinationPlanetId)
-                .add("started", started)
-                .add("arrival", arrival)
+                .add("start", start)
+                .add("destination", destination)
+                .add("startedInRound", startedInRound)
+                .add("arrivalInRound", arrivalInRound)
                 .add("ships", ships)
                 .add("energyNeeded", energyNeeded)
                 .add("type", type)

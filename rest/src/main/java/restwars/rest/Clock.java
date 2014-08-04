@@ -58,13 +58,12 @@ public class Clock implements Managed, Runnable {
     @Override
     public void run() {
         long round = roundService.nextRound();
+        LOGGER.info("Starting round {}", round);
 
         buildingService.finishConstructionSites();
         technologyService.finishResearches();
         shipService.finishShipsInConstruction();
         resourceService.gatherResourcesOnAllPlanets();
         shipService.finishFlights();
-
-        LOGGER.info("Starting round {}", round);
     }
 }

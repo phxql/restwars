@@ -31,7 +31,7 @@ public class InMemoryFlightDAO implements FlightDAO {
 
     @Override
     public List<Flight> findWithArrival(long arrival) {
-        return flights.values().stream().filter(f -> f.getArrival() == arrival).collect(Collectors.toList());
+        return flights.values().stream().filter(f -> f.getArrivalInRound() == arrival).collect(Collectors.toList());
     }
 
     @Override
