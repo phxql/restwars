@@ -8,6 +8,7 @@ import restwars.service.planet.PlanetService;
 import restwars.service.player.PlayerService;
 import restwars.service.ship.ShipService;
 import restwars.service.technology.TechnologyService;
+import restwars.storage.JdbcConnection;
 
 import javax.inject.Inject;
 
@@ -26,8 +27,10 @@ public class CompositionRoot {
     private final PlayerAuthenticator playerAuthenticator;
     private final Clock clock;
 
+    private final JdbcConnection jdbcConnection;
+
     @Inject
-    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, PlayerAuthenticator playerAuthenticator, Clock clock) {
+    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, PlayerAuthenticator playerAuthenticator, Clock clock, JdbcConnection jdbcConnection) {
         this.playerService = playerService;
         this.planetService = planetService;
         this.buildingService = buildingService;
@@ -40,6 +43,7 @@ public class CompositionRoot {
         this.planetResource = planetResource;
         this.playerAuthenticator = playerAuthenticator;
         this.clock = clock;
+        this.jdbcConnection = jdbcConnection;
     }
 
     public BuildingService getBuildingService() {
@@ -88,5 +92,9 @@ public class CompositionRoot {
 
     public ShipService getShipService() {
         return shipService;
+    }
+
+    public JdbcConnection getJdbcConnection() {
+        return jdbcConnection;
     }
 }

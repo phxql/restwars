@@ -8,6 +8,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.CompositionRoot;
 import restwars.rest.di.RestWarsModule;
 import restwars.service.UniverseConfiguration;
@@ -44,8 +45,10 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
     @Override
     public void run(RestwarsConfiguration restwarsConfiguration, Environment environment) throws Exception {
         UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 30);
-        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration));
+        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, restwarsConfiguration.getDatabase()));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
+
+        compositionRoot.getJdbcConnection().updateSchema();
 
         environment.jersey().register(new BasicAuthProvider<>(compositionRoot.getPlayerAuthenticator(), "RESTwars"));
         environment.jersey().register(compositionRoot.getSystemResource());
