@@ -8,6 +8,7 @@ import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.impl.RoundServiceImpl;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.PlayerDAO;
+import restwars.service.ship.FlightDAO;
 import restwars.service.ship.HangarDAO;
 import restwars.service.ship.ShipInConstructionDAO;
 import restwars.service.technology.ResearchDAO;
@@ -16,6 +17,7 @@ import restwars.storage.building.InMemoryBuildingDAO;
 import restwars.storage.building.InMemoryConstructionSiteDAO;
 import restwars.storage.planet.InMemoryPlanetDAO;
 import restwars.storage.player.InMemoryPlayerDAO;
+import restwars.storage.ship.InMemoryFlightDAO;
 import restwars.storage.ship.InMemoryHangarDAO;
 import restwars.storage.ship.InMemoryShipInConstructionDAO;
 import restwars.storage.technology.InMemoryResearchDAO;
@@ -79,4 +81,9 @@ public class InMemoryDAOModule {
         return new RoundServiceImpl();
     }
 
+    @Provides
+    @Singleton
+    FlightDAO providesFlightDAO() {
+        return new InMemoryFlightDAO();
+    }
 }

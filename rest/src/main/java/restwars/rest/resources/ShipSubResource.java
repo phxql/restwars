@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.ship.ShipResponse;
 import restwars.rest.resources.param.LocationParam;
+import restwars.rest.util.Helper;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -31,9 +32,8 @@ public class ShipSubResource {
         Preconditions.checkNotNull(location, "location");
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
-        List<Ship> ships = shipService.findShipsOnPlanet(planet);
+        List<Ship> ships = shipService.findShipsOnPlanet(planet).asList();
 
         return Helper.mapToList(ships, ShipResponse::fromShip);
     }
-
 }

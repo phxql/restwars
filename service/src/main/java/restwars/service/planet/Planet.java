@@ -76,4 +76,10 @@ public class Planet {
 
         return crystals >= resources.getCrystals() && gas >= resources.getGas() && energy >= resources.getEnergy();
     }
+
+    public Planet withOwnerId(Optional<UUID> ownerId) {
+        Preconditions.checkNotNull(ownerId, "ownerId");
+
+        return new Planet(id, location, ownerId, crystals, gas, energy);
+    }
 }

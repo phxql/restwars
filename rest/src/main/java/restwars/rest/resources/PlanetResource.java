@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.planet.PlanetResponse;
 import restwars.rest.resources.param.LocationParam;
+import restwars.rest.util.Helper;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -23,9 +24,11 @@ public class PlanetResource {
     private final ResearchSubResource researchSubResource;
     private final ShipInConstructionSubResource shipInConstructionSubResource;
     private final ShipSubResource shipSubResource;
+    private final FlightSubResource flightSubResource;
 
     @Inject
-    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource) {
+    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource, FlightSubResource flightSubResource) {
+        this.flightSubResource = Preconditions.checkNotNull(flightSubResource, "flightSubResource");
         this.shipSubResource = Preconditions.checkNotNull(shipSubResource, "shipSubResource");
         this.shipInConstructionSubResource = Preconditions.checkNotNull(shipInConstructionSubResource, "shipInConstructionSubResource");
         this.researchSubResource = Preconditions.checkNotNull(researchSubResource, "researchSubResource");
@@ -78,4 +81,8 @@ public class PlanetResource {
         return shipSubResource;
     }
 
+    @Path("/{location}/flight")
+    public FlightSubResource getFlights() {
+        return flightSubResource;
+    }
 }

@@ -10,6 +10,7 @@ import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 import restwars.service.player.PlayerService;
 
+import javax.inject.Inject;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final PlayerDAO playerDAO;
     private final PlanetService planetService;
 
+    @Inject
     public PlayerServiceImpl(UUIDFactory uuidFactory, PlayerDAO playerDAO, PlanetService planetService) {
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");

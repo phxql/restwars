@@ -5,6 +5,7 @@ import io.dropwizard.auth.Auth;
 import restwars.rest.api.building.ConstructionSiteResponse;
 import restwars.rest.api.building.CreateBuildingRequest;
 import restwars.rest.resources.param.LocationParam;
+import restwars.rest.util.Helper;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
 import restwars.service.building.ConstructionSite;

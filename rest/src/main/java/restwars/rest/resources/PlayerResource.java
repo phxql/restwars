@@ -5,6 +5,7 @@ import io.dropwizard.auth.Auth;
 import restwars.rest.api.planet.PlanetResponse;
 import restwars.rest.api.player.PlayerResponse;
 import restwars.rest.api.player.RegisterPlayerRequest;
+import restwars.rest.util.Helper;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;

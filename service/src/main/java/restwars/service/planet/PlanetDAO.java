@@ -44,4 +44,12 @@ public interface PlanetDAO {
      * @return All planets.
      */
     List<Planet> findAll();
+
+    /**
+     * Finds the planet with the given id.
+     *
+     * @param id Id.
+     * @return Planet if found.
+     */
+    Optional<Planet> findWithId(UUID id);
 }

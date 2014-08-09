@@ -45,6 +45,13 @@ public class InMemoryPlanetDAO implements PlanetDAO {
     }
 
     @Override
+    public Optional<Planet> findWithId(UUID id) {
+        Preconditions.checkNotNull(id, "id");
+
+        return Optional.ofNullable(planets.get(id));
+    }
+
+    @Override
     public void update(Planet planet) {
         Preconditions.checkNotNull(planet, "planet");
 

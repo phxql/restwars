@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.building.BuildingResponse;
 import restwars.rest.resources.param.LocationParam;
+import restwars.rest.util.Helper;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingService;
 import restwars.service.planet.Planet;

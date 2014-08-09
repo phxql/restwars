@@ -68,4 +68,10 @@ public class Location {
     public String toString() {
         return galaxy + "." + solarSystem + "." + planet;
     }
+
+    public long calculateDistance(Location to) {
+        Preconditions.checkNotNull(to, "to");
+
+        return Math.abs(getPlanet() - to.getPlanet()) + Math.abs(getSolarSystem() - to.getSolarSystem()) + Math.abs(getGalaxy() - to.getGalaxy());
+    }
 }

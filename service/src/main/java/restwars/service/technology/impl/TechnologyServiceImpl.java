@@ -13,6 +13,7 @@ import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 import restwars.service.technology.*;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class TechnologyServiceImpl implements TechnologyService {
     private final RoundService roundService;
     private final ResearchDAO researchDAO;
 
+    @Inject
     public TechnologyServiceImpl(UUIDFactory uuidFactory, BuildingService buildingService, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO) {
         this.researchDAO = Preconditions.checkNotNull(researchDAO, "researchDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
