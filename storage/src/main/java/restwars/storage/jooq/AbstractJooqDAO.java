@@ -3,10 +3,17 @@ package restwars.storage.jooq;
 import com.google.common.base.Preconditions;
 import org.jooq.DSLContext;
 import restwars.service.unitofwork.UnitOfWork;
+import restwars.service.unitofwork.UnitOfWorkService;
 
 public abstract class AbstractJooqDAO {
-    protected static DSLContext context(UnitOfWork uow) {
-        Preconditions.checkNotNull(uow, "uow");
+    private final UnitOfWorkService unitOfWorkService;
+
+    protected AbstractJooqDAO(UnitOfWorkService unitOfWorkService) {
+        this.unitOfWorkService = Preconditions.checkNotNull(unitOfWorkService, "unitOfWorkService");
+    }
+
+    protected DSLContext context() {
+        UnitOfWork uow = unitOfWorkService.getCurrent();
 
         if (!(uow instanceof JooqUnitOfWork)) {
             throw new IllegalArgumentException("Expected a JooqUnitOfWork, found " + uow.getClass());

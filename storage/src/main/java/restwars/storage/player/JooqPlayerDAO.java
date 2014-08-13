@@ -15,18 +15,16 @@ import static restwars.storage.jooq.Tables.PLAYER;
 
 @Singleton
 public class JooqPlayerDAO extends AbstractJooqDAO implements PlayerDAO {
-    private final UnitOfWorkService unitOfWorkService;
-
     @Inject
     public JooqPlayerDAO(UnitOfWorkService unitOfWorkService) {
-        this.unitOfWorkService = Preconditions.checkNotNull(unitOfWorkService, "unitOfWorkService");
+        super(unitOfWorkService);
     }
 
     @Override
     public void insert(Player player) {
         Preconditions.checkNotNull(player, "player");
 
-        context(unitOfWorkService.getCurrent()).insertInto(PLAYER, PLAYER.ID, PLAYER.USERNAME, PLAYER.PASSWORD)
+        context().insertInto(PLAYER, PLAYER.ID, PLAYER.USERNAME, PLAYER.PASSWORD)
                 .values(player.getId(), player.getUsername(), player.getPassword())
                 .execute();
 
@@ -36,7 +34,7 @@ public class JooqPlayerDAO extends AbstractJooqDAO implements PlayerDAO {
     public Optional<Player> findWithUsername(String username) {
         Preconditions.checkNotNull(username, "username");
 
-        Record record = context(unitOfWorkService.getCurrent()).select().from(PLAYER).where(PLAYER.USERNAME.eq(username)).fetchAny();
+        Record record = context().select().from(PLAYER).where(PLAYER.USERNAME.eq(username)).fetchAny();
         if (record == null) {
             return Optional.empty();
         }
