@@ -90,7 +90,7 @@
                 <executions>
                     <execution>
                         <configuration>
-                            <changeLogFile>src/main/resources/migration.xml</changeLogFile>
+                            <changeLogFile>src/main/resources/migrations.xml</changeLogFile>
                             <driver>org.h2.Driver</driver>
                             <url>${database.url}</url>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
