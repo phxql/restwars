@@ -6,6 +6,7 @@ import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
+import restwars.service.unitofwork.UnitOfWork;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,12 +20,14 @@ public class PlayerServiceImplTest {
     private PlayerDAO playerDAO;
     private PlanetService planetService;
     private PlayerServiceImpl sut;
+    private UnitOfWork uow;
 
     @BeforeMethod
     public void setUp() throws Exception {
         uuidFactory = mock(UUIDFactory.class);
         playerDAO = mock(PlayerDAO.class);
         planetService = mock(PlanetService.class);
+        uow = mock(UnitOfWork.class);
 
         sut = new PlayerServiceImpl(uuidFactory, playerDAO, planetService);
     }
@@ -32,9 +35,9 @@ public class PlayerServiceImplTest {
     @Test
     public void testFindWithUsername() throws Exception {
         Player player = mock(Player.class);
-        when(playerDAO.findWithUsername("Sheng Long")).thenReturn(Optional.of(player));
+        when(playerDAO.findWithUsername(uow, "Sheng Long")).thenReturn(Optional.of(player));
 
-        Optional<Player> actual = sut.findWithUsername("Sheng Long");
+        Optional<Player> actual = sut.findWithUsername(uow, "Sheng Long");
 
         assertThat(actual, is(Optional.of(player)));
     }
@@ -44,13 +47,13 @@ public class PlayerServiceImplTest {
         UUID id = UUID.randomUUID();
         when(uuidFactory.create()).thenReturn(id);
 
-        Player actual = sut.createPlayer("username", "password");
+        Player actual = sut.createPlayer(uow, "username", "password");
 
         assertThat(actual.getId(), is(id));
         assertThat(actual.getUsername(), is("username"));
         assertThat(actual.getPassword(), is("password"));
 
-        verify(playerDAO).insert(new Player(id, "username", "password"));
+        verify(playerDAO).insert(uow, new Player(id, "username", "password"));
         verify(planetService).createStartPlanet(new Player(id, "username", "password"));
     }
 }

@@ -8,7 +8,7 @@ import restwars.service.planet.PlanetService;
 import restwars.service.player.PlayerService;
 import restwars.service.ship.ShipService;
 import restwars.service.technology.TechnologyService;
-import restwars.storage.JdbcConnection;
+import restwars.service.unitofwork.UnitOfWorkService;
 
 import javax.inject.Inject;
 
@@ -27,10 +27,10 @@ public class CompositionRoot {
     private final PlayerAuthenticator playerAuthenticator;
     private final Clock clock;
 
-    private final JdbcConnection jdbcConnection;
+    private final UnitOfWorkService unitOfWorkService;
 
     @Inject
-    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, PlayerAuthenticator playerAuthenticator, Clock clock, JdbcConnection jdbcConnection) {
+    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, PlayerAuthenticator playerAuthenticator, Clock clock, UnitOfWorkService unitOfWorkService) {
         this.playerService = playerService;
         this.planetService = planetService;
         this.buildingService = buildingService;
@@ -43,7 +43,7 @@ public class CompositionRoot {
         this.planetResource = planetResource;
         this.playerAuthenticator = playerAuthenticator;
         this.clock = clock;
-        this.jdbcConnection = jdbcConnection;
+        this.unitOfWorkService = unitOfWorkService;
     }
 
     public BuildingService getBuildingService() {
@@ -94,7 +94,7 @@ public class CompositionRoot {
         return shipService;
     }
 
-    public JdbcConnection getJdbcConnection() {
-        return jdbcConnection;
+    public UnitOfWorkService getUnitOfWorkService() {
+        return unitOfWorkService;
     }
 }

@@ -29,8 +29,8 @@ import javax.inject.Singleton;
 public class JooqDAOModule {
     @Provides
     @Singleton
-    PlayerDAO providesPlayerDAO(JooqPlayerDAO playerDAO) {
-        return playerDAO;
+    PlayerDAO providesPlayerDAO() {
+        return new JooqPlayerDAO();
     }
 
     @Provides

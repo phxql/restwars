@@ -4,6 +4,9 @@ import com.google.common.collect.Lists;
 import dagger.ObjectGraph;
 import io.dropwizard.Application;
 import io.dropwizard.auth.basic.BasicAuthProvider;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.db.ManagedDataSource;
+import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
@@ -23,6 +26,8 @@ import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.ship.*;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.TechnologyType;
+import restwars.service.unitofwork.UnitOfWork;
+import restwars.service.unitofwork.UnitOfWorkService;
 
 import java.util.List;
 
@@ -39,16 +44,25 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
     }
 
     @Override
-    public void initialize(Bootstrap<RestwarsConfiguration> restwarsConfigurationBootstrap) {
+    public void initialize(Bootstrap<RestwarsConfiguration> bootstrap) {
+        bootstrap.addBundle(new MigrationsBundle<RestwarsConfiguration>() {
+            @Override
+            public DataSourceFactory getDataSourceFactory(RestwarsConfiguration configuration) {
+                return configuration.getDatabase();
+            }
+        });
     }
 
     @Override
     public void run(RestwarsConfiguration restwarsConfiguration, Environment environment) throws Exception {
-        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 30);
-        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, restwarsConfiguration.getDatabase()));
-        CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
+        // Start connection pool
+        ManagedDataSource dataSource = restwarsConfiguration.getDatabase().build(environment.metrics(), "datasource");
+        environment.lifecycle().manage(dataSource);
 
-        compositionRoot.getJdbcConnection().updateSchema();
+        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 30);
+
+        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource));
+        CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
 
         environment.jersey().register(new BasicAuthProvider<>(compositionRoot.getPlayerAuthenticator(), "RESTwars"));
         environment.jersey().register(compositionRoot.getSystemResource());
@@ -58,14 +72,15 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         environment.lifecycle().manage(compositionRoot.getClock());
 
-        loadDemoData(compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
+        loadDemoData(compositionRoot.getUnitOfWorkService(), compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
     }
 
-    private void loadDemoData(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {
-        Player player1 = playerService.createPlayer("player1", "player1");
+    private void loadDemoData(UnitOfWorkService unitOfWorkService, PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {
+        UnitOfWork uow = unitOfWorkService.start();
+        Player player1 = playerService.createPlayer(uow, "player1", "player1");
         List<Planet> player1planets = planetService.findWithOwner(player1);
 
-        Player player2 = playerService.createPlayer("player2", "player2");
+        Player player2 = playerService.createPlayer(uow, "player2", "player2");
         List<Planet> player2planets = planetService.findWithOwner(player2);
 
         if (!player1planets.isEmpty()) {
@@ -99,5 +114,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         } catch (NotEnoughShipsException e) {
             LOGGER.error("Exception while sending ships to planet", e);
         }
+
+        unitOfWorkService.commit(uow);
     }
 }

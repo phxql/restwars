@@ -9,6 +9,7 @@ import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 import restwars.service.player.PlayerService;
+import restwars.service.unitofwork.UnitOfWork;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -29,7 +30,8 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player createPlayer(String username, String password) {
+    public Player createPlayer(UnitOfWork uow, String username, String password) {
+        Preconditions.checkNotNull(uow, "uow");
         Preconditions.checkNotNull(username, "username");
         Preconditions.checkNotNull(password, "password");
 
@@ -38,7 +40,7 @@ public class PlayerServiceImpl implements PlayerService {
         // TODO: Validate username and password
 
         Player player = new Player(id, username, password);
-        playerDAO.insert(player);
+        playerDAO.insert(uow, player);
         LOGGER.debug("Created player {}", player);
 
         Planet planet = planetService.createStartPlanet(player);
@@ -48,9 +50,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Optional<Player> findWithUsername(String username) {
+    public Optional<Player> findWithUsername(UnitOfWork uow, String username) {
+        Preconditions.checkNotNull(uow, "uow");
         Preconditions.checkNotNull(username, "username");
 
-        return playerDAO.findWithUsername(username);
+        return playerDAO.findWithUsername(uow, username);
     }
 }
