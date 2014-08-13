@@ -8,7 +8,7 @@ import restwars.service.ServiceModule;
 import restwars.service.UniverseConfiguration;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.JooqDAOModule;
-import restwars.storage.unitofwork.JooqUnitOfWorkService;
+import restwars.storage.jooq.JooqUnitOfWorkService;
 
 @Module(injects = CompositionRoot.class, includes = {
         JooqDAOModule.class, ServiceModule.class

@@ -1,4 +1,4 @@
-package restwars.storage.unitofwork;
+package restwars.storage.jooq;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.db.ManagedDataSource;
@@ -66,7 +66,7 @@ public class JooqUnitOfWorkService implements UnitOfWorkService {
      * {@link java.lang.IllegalArgumentException} if it's not.
      *
      * @param unitOfWork Unit of work to check.
-     * @return A {@link restwars.storage.unitofwork.JooqUnitOfWork}.
+     * @return A {@link JooqUnitOfWork}.
      */
     private static JooqUnitOfWork checkType(UnitOfWork unitOfWork) {
         assert unitOfWork != null;

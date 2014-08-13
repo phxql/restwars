@@ -1,4 +1,4 @@
-package restwars.storage.unitofwork;
+package restwars.storage.jooq;
 
 import com.google.common.base.Preconditions;
 import org.jooq.DSLContext;
