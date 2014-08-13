@@ -8,7 +8,7 @@ import restwars.service.unitofwork.UnitOfWorkService;
 public abstract class AbstractJooqDAO {
     private final UnitOfWorkService unitOfWorkService;
 
-    protected AbstractJooqDAO(UnitOfWorkService unitOfWorkService) {
+    public AbstractJooqDAO(UnitOfWorkService unitOfWorkService) {
         this.unitOfWorkService = Preconditions.checkNotNull(unitOfWorkService, "unitOfWorkService");
     }
 

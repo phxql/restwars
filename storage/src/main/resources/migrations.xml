@@ -14,5 +14,33 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <createTable tableName="planet">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="location_galaxy" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_solar_system" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_planet" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="uuid">
+                <constraints nullable="true" references="player(id)" foreignKeyName="planet_owner_id"/>
+            </column>
+            <column name="crystals" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gas" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="energy" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="planet" columnNames="location_galaxy, location_solar_system, location_planet"/>
     </changeSet>
 </databaseChangeLog>

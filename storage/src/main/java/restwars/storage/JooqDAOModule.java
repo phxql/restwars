@@ -15,7 +15,7 @@ import restwars.service.technology.ResearchDAO;
 import restwars.service.technology.TechnologyDAO;
 import restwars.storage.building.InMemoryBuildingDAO;
 import restwars.storage.building.InMemoryConstructionSiteDAO;
-import restwars.storage.planet.InMemoryPlanetDAO;
+import restwars.storage.planet.JooqPlanetDAO;
 import restwars.storage.player.JooqPlayerDAO;
 import restwars.storage.ship.InMemoryFlightDAO;
 import restwars.storage.ship.InMemoryHangarDAO;
@@ -28,9 +28,13 @@ import javax.inject.Singleton;
 @Module(library = true, complete = false)
 public class JooqDAOModule {
     @Provides
-    @Singleton
     PlayerDAO providesPlayerDAO(JooqPlayerDAO jooqPlayerDAO) {
         return jooqPlayerDAO;
+    }
+
+    @Provides
+    PlanetDAO providesPlanetDAO(JooqPlanetDAO jooqPlanetDAO) {
+        return jooqPlanetDAO;
     }
 
     @Provides
@@ -55,12 +59,6 @@ public class JooqDAOModule {
     @Singleton
     ConstructionSiteDAO providesConstructionSiteDAO() {
         return new InMemoryConstructionSiteDAO();
-    }
-
-    @Provides
-    @Singleton
-    PlanetDAO providesPlanetDAO() {
-        return new InMemoryPlanetDAO();
     }
 
     @Provides
