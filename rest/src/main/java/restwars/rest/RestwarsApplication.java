@@ -26,7 +26,6 @@ import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.ship.*;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.TechnologyType;
-import restwars.service.unitofwork.UnitOfWork;
 import restwars.service.unitofwork.UnitOfWorkService;
 
 import java.util.List;
@@ -76,11 +75,12 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
     }
 
     private void loadDemoData(UnitOfWorkService unitOfWorkService, PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {
-        UnitOfWork uow = unitOfWorkService.start();
-        Player player1 = playerService.createPlayer(uow, "player1", "player1");
+        unitOfWorkService.start();
+
+        Player player1 = playerService.createPlayer("player1", "player1");
         List<Planet> player1planets = planetService.findWithOwner(player1);
 
-        Player player2 = playerService.createPlayer(uow, "player2", "player2");
+        Player player2 = playerService.createPlayer("player2", "player2");
         List<Planet> player2planets = planetService.findWithOwner(player2);
 
         if (!player1planets.isEmpty()) {
@@ -115,6 +115,6 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
             LOGGER.error("Exception while sending ships to planet", e);
         }
 
-        unitOfWorkService.commit(uow);
+        unitOfWorkService.commit();
     }
 }

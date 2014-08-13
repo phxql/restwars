@@ -4,9 +4,10 @@ import com.google.common.base.Preconditions;
 import org.jooq.Record;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
-import restwars.service.unitofwork.UnitOfWork;
+import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Optional;
 
@@ -14,23 +15,28 @@ import static restwars.storage.jooq.Tables.PLAYER;
 
 @Singleton
 public class JooqPlayerDAO extends AbstractJooqDAO implements PlayerDAO {
+    private final UnitOfWorkService unitOfWorkService;
+
+    @Inject
+    public JooqPlayerDAO(UnitOfWorkService unitOfWorkService) {
+        this.unitOfWorkService = Preconditions.checkNotNull(unitOfWorkService, "unitOfWorkService");
+    }
+
     @Override
-    public void insert(UnitOfWork uow, Player player) {
-        Preconditions.checkNotNull(uow, "uow");
+    public void insert(Player player) {
         Preconditions.checkNotNull(player, "player");
 
-        context(uow).insertInto(PLAYER, PLAYER.ID, PLAYER.USERNAME, PLAYER.PASSWORD)
+        context(unitOfWorkService.getCurrent()).insertInto(PLAYER, PLAYER.ID, PLAYER.USERNAME, PLAYER.PASSWORD)
                 .values(player.getId(), player.getUsername(), player.getPassword())
                 .execute();
 
     }
 
     @Override
-    public Optional<Player> findWithUsername(UnitOfWork uow, String username) {
-        Preconditions.checkNotNull(uow, "uow");
+    public Optional<Player> findWithUsername(String username) {
         Preconditions.checkNotNull(username, "username");
 
-        Record record = context(uow).select().from(PLAYER).where(PLAYER.USERNAME.eq(username)).fetchAny();
+        Record record = context(unitOfWorkService.getCurrent()).select().from(PLAYER).where(PLAYER.USERNAME.eq(username)).fetchAny();
         if (record == null) {
             return Optional.empty();
         }

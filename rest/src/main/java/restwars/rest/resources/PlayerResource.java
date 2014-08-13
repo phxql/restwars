@@ -10,7 +10,6 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
-import restwars.service.unitofwork.UnitOfWork;
 import restwars.service.unitofwork.UnitOfWorkService;
 
 import javax.inject.Inject;
@@ -21,7 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Path("/v1/player")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -53,20 +51,20 @@ public class PlayerResource {
         Preconditions.checkNotNull(registration, "registration");
 
         // TODO: Move this in an JAXRS interceptor
-        execute(uow -> {
-            playerService.createPlayer(uow, registration.getUsername(), registration.getPassword());
+        execute(() -> {
+            playerService.createPlayer(registration.getUsername(), registration.getPassword());
         });
 
         return Response.created(uriInfo.getAbsolutePathBuilder().path("/").build()).build();
     }
 
-    private void execute(Consumer<UnitOfWork> consumer) {
-        UnitOfWork uow = unitOfWorkService.start();
+    private void execute(Runnable consumer) {
+        unitOfWorkService.start();
         try {
-            consumer.accept(uow);
-            unitOfWorkService.commit(uow);
+            consumer.run();
+            unitOfWorkService.commit();
         } catch (Exception e) {
-            unitOfWorkService.abort(uow);
+            unitOfWorkService.abort();
             throw new RuntimeException(e);
         }
     }

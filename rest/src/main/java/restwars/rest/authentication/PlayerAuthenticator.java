@@ -6,7 +6,6 @@ import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
-import restwars.service.unitofwork.UnitOfWork;
 import restwars.service.unitofwork.UnitOfWorkService;
 
 import javax.inject.Inject;
@@ -27,16 +26,18 @@ public class PlayerAuthenticator implements Authenticator<BasicCredentials, Play
     public com.google.common.base.Optional<Player> authenticate(BasicCredentials basicCredentials) throws AuthenticationException {
         Preconditions.checkNotNull(basicCredentials, "basicCredentials");
 
-        UnitOfWork uow = unitOfWorkService.start();
-        Optional<Player> player = playerService.findWithUsername(uow, basicCredentials.getUsername());
+        unitOfWorkService.start();
+        Optional<Player> player = playerService.findWithUsername(basicCredentials.getUsername());
         if (player.isPresent()) {
             // TODO: Fix timing attacks
             // TODO: Bcrypt password
             if (player.get().getPassword().equals(basicCredentials.getPassword())) {
+                unitOfWorkService.commit();
                 return com.google.common.base.Optional.of(player.get());
             }
         }
 
+        unitOfWorkService.commit();
         return com.google.common.base.Optional.absent();
     }
 }
