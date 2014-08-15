@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.CompositionRoot;
 import restwars.rest.di.RestWarsModule;
+import restwars.rest.integration.UnitOfWorkResourceMethodDispatchAdapter;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
@@ -62,6 +63,8 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
+
+        environment.jersey().register(new UnitOfWorkResourceMethodDispatchAdapter(compositionRoot.getUnitOfWorkService()));
 
         environment.jersey().register(new BasicAuthProvider<>(compositionRoot.getPlayerAuthenticator(), "RESTwars"));
         environment.jersey().register(compositionRoot.getSystemResource());

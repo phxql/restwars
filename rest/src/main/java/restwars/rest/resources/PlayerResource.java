@@ -10,7 +10,6 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
-import restwars.service.unitofwork.UnitOfWorkService;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -27,16 +26,14 @@ import java.util.List;
 public class PlayerResource {
     private final PlayerService playerService;
     private final PlanetService planetService;
-    private final UnitOfWorkService unitOfWorkService;
 
     @Context
     private UriInfo uriInfo;
 
     @Inject
-    public PlayerResource(PlayerService playerService, PlanetService planetService, UnitOfWorkService unitOfWorkService) {
+    public PlayerResource(PlayerService playerService, PlanetService planetService) {
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.playerService = Preconditions.checkNotNull(playerService, "playerService");
-        this.unitOfWorkService = unitOfWorkService; // TODO: Move this in an JAXRS interceptor
     }
 
     @GET
@@ -50,22 +47,8 @@ public class PlayerResource {
     public Response register(@Valid RegisterPlayerRequest registration) {
         Preconditions.checkNotNull(registration, "registration");
 
-        // TODO: Move this in an JAXRS interceptor
-        execute(() -> {
-            playerService.createPlayer(registration.getUsername(), registration.getPassword());
-        });
+        playerService.createPlayer(registration.getUsername(), registration.getPassword());
 
         return Response.created(uriInfo.getAbsolutePathBuilder().path("/").build()).build();
-    }
-
-    private void execute(Runnable consumer) {
-        unitOfWorkService.start();
-        try {
-            consumer.run();
-            unitOfWorkService.commit();
-        } catch (Exception e) {
-            unitOfWorkService.abort();
-            throw new RuntimeException(e);
-        }
     }
 }
