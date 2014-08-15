@@ -42,5 +42,21 @@
             </column>
         </createTable>
         <addUniqueConstraint tableName="planet" columnNames="location_galaxy, location_solar_system, location_planet"/>
+
+        <createTable tableName="building">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="building_planet_id"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="building" columnNames="planet_id, type"/>
     </changeSet>
 </databaseChangeLog>
