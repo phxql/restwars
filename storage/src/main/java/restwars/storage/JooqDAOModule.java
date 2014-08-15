@@ -13,8 +13,8 @@ import restwars.service.ship.HangarDAO;
 import restwars.service.ship.ShipInConstructionDAO;
 import restwars.service.technology.ResearchDAO;
 import restwars.service.technology.TechnologyDAO;
-import restwars.storage.building.InMemoryConstructionSiteDAO;
 import restwars.storage.building.JooqBuildingDAO;
+import restwars.storage.building.JooqConstructionSiteDAO;
 import restwars.storage.planet.JooqPlanetDAO;
 import restwars.storage.player.JooqPlayerDAO;
 import restwars.storage.ship.InMemoryFlightDAO;
@@ -43,6 +43,11 @@ public class JooqDAOModule {
     }
 
     @Provides
+    ConstructionSiteDAO providesConstructionSiteDAO(JooqConstructionSiteDAO jooqConstructionSiteDAO) {
+        return jooqConstructionSiteDAO;
+    }
+
+    @Provides
     @Singleton
     HangarDAO providesHangarDAO() {
         return new InMemoryHangarDAO();
@@ -52,12 +57,6 @@ public class JooqDAOModule {
     @Singleton
     ShipInConstructionDAO providesShipInConstructionDAO() {
         return new InMemoryShipInConstructionDAO();
-    }
-
-    @Provides
-    @Singleton
-    ConstructionSiteDAO providesConstructionSiteDAO() {
-        return new InMemoryConstructionSiteDAO();
     }
 
     @Provides
