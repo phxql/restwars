@@ -121,5 +121,26 @@
             </column>
         </createTable>
         <addUniqueConstraint tableName="technology" columnNames="player_id, type"/>
+
+        <createTable tableName="ship_in_construction">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="ship_in_construction_planet_id"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="ship_in_construction_player_id"/>
+            </column>
+            <column name="started" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="done" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>
