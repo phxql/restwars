@@ -20,8 +20,8 @@ import restwars.storage.player.JooqPlayerDAO;
 import restwars.storage.ship.InMemoryFlightDAO;
 import restwars.storage.ship.InMemoryHangarDAO;
 import restwars.storage.ship.InMemoryShipInConstructionDAO;
-import restwars.storage.technology.InMemoryResearchDAO;
-import restwars.storage.technology.InMemoryTechnologyDAO;
+import restwars.storage.technology.JooqResearchDAO;
+import restwars.storage.technology.JooqTechnologyDAO;
 
 import javax.inject.Singleton;
 
@@ -48,6 +48,16 @@ public class JooqDAOModule {
     }
 
     @Provides
+    TechnologyDAO providesTechnologyDAO(JooqTechnologyDAO jooqTechnologyDAO) {
+        return jooqTechnologyDAO;
+    }
+
+    @Provides
+    ResearchDAO providesResearchDAO(JooqResearchDAO jooqResearchDAO) {
+        return jooqResearchDAO;
+    }
+
+    @Provides
     @Singleton
     HangarDAO providesHangarDAO() {
         return new InMemoryHangarDAO();
@@ -57,18 +67,6 @@ public class JooqDAOModule {
     @Singleton
     ShipInConstructionDAO providesShipInConstructionDAO() {
         return new InMemoryShipInConstructionDAO();
-    }
-
-    @Provides
-    @Singleton
-    ResearchDAO providesResearchDAO() {
-        return new InMemoryResearchDAO();
-    }
-
-    @Provides
-    @Singleton
-    TechnologyDAO providesTechnologyDAO() {
-        return new InMemoryTechnologyDAO();
     }
 
     @Provides
