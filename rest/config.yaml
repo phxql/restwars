@@ -1,4 +1,9 @@
 serverName: localhost
+database:
+    driverClass: org.h2.Driver
+    url: jdbc:h2:/tmp/restwars
+    user:
+    password:
 logging:
     level: WARN
     loggers:

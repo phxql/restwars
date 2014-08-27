@@ -4,12 +4,17 @@ import com.google.common.collect.Lists;
 import dagger.ObjectGraph;
 import io.dropwizard.Application;
 import io.dropwizard.auth.basic.BasicAuthProvider;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.db.ManagedDataSource;
+import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.CompositionRoot;
 import restwars.rest.di.RestWarsModule;
+import restwars.rest.integration.UnitOfWorkResourceMethodDispatchAdapter;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
@@ -22,6 +27,7 @@ import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.ship.*;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.TechnologyType;
+import restwars.service.unitofwork.UnitOfWorkService;
 
 import java.util.List;
 
@@ -38,14 +44,27 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
     }
 
     @Override
-    public void initialize(Bootstrap<RestwarsConfiguration> restwarsConfigurationBootstrap) {
+    public void initialize(Bootstrap<RestwarsConfiguration> bootstrap) {
+        bootstrap.addBundle(new MigrationsBundle<RestwarsConfiguration>() {
+            @Override
+            public DataSourceFactory getDataSourceFactory(RestwarsConfiguration configuration) {
+                return configuration.getDatabase();
+            }
+        });
     }
 
     @Override
     public void run(RestwarsConfiguration restwarsConfiguration, Environment environment) throws Exception {
+        // Start connection pool
+        ManagedDataSource dataSource = restwarsConfiguration.getDatabase().build(environment.metrics(), "datasource");
+        environment.lifecycle().manage(dataSource);
+
         UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 30);
-        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration));
+
+        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
+
+        environment.jersey().register(new UnitOfWorkResourceMethodDispatchAdapter(compositionRoot.getUnitOfWorkService()));
 
         environment.jersey().register(new BasicAuthProvider<>(compositionRoot.getPlayerAuthenticator(), "RESTwars"));
         environment.jersey().register(compositionRoot.getSystemResource());
@@ -55,10 +74,12 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         environment.lifecycle().manage(compositionRoot.getClock());
 
-        loadDemoData(compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
+        loadDemoData(compositionRoot.getUnitOfWorkService(), compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
     }
 
-    private void loadDemoData(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {
+    private void loadDemoData(UnitOfWorkService unitOfWorkService, PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {
+        unitOfWorkService.start();
+
         Player player1 = playerService.createPlayer("player1", "player1");
         List<Planet> player1planets = planetService.findWithOwner(player1);
 
@@ -96,5 +117,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         } catch (NotEnoughShipsException e) {
             LOGGER.error("Exception while sending ships to planet", e);
         }
+
+        unitOfWorkService.commit();
     }
 }
