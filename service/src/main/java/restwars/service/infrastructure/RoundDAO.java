@@ -5,6 +5,11 @@ package restwars.service.infrastructure;
  */
 public interface RoundDAO {
     /**
+     * Initial round.
+     */
+    public static final int INITIAL_ROUND = 1;
+
+    /**
      * Returns the current round.
      *
      * @return Round.

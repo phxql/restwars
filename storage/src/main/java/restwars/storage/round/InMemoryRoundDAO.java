@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Singleton
 public class InMemoryRoundDAO implements RoundDAO {
-    private final AtomicLong round = new AtomicLong(1);
+    private final AtomicLong round = new AtomicLong(INITIAL_ROUND);
 
     @Override
     public long getRound() {

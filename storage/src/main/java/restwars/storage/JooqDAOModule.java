@@ -16,7 +16,7 @@ import restwars.storage.building.JooqBuildingDAO;
 import restwars.storage.building.JooqConstructionSiteDAO;
 import restwars.storage.planet.JooqPlanetDAO;
 import restwars.storage.player.JooqPlayerDAO;
-import restwars.storage.round.InMemoryRoundDAO;
+import restwars.storage.round.JooqRoundDAO;
 import restwars.storage.ship.InMemoryFlightDAO;
 import restwars.storage.ship.JooqHangarDAO;
 import restwars.storage.ship.JooqShipInConstructionDAO;
@@ -70,8 +70,8 @@ public class JooqDAOModule {
 
     @Provides
     @Singleton
-    RoundDAO providesRoundDAO() {
-        return new InMemoryRoundDAO();
+    RoundDAO providesRoundDAO(JooqRoundDAO jooqRoundDAO) {
+        return jooqRoundDAO;
     }
 
     @Provides

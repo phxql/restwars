@@ -167,5 +167,11 @@
             </column>
         </createTable>
         <addPrimaryKey tableName="hangar_ships" columnNames="hangar_id, type"/>
+
+        <createTable tableName="round">
+            <column name="current_round" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>
