@@ -235,7 +235,7 @@ public class ShipServiceImpl implements ShipService {
         long distance = start.getLocation().calculateDistance(destination);
         double energyNeeded = 0;
         for (Ship ship : ships) {
-            energyNeeded += ship.getType().getFlightCostModifier() * distance * ship.getCount();
+            energyNeeded += ship.getType().getFlightCostModifier() * distance * ship.getAmount();
         }
         long speed = findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
@@ -249,7 +249,7 @@ public class ShipServiceImpl implements ShipService {
         // Check if enough ships are on the start planet
         Hangar hangar = hangarDAO.findWithPlanetId(start.getId()).orElseThrow(NotEnoughShipsException::new);
         for (Ship ship : ships) {
-            if (hangar.getShips().countByType(ship.getType()) < ship.getCount()) {
+            if (hangar.getShips().countByType(ship.getType()) < ship.getAmount()) {
                 throw new NotEnoughShipsException();
             }
         }

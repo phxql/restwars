@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class Ships implements Iterable<Ship> {
     public static final Ships EMPTY = new Ships();
 
-    private final Map<ShipType, Long> ships = Maps.newHashMap();
+    private final Map<ShipType, Integer> ships = Maps.newHashMap();
 
     public Ships() {
     }
@@ -22,11 +22,11 @@ public class Ships implements Iterable<Ship> {
         Preconditions.checkNotNull(ships, "ships");
 
         for (Ship ship : ships) {
-            this.ships.put(ship.getType(), this.ships.getOrDefault(ship.getType(), 0L) + ship.getCount());
+            this.ships.put(ship.getType(), this.ships.getOrDefault(ship.getType(), 0) + ship.getAmount());
         }
     }
 
-    public Ships(Map<ShipType, Long> ships) {
+    public Ships(Map<ShipType, Integer> ships) {
         Preconditions.checkNotNull(ships, "ships");
 
         this.ships.putAll(ships);
@@ -34,10 +34,10 @@ public class Ships implements Iterable<Ship> {
 
     public Ships plus(List<Ship> ships) {
         Preconditions.checkNotNull(ships, "ships");
-        Map<ShipType, Long> newShips = Maps.newHashMap(this.ships);
+        Map<ShipType, Integer> newShips = Maps.newHashMap(this.ships);
 
         for (Ship ship : ships) {
-            newShips.put(ship.getType(), newShips.getOrDefault(ship.getType(), 0L) + ship.getCount());
+            newShips.put(ship.getType(), newShips.getOrDefault(ship.getType(), 0) + ship.getAmount());
         }
 
         return new Ships(newShips);
@@ -49,7 +49,7 @@ public class Ships implements Iterable<Ship> {
         return plus(ships.asList());
     }
 
-    public Ships plus(ShipType type, long count) {
+    public Ships plus(ShipType type, int count) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(count >= 0, "count must be >= 0");
 
@@ -58,10 +58,10 @@ public class Ships implements Iterable<Ship> {
 
     public Ships minus(List<Ship> ships) {
         Preconditions.checkNotNull(ships, "ships");
-        Map<ShipType, Long> newShips = Maps.newHashMap(this.ships);
+        Map<ShipType, Integer> newShips = Maps.newHashMap(this.ships);
 
         for (Ship ship : ships) {
-            newShips.put(ship.getType(), newShips.getOrDefault(ship.getType(), 0L) - ship.getCount());
+            newShips.put(ship.getType(), newShips.getOrDefault(ship.getType(), 0) - ship.getAmount());
         }
 
         return new Ships(newShips);
@@ -73,14 +73,14 @@ public class Ships implements Iterable<Ship> {
         return minus(ships.asList());
     }
 
-    public Ships minus(ShipType type, long count) {
+    public Ships minus(ShipType type, int count) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(count >= 0, "count must be >= 0");
 
         return minus(Lists.newArrayList(new Ship(type, count)));
     }
 
-    public Map<ShipType, Long> asMap() {
+    public Map<ShipType, Integer> asMap() {
         return Collections.unmodifiableMap(ships);
     }
 
@@ -91,7 +91,7 @@ public class Ships implements Iterable<Ship> {
     public long countByType(ShipType type) {
         Preconditions.checkNotNull(type, "type");
 
-        return ships.getOrDefault(type, 0L);
+        return ships.getOrDefault(type, 0);
     }
 
     @Override

@@ -16,7 +16,7 @@ public class CreateFlightRequest {
         private String type;
 
         @Min(1)
-        private long count;
+        private int amount;
 
         public String getType() {
             return type;
@@ -26,12 +26,12 @@ public class CreateFlightRequest {
             this.type = type;
         }
 
-        public long getCount() {
-            return count;
+        public int getAmount() {
+            return amount;
         }
 
-        public void setCount(long count) {
-            this.count = count;
+        public void setAmount(int amount) {
+            this.amount = amount;
         }
     }
 
@@ -64,7 +64,7 @@ public class CreateFlightRequest {
 
     public Ships getParsedShips() {
         return new Ships(getShips().stream()
-                .map(s -> new restwars.service.ship.Ship(ShipType.valueOf(s.getType()), s.getCount()))
+                .map(s -> new restwars.service.ship.Ship(ShipType.valueOf(s.getType()), s.getAmount()))
                 .collect(Collectors.toList())
         );
     }

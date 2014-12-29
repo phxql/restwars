@@ -142,5 +142,30 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <createTable tableName="hangar">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="hangar_planet_id"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="hangar_player_id"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="hangar_ships">
+            <column name="hangar_id" type="uuid">
+                <constraints nullable="false" references="hangar(id)" foreignKeyName="hangar_ships_hangar_id"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="hangar_ships" columnNames="hangar_id, type"/>
     </changeSet>
 </databaseChangeLog>
