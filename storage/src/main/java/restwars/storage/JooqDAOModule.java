@@ -4,8 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.ConstructionSiteDAO;
-import restwars.service.infrastructure.RoundService;
-import restwars.service.infrastructure.impl.RoundServiceImpl;
+import restwars.service.infrastructure.RoundDAO;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.PlayerDAO;
 import restwars.service.ship.FlightDAO;
@@ -17,6 +16,7 @@ import restwars.storage.building.JooqBuildingDAO;
 import restwars.storage.building.JooqConstructionSiteDAO;
 import restwars.storage.planet.JooqPlanetDAO;
 import restwars.storage.player.JooqPlayerDAO;
+import restwars.storage.round.InMemoryRoundDAO;
 import restwars.storage.ship.InMemoryFlightDAO;
 import restwars.storage.ship.JooqHangarDAO;
 import restwars.storage.ship.JooqShipInConstructionDAO;
@@ -70,8 +70,8 @@ public class JooqDAOModule {
 
     @Provides
     @Singleton
-    RoundService providesRoundService() {
-        return new RoundServiceImpl();
+    RoundDAO providesRoundDAO() {
+        return new InMemoryRoundDAO();
     }
 
     @Provides

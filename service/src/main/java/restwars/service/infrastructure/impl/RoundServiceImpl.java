@@ -1,19 +1,31 @@
 package restwars.service.infrastructure.impl;
 
+import com.google.common.base.Preconditions;
+import restwars.service.infrastructure.RoundDAO;
 import restwars.service.infrastructure.RoundService;
 
-import java.util.concurrent.atomic.AtomicLong;
+import javax.inject.Inject;
 
 public class RoundServiceImpl implements RoundService {
-    private final AtomicLong currentRound = new AtomicLong(1);
+    private final RoundDAO roundDAO;
+
+    @Inject
+    public RoundServiceImpl(RoundDAO roundDAO) {
+        this.roundDAO = Preconditions.checkNotNull(roundDAO, "roundDAO");
+    }
 
     @Override
     public long getCurrentRound() {
-        return currentRound.get();
+        // TODO: Implement caching
+
+        return roundDAO.getRound();
     }
 
     @Override
     public long nextRound() {
-        return currentRound.incrementAndGet();
+        long newRound = getCurrentRound() + 1;
+        roundDAO.updateRound(newRound);
+
+        return newRound;
     }
 }
