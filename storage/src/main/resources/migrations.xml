@@ -173,5 +173,60 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
         </createTable>
+
+        <createTable tableName="flight">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="flight_player_id"/>
+            </column>
+            <column name="start_galaxy" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_solar_system" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_planet" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_galaxy" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_solar_system" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_planet" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="started_in_round" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="arrival_in_round" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="energy_needed" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="direction" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="flight_ships">
+            <column name="flight_id" type="uuid">
+                <constraints nullable="false" references="flight(id)" foreignKeyName="flight_ships_flight_id"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="flight_ships" columnNames="flight_id, type"/>
     </changeSet>
 </databaseChangeLog>
