@@ -17,7 +17,7 @@ import restwars.storage.building.JooqConstructionSiteDAO;
 import restwars.storage.planet.JooqPlanetDAO;
 import restwars.storage.player.JooqPlayerDAO;
 import restwars.storage.round.JooqRoundDAO;
-import restwars.storage.ship.InMemoryFlightDAO;
+import restwars.storage.ship.JooqFlightDAO;
 import restwars.storage.ship.JooqHangarDAO;
 import restwars.storage.ship.JooqShipInConstructionDAO;
 import restwars.storage.technology.JooqResearchDAO;
@@ -76,7 +76,7 @@ public class JooqDAOModule {
 
     @Provides
     @Singleton
-    FlightDAO providesFlightDAO() {
-        return new InMemoryFlightDAO();
+    FlightDAO providesFlightDAO(JooqFlightDAO jooqFlightDAO) {
+        return jooqFlightDAO;
     }
 }
