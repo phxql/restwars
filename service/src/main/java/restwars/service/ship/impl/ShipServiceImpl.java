@@ -147,8 +147,6 @@ public class ShipServiceImpl implements ShipService {
     private void finishOutwardFlight(Flight flight) {
         assert flight != null;
 
-        // TODO: Handle flight type, eg start fight
-
         LOGGER.debug("Finishing outward flight {}", flight);
 
         switch (flight.getType()) {
@@ -167,22 +165,58 @@ public class ShipServiceImpl implements ShipService {
         assert flight != null;
         LOGGER.debug("Finishing colonizing flight");
 
-        // TODO: Check if the target planet is already colonized
         Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
         if (planet.isPresent()) {
-            // TODO: If there are enemy ships on the planet, start a fight.
-            // TODO: The planet is already colonized, create return flight.
+            LOGGER.debug("Planet is already colonized, creating return flight");
+            createReturnFlight(flight, flight.getShips());
         } else {
+            LOGGER.debug("Player {} colonized new planet at {}", flight.getPlayerId(), flight.getDestination());
+
             Planet newPlanet = new Planet(uuidFactory.create(), flight.getDestination(), Optional.of(flight.getPlayerId()),
                     universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(),
                     universeConfiguration.getStartingEnergy() + flight.getEnergyNeeded() / 2);
-
             planetDAO.insert(newPlanet);
 
             // Land the ships on the new planet
             Hangar hangar = getOrCreateHangar(newPlanet.getId(), flight.getPlayerId());
             Hangar updatedHangar = hangar.withShips(flight.getShips().minus(ShipType.COLONY, 1));
             hangarDAO.update(updatedHangar);
+
+            flightDAO.delete(flight);
+        }
+    }
+
+    /**
+     * Handles an attack flight.
+     *
+     * @param flight Flight to handle.
+     */
+    private void handleAttack(Flight flight) {
+        assert flight != null;
+        LOGGER.debug("Handling attack of flight {}", flight);
+
+        Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
+        if (planet.isPresent()) {
+            Hangar hangar = getOrCreateHangar(planet.get().getId(), planet.get().getOwnerId().get());
+
+            Fight fight = fightCalculator.attack(flight.getShips(), hangar.getShips());
+
+            // Update defenders hangar
+            hangarDAO.update(hangar.withShips(fight.getRemainingDefenderShips()));
+
+            if (fight.getRemainingAttackerShips().isEmpty()) {
+                LOGGER.debug("Attacker lost all ships");
+                flightDAO.delete(flight);
+            } else {
+                if (fight.getRemainingDefenderShips().isEmpty()) {
+                    // TODO: Loot planet
+                }
+
+                createReturnFlight(flight, fight.getRemainingAttackerShips());
+            }
+        } else {
+            // Planet is not colonized, create return flight
+            createReturnFlight(flight, flight.getShips());
         }
     }
 
@@ -203,38 +237,6 @@ public class ShipServiceImpl implements ShipService {
         flightDAO.update(returnFlight);
 
         LOGGER.debug("Created return flight {}", returnFlight);
-    }
-
-    /**
-     * Handles an attack flight.
-     *
-     * @param flight Flight to handle.
-     */
-    private void handleAttack(Flight flight) {
-        assert flight != null;
-
-        LOGGER.debug("Handling attack of flight {}", flight);
-
-        Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
-        if (planet.isPresent()) {
-            Hangar hangar = getOrCreateHangar(planet.get().getId(), planet.get().getOwnerId().get());
-
-            Fight fight = fightCalculator.attack(flight.getShips(), hangar.getShips());
-
-            // Update defenders hangar
-            hangarDAO.update(hangar.withShips(fight.getRemainingDefenderShips()));
-
-            if (!fight.getRemainingAttackerShips().isEmpty()) {
-                if (fight.getRemainingDefenderShips().isEmpty()) {
-                    // TODO: Loot planet
-                }
-
-                createReturnFlight(flight, fight.getRemainingAttackerShips());
-            }
-        } else {
-            // Planet is not colonized, create return flight
-            createReturnFlight(flight, flight.getShips());
-        }
     }
 
     @Override

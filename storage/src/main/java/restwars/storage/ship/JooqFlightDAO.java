@@ -100,12 +100,12 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
 
         LOGGER.debug("Deleting flight {}", flight);
 
+        deleteShips(flight);
         context()
                 .delete(FLIGHT)
                 .where(FLIGHT.ID.eq(flight.getId()))
                 .execute();
 
-        deleteShips(flight);
     }
 
     @Override

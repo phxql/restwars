@@ -76,6 +76,7 @@ public class Clock implements Managed, Runnable {
             unitOfWorkService.commit();
         } catch (Exception e) {
             unitOfWorkService.abort();
+            LOGGER.error("Clock thread crashed with exception", e);
             throw new UnrecoverableException("Exception", e);
         }
     }
