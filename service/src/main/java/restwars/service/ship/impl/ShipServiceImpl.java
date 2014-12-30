@@ -183,8 +183,6 @@ public class ShipServiceImpl implements ShipService {
         }
     }
 
-    // TODO: Refactor Map<ShipType, Long> and List<Ship> into a Ships class with useful methods to calculate with the ship numbers
-
     private void createReturnFlight(Flight flight, Ships ships) {
         assert flight != null;
         assert ships != null;
@@ -212,7 +210,15 @@ public class ShipServiceImpl implements ShipService {
     private void handleAttack(Flight flight) {
         assert flight != null;
 
-        createReturnFlight(flight, flight.getShips());
+        LOGGER.debug("Handling attack of flight {}", flight);
+
+        Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
+        if (planet.isPresent()) {
+
+        } else {
+            // Planet is not colonized, create return flight
+            createReturnFlight(flight, flight.getShips());
+        }
     }
 
     @Override
