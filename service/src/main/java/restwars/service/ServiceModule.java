@@ -4,7 +4,9 @@ import dagger.Module;
 import dagger.Provides;
 import restwars.service.building.BuildingService;
 import restwars.service.building.impl.BuildingServiceImpl;
+import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
+import restwars.service.infrastructure.impl.RoundServiceImpl;
 import restwars.service.infrastructure.impl.UUIDFactoryImpl;
 import restwars.service.location.LocationFactory;
 import restwars.service.location.impl.LocationFactoryImpl;
@@ -59,5 +61,10 @@ public class ServiceModule {
     @Provides
     ShipService providesShipService(ShipServiceImpl shipService) {
         return shipService;
+    }
+
+    @Provides
+    RoundService providesRoundService(RoundServiceImpl roundService) {
+        return roundService;
     }
 }

@@ -24,6 +24,6 @@ public class ShipResponse {
     public static ShipResponse fromShip(Ship ship) {
         Preconditions.checkNotNull(ship, "ship");
 
-        return new ShipResponse(ship.getType().toString(), ship.getCount());
+        return new ShipResponse(ship.getType().toString(), ship.getAmount());
     }
 }

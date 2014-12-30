@@ -1,0 +1,232 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="1" author="mkammerer">
+        <createTable tableName="player">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="planet">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="location_galaxy" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_solar_system" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_planet" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="uuid">
+                <constraints nullable="true" references="player(id)" foreignKeyName="planet_owner_id"/>
+            </column>
+            <column name="crystals" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gas" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="energy" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="planet" columnNames="location_galaxy, location_solar_system, location_planet"/>
+
+        <createTable tableName="building">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="building_planet_id"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="building" columnNames="planet_id, type"/>
+
+        <createTable tableName="construction_site">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="construction_site_planet_id"/>
+            </column>
+            <column name="started" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="done" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="construction_site" columnNames="planet_id, type"/>
+
+        <createTable tableName="research">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="research_planet_id"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="research_player_id"/>
+            </column>
+            <column name="started" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="done" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="research" columnNames="planet_id, type"/>
+
+        <createTable tableName="technology">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="technology_player_id"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="technology" columnNames="player_id, type"/>
+
+        <createTable tableName="ship_in_construction">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="ship_in_construction_planet_id"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="ship_in_construction_player_id"/>
+            </column>
+            <column name="started" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="done" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="hangar">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="hangar_planet_id"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="hangar_player_id"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="hangar_ships">
+            <column name="hangar_id" type="uuid">
+                <constraints nullable="false" references="hangar(id)" foreignKeyName="hangar_ships_hangar_id"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="hangar_ships" columnNames="hangar_id, type"/>
+
+        <createTable tableName="round">
+            <column name="current_round" type="long">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="flight">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="flight_player_id"/>
+            </column>
+            <column name="start_galaxy" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_solar_system" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_planet" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_galaxy" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_solar_system" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_planet" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="started_in_round" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="arrival_in_round" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="energy_needed" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="direction" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="flight_ships">
+            <column name="flight_id" type="uuid">
+                <constraints nullable="false" references="flight(id)" foreignKeyName="flight_ships_flight_id"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="flight_ships" columnNames="flight_id, type"/>
+    </changeSet>
+</databaseChangeLog>

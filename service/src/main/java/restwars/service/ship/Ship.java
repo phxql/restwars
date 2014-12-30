@@ -5,20 +5,20 @@ import com.google.common.base.Preconditions;
 public class Ship {
     private final ShipType type;
 
-    private final long count;
+    private final int amount;
 
-    public Ship(ShipType type, long count) {
-        Preconditions.checkArgument(count >= 0, "count must be >= 0");
+    public Ship(ShipType type, int amount) {
+        Preconditions.checkArgument(amount >= 0, "amount must be >= 0");
 
         this.type = Preconditions.checkNotNull(type, "type");
-        this.count = count;
+        this.amount = amount;
     }
 
     public ShipType getType() {
         return type;
     }
 
-    public long getCount() {
-        return count;
+    public int getAmount() {
+        return amount;
     }
 }

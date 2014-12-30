@@ -84,6 +84,10 @@ public class Flight {
         return destination;
     }
 
+    public Flight withShips(Ships ships) {
+        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction);
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
