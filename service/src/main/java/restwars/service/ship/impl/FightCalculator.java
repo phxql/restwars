@@ -2,7 +2,7 @@ package restwars.service.ship.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.ship.Attack;
+import restwars.service.ship.Fight;
 import restwars.service.ship.Ship;
 import restwars.service.ship.ShipType;
 import restwars.service.ship.Ships;
@@ -11,21 +11,21 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class AttackCalculator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AttackCalculator.class);
+public class FightCalculator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FightCalculator.class);
 
     /**
      * Random number generator.
      */
     private final Random random = new Random();
 
-    public Attack attack(Ships attackingShips, Ships defendingShips) {
+    public Fight attack(Ships attackingShips, Ships defendingShips) {
         LOGGER.debug("Fight between {} and {}", attackingShips, defendingShips);
 
         Ships remainingDefendingShips = fight(attackingShips, defendingShips);
         Ships remainingAttackingShips = fight(defendingShips, attackingShips);
 
-        return new Attack(attackingShips, defendingShips, remainingAttackingShips, remainingDefendingShips);
+        return new Fight(attackingShips, defendingShips, remainingAttackingShips, remainingDefendingShips);
     }
 
     /**

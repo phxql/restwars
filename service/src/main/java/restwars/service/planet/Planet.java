@@ -12,6 +12,7 @@ public class Planet {
 
     private final Location location;
 
+    // TODO: Remove the Optional<>, only colonized planets appear as an instance of Planet.
     private final Optional<UUID> ownerId;
 
     private final long crystals;

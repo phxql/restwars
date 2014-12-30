@@ -1,6 +1,6 @@
 package restwars.service.ship;
 
-public class Attack {
+public class Fight {
     private final Ships attackingShips;
 
     private final Ships defendingShips;
@@ -9,7 +9,7 @@ public class Attack {
 
     private final Ships remainingDefenderShips;
 
-    public Attack(Ships attackingShips, Ships defendingShips, Ships remainingAttackerShips, Ships remainingDefenderShips) {
+    public Fight(Ships attackingShips, Ships defendingShips, Ships remainingAttackerShips, Ships remainingDefenderShips) {
         this.attackingShips = attackingShips;
         this.defendingShips = defendingShips;
         this.remainingAttackerShips = remainingAttackerShips;

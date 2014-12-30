@@ -117,6 +117,10 @@ public class Ships implements Iterable<Ship> {
         return ships.getOrDefault(type, 0);
     }
 
+    public boolean isEmpty() {
+        return ships.isEmpty();
+    }
+
     @Override
     public Iterator<Ship> iterator() {
         return asList().iterator();

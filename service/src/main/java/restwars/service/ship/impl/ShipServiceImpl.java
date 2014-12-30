@@ -30,6 +30,8 @@ public class ShipServiceImpl implements ShipService {
     private final FlightDAO flightDAO;
     private final UniverseConfiguration universeConfiguration;
 
+    private final FightCalculator fightCalculator = new FightCalculator();
+
     @Inject
     public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration) {
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
@@ -168,7 +170,8 @@ public class ShipServiceImpl implements ShipService {
         // TODO: Check if the target planet is already colonized
         Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
         if (planet.isPresent()) {
-            // TODO: The planet is already colonized, create return flight!
+            // TODO: If there are enemy ships on the planet, start a fight.
+            // TODO: The planet is already colonized, create return flight.
         } else {
             Planet newPlanet = new Planet(uuidFactory.create(), flight.getDestination(), Optional.of(flight.getPlayerId()),
                     universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(),
@@ -214,7 +217,20 @@ public class ShipServiceImpl implements ShipService {
 
         Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
         if (planet.isPresent()) {
+            Hangar hangar = getOrCreateHangar(planet.get().getId(), planet.get().getOwnerId().get());
 
+            Fight fight = fightCalculator.attack(flight.getShips(), hangar.getShips());
+
+            // Update defenders hangar
+            hangarDAO.update(hangar.withShips(fight.getRemainingDefenderShips()));
+
+            if (!fight.getRemainingAttackerShips().isEmpty()) {
+                if (fight.getRemainingDefenderShips().isEmpty()) {
+                    // TODO: Loot planet
+                }
+
+                createReturnFlight(flight, fight.getRemainingAttackerShips());
+            }
         } else {
             // Planet is not colonized, create return flight
             createReturnFlight(flight, flight.getShips());
