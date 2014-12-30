@@ -88,6 +88,7 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
                 .set(FLIGHT.ENERGY_NEEDED, flight.getEnergyNeeded())
                 .set(FLIGHT.TYPE, flight.getType().getId())
                 .set(FLIGHT.DIRECTION, flight.getDirection().getId())
+                .where(FLIGHT.ID.eq(flight.getId()))
                 .execute();
 
         deleteShips(flight);
