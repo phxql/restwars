@@ -48,7 +48,7 @@ public class JooqRoundDAO extends AbstractJooqDAO implements RoundDAO {
 
         context()
                 .update(ROUND)
-                .set(ROUND.CURRENT_ROUND, (int) round) // TODO: Remove the cast!
+                .set(ROUND.CURRENT_ROUND, round)
                 .execute();
     }
 }

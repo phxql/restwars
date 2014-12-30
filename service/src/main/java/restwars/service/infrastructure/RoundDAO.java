@@ -7,7 +7,7 @@ public interface RoundDAO {
     /**
      * Initial round.
      */
-    public static final int INITIAL_ROUND = 1;
+    public static final long INITIAL_ROUND = 1L;
 
     /**
      * Returns the current round.

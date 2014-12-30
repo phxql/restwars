@@ -169,7 +169,7 @@
         <addPrimaryKey tableName="hangar_ships" columnNames="hangar_id, type"/>
 
         <createTable tableName="round">
-            <column name="current_round" type="int">
+            <column name="current_round" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
         </createTable>
@@ -199,13 +199,13 @@
             <column name="destination_planet" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="started_in_round" type="int">
+            <column name="started_in_round" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="arrival_in_round" type="int">
+            <column name="arrival_in_round" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="energy_needed" type="int">
+            <column name="energy_needed" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="type" type="int">

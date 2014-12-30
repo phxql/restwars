@@ -34,7 +34,6 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
 
         LOGGER.debug("Inserting flight {}", flight);
 
-        // TODO: Remove the casts!
         context()
                 .insertInto(
                         FLIGHT, FLIGHT.ID, FLIGHT.PLAYER_ID, FLIGHT.START_GALAXY, FLIGHT.START_SOLAR_SYSTEM, FLIGHT.START_PLANET,
@@ -44,7 +43,7 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
                 .values(
                         flight.getId(), flight.getPlayerId(), flight.getStart().getGalaxy(), flight.getStart().getSolarSystem(), flight.getStart().getPlanet(),
                         flight.getDestination().getGalaxy(), flight.getDestination().getSolarSystem(), flight.getDestination().getPlanet(),
-                        (int) flight.getStartedInRound(), (int) flight.getArrivalInRound(), (int) flight.getEnergyNeeded(), flight.getType().getId(), flight.getDirection().getId()
+                        flight.getStartedInRound(), flight.getArrivalInRound(), flight.getEnergyNeeded(), flight.getType().getId(), flight.getDirection().getId()
                 )
                 .execute();
 
@@ -65,8 +64,7 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
     public List<Flight> findWithArrival(long arrival) {
         LOGGER.debug("Finding flights with arrival {}", arrival);
 
-        // TODO: Remove the cast
-        Result<Record> result = context().select().from(FLIGHT).join(FLIGHT_SHIPS).on(FLIGHT_SHIPS.FLIGHT_ID.eq(FLIGHT.ID)).where(FLIGHT.ARRIVAL_IN_ROUND.eq((int) arrival)).fetch();
+        Result<Record> result = context().select().from(FLIGHT).join(FLIGHT_SHIPS).on(FLIGHT_SHIPS.FLIGHT_ID.eq(FLIGHT.ID)).where(FLIGHT.ARRIVAL_IN_ROUND.eq(arrival)).fetch();
         return readFlights(result);
     }
 
@@ -76,7 +74,6 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
 
         LOGGER.debug("Updating flight {}", flight);
 
-        // TODO: Remove the casts
         context()
                 .update(FLIGHT)
                 .set(FLIGHT.PLAYER_ID, flight.getPlayerId())
@@ -86,9 +83,9 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
                 .set(FLIGHT.DESTINATION_GALAXY, flight.getDestination().getGalaxy())
                 .set(FLIGHT.DESTINATION_SOLAR_SYSTEM, flight.getDestination().getSolarSystem())
                 .set(FLIGHT.DESTINATION_PLANET, flight.getDestination().getPlanet())
-                .set(FLIGHT.STARTED_IN_ROUND, (int) flight.getStartedInRound())
-                .set(FLIGHT.ARRIVAL_IN_ROUND, (int) flight.getArrivalInRound())
-                .set(FLIGHT.ENERGY_NEEDED, (int) flight.getEnergyNeeded())
+                .set(FLIGHT.STARTED_IN_ROUND, flight.getStartedInRound())
+                .set(FLIGHT.ARRIVAL_IN_ROUND, flight.getArrivalInRound())
+                .set(FLIGHT.ENERGY_NEEDED, flight.getEnergyNeeded())
                 .set(FLIGHT.TYPE, flight.getType().getId())
                 .set(FLIGHT.DIRECTION, flight.getDirection().getId())
                 .execute();
