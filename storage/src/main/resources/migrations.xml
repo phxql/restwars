@@ -154,6 +154,7 @@
                 <constraints nullable="false" references="player(id)" foreignKeyName="hangar_player_id"/>
             </column>
         </createTable>
+        <addUniqueConstraint tableName="hangar" columnNames="planet_id, player_id"/>
 
         <createTable tableName="hangar_ships">
             <column name="hangar_id" type="uuid">

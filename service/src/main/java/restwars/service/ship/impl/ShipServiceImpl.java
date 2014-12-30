@@ -135,7 +135,7 @@ public class ShipServiceImpl implements ShipService {
         assert flight != null;
         LOGGER.debug("Finishing return flight {}", flight);
 
-        UUID destinationPlanetId = planetDAO.findWithLocation(flight.getDestination()).map(Planet::getId).get();
+        UUID destinationPlanetId = planetDAO.findWithLocation(flight.getStart()).map(Planet::getId).get();
         Hangar hangar = getOrCreateHangar(destinationPlanetId, flight.getPlayerId());
 
         Hangar updatedHangar = hangar.withShips(hangar.getShips().plus(flight.getShips()));
