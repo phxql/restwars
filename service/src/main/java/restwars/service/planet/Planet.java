@@ -1,5 +1,6 @@
 package restwars.service.planet;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
@@ -82,5 +83,17 @@ public class Planet {
         Preconditions.checkNotNull(ownerId, "ownerId");
 
         return new Planet(id, location, ownerId, crystals, gas, energy);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("location", location)
+                .add("ownerId", ownerId)
+                .add("crystals", crystals)
+                .add("gas", gas)
+                .add("energy", energy)
+                .toString();
     }
 }

@@ -1,5 +1,7 @@
 package restwars.service.ship;
 
+import com.google.common.base.Objects;
+
 public class Fight {
     private final Ships attackingShips;
 
@@ -30,5 +32,15 @@ public class Fight {
 
     public Ships getRemainingDefenderShips() {
         return remainingDefenderShips;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("attackingShips", attackingShips)
+                .add("defendingShips", defendingShips)
+                .add("remainingAttackerShips", remainingAttackerShips)
+                .add("remainingDefenderShips", remainingDefenderShips)
+                .toString();
     }
 }

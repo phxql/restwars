@@ -1,5 +1,6 @@
 package restwars.service.technology;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 import java.util.UUID;
@@ -59,5 +60,19 @@ public class Research {
 
     public UUID getPlayerId() {
         return playerId;
+    }
+
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("type", type)
+                .add("level", level)
+                .add("started", started)
+                .add("done", done)
+                .add("planetId", planetId)
+                .add("playerId", playerId)
+                .toString();
     }
 }

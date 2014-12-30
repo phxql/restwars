@@ -1,5 +1,6 @@
 package restwars.service.ship;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 public class Ship {
@@ -20,5 +21,13 @@ public class Ship {
 
     public int getAmount() {
         return amount;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("type", type)
+                .add("amount", amount)
+                .toString();
     }
 }

@@ -1,5 +1,7 @@
 package restwars.service.resource;
 
+import com.google.common.base.Objects;
+
 public class Resources {
     public static final Resources NONE = new Resources(0, 0, 0);
 
@@ -25,5 +27,14 @@ public class Resources {
 
     public long getEnergy() {
         return energy;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("crystals", crystals)
+                .add("gas", gas)
+                .add("energy", energy)
+                .toString();
     }
 }

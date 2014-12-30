@@ -1,5 +1,6 @@
 package restwars.service.ship;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 import java.util.UUID;
@@ -40,5 +41,15 @@ public class Hangar {
         Preconditions.checkNotNull(ships, "ships");
 
         return new Hangar(id, planetId, playerId, ships);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("planetId", planetId)
+                .add("playerId", playerId)
+                .add("ships", ships)
+                .toString();
     }
 }

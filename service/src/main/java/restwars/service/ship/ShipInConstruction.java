@@ -1,5 +1,6 @@
 package restwars.service.ship;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 import java.util.UUID;
@@ -51,5 +52,17 @@ public class ShipInConstruction {
 
     public long getDone() {
         return done;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("type", type)
+                .add("planetId", planetId)
+                .add("playerId", playerId)
+                .add("started", started)
+                .add("done", done)
+                .toString();
     }
 }

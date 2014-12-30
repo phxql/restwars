@@ -47,4 +47,12 @@ public class Player {
     public int hashCode() {
         return Objects.hashCode(id, username, password);
     }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("username", username)
+                .toString();
+    }
 }
