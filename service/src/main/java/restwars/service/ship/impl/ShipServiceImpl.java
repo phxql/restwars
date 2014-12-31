@@ -238,15 +238,14 @@ public class ShipServiceImpl implements ShipService {
         assert ships != null;
 
         long distance = flight.getStart().calculateDistance(flight.getDestination());
-        long speed = findSpeedOfSlowestShip(ships);
+        int speed = findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
         long arrival = started + (long) Math.ceil(distance / speed);
-        ;
 
         Flight returnFlight = new Flight(
                 flight.getId(), flight.getStart(), flight.getDestination(),
                 flight.getStartedInRound(), arrival, ships, flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
-                FlightDirection.RETURN
+                FlightDirection.RETURN, flight.getCargo()
         );
         flightDAO.update(returnFlight);
 
@@ -298,7 +297,7 @@ public class ShipServiceImpl implements ShipService {
         }
 
         // Calculate arrival time
-        long speed = findSpeedOfSlowestShip(ships);
+        int speed = findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
         long arrives = started + (long) Math.ceil(distance / speed);
 
@@ -311,15 +310,15 @@ public class ShipServiceImpl implements ShipService {
         hangarDAO.update(updatedHangar);
 
         // Start the flight
-        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, totalEnergyNeeded, flightType, player.getId(), FlightDirection.OUTWARD);
+        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, totalEnergyNeeded, flightType, player.getId(), FlightDirection.OUTWARD, Resources.NONE);
         flightDAO.insert(flight);
         return flight;
     }
 
-    private long findSpeedOfSlowestShip(Ships ships) {
+    private int findSpeedOfSlowestShip(Ships ships) {
         assert ships != null;
 
-        return ships.asList().stream().map(s -> s.getType().getSpeed()).min(Long::compare).get();
+        return ships.asList().stream().mapToInt(s -> s.getType().getSpeed()).min().getAsInt();
     }
 
     @Override
