@@ -191,8 +191,7 @@ public class ShipServiceImpl implements ShipService {
 
             Planet newPlanet = new Planet(
                     uuidFactory.create(), flight.getDestination(), flight.getPlayerId(),
-                    new Resources(universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(),
-                            universeConfiguration.getStartingEnergy() + flight.getEnergyNeeded() / 2)
+                    universeConfiguration.getStartingResources().plus(Resources.energy(flight.getEnergyNeeded() / 2))
             );
             planetDAO.insert(newPlanet);
 

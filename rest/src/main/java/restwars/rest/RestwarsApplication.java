@@ -22,6 +22,7 @@ import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
 import restwars.service.resource.InsufficientResourcesException;
+import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 import restwars.service.technology.TechnologyService;
 import restwars.service.unitofwork.UnitOfWorkService;
@@ -56,7 +57,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         ManagedDataSource dataSource = restwarsConfiguration.getDatabase().build(environment.metrics(), "datasource");
         environment.lifecycle().manage(dataSource);
 
-        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 5);
+        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, new Resources(1000L, 200L, 200L), 5);
 
         ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
