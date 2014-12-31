@@ -25,6 +25,9 @@ public class FightCalculator {
         Ships remainingDefendingShips = fight(attackingShips, defendingShips);
         Ships remainingAttackingShips = fight(defendingShips, attackingShips);
 
+        LOGGER.debug("Remaining ships from attacker: {}", remainingAttackingShips);
+        LOGGER.debug("Remaining ships from defender: {}", remainingDefendingShips);
+
         return new Fight(attackingShips, defendingShips, remainingAttackingShips, remainingDefendingShips);
     }
 

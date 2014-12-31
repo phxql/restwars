@@ -148,11 +148,15 @@ public class ShipServiceImpl implements ShipService {
         assert flight != null;
         LOGGER.debug("Finishing return flight {}", flight);
 
-        UUID destinationPlanetId = planetDAO.findWithLocation(flight.getStart()).map(Planet::getId).get();
-        Hangar hangar = getOrCreateHangar(destinationPlanetId, flight.getPlayerId());
+        // Land ships in hangar
+        Planet planet = planetDAO.findWithLocation(flight.getStart()).get();
+        Hangar hangar = getOrCreateHangar(planet.getId(), flight.getPlayerId());
+        hangar = hangar.withShips(hangar.getShips().plus(flight.getShips()));
+        hangarDAO.update(hangar);
 
-        Hangar updatedHangar = hangar.withShips(hangar.getShips().plus(flight.getShips()));
-        hangarDAO.update(updatedHangar);
+        // Unload cargo
+        planet = planet.withResources(planet.getResources().plus(flight.getCargo()));
+        planetDAO.update(planet);
 
         flightDAO.delete(flight);
     }
@@ -181,7 +185,7 @@ public class ShipServiceImpl implements ShipService {
         Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
         if (planet.isPresent()) {
             LOGGER.debug("Planet is already colonized, creating return flight");
-            createReturnFlight(flight, flight.getShips());
+            createReturnFlight(flight, flight.getShips(), flight.getCargo());
         } else {
             LOGGER.debug("Player {} colonized new planet at {}", flight.getPlayerId(), flight.getDestination());
 
@@ -221,19 +225,41 @@ public class ShipServiceImpl implements ShipService {
                 LOGGER.debug("Attacker lost all ships");
                 flightDAO.delete(flight);
             } else {
+                Resources cargo = Resources.NONE;
                 if (fight.getRemainingDefenderShips().isEmpty()) {
-                    // TODO: Gameplay - Loot planet
+                    cargo = lootPlanet(planet.get(), fight.getRemainingAttackerShips());
                 }
 
-                createReturnFlight(flight, fight.getRemainingAttackerShips());
+                createReturnFlight(flight, fight.getRemainingAttackerShips(), cargo);
             }
         } else {
             // Planet is not colonized, create return flight
-            createReturnFlight(flight, flight.getShips());
+            createReturnFlight(flight, flight.getShips(), flight.getCargo());
         }
     }
 
-    private void createReturnFlight(Flight flight, Ships ships) {
+    private Resources lootPlanet(Planet planet, Ships ships) {
+        long storageCapacity = ships.stream().mapToLong(s -> s.getType().getStorageCapacity()).sum();
+
+        long lootCrystals = storageCapacity / 3;
+        long lootGas = storageCapacity / 3;
+        long lootEnergy = storageCapacity - lootCrystals - lootGas;
+
+        // TODO - Gameplay: Implement a more greedy looting strategy
+        lootCrystals = Math.min(planet.getCrystals(), lootCrystals);
+        lootGas = Math.min(planet.getGas(), lootGas);
+        lootEnergy = Math.min(planet.getEnergy(), lootEnergy);
+
+        // Decrease resources on planet
+        planet = planet.withResources(planet.getCrystals() - lootCrystals, planet.getGas() - lootGas, planet.getEnergy() - lootEnergy);
+        planetDAO.update(planet);
+
+        Resources resources = new Resources(lootCrystals, lootGas, lootEnergy);
+        LOGGER.debug("Looted {} from planet {}", resources, planet.getLocation());
+        return resources;
+    }
+
+    private void createReturnFlight(Flight flight, Ships ships, Resources cargo) {
         assert flight != null;
         assert ships != null;
 
@@ -245,7 +271,7 @@ public class ShipServiceImpl implements ShipService {
         Flight returnFlight = new Flight(
                 flight.getId(), flight.getStart(), flight.getDestination(),
                 flight.getStartedInRound(), arrival, ships, flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
-                FlightDirection.RETURN, flight.getCargo()
+                FlightDirection.RETURN, cargo
         );
         flightDAO.update(returnFlight);
 
@@ -317,6 +343,7 @@ public class ShipServiceImpl implements ShipService {
 
     private int findSpeedOfSlowestShip(Ships ships) {
         assert ships != null;
+        assert !ships.isEmpty();
 
         return ships.asList().stream().mapToInt(s -> s.getType().getSpeed()).min().getAsInt();
     }

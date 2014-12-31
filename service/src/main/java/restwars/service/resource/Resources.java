@@ -29,6 +29,10 @@ public class Resources {
         return energy;
     }
 
+    public Resources plus(Resources other) {
+        return new Resources(crystals + other.getCrystals(), gas + other.getGas(), energy + other.getEnergy());
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)

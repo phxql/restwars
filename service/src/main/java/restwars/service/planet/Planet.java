@@ -57,6 +57,14 @@ public class Planet {
         return energy;
     }
 
+    public Resources getResources() {
+        return new Resources(crystals, gas, energy);
+    }
+
+    public Planet withResources(Resources resources) {
+        return withResources(resources.getCrystals(), resources.getGas(), resources.getEnergy());
+    }
+
     public Planet withResources(long crystals, long gas, long energy) {
         return new Planet(id, location, ownerId, crystals, gas, energy);
     }
