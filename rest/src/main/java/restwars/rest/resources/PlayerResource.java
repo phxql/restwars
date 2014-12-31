@@ -25,7 +25,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Path("/v1/player")
-@Api(value = "/v1/player")
+@Api(value = "/v1/player", description = "Player management")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class PlayerResource {

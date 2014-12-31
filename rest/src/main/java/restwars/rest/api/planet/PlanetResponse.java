@@ -7,16 +7,16 @@ import restwars.service.planet.Planet;
 
 @ApiModel(description = "A planet")
 public class PlanetResponse {
-    @ApiModelProperty("Location")
+    @ApiModelProperty(value = "Location", required = true)
     private final String location;
 
-    @ApiModelProperty("Amount of crystals")
+    @ApiModelProperty(value = "Amount of crystals", required = true)
     private final long crystal;
 
-    @ApiModelProperty("Amount of gas")
+    @ApiModelProperty(value = "Amount of gas", required = true)
     private final long gas;
 
-    @ApiModelProperty("Amount of energy")
+    @ApiModelProperty(value = "Amount of energy", required = true)
     private final long energy;
 
     public PlanetResponse(String location, long crystal, long gas, long energy) {

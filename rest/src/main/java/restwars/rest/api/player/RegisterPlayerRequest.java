@@ -6,11 +6,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @ApiModel(description = "Player registration")
 public class RegisterPlayerRequest {
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "Username", required = true)
     @NotEmpty
     private String username;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "Password", required = true)
     @NotEmpty
     private String password;
 

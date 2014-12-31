@@ -9,10 +9,10 @@ import java.util.List;
 
 @ApiModel(description = "A player")
 public class PlayerResponse {
-    @ApiModelProperty("Username")
+    @ApiModelProperty(value = "Username", required = true)
     private final String username;
 
-    @ApiModelProperty("Owned planets")
+    @ApiModelProperty(value = "Owned planets", required = true)
     private final List<PlanetResponse> planets;
 
     public PlayerResponse(String username, List<PlanetResponse> planets) {
