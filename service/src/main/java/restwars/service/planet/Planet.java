@@ -14,20 +14,15 @@ public class Planet {
 
     private final UUID ownerId;
 
-    private final long crystals;
+    private final Resources resources;
 
-    private final long gas;
+    public Planet(UUID id, Location location, UUID ownerId, Resources resources) {
+        Preconditions.checkNotNull(resources, "resources");
+        Preconditions.checkArgument(resources.getCrystals() >= 0, "crystals must be >= 0");
+        Preconditions.checkArgument(resources.getGas() >= 0, "gas must be >= 0");
+        Preconditions.checkArgument(resources.getCrystals() >= 0, "energy must be >= 0");
 
-    private final long energy;
-
-    public Planet(UUID id, Location location, UUID ownerId, long crystals, long gas, long energy) {
-        Preconditions.checkArgument(crystals >= 0, "crystals must be >= 0");
-        Preconditions.checkArgument(gas >= 0, "gas must be >= 0");
-        Preconditions.checkArgument(energy >= 0, "energy must be >= 0");
-
-        this.crystals = crystals;
-        this.gas = gas;
-        this.energy = energy;
+        this.resources = resources;
         this.id = Preconditions.checkNotNull(id, "id");
         this.location = Preconditions.checkNotNull(location, "location");
         this.ownerId = Preconditions.checkNotNull(ownerId, "ownerId");
@@ -45,32 +40,12 @@ public class Planet {
         return ownerId;
     }
 
-    public long getCrystals() {
-        return crystals;
-    }
-
-    public long getGas() {
-        return gas;
-    }
-
-    public long getEnergy() {
-        return energy;
-    }
-
     public Resources getResources() {
-        return new Resources(crystals, gas, energy);
+        return resources;
     }
 
     public Planet withResources(Resources resources) {
-        return withResources(resources.getCrystals(), resources.getGas(), resources.getEnergy());
-    }
-
-    public Planet withResources(long crystals, long gas, long energy) {
-        return new Planet(id, location, ownerId, crystals, gas, energy);
-    }
-
-    public Planet withEnergy(long energy) {
-        return withResources(crystals, gas, energy);
+        return new Planet(id, location, ownerId, resources);
     }
 
     public boolean isOwnedFrom(Player player) {
@@ -79,28 +54,10 @@ public class Planet {
         return ownerId.equals(player.getId());
     }
 
-    public boolean hasResources(Resources resources) {
-        Preconditions.checkNotNull(resources, "resources");
-
-        return hasCrystals(resources) && hasGas(resources) && hasEnergy(resources.getEnergy());
-    }
-
-    public boolean hasEnergy(long energy) {
-        return this.energy >= energy;
-    }
-
-    private boolean hasGas(Resources resources) {
-        return gas >= resources.getGas();
-    }
-
-    private boolean hasCrystals(Resources resources) {
-        return crystals >= resources.getCrystals();
-    }
-
     public Planet withOwnerId(UUID ownerId) {
         Preconditions.checkNotNull(ownerId, "ownerId");
 
-        return new Planet(id, location, ownerId, crystals, gas, energy);
+        return new Planet(id, location, ownerId, resources);
     }
 
     @Override
@@ -109,9 +66,7 @@ public class Planet {
                 .add("id", id)
                 .add("location", location)
                 .add("ownerId", ownerId)
-                .add("crystals", crystals)
-                .add("gas", gas)
-                .add("energy", energy)
+                .add("resources", resources)
                 .toString();
     }
 }

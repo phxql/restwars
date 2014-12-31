@@ -13,6 +13,7 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
+import restwars.service.resource.Resources;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -44,7 +45,7 @@ public class PlanetServiceImpl implements PlanetService {
         UUID id = uuidFactory.create();
 
         Location location = locationFactory.random(universeConfiguration.getGalaxyCount(), universeConfiguration.getSolarSystemsPerGalaxy(), universeConfiguration.getPlanetsPerSolarSystem());
-        Planet planet = new Planet(id, location, owner.getId(), universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(), universeConfiguration.getStartingEnergy());
+        Planet planet = new Planet(id, location, owner.getId(), new Resources(universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(), universeConfiguration.getStartingEnergy()));
         planetDAO.insert(planet);
 
         buildingService.addBuilding(planet, BuildingType.COMMAND_CENTER, 1);

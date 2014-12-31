@@ -68,11 +68,11 @@ public class ShipServiceImpl implements ShipService {
         // TODO: Gameplay - Check build queues
 
         Resources buildCost = type.getBuildCost();
-        if (!planet.hasResources(buildCost)) {
-            throw new InsufficientResourcesException(buildCost.getCrystals(), buildCost.getGas(), buildCost.getEnergy(), planet.getCrystals(), planet.getGas(), planet.getEnergy());
+        if (!planet.getResources().isEnough(buildCost)) {
+            throw new InsufficientResourcesException(buildCost, planet.getResources());
         }
 
-        Planet updatedPlanet = planet.withResources(planet.getCrystals() - buildCost.getCrystals(), planet.getGas() - buildCost.getGas(), planet.getEnergy() - buildCost.getEnergy());
+        Planet updatedPlanet = planet.withResources(planet.getResources().minus(buildCost));
         planetDAO.update(updatedPlanet);
 
         UUID id = uuidFactory.create();
@@ -189,9 +189,11 @@ public class ShipServiceImpl implements ShipService {
         } else {
             LOGGER.debug("Player {} colonized new planet at {}", flight.getPlayerId(), flight.getDestination());
 
-            Planet newPlanet = new Planet(uuidFactory.create(), flight.getDestination(), flight.getPlayerId(),
-                    universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(),
-                    universeConfiguration.getStartingEnergy() + flight.getEnergyNeeded() / 2);
+            Planet newPlanet = new Planet(
+                    uuidFactory.create(), flight.getDestination(), flight.getPlayerId(),
+                    new Resources(universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(),
+                            universeConfiguration.getStartingEnergy() + flight.getEnergyNeeded() / 2)
+            );
             planetDAO.insert(newPlanet);
 
             // Land the ships on the new planet
@@ -246,12 +248,12 @@ public class ShipServiceImpl implements ShipService {
         long lootEnergy = storageCapacity - lootCrystals - lootGas;
 
         // TODO - Gameplay: Implement a more greedy looting strategy
-        lootCrystals = Math.min(planet.getCrystals(), lootCrystals);
-        lootGas = Math.min(planet.getGas(), lootGas);
-        lootEnergy = Math.min(planet.getEnergy(), lootEnergy);
+        lootCrystals = Math.min(planet.getResources().getCrystals(), lootCrystals);
+        lootGas = Math.min(planet.getResources().getGas(), lootGas);
+        lootEnergy = Math.min(planet.getResources().getEnergy(), lootEnergy);
 
         // Decrease resources on planet
-        planet = planet.withResources(planet.getCrystals() - lootCrystals, planet.getGas() - lootGas, planet.getEnergy() - lootEnergy);
+        planet = planet.withResources(planet.getResources().minus(new Resources(lootCrystals, lootGas, lootEnergy)));
         planetDAO.update(planet);
 
         Resources resources = new Resources(lootCrystals, lootGas, lootEnergy);
@@ -310,8 +312,8 @@ public class ShipServiceImpl implements ShipService {
         }
         long totalEnergyNeeded = (long) Math.ceil(energyNeeded);
         // Check if planet has enough energy
-        if (!start.hasEnergy(totalEnergyNeeded)) {
-            throw new InsufficientResourcesException(0, 0, totalEnergyNeeded, 0, 0, start.getEnergy());
+        if (!start.getResources().isEnoughEnergy(totalEnergyNeeded)) {
+            throw new InsufficientResourcesException(Resources.energy(totalEnergyNeeded), start.getResources());
         }
 
         // Check if enough ships are on the start planet
@@ -328,7 +330,7 @@ public class ShipServiceImpl implements ShipService {
         long arrives = started + (long) Math.ceil(distance / speed);
 
         // Decrease energy on start planet
-        start = start.withEnergy(start.getEnergy() - totalEnergyNeeded);
+        start = start.withResources(start.getResources().minus(Resources.energy(totalEnergyNeeded)));
         planetDAO.update(start);
 
         // Remove ships from the planet

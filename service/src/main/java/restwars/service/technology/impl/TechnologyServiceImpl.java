@@ -95,14 +95,11 @@ public class TechnologyServiceImpl implements TechnologyService {
         int level = existingTechnology.map(Technology::getLevel).orElse(1);
 
         Resources researchCost = calculateResearchCost(technology, level);
-        if (!planet.hasResources(researchCost)) {
-            throw new InsufficientResourcesException(
-                    researchCost.getCrystals(), researchCost.getGas(), researchCost.getEnergy(),
-                    planet.getCrystals(), planet.getGas(), planet.getEnergy()
-            );
+        if (!planet.getResources().isEnough(researchCost)) {
+            throw new InsufficientResourcesException(researchCost, planet.getResources());
         }
 
-        Planet updatedPlanet = planet.withResources(planet.getCrystals() - researchCost.getCrystals(), planet.getGas() - researchCost.getGas(), planet.getEnergy() - researchCost.getEnergy());
+        Planet updatedPlanet = planet.withResources(planet.getResources().minus(researchCost));
         planetDAO.update(updatedPlanet);
 
         UUID id = uuidFactory.create();

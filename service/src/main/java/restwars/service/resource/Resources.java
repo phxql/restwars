@@ -33,6 +33,22 @@ public class Resources {
         return new Resources(crystals + other.getCrystals(), gas + other.getGas(), energy + other.getEnergy());
     }
 
+    public Resources minus(Resources other) {
+        return new Resources(crystals - other.getCrystals(), gas - other.getGas(), energy - other.getEnergy());
+    }
+
+    public boolean isEnough(Resources resources) {
+        return crystals >= resources.getCrystals() && gas >= resources.getGas() && energy >= resources.getEnergy();
+    }
+
+    public boolean isEnoughEnergy(long energy) {
+        return this.energy >= energy;
+    }
+
+    public static Resources energy(long energy) {
+        return new Resources(0, 0, energy);
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
