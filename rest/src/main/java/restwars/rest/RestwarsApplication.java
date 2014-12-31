@@ -21,6 +21,7 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
+import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.ship.*;
 import restwars.service.technology.TechnologyService;
 import restwars.service.unitofwork.UnitOfWorkService;
@@ -88,7 +89,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
             shipService.sendShipsToPlanet(player1, player1planets.get(0), player2planets.get(0).getLocation(), new Ships(new Ship(ShipType.MOSQUITO, 2)), FlightType.ATTACK);
             shipService.sendShipsToPlanet(player1, player1planets.get(0), new Location(3, 3, 3), new Ships(new Ship(ShipType.COLONY, 1)), FlightType.COLONIZE);
-        } catch (NotEnoughShipsException | InvalidFlightException e) {
+        } catch (NotEnoughShipsException | InvalidFlightException | InsufficientResourcesException e) {
             LOGGER.error("Exception while sending ships to planet", e);
         }
 

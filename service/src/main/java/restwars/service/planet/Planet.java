@@ -70,7 +70,19 @@ public class Planet {
     public boolean hasResources(Resources resources) {
         Preconditions.checkNotNull(resources, "resources");
 
-        return crystals >= resources.getCrystals() && gas >= resources.getGas() && energy >= resources.getEnergy();
+        return hasCrystals(resources) && hasGas(resources) && hasEnergy(resources.getEnergy());
+    }
+
+    public boolean hasEnergy(long energy) {
+        return this.energy >= energy;
+    }
+
+    private boolean hasGas(Resources resources) {
+        return gas >= resources.getGas();
+    }
+
+    private boolean hasCrystals(Resources resources) {
+        return crystals >= resources.getCrystals();
     }
 
     public Planet withOwnerId(UUID ownerId) {

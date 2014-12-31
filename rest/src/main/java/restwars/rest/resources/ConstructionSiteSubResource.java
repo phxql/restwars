@@ -19,7 +19,6 @@ import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.WebApplicationException;
 import java.util.List;
 
 public class ConstructionSiteSubResource {
@@ -57,8 +56,7 @@ public class ConstructionSiteSubResource {
 
             return ConstructionSiteResponse.fromConstructionSite(constructionSite);
         } catch (InsufficientResourcesException e) {
-            // TODO: Create a real exception!
-            throw new WebApplicationException();
+            throw new InsufficientResourcesWebException();
         }
     }
 }

@@ -237,10 +237,11 @@ public class ShipServiceImpl implements ShipService {
         assert flight != null;
         assert ships != null;
 
-        // TODO: Calculate travel speed on the remaining ships
-        long flightTime = flight.getArrivalInRound() - flight.getStartedInRound();
+        long distance = flight.getStart().calculateDistance(flight.getDestination());
+        long speed = findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
-        long arrival = started + flightTime;
+        long arrival = started + (long) Math.ceil(distance / speed);
+        ;
 
         Flight returnFlight = new Flight(
                 flight.getId(), flight.getStart(), flight.getDestination(),
@@ -260,7 +261,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType) throws NotEnoughShipsException, InvalidFlightException {
+    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType) throws NotEnoughShipsException, InvalidFlightException, InsufficientResourcesException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");
@@ -282,11 +283,16 @@ public class ShipServiceImpl implements ShipService {
             // This also contains the energy needed for the return flight
             energyNeeded += ship.getType().getFlightCostModifier() * distance * ship.getAmount() * 2;
         }
+        long totalEnergyNeeded = (long) Math.ceil(energyNeeded);
+        // Check if planet has enough energy
+        if (!start.hasEnergy(totalEnergyNeeded)) {
+            throw new InsufficientResourcesException(0, 0, totalEnergyNeeded, 0, 0, start.getEnergy());
+        }
+
         long speed = findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
         long arrives = started + (long) Math.ceil(distance / speed);
 
-        // TODO: Check if enough energy is available
         // TODO: Decrease energy
 
         // Check if enough ships are on the start planet
@@ -302,7 +308,7 @@ public class ShipServiceImpl implements ShipService {
         hangarDAO.update(updatedHangar);
 
         // Start the flight
-        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, (long) Math.ceil(energyNeeded), flightType, player.getId(), FlightDirection.OUTWARD);
+        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, totalEnergyNeeded, flightType, player.getId(), FlightDirection.OUTWARD);
         flightDAO.insert(flight);
         return flight;
     }
