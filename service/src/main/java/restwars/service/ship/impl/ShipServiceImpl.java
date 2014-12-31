@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.UniverseConfiguration;
+import restwars.service.building.Building;
+import restwars.service.building.BuildingDAO;
+import restwars.service.building.BuildingType;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Location;
@@ -29,11 +32,12 @@ public class ShipServiceImpl implements ShipService {
     private final RoundService roundService;
     private final FlightDAO flightDAO;
     private final UniverseConfiguration universeConfiguration;
+    private final BuildingDAO buildingDAO;
 
     private final FightCalculator fightCalculator = new FightCalculator();
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO) {
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
@@ -41,6 +45,7 @@ public class ShipServiceImpl implements ShipService {
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.hangarDAO = Preconditions.checkNotNull(hangarDAO, "hangarDAO");
         this.shipInConstructionDAO = Preconditions.checkNotNull(shipInConstructionDAO, "shipInConstructionDAO");
+        this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
     }
 
     @Override
@@ -51,13 +56,16 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException {
+    public ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException, InsufficientShipyardException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
+        if (!hasShipyard(planet)) {
+            throw new InsufficientShipyardException(1);
+        }
+
         // TODO: Check build queues
-        // TODO: Check if the planet has a shipyard
 
         Resources buildCost = type.getBuildCost();
         if (!planet.hasResources(buildCost)) {
@@ -74,6 +82,11 @@ public class ShipServiceImpl implements ShipService {
         shipInConstructionDAO.insert(shipInConstruction);
 
         return shipInConstruction;
+    }
+
+    private boolean hasShipyard(Planet planet) {
+        List<Building> buildings = buildingDAO.findWithPlanetId(planet.getId());
+        return buildings.stream().anyMatch(b -> b.getType().equals(BuildingType.SHIPYARD));
     }
 
     @Override
@@ -247,14 +260,19 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType) throws NotEnoughShipsException {
+    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType) throws NotEnoughShipsException, InvalidFlightException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");
         Preconditions.checkNotNull(ships, "ships");
         Preconditions.checkNotNull(flightType, "flightType");
 
-        // TODO: Ensure that ships is not empty
+        if (ships.isEmpty()) {
+            throw new InvalidFlightException(InvalidFlightException.Reason.NO_SHIPS);
+        }
+        if (flightType.equals(FlightType.COLONIZE) && ships.countByType(ShipType.COLONY) == 0) {
+            throw new InvalidFlightException(InvalidFlightException.Reason.NO_COLONY_SHIP);
+        }
 
         long distance = start.getLocation().calculateDistance(destination);
         double energyNeeded = 0;
@@ -265,7 +283,6 @@ public class ShipServiceImpl implements ShipService {
         long started = roundService.getCurrentRound();
         long arrives = started + (long) Math.ceil(distance / speed);
 
-        // TODO: Ensure that a colonization flight has a colony ship
         // TODO: Check if enough energy is available
         // TODO: Decrease energy
         // TODO: For attack flights the double amount of energy is needed, because of the return flight
