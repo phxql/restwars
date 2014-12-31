@@ -10,13 +10,14 @@ import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerDropwizard;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.CompositionRoot;
 import restwars.rest.di.RestWarsModule;
 import restwars.rest.doc.SwaggerFilter;
-import restwars.rest.integration.UnitOfWorkResourceMethodDispatchAdapter;
+import restwars.rest.integration.database.UnitOfWorkResourceMethodDispatchAdapter;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.planet.Location;
@@ -30,6 +31,9 @@ import restwars.service.ship.*;
 import restwars.service.technology.TechnologyService;
 import restwars.service.unitofwork.UnitOfWorkService;
 
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import java.util.EnumSet;
 import java.util.List;
 
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
@@ -84,6 +88,18 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         // Initialize swagger documentation
         swaggerDropwizard.onRun(restwarsConfiguration, environment);
         FilterFactory.setFilter(new SwaggerFilter());
+
+        registerCorsFilter(environment);
+    }
+
+    private void registerCorsFilter(Environment environment) {
+        FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+        filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+        filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS");
+        filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+        filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
+        filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+        filter.setInitParameter("allowCredentials", "true");
     }
 
     private void loadDemoData(UnitOfWorkService unitOfWorkService, PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {

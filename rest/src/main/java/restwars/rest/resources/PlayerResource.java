@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.planet.PlanetResponse;
 import restwars.rest.api.player.PlayerResponse;
@@ -24,7 +25,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Path("/v1/player")
-@Api("/v1/player")
+@Api(value = "/v1/player")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class PlayerResource {
@@ -41,7 +42,9 @@ public class PlayerResource {
     }
 
     @GET
-    @ApiOperation("Gets information about the current player")
+    @ApiOperation(value = "Gets information about the current player", authorizations = {
+            @Authorization("basicAuth")
+    })
     public PlayerResponse me(@ApiParam(access = "internal") @Auth Player player) {
         List<Planet> planets = planetService.findWithOwner(player);
 
