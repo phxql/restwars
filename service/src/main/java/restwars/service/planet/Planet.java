@@ -61,6 +61,10 @@ public class Planet {
         return new Planet(id, location, ownerId, crystals, gas, energy);
     }
 
+    public Planet withEnergy(long energy) {
+        return withResources(crystals, gas, energy);
+    }
+
     public boolean isOwnedFrom(Player player) {
         Preconditions.checkNotNull(player, "player");
 

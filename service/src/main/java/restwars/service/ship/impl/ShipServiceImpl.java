@@ -289,12 +289,6 @@ public class ShipServiceImpl implements ShipService {
             throw new InsufficientResourcesException(0, 0, totalEnergyNeeded, 0, 0, start.getEnergy());
         }
 
-        long speed = findSpeedOfSlowestShip(ships);
-        long started = roundService.getCurrentRound();
-        long arrives = started + (long) Math.ceil(distance / speed);
-
-        // TODO: Gameplay - Decrease energy
-
         // Check if enough ships are on the start planet
         Hangar hangar = hangarDAO.findWithPlanetId(start.getId()).orElseThrow(NotEnoughShipsException::new);
         for (Ship ship : ships) {
@@ -302,6 +296,15 @@ public class ShipServiceImpl implements ShipService {
                 throw new NotEnoughShipsException();
             }
         }
+
+        // Calculate arrival time
+        long speed = findSpeedOfSlowestShip(ships);
+        long started = roundService.getCurrentRound();
+        long arrives = started + (long) Math.ceil(distance / speed);
+
+        // Decrease energy on start planet
+        start = start.withEnergy(start.getEnergy() - totalEnergyNeeded);
+        planetDAO.update(start);
 
         // Remove ships from the planet
         Hangar updatedHangar = hangar.withShips(hangar.getShips().minus(ships));
