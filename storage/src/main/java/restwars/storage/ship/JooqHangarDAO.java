@@ -32,7 +32,7 @@ public class JooqHangarDAO extends AbstractJooqDAO implements HangarDAO {
 
         LOGGER.debug("Finding hangar for planet {}", planetId);
 
-        Result<Record> result = context().select().from(HANGAR).join(HANGAR_SHIPS).on(HANGAR_SHIPS.HANGAR_ID.eq(HANGAR.ID)).where(HANGAR.PLANET_ID.eq(planetId)).fetch();
+        Result<Record> result = context().select().from(HANGAR).leftOuterJoin(HANGAR_SHIPS).on(HANGAR_SHIPS.HANGAR_ID.eq(HANGAR.ID)).where(HANGAR.PLANET_ID.eq(planetId)).fetch();
         if (result.isEmpty()) {
             return Optional.empty();
         }
@@ -44,10 +44,13 @@ public class JooqHangarDAO extends AbstractJooqDAO implements HangarDAO {
 
         Map<ShipType, Integer> ships = Maps.newHashMap();
         for (Record record : result) {
-            ShipType shipType = ShipType.fromId(record.getValue(HANGAR_SHIPS.TYPE));
-            int amount = record.getValue(HANGAR_SHIPS.AMOUNT);
+            Integer shipType = record.getValue(HANGAR_SHIPS.TYPE);
+            Integer amount = record.getValue(HANGAR_SHIPS.AMOUNT);
 
-            ships.put(shipType, amount);
+            // Fields can be null because of the left outer join
+            if (shipType != null && amount != null) {
+                ships.put(ShipType.fromId(shipType), amount);
+            }
         }
 
         return Optional.of(new Hangar(id, planetId, playerId, new Ships(ships)));

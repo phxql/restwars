@@ -75,4 +75,16 @@ public class ConstructionSite {
     public int hashCode() {
         return Objects.hashCode(id, type, level, planetId, started, done);
     }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("type", type)
+                .add("level", level)
+                .add("planetId", planetId)
+                .add("started", started)
+                .add("done", done)
+                .toString();
+    }
 }

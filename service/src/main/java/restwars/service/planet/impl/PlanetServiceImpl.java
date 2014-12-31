@@ -44,7 +44,7 @@ public class PlanetServiceImpl implements PlanetService {
         UUID id = uuidFactory.create();
 
         Location location = locationFactory.random(universeConfiguration.getGalaxyCount(), universeConfiguration.getSolarSystemsPerGalaxy(), universeConfiguration.getPlanetsPerSolarSystem());
-        Planet planet = new Planet(id, location, Optional.of(owner.getId()), universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(), universeConfiguration.getStartingEnergy());
+        Planet planet = new Planet(id, location, owner.getId(), universeConfiguration.getStartingResources());
         planetDAO.insert(planet);
 
         buildingService.addBuilding(planet, BuildingType.COMMAND_CENTER, 1);

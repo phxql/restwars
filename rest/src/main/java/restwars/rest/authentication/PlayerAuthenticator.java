@@ -24,8 +24,8 @@ public class PlayerAuthenticator implements Authenticator<BasicCredentials, Play
 
         Optional<Player> player = playerService.findWithUsername(basicCredentials.getUsername());
         if (player.isPresent()) {
-            // TODO: Fix timing attacks
-            // TODO: Bcrypt password
+            // TODO: Security - Fix timing attacks
+            // TODO: Security - Bcrypt password
             if (player.get().getPassword().equals(basicCredentials.getPassword())) {
                 return com.google.common.base.Optional.of(player.get());
             }

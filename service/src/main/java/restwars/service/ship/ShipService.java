@@ -16,7 +16,7 @@ public interface ShipService {
      * @param type   Type of ship.
      * @return Ship in construction.
      */
-    ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException;
+    ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException, InsufficientShipyardException;
 
     /**
      * Finds all ships in construction on the given planet.
@@ -50,7 +50,7 @@ public interface ShipService {
      * @return Flight.
      * @throws NotEnoughShipsException If not enough ships are available on the start planet.
      */
-    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType) throws NotEnoughShipsException;
+    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType) throws NotEnoughShipsException, InvalidFlightException, InsufficientResourcesException;
 
     /**
      * Finds all flights for a given player.

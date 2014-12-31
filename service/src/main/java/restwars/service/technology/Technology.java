@@ -1,5 +1,6 @@
 package restwars.service.technology;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 import java.util.UUID;
@@ -40,5 +41,15 @@ public class Technology {
 
     public Technology withLevel(int level) {
         return new Technology(id, type, level, playerId);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("type", type)
+                .add("level", level)
+                .add("playerId", playerId)
+                .toString();
     }
 }

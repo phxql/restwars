@@ -88,21 +88,18 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkNotNull(technology, "technology");
         Preconditions.checkNotNull(player, "player");
 
-        // TODO: Check if a research is already running on the planet
-        // TODO: Check if the research is already running for the player
-        // TODO: Check if the planet has a research center
+        // TODO: Gameplay - Check if a research is already running on the planet
+        // TODO: Gameplay - Check if the research is already running for the player
+        // TODO: Gameplay - Check if the planet has a research center
         Optional<Technology> existingTechnology = technologyDAO.findWithPlayerId(player.getId(), technology);
         int level = existingTechnology.map(Technology::getLevel).orElse(1);
 
         Resources researchCost = calculateResearchCost(technology, level);
-        if (!planet.hasResources(researchCost)) {
-            throw new InsufficientResourcesException(
-                    researchCost.getCrystals(), researchCost.getGas(), researchCost.getEnergy(),
-                    planet.getCrystals(), planet.getGas(), planet.getEnergy()
-            );
+        if (!planet.getResources().isEnough(researchCost)) {
+            throw new InsufficientResourcesException(researchCost, planet.getResources());
         }
 
-        Planet updatedPlanet = planet.withResources(planet.getCrystals() - researchCost.getCrystals(), planet.getGas() - researchCost.getGas(), planet.getEnergy() - researchCost.getEnergy());
+        Planet updatedPlanet = planet.withResources(planet.getResources().minus(researchCost));
         planetDAO.update(updatedPlanet);
 
         UUID id = uuidFactory.create();

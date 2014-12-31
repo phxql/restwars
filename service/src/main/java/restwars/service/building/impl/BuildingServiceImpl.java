@@ -74,11 +74,11 @@ public class BuildingServiceImpl implements BuildingService {
         assert level > 0;
 
         Resources buildCost = calculateBuildCost(type, level);
-        if (!planet.hasResources(buildCost)) {
-            throw new InsufficientResourcesException(buildCost.getCrystals(), buildCost.getGas(), buildCost.getEnergy(), planet.getCrystals(), planet.getGas(), planet.getEnergy());
+        if (!planet.getResources().isEnough(buildCost)) {
+            throw new InsufficientResourcesException(buildCost, planet.getResources());
         }
 
-        Planet updatedPlanet = planet.withResources(planet.getCrystals() - buildCost.getCrystals(), planet.getGas() - buildCost.getGas(), planet.getEnergy() - buildCost.getEnergy());
+        Planet updatedPlanet = planet.withResources(planet.getResources().minus(buildCost));
         planetDAO.update(updatedPlanet);
 
         UUID id = uuidFactory.create();

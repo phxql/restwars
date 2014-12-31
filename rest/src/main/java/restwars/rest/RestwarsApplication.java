@@ -1,6 +1,5 @@
 package restwars.rest;
 
-import com.google.common.collect.Lists;
 import dagger.ObjectGraph;
 import io.dropwizard.Application;
 import io.dropwizard.auth.basic.BasicAuthProvider;
@@ -17,16 +16,15 @@ import restwars.rest.di.RestWarsModule;
 import restwars.rest.integration.UnitOfWorkResourceMethodDispatchAdapter;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
-import restwars.service.building.BuildingType;
 import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
 import restwars.service.resource.InsufficientResourcesException;
+import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 import restwars.service.technology.TechnologyService;
-import restwars.service.technology.TechnologyType;
 import restwars.service.unitofwork.UnitOfWorkService;
 
 import java.util.List;
@@ -59,7 +57,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         ManagedDataSource dataSource = restwarsConfiguration.getDatabase().build(environment.metrics(), "datasource");
         environment.lifecycle().manage(dataSource);
 
-        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, 1000L, 200L, 200L, 30);
+        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, new Resources(1000L, 200L, 200L), 5);
 
         ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
@@ -86,35 +84,13 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         Player player2 = playerService.createPlayer("player2", "player2");
         List<Planet> player2planets = planetService.findWithOwner(player2);
 
-        if (!player1planets.isEmpty()) {
-            try {
-                technologyService.researchTechnology(player1, player1planets.get(0), TechnologyType.CRYSTAL_MINE_EFFICIENCY);
-            } catch (InsufficientResourcesException e) {
-                LOGGER.error("Exception while researching crystal mine efficiency", e);
-            }
-        }
-
-        for (Planet planet : player1planets) {
-            LOGGER.info("Moe has a planet at {}", planet.getLocation());
-
-            try {
-                buildingService.constructBuilding(planet, BuildingType.CRYSTAL_MINE);
-            } catch (InsufficientResourcesException e) {
-                LOGGER.error("Exception while constructing a crystal mine", e);
-            }
-
-            try {
-                shipService.buildShip(player1, planet, ShipType.MOSQUITO);
-            } catch (InsufficientResourcesException e) {
-                LOGGER.error("Exception while building a mosquito", e);
-            }
-        }
-
         try {
-            shipService.manifestShips(player1, player1planets.get(0), new Ships(Lists.newArrayList(new Ship(ShipType.MOSQUITO, 2), new Ship(ShipType.COLONY, 1))));
-            shipService.sendShipsToPlanet(player1, player1planets.get(0), player2planets.get(0).getLocation(), new Ships(Lists.newArrayList(new Ship(ShipType.MOSQUITO, 1))), FlightType.ATTACK);
-            shipService.sendShipsToPlanet(player1, player1planets.get(0), new Location(3, 3, 3), new Ships(Lists.newArrayList(new Ship(ShipType.COLONY, 1), new Ship(ShipType.MOSQUITO, 1))), FlightType.COLONIZE);
-        } catch (NotEnoughShipsException e) {
+            shipService.manifestShips(player1, player1planets.get(0), new Ships(new Ship(ShipType.MOSQUITO, 2), new Ship(ShipType.COLONY, 1)));
+            shipService.manifestShips(player2, player2planets.get(0), new Ships(new Ship(ShipType.MOSQUITO, 1)));
+
+            shipService.sendShipsToPlanet(player1, player1planets.get(0), player2planets.get(0).getLocation(), new Ships(new Ship(ShipType.MOSQUITO, 2)), FlightType.ATTACK);
+            shipService.sendShipsToPlanet(player1, player1planets.get(0), new Location(3, 3, 3), new Ships(new Ship(ShipType.COLONY, 1)), FlightType.COLONIZE);
+        } catch (NotEnoughShipsException | InvalidFlightException | InsufficientResourcesException e) {
             LOGGER.error("Exception while sending ships to planet", e);
         }
 

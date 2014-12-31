@@ -55,24 +55,19 @@ public class ResourceServiceImpl implements ResourceService {
     public void gatherResources(Planet planet) {
         Preconditions.checkNotNull(planet, "planet");
 
-        LOGGER.debug("Planet has {} crystals, {} gas, {} energy", planet.getCrystals(), planet.getGas(), planet.getEnergy());
+        LOGGER.debug("Planet has {}", planet.getResources());
 
-        long crystals = planet.getCrystals();
-        long gas = planet.getGas();
-        long energy = planet.getEnergy();
+        Resources totalGathered = Resources.NONE;
 
         List<Building> buildings = buildingService.findBuildingsOnPlanet(planet);
         for (Building building : buildings) {
             Resources gatheredResources = calculateGatheredResources(building.getType(), building.getLevel());
-
-            crystals += gatheredResources.getCrystals();
-            gas += gatheredResources.getGas();
-            energy += gatheredResources.getEnergy();
+            totalGathered = totalGathered.plus(gatheredResources);
         }
 
-        Planet updatedPlanet = planet.withResources(crystals, gas, energy);
+        Planet updatedPlanet = planet.withResources(planet.getResources().plus(totalGathered));
         planetService.update(updatedPlanet);
 
-        LOGGER.debug("Planet has now {} crystals, {} gas, {} energy", updatedPlanet.getCrystals(), updatedPlanet.getGas(), updatedPlanet.getEnergy());
+        LOGGER.debug("Planet has now {}", updatedPlanet.getResources());
     }
 }

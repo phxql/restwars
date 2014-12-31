@@ -39,7 +39,7 @@ public class PlanetResponse {
         Preconditions.checkNotNull(planet, "planet");
 
         return new PlanetResponse(
-                planet.getLocation().toString(), planet.getCrystals(), planet.getGas(), planet.getEnergy()
+                planet.getLocation().toString(), planet.getResources().getCrystals(), planet.getResources().getGas(), planet.getResources().getEnergy()
         );
     }
 }

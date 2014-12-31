@@ -3,6 +3,7 @@ package restwars.service.ship;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import restwars.service.planet.Location;
+import restwars.service.resource.Resources;
 
 import java.util.UUID;
 
@@ -27,13 +28,16 @@ public class Flight {
 
     private final FlightDirection direction;
 
-    public Flight(UUID id, Location start, Location destination, long startedInRound, long arrivalInRound, Ships ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction) {
-        this.start = Preconditions.checkNotNull(start, "start");
-        this.destination = Preconditions.checkNotNull(destination, "destination");
+    private final Resources cargo;
+
+    public Flight(UUID id, Location start, Location destination, long startedInRound, long arrivalInRound, Ships ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction, Resources cargo) {
         Preconditions.checkArgument(startedInRound > 0, "startedInRound must be > 0");
         Preconditions.checkArgument(arrivalInRound > 0, "arrivalInRound must be > 0");
         Preconditions.checkArgument(energyNeeded > 0, "energyNeeded must be > 0");
 
+        this.cargo = Preconditions.checkNotNull(cargo, "cargo");
+        this.start = Preconditions.checkNotNull(start, "start");
+        this.destination = Preconditions.checkNotNull(destination, "destination");
         this.id = Preconditions.checkNotNull(id, "id");
         this.startedInRound = startedInRound;
         this.arrivalInRound = arrivalInRound;
@@ -84,8 +88,16 @@ public class Flight {
         return destination;
     }
 
+    public Resources getCargo() {
+        return cargo;
+    }
+
+    public Flight withCargo(Resources cargo) {
+        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction, cargo);
+    }
+
     public Flight withShips(Ships ships) {
-        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction);
+        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction, cargo);
     }
 
     @Override
@@ -101,6 +113,7 @@ public class Flight {
                 .add("energyNeeded", energyNeeded)
                 .add("type", type)
                 .add("direction", direction)
+                .add("cargo", cargo)
                 .toString();
     }
 }

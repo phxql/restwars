@@ -1,5 +1,6 @@
 package restwars.service.building;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 import java.util.UUID;
@@ -40,5 +41,15 @@ public class Building {
 
     public Building withLevel(int level) {
         return new Building(id, type, level, planetId);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("type", type)
+                .add("level", level)
+                .add("planetId", planetId)
+                .toString();
     }
 }

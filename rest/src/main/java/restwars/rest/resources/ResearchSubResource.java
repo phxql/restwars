@@ -19,7 +19,6 @@ import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.WebApplicationException;
 import java.util.List;
 
 public class ResearchSubResource {
@@ -56,7 +55,7 @@ public class ResearchSubResource {
             Research research = technologyService.researchTechnology(player, planet, type);
             return ResearchResponse.fromResearch(research);
         } catch (InsufficientResourcesException e) {
-            throw new WebApplicationException(); // TODO: Create real exception
+            throw new InsufficientResourcesWebException();
         }
     }
 }

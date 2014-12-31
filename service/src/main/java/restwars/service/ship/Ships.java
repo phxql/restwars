@@ -4,11 +4,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Ships implements Iterable<Ship> {
     public static final Ships EMPTY = new Ships();
@@ -18,18 +16,39 @@ public class Ships implements Iterable<Ship> {
     public Ships() {
     }
 
+    public Ships(Ship... ships) {
+        this(Arrays.asList(ships));
+    }
+
     public Ships(List<Ship> ships) {
         Preconditions.checkNotNull(ships, "ships");
 
         for (Ship ship : ships) {
             this.ships.put(ship.getType(), this.ships.getOrDefault(ship.getType(), 0) + ship.getAmount());
         }
+
+        reduce();
     }
 
     public Ships(Map<ShipType, Integer> ships) {
         Preconditions.checkNotNull(ships, "ships");
 
         this.ships.putAll(ships);
+
+        reduce();
+    }
+
+    /**
+     * Removes all ships with an amount of zero.
+     */
+    private void reduce() {
+        Iterator<Map.Entry<ShipType, Integer>> iterator = ships.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<ShipType, Integer> entry = iterator.next();
+            if (entry.getValue() == 0) {
+                iterator.remove();
+            }
+        }
     }
 
     public Ships plus(List<Ship> ships) {
@@ -84,8 +103,12 @@ public class Ships implements Iterable<Ship> {
         return Collections.unmodifiableMap(ships);
     }
 
+    public Stream<Ship> stream() {
+        return ships.entrySet().stream().map(e -> new Ship(e.getKey(), e.getValue()));
+    }
+
     public List<Ship> asList() {
-        return ships.entrySet().stream().map(e -> new Ship(e.getKey(), e.getValue())).collect(Collectors.toList());
+        return stream().collect(Collectors.toList());
     }
 
     public long countByType(ShipType type) {
@@ -94,8 +117,17 @@ public class Ships implements Iterable<Ship> {
         return ships.getOrDefault(type, 0);
     }
 
+    public boolean isEmpty() {
+        return ships.isEmpty();
+    }
+
     @Override
     public Iterator<Ship> iterator() {
         return asList().iterator();
+    }
+
+    @Override
+    public String toString() {
+        return ships.toString();
     }
 }

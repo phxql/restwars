@@ -1,10 +1,10 @@
 package restwars.service.planet;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class Planet {
@@ -12,22 +12,17 @@ public class Planet {
 
     private final Location location;
 
-    private final Optional<UUID> ownerId;
+    private final UUID ownerId;
 
-    private final long crystals;
+    private final Resources resources;
 
-    private final long gas;
+    public Planet(UUID id, Location location, UUID ownerId, Resources resources) {
+        Preconditions.checkNotNull(resources, "resources");
+        Preconditions.checkArgument(resources.getCrystals() >= 0, "crystals must be >= 0");
+        Preconditions.checkArgument(resources.getGas() >= 0, "gas must be >= 0");
+        Preconditions.checkArgument(resources.getCrystals() >= 0, "energy must be >= 0");
 
-    private final long energy;
-
-    public Planet(UUID id, Location location, Optional<UUID> ownerId, long crystals, long gas, long energy) {
-        Preconditions.checkArgument(crystals >= 0, "crystals must be >= 0");
-        Preconditions.checkArgument(gas >= 0, "gas must be >= 0");
-        Preconditions.checkArgument(energy >= 0, "energy must be >= 0");
-
-        this.crystals = crystals;
-        this.gas = gas;
-        this.energy = energy;
+        this.resources = resources;
         this.id = Preconditions.checkNotNull(id, "id");
         this.location = Preconditions.checkNotNull(location, "location");
         this.ownerId = Preconditions.checkNotNull(ownerId, "ownerId");
@@ -41,45 +36,37 @@ public class Planet {
         return location;
     }
 
-    public Optional<UUID> getOwnerId() {
+    public UUID getOwnerId() {
         return ownerId;
     }
 
-    public long getCrystals() {
-        return crystals;
+    public Resources getResources() {
+        return resources;
     }
 
-    public long getGas() {
-        return gas;
-    }
-
-    public long getEnergy() {
-        return energy;
-    }
-
-    public Planet withResources(long crystals, long gas, long energy) {
-        return new Planet(id, location, ownerId, crystals, gas, energy);
+    public Planet withResources(Resources resources) {
+        return new Planet(id, location, ownerId, resources);
     }
 
     public boolean isOwnedFrom(Player player) {
         Preconditions.checkNotNull(player, "player");
 
-        if (ownerId.isPresent()) {
-            return ownerId.get().equals(player.getId());
-        }
-
-        return false;
+        return ownerId.equals(player.getId());
     }
 
-    public boolean hasResources(Resources resources) {
-        Preconditions.checkNotNull(resources, "resources");
-
-        return crystals >= resources.getCrystals() && gas >= resources.getGas() && energy >= resources.getEnergy();
-    }
-
-    public Planet withOwnerId(Optional<UUID> ownerId) {
+    public Planet withOwnerId(UUID ownerId) {
         Preconditions.checkNotNull(ownerId, "ownerId");
 
-        return new Planet(id, location, ownerId, crystals, gas, energy);
+        return new Planet(id, location, ownerId, resources);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("location", location)
+                .add("ownerId", ownerId)
+                .add("resources", resources)
+                .toString();
     }
 }

@@ -29,7 +29,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="owner_id" type="uuid">
-                <constraints nullable="true" references="player(id)" foreignKeyName="planet_owner_id"/>
+                <constraints nullable="false" references="player(id)" foreignKeyName="planet_owner_id"/>
             </column>
             <column name="crystals" type="long">
                 <constraints nullable="false"/>
@@ -154,6 +154,7 @@
                 <constraints nullable="false" references="player(id)" foreignKeyName="hangar_player_id"/>
             </column>
         </createTable>
+        <addUniqueConstraint tableName="hangar" columnNames="planet_id, player_id"/>
 
         <createTable tableName="hangar_ships">
             <column name="hangar_id" type="uuid">
@@ -212,6 +213,15 @@
                 <constraints nullable="false"/>
             </column>
             <column name="direction" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_crystals" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_gas" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_energy" type="long">
                 <constraints nullable="false"/>
             </column>
         </createTable>

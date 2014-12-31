@@ -1,32 +1,30 @@
 package restwars.service;
 
 import com.google.common.base.Preconditions;
+import restwars.service.resource.Resources;
 
 public class UniverseConfiguration {
     private final int galaxyCount;
     private final int solarSystemsPerGalaxy;
     private final int planetsPerSolarSystem;
-    private final long startingCrystals;
-    private final long startingGas;
-    private final long startingEnergy;
+    private final Resources startingResources;
     private final int roundTimeInSeconds;
 
-    public UniverseConfiguration(int galaxyCount, int solarSystemsPerGalaxy, int planetsPerSolarSystem, long startingCrystals, long startingGas, long startingEnergy, int roundTimeInSeconds) {
-        Preconditions.checkArgument(startingCrystals >= 0, "startingCrystals must be >= 0");
-        Preconditions.checkArgument(startingGas >= 0, "startingGas must be >= 0");
-        Preconditions.checkArgument(startingEnergy >= 0, "startingEnergy must be >= 0");
+    public UniverseConfiguration(int galaxyCount, int solarSystemsPerGalaxy, int planetsPerSolarSystem, Resources startingResources, int roundTimeInSeconds) {
+        Preconditions.checkNotNull(startingResources, "startingResources");
+        Preconditions.checkArgument(startingResources.getCrystals() >= 0, "Starting crystals must be >= 0");
+        Preconditions.checkArgument(startingResources.getGas() >= 0, "Starting gas must be >= 0");
+        Preconditions.checkArgument(startingResources.getEnergy() >= 0, "Starting energy must be >= 0");
         Preconditions.checkArgument(galaxyCount > 0, "galaxyCount must be > 0");
         Preconditions.checkArgument(solarSystemsPerGalaxy > 0, "solarSystemsPerGalaxy must be > 0");
         Preconditions.checkArgument(planetsPerSolarSystem > 0, "planetsPerSolarSystem must be > 0");
         Preconditions.checkArgument(roundTimeInSeconds > 0, "roundTimeInSeconds must be > 0");
 
-        this.startingCrystals = startingCrystals;
-        this.startingGas = startingGas;
-        this.startingEnergy = startingEnergy;
         this.galaxyCount = galaxyCount;
         this.solarSystemsPerGalaxy = solarSystemsPerGalaxy;
         this.planetsPerSolarSystem = planetsPerSolarSystem;
         this.roundTimeInSeconds = roundTimeInSeconds;
+        this.startingResources = startingResources;
     }
 
     public int getGalaxyCount() {
@@ -41,16 +39,8 @@ public class UniverseConfiguration {
         return planetsPerSolarSystem;
     }
 
-    public long getStartingCrystals() {
-        return startingCrystals;
-    }
-
-    public long getStartingGas() {
-        return startingGas;
-    }
-
-    public long getStartingEnergy() {
-        return startingEnergy;
+    public Resources getStartingResources() {
+        return startingResources;
     }
 
     public int getRoundTimeInSeconds() {
