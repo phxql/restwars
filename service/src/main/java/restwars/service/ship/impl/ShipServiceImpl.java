@@ -267,9 +267,11 @@ public class ShipServiceImpl implements ShipService {
         Preconditions.checkNotNull(ships, "ships");
         Preconditions.checkNotNull(flightType, "flightType");
 
+        // Empty flights are forbidden
         if (ships.isEmpty()) {
             throw new InvalidFlightException(InvalidFlightException.Reason.NO_SHIPS);
         }
+        // A colonize flight needs at least one colony ship
         if (flightType.equals(FlightType.COLONIZE) && ships.countByType(ShipType.COLONY) == 0) {
             throw new InvalidFlightException(InvalidFlightException.Reason.NO_COLONY_SHIP);
         }
@@ -277,7 +279,8 @@ public class ShipServiceImpl implements ShipService {
         long distance = start.getLocation().calculateDistance(destination);
         double energyNeeded = 0;
         for (Ship ship : ships) {
-            energyNeeded += ship.getType().getFlightCostModifier() * distance * ship.getAmount();
+            // This also contains the energy needed for the return flight
+            energyNeeded += ship.getType().getFlightCostModifier() * distance * ship.getAmount() * 2;
         }
         long speed = findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
@@ -285,7 +288,6 @@ public class ShipServiceImpl implements ShipService {
 
         // TODO: Check if enough energy is available
         // TODO: Decrease energy
-        // TODO: For attack flights the double amount of energy is needed, because of the return flight
 
         // Check if enough ships are on the start planet
         Hangar hangar = hangarDAO.findWithPlanetId(start.getId()).orElseThrow(NotEnoughShipsException::new);
