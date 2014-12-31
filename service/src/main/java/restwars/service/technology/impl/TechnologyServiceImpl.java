@@ -88,9 +88,9 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkNotNull(technology, "technology");
         Preconditions.checkNotNull(player, "player");
 
-        // TODO: Check if a research is already running on the planet
-        // TODO: Check if the research is already running for the player
-        // TODO: Check if the planet has a research center
+        // TODO: Gameplay - Check if a research is already running on the planet
+        // TODO: Gameplay - Check if the research is already running for the player
+        // TODO: Gameplay - Check if the planet has a research center
         Optional<Technology> existingTechnology = technologyDAO.findWithPlayerId(player.getId(), technology);
         int level = existingTechnology.map(Technology::getLevel).orElse(1);
 

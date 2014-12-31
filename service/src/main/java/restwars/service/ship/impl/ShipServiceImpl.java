@@ -65,7 +65,7 @@ public class ShipServiceImpl implements ShipService {
             throw new InsufficientShipyardException(1);
         }
 
-        // TODO: Check build queues
+        // TODO: Gameplay - Check build queues
 
         Resources buildCost = type.getBuildCost();
         if (!planet.hasResources(buildCost)) {
@@ -136,7 +136,7 @@ public class ShipServiceImpl implements ShipService {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(ships, "ships");
 
-        // TODO: Code duplication from finishShipsInConstruction, refactor!
+        // TODO: Code smell - Code duplication from finishShipsInConstruction, refactor!
 
         Hangar hangar = getOrCreateHangar(planet.getId(), player.getId());
 
@@ -222,7 +222,7 @@ public class ShipServiceImpl implements ShipService {
                 flightDAO.delete(flight);
             } else {
                 if (fight.getRemainingDefenderShips().isEmpty()) {
-                    // TODO: Loot planet
+                    // TODO: Gameplay - Loot planet
                 }
 
                 createReturnFlight(flight, fight.getRemainingAttackerShips());
@@ -293,7 +293,7 @@ public class ShipServiceImpl implements ShipService {
         long started = roundService.getCurrentRound();
         long arrives = started + (long) Math.ceil(distance / speed);
 
-        // TODO: Decrease energy
+        // TODO: Gameplay - Decrease energy
 
         // Check if enough ships are on the start planet
         Hangar hangar = hangarDAO.findWithPlanetId(start.getId()).orElseThrow(NotEnoughShipsException::new);

@@ -35,7 +35,7 @@ public class PlayerServiceImpl implements PlayerService {
 
         UUID id = uuidFactory.create();
 
-        // TODO: Validate username and password
+        // TODO: Security - Validate username and password
 
         Player player = new Player(id, username, password);
         playerDAO.insert(player);

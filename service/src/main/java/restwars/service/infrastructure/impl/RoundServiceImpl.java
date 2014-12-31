@@ -16,7 +16,7 @@ public class RoundServiceImpl implements RoundService {
 
     @Override
     public long getCurrentRound() {
-        // TODO: Implement caching
+        // TODO: Performance - Implement caching
 
         return roundDAO.getRound();
     }

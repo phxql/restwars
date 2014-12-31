@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 
 public class InvalidFlightsWebException extends WebApplicationException {
     public InvalidFlightsWebException() {
-        // TODO: Include reason
+        // TODO: REST beauty - Include reason
         super(Response.Status.PRECONDITION_FAILED);
     }
 }
