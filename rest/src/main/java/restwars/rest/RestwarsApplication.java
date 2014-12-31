@@ -1,6 +1,15 @@
 package restwars.rest;
 
+import com.wordnik.swagger.config.ConfigFactory;
 import com.wordnik.swagger.config.FilterFactory;
+import com.wordnik.swagger.config.ScannerFactory;
+import com.wordnik.swagger.config.SwaggerConfig;
+import com.wordnik.swagger.jaxrs.config.DefaultJaxrsScanner;
+import com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider;
+import com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON;
+import com.wordnik.swagger.jaxrs.listing.ResourceListingProvider;
+import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader;
+import com.wordnik.swagger.reader.ClassReaders;
 import dagger.ObjectGraph;
 import io.dropwizard.Application;
 import io.dropwizard.auth.basic.BasicAuthProvider;
@@ -9,7 +18,6 @@ import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.federecio.dropwizard.swagger.SwaggerDropwizard;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +47,6 @@ import java.util.List;
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RestwarsApplication.class);
 
-    private final SwaggerDropwizard swaggerDropwizard = new SwaggerDropwizard();
-
     public static void main(String[] args) throws Exception {
         try {
             new RestwarsApplication().run(args);
@@ -58,8 +64,6 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
                 return configuration.getDatabase();
             }
         });
-
-        swaggerDropwizard.onInitialize(bootstrap);
     }
 
     @Override
@@ -86,10 +90,23 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         // loadDemoData(compositionRoot.getUnitOfWorkService(), compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
 
         // Initialize swagger documentation
-        swaggerDropwizard.onRun(restwarsConfiguration, environment);
-        FilterFactory.setFilter(new SwaggerFilter());
+        registerSwagger(environment);
 
         registerCorsFilter(environment);
+    }
+
+    private void registerSwagger(Environment environment) {
+        environment.jersey().register(new ApiListingResourceJSON());
+        environment.jersey().register(new ResourceListingProvider());
+        environment.jersey().register(new ApiDeclarationProvider());
+        ScannerFactory.setScanner(new DefaultJaxrsScanner());
+        ClassReaders.setReader(new DefaultJaxrsApiReader());
+
+        SwaggerConfig config = ConfigFactory.config();
+        config.setApiVersion("1.0.0");
+        config.setBasePath("http://localhost:8080");
+
+        FilterFactory.setFilter(new SwaggerFilter());
     }
 
     private void registerCorsFilter(Environment environment) {
