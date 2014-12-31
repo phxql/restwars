@@ -172,7 +172,7 @@ public class ShipServiceImpl implements ShipService {
         } else {
             LOGGER.debug("Player {} colonized new planet at {}", flight.getPlayerId(), flight.getDestination());
 
-            Planet newPlanet = new Planet(uuidFactory.create(), flight.getDestination(), Optional.of(flight.getPlayerId()),
+            Planet newPlanet = new Planet(uuidFactory.create(), flight.getDestination(), flight.getPlayerId(),
                     universeConfiguration.getStartingCrystals(), universeConfiguration.getStartingGas(),
                     universeConfiguration.getStartingEnergy() + flight.getEnergyNeeded() / 2);
             planetDAO.insert(newPlanet);
@@ -197,7 +197,7 @@ public class ShipServiceImpl implements ShipService {
 
         Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
         if (planet.isPresent()) {
-            Hangar hangar = getOrCreateHangar(planet.get().getId(), planet.get().getOwnerId().get());
+            Hangar hangar = getOrCreateHangar(planet.get().getId(), planet.get().getOwnerId());
 
             Fight fight = fightCalculator.attack(flight.getShips(), hangar.getShips());
 

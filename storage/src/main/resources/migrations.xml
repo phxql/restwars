@@ -29,7 +29,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="owner_id" type="uuid">
-                <constraints nullable="true" references="player(id)" foreignKeyName="planet_owner_id"/>
+                <constraints nullable="false" references="player(id)" foreignKeyName="planet_owner_id"/>
             </column>
             <column name="crystals" type="long">
                 <constraints nullable="false"/>

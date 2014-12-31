@@ -38,7 +38,7 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
                 PLANET.OWNER_ID, PLANET.CRYSTALS, PLANET.GAS, PLANET.ENERGY
         ).values(
                 planet.getId(), planet.getLocation().getGalaxy(), planet.getLocation().getSolarSystem(),
-                planet.getLocation().getPlanet(), planet.getOwnerId().orElse(null), planet.getCrystals(),
+                planet.getLocation().getPlanet(), planet.getOwnerId(), planet.getCrystals(),
                 planet.getGas(), planet.getEnergy()
         ).execute();
     }
@@ -82,7 +82,7 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
                 .set(PLANET.LOCATION_GALAXY, planet.getLocation().getGalaxy())
                 .set(PLANET.LOCATION_SOLAR_SYSTEM, planet.getLocation().getSolarSystem())
                 .set(PLANET.LOCATION_PLANET, planet.getLocation().getPlanet())
-                .set(PLANET.OWNER_ID, planet.getOwnerId().orElse(null))
+                .set(PLANET.OWNER_ID, planet.getOwnerId())
                 .set(PLANET.CRYSTALS, planet.getCrystals())
                 .set(PLANET.GAS, planet.getGas())
                 .set(PLANET.ENERGY, planet.getEnergy())
@@ -117,7 +117,7 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
         return new Planet(
                 record.getValue(PLANET.ID), new Location(record.getValue(PLANET.LOCATION_GALAXY),
                 record.getValue(PLANET.LOCATION_SOLAR_SYSTEM), record.getValue(PLANET.LOCATION_PLANET)),
-                Optional.ofNullable(record.getValue(PLANET.OWNER_ID)), record.getValue(PLANET.CRYSTALS),
+                record.getValue(PLANET.OWNER_ID), record.getValue(PLANET.CRYSTALS),
                 record.getValue(PLANET.GAS), record.getValue(PLANET.ENERGY)
         );
     }

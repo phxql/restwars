@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class Planet {
@@ -13,8 +12,7 @@ public class Planet {
 
     private final Location location;
 
-    // TODO: Remove the Optional<>, only colonized planets appear as an instance of Planet.
-    private final Optional<UUID> ownerId;
+    private final UUID ownerId;
 
     private final long crystals;
 
@@ -22,7 +20,7 @@ public class Planet {
 
     private final long energy;
 
-    public Planet(UUID id, Location location, Optional<UUID> ownerId, long crystals, long gas, long energy) {
+    public Planet(UUID id, Location location, UUID ownerId, long crystals, long gas, long energy) {
         Preconditions.checkArgument(crystals >= 0, "crystals must be >= 0");
         Preconditions.checkArgument(gas >= 0, "gas must be >= 0");
         Preconditions.checkArgument(energy >= 0, "energy must be >= 0");
@@ -43,7 +41,7 @@ public class Planet {
         return location;
     }
 
-    public Optional<UUID> getOwnerId() {
+    public UUID getOwnerId() {
         return ownerId;
     }
 
@@ -66,11 +64,7 @@ public class Planet {
     public boolean isOwnedFrom(Player player) {
         Preconditions.checkNotNull(player, "player");
 
-        if (ownerId.isPresent()) {
-            return ownerId.get().equals(player.getId());
-        }
-
-        return false;
+        return ownerId.equals(player.getId());
     }
 
     public boolean hasResources(Resources resources) {
@@ -79,7 +73,7 @@ public class Planet {
         return crystals >= resources.getCrystals() && gas >= resources.getGas() && energy >= resources.getEnergy();
     }
 
-    public Planet withOwnerId(Optional<UUID> ownerId) {
+    public Planet withOwnerId(UUID ownerId) {
         Preconditions.checkNotNull(ownerId, "ownerId");
 
         return new Planet(id, location, ownerId, crystals, gas, energy);
