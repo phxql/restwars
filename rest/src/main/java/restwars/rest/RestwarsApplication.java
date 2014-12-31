@@ -1,5 +1,6 @@
 package restwars.rest;
 
+import com.wordnik.swagger.config.FilterFactory;
 import dagger.ObjectGraph;
 import io.dropwizard.Application;
 import io.dropwizard.auth.basic.BasicAuthProvider;
@@ -8,11 +9,13 @@ import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.federecio.dropwizard.swagger.SwaggerDropwizard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.CompositionRoot;
 import restwars.rest.di.RestWarsModule;
+import restwars.rest.doc.SwaggerFilter;
 import restwars.rest.integration.UnitOfWorkResourceMethodDispatchAdapter;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
@@ -32,6 +35,8 @@ import java.util.List;
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RestwarsApplication.class);
 
+    private final SwaggerDropwizard swaggerDropwizard = new SwaggerDropwizard();
+
     public static void main(String[] args) throws Exception {
         try {
             new RestwarsApplication().run(args);
@@ -49,6 +54,8 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
                 return configuration.getDatabase();
             }
         });
+
+        swaggerDropwizard.onInitialize(bootstrap);
     }
 
     @Override
@@ -72,7 +79,11 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         environment.lifecycle().manage(compositionRoot.getClock());
 
-        loadDemoData(compositionRoot.getUnitOfWorkService(), compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
+        // loadDemoData(compositionRoot.getUnitOfWorkService(), compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
+
+        // Initialize swagger documentation
+        swaggerDropwizard.onRun(restwarsConfiguration, environment);
+        FilterFactory.setFilter(new SwaggerFilter());
     }
 
     private void loadDemoData(UnitOfWorkService unitOfWorkService, PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {
