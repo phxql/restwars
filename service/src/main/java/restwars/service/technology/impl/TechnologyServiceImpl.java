@@ -3,13 +3,13 @@ package restwars.service.technology.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.building.BuildingService;
+import restwars.service.building.BuildingDAO;
+import restwars.service.building.BuildingType;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.Player;
-import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 import restwars.service.technology.*;
 
@@ -22,20 +22,20 @@ public class TechnologyServiceImpl implements TechnologyService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TechnologyServiceImpl.class);
 
     private final UUIDFactory uuidFactory;
-    private final BuildingService buildingService;
     private final TechnologyDAO technologyDAO;
     private final PlanetDAO planetDAO;
     private final RoundService roundService;
     private final ResearchDAO researchDAO;
+    private final BuildingDAO buildingDAO;
 
     @Inject
-    public TechnologyServiceImpl(UUIDFactory uuidFactory, BuildingService buildingService, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO) {
+    public TechnologyServiceImpl(UUIDFactory uuidFactory, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO, BuildingDAO buildingDAO) {
         this.researchDAO = Preconditions.checkNotNull(researchDAO, "researchDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
-        this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
+        this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
     }
 
     @Override
@@ -83,20 +83,33 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
-    public Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws InsufficientResourcesException {
+    public Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws ResearchException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(technology, "technology");
         Preconditions.checkNotNull(player, "player");
 
-        // TODO: Gameplay - Check if a research is already running on the planet
-        // TODO: Gameplay - Check if the research is already running for the player
-        // TODO: Gameplay - Check if the planet has a research center
+        // Ensure that the planet has a research center
+        boolean hasResearchCenter = buildingDAO.findWithPlanetId(planet.getId()).stream().anyMatch(b -> b.getType().equals(BuildingType.RESEARCH_CENTER));
+        if (!hasResearchCenter) {
+            throw new ResearchException(ResearchException.Reason.NO_RESEARCH_CENTER);
+        }
+
+        // Ensure that no other research is running on that planet
+        if (!researchDAO.findWithPlanetId(planet.getId()).isEmpty()) {
+            throw new ResearchException(ResearchException.Reason.NOT_ENOUGH_RESEARCH_QUEUES);
+        }
+
+        // Ensure that the research is not running on other planets
+        if (!researchDAO.findWithPlayerAndType(player.getId(), technology).isEmpty()) {
+            throw new ResearchException(ResearchException.Reason.ALREADY_RUNNING);
+        }
+
         Optional<Technology> existingTechnology = technologyDAO.findWithPlayerId(player.getId(), technology);
         int level = existingTechnology.map(Technology::getLevel).orElse(1);
 
         Resources researchCost = calculateResearchCost(technology, level);
         if (!planet.getResources().isEnough(researchCost)) {
-            throw new InsufficientResourcesException(researchCost, planet.getResources());
+            throw new ResearchException(ResearchException.Reason.INSUFFICIENT_RESOURCES);
         }
 
         Planet updatedPlanet = planet.withResources(planet.getResources().minus(researchCost));

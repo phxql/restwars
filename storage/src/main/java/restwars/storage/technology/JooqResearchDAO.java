@@ -49,7 +49,7 @@ public class JooqResearchDAO extends AbstractJooqDAO implements ResearchDAO {
         LOGGER.debug("Finding researches with round {}", round);
 
         Result<ResearchRecord> result = context().selectFrom(RESEARCH).where(RESEARCH.DONE.eq(round)).fetch();
-        return result.stream().map(this::fromRecord).collect(Collectors.toList());
+        return toList(result);
     }
 
     private Research fromRecord(ResearchRecord record) {
@@ -77,6 +77,21 @@ public class JooqResearchDAO extends AbstractJooqDAO implements ResearchDAO {
         LOGGER.debug("Finding researches with planet id {}", planetId);
 
         Result<ResearchRecord> result = context().selectFrom(RESEARCH).where(RESEARCH.PLANET_ID.eq(planetId)).fetch();
+        return toList(result);
+    }
+
+    @Override
+    public List<Research> findWithPlayerAndType(UUID playerId, TechnologyType type) {
+        Preconditions.checkNotNull(playerId, "playerId");
+        Preconditions.checkNotNull(type, "type");
+
+        LOGGER.debug("Finding researched with player id {} and type {}", playerId, type);
+
+        Result<ResearchRecord> result = context().selectFrom(RESEARCH).where(RESEARCH.PLAYER_ID.eq(playerId)).and(RESEARCH.TYPE.eq(type.getId())).fetch();
+        return toList(result);
+    }
+
+    private List<Research> toList(Result<ResearchRecord> result) {
         return result.stream().map(this::fromRecord).collect(Collectors.toList());
     }
 }

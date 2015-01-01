@@ -42,6 +42,37 @@ public class CreateFlightRequest {
     @NotEmpty
     private List<Ship> ships;
 
+    @Min(0)
+    private long cargoCrystals;
+    @Min(0)
+    private long cargoGas;
+    @Min(0)
+    private long cargoEnergy;
+
+    public long getCargoCrystals() {
+        return cargoCrystals;
+    }
+
+    public void setCargoCrystals(long cargoCrystals) {
+        this.cargoCrystals = cargoCrystals;
+    }
+
+    public void setCargoGas(long cargoGas) {
+        this.cargoGas = cargoGas;
+    }
+
+    public void setCargoEnergy(long cargoEnergy) {
+        this.cargoEnergy = cargoEnergy;
+    }
+
+    public long getCargoGas() {
+        return cargoGas;
+    }
+
+    public long getCargoEnergy() {
+        return cargoEnergy;
+    }
+
     public String getType() {
         return type;
     }

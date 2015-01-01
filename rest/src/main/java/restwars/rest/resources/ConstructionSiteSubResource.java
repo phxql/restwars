@@ -6,13 +6,13 @@ import restwars.rest.api.building.ConstructionSiteResponse;
 import restwars.rest.api.building.CreateBuildingRequest;
 import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
+import restwars.service.building.BuildingException;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
 import restwars.service.building.ConstructionSite;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
-import restwars.service.resource.InsufficientResourcesException;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -55,8 +55,8 @@ public class ConstructionSiteSubResource {
             ConstructionSite constructionSite = buildingService.constructOrUpgradeBuilding(planet, type);
 
             return ConstructionSiteResponse.fromConstructionSite(constructionSite);
-        } catch (InsufficientResourcesException e) {
-            throw new InsufficientResourcesWebException();
+        } catch (BuildingException e) {
+            throw new BuildingWebException(e.getReason());
         }
     }
 }

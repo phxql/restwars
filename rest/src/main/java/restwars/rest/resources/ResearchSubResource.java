@@ -9,8 +9,8 @@ import restwars.rest.util.Helper;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
-import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.technology.Research;
+import restwars.service.technology.ResearchException;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.TechnologyType;
 
@@ -54,8 +54,8 @@ public class ResearchSubResource {
         try {
             Research research = technologyService.researchTechnology(player, planet, type);
             return ResearchResponse.fromResearch(research);
-        } catch (InsufficientResourcesException e) {
-            throw new InsufficientResourcesWebException();
+        } catch (ResearchException e) {
+            throw new ResearchWebException(e.getReason());
         }
     }
 }

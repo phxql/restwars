@@ -36,4 +36,13 @@ public interface ResearchDAO {
      * @return Researches.
      */
     List<Research> findWithPlanetId(UUID planetId);
+
+    /**
+     * Finds all researches with the given player id and the given type.
+     *
+     * @param playerId Player id.
+     * @param type     Type.
+     * @return Researches.
+     */
+    List<Research> findWithPlayerAndType(UUID playerId, TechnologyType type);
 }
