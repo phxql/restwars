@@ -11,7 +11,7 @@ import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
 import restwars.service.ship.Flight;
-import restwars.service.ship.InvalidFlightException;
+import restwars.service.ship.FlightException;
 import restwars.service.ship.ShipService;
 
 import javax.inject.Inject;
@@ -60,7 +60,7 @@ public class FlightSubResource {
             );
 
             return FlightResponse.fromFlight(flight);
-        } catch (InvalidFlightException e) {
+        } catch (FlightException e) {
             throw new InvalidFlightsWebException();
         }
     }

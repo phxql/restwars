@@ -2,7 +2,7 @@ package restwars.service.ship;
 
 import restwars.service.ServiceException;
 
-public class InvalidFlightException extends ServiceException {
+public class FlightException extends ServiceException {
     public static enum Reason {
         NO_SHIPS,
         NO_COLONY_SHIP,
@@ -15,7 +15,7 @@ public class InvalidFlightException extends ServiceException {
 
     private final Reason reason;
 
-    public InvalidFlightException(Reason reason) {
+    public FlightException(Reason reason) {
         this.reason = reason;
     }
 

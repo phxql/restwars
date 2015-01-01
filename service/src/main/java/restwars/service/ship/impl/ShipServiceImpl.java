@@ -199,7 +199,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws InvalidFlightException {
+    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws FlightException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");
@@ -209,15 +209,15 @@ public class ShipServiceImpl implements ShipService {
 
         // Empty flights are forbidden
         if (ships.isEmpty()) {
-            throw new InvalidFlightException(InvalidFlightException.Reason.NO_SHIPS);
+            throw new FlightException(FlightException.Reason.NO_SHIPS);
         }
         // A colonize flight needs at least one colony ship
         if (flightType.equals(FlightType.COLONIZE) && ships.countByType(ShipType.COLONY) == 0) {
-            throw new InvalidFlightException(InvalidFlightException.Reason.NO_COLONY_SHIP);
+            throw new FlightException(FlightException.Reason.NO_COLONY_SHIP);
         }
         // Only transport and colonize flights can have cargo
         if (!cargo.isEmpty() && !(flightType.equals(FlightType.COLONIZE) || flightType.equals(FlightType.TRANSPORT))) {
-            throw new InvalidFlightException(InvalidFlightException.Reason.NO_CARGO_ALLOWED);
+            throw new FlightException(FlightException.Reason.NO_CARGO_ALLOWED);
         }
 
         long distance = start.getLocation().calculateDistance(destination);
@@ -229,14 +229,14 @@ public class ShipServiceImpl implements ShipService {
         long totalEnergyNeeded = (long) Math.ceil(energyNeeded);
         // Check if planet has enough energy
         if (!start.getResources().isEnoughEnergy(totalEnergyNeeded)) {
-            throw new InvalidFlightException(InvalidFlightException.Reason.INSUFFICIENT_FUEL);
+            throw new FlightException(FlightException.Reason.INSUFFICIENT_FUEL);
         }
 
         // Check if enough ships are on the start planet
         Hangar hangar = shipUtils.getOrCreateHangar(hangarDAO, uuidFactory, start.getId(), start.getOwnerId());
         for (Ship ship : ships) {
             if (hangar.getShips().countByType(ship.getType()) < ship.getAmount()) {
-                throw new InvalidFlightException(InvalidFlightException.Reason.NOT_ENOUGH_SHIPS_ON_PLANET);
+                throw new FlightException(FlightException.Reason.NOT_ENOUGH_SHIPS_ON_PLANET);
             }
         }
 
@@ -251,10 +251,10 @@ public class ShipServiceImpl implements ShipService {
         if (!cargo.isEmpty()) {
             // Check cargo space and resource availability
             if (cargo.sum() > shipUtils.calculateStorageCapacity(ships)) {
-                throw new InvalidFlightException(InvalidFlightException.Reason.NOT_ENOUGH_CARGO_SPACE);
+                throw new FlightException(FlightException.Reason.NOT_ENOUGH_CARGO_SPACE);
             }
             if (!start.getResources().isEnough(cargo)) {
-                throw new InvalidFlightException(InvalidFlightException.Reason.INSUFFICIENT_RESOURCES);
+                throw new FlightException(FlightException.Reason.INSUFFICIENT_RESOURCES);
             }
 
             // Decrease resources

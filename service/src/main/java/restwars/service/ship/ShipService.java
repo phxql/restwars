@@ -51,7 +51,7 @@ public interface ShipService {
      *
      * @return Flight.
      */
-    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws InvalidFlightException;
+    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws FlightException;
 
     /**
      * Finds all flights for a given player.
