@@ -45,7 +45,7 @@ public class PlayerResource {
     @ApiOperation(value = "Gets information about the current player", authorizations = {
             @Authorization("basicAuth")
     })
-    public PlayerResponse me(@ApiParam(access = "internal") @Auth Player player) {
+    public PlayerResponse me(@Auth @ApiParam(access = "internal") Player player) {
         List<Planet> planets = planetService.findWithOwner(player);
 
         return new PlayerResponse(player.getUsername(), Helper.mapToList(planets, PlanetResponse::fromPlanet));

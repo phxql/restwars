@@ -4,8 +4,6 @@ import com.wordnik.swagger.config.ConfigFactory;
 import com.wordnik.swagger.config.FilterFactory;
 import com.wordnik.swagger.config.ScannerFactory;
 import com.wordnik.swagger.config.SwaggerConfig;
-import com.wordnik.swagger.converter.ModelConverters;
-import com.wordnik.swagger.converter.OverrideConverter;
 import com.wordnik.swagger.jaxrs.config.DefaultJaxrsScanner;
 import com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider;
 import com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON;
@@ -26,9 +24,9 @@ import org.slf4j.LoggerFactory;
 import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.CompositionRoot;
 import restwars.rest.di.RestWarsModule;
+import restwars.rest.doc.ModelConverter;
 import restwars.rest.doc.SwaggerFilter;
 import restwars.rest.integration.database.UnitOfWorkResourceMethodDispatchAdapter;
-import restwars.rest.resources.param.LocationParam;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.planet.Location;
@@ -110,14 +108,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         config.setBasePath("http://localhost:8080");
 
         FilterFactory.setFilter(new SwaggerFilter());
-        OverrideConverter overrideConverter = new OverrideConverter();
-
-        // TODO: Code smell - This is really ugly
-        String jsonString = "{" +
-                "  \"id\": \"Date\"" +
-                "}";
-        overrideConverter.add(LocationParam.class.getName(), jsonString);
-        ModelConverters.addConverter(overrideConverter, true);
+        ModelConverter.register();
     }
 
     private void registerCorsFilter(Environment environment) {

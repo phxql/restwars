@@ -46,7 +46,7 @@ public class PlanetResource {
 
     @GET
     @ApiOperation("Lists all planets for the current player")
-    public List<PlanetResponse> index(@ApiParam(access = "internal") @Auth Player player) {
+    public List<PlanetResponse> index(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
         List<Planet> planets = planetService.findWithOwner(player);
 
@@ -57,8 +57,8 @@ public class PlanetResource {
     @Path("/{location}")
     @ApiOperation("Returns the planet at the given location")
     public PlanetResponse getPlanet(
-            @ApiParam(access = "internal") @Auth Player player,
-            @ApiParam(value = "Planet location", required = true) @PathParam("location") LocationParam location
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("location") @ApiParam(value = "Planet location", required = true) LocationParam location
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
@@ -69,6 +69,7 @@ public class PlanetResource {
     }
 
     @Path("/{location}/building")
+    @ApiOperation("Buildings of a planet")
     public BuildingSubResource getBuildings() {
         return buildingSubResource;
     }
