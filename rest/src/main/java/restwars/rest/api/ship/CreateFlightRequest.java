@@ -53,6 +53,18 @@ public class CreateFlightRequest {
         return cargoCrystals;
     }
 
+    public void setCargoCrystals(long cargoCrystals) {
+        this.cargoCrystals = cargoCrystals;
+    }
+
+    public void setCargoGas(long cargoGas) {
+        this.cargoGas = cargoGas;
+    }
+
+    public void setCargoEnergy(long cargoEnergy) {
+        this.cargoEnergy = cargoEnergy;
+    }
+
     public long getCargoGas() {
         return cargoGas;
     }
