@@ -20,7 +20,7 @@ public interface TechnologyService {
      * @param technology Technology to research.
      * @return Research.
      */
-    Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws InsufficientResourcesException;
+    Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws InsufficientResourcesException, InsufficientResearchCenterException;
 
     /**
      * Finds all running researches on the given planet.
