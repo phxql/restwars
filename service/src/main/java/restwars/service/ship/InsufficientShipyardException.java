@@ -1,6 +1,8 @@
 package restwars.service.ship;
 
-public class InsufficientShipyardException extends Exception {
+import restwars.service.ServiceException;
+
+public class InsufficientShipyardException extends ServiceException {
     private final int levelRequired;
 
     public InsufficientShipyardException(int levelRequired) {

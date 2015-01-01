@@ -1,6 +1,8 @@
 package restwars.service.ship;
 
-public class InvalidFlightException extends Exception {
+import restwars.service.ServiceException;
+
+public class InvalidFlightException extends ServiceException {
     public enum Reason {
         NO_SHIPS,
         NO_COLONY_SHIP,

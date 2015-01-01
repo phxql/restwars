@@ -17,7 +17,7 @@ public interface ShipService {
      * @param type   Type of ship.
      * @return Ship in construction.
      */
-    ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException, InsufficientShipyardException;
+    ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException, InsufficientShipyardException, InsufficientBuildQueuesException;
 
     /**
      * Finds all ships in construction on the given planet.

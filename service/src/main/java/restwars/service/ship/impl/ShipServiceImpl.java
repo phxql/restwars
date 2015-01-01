@@ -66,7 +66,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException, InsufficientShipyardException {
+    public ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException, InsufficientShipyardException, InsufficientBuildQueuesException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
@@ -75,7 +75,10 @@ public class ShipServiceImpl implements ShipService {
             throw new InsufficientShipyardException(1);
         }
 
-        // TODO: Gameplay - Check build queues
+        List<ShipInConstruction> shipsInConstruction = shipInConstructionDAO.findWithPlanetId(planet.getId());
+        if (!shipsInConstruction.isEmpty()) {
+            throw new InsufficientBuildQueuesException();
+        }
 
         Resources buildCost = type.getBuildCost();
         if (!planet.getResources().isEnough(buildCost)) {
