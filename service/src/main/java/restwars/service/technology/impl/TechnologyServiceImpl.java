@@ -3,6 +3,7 @@ package restwars.service.technology.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
 import restwars.service.infrastructure.RoundService;
@@ -84,17 +85,22 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
-    public Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws InsufficientResourcesException, InsufficientResearchCenterException {
+    public Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws InsufficientResourcesException, InsufficientResearchCenterException, InsufficientBuildQueuesException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(technology, "technology");
         Preconditions.checkNotNull(player, "player");
 
+        // Ensure that the planet has a research center
         boolean hasResearchCenter = buildingDAO.findWithPlanetId(planet.getId()).stream().anyMatch(b -> b.getType().equals(BuildingType.RESEARCH_CENTER));
         if (!hasResearchCenter) {
             throw new InsufficientResearchCenterException(1);
         }
 
-        // TODO: Gameplay - Check if a research is already running on the planet
+        // Ensure that no other research is running on that planet
+        if (!researchDAO.findWithPlanetId(planet.getId()).isEmpty()) {
+            throw new InsufficientBuildQueuesException();
+        }
+
         // TODO: Gameplay - Check if the research is already running for the player
         Optional<Technology> existingTechnology = technologyDAO.findWithPlayerId(player.getId(), technology);
         int level = existingTechnology.map(Technology::getLevel).orElse(1);
