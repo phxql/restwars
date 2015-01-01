@@ -45,6 +45,14 @@ public class Resources {
         return this.energy >= energy;
     }
 
+    public boolean isEmpty() {
+        return energy == 0 && crystals == 0 && gas == 0;
+    }
+
+    public long sum() {
+        return crystals + gas + energy;
+    }
+
     public static Resources energy(long energy) {
         return new Resources(0, 0, energy);
     }

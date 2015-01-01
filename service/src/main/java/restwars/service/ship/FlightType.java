@@ -2,7 +2,8 @@ package restwars.service.ship;
 
 public enum FlightType {
     ATTACK(0),
-    COLONIZE(1);
+    COLONIZE(1),
+    TRANSPORT(2);
 
     private final int id;
 
