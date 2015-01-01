@@ -5,6 +5,7 @@ import restwars.service.ship.Fight;
 import restwars.service.ship.Ship;
 import restwars.service.ship.ShipType;
 import restwars.service.ship.Ships;
+import restwars.service.ship.impl.flighthandler.FightCalculator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

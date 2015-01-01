@@ -8,7 +8,6 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.resource.Resources;
 import restwars.service.ship.*;
-import restwars.service.ship.impl.FightCalculator;
 
 import java.util.Optional;
 
