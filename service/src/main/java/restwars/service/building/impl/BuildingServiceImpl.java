@@ -3,6 +3,7 @@ package restwars.service.building.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.building.*;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
@@ -61,14 +62,14 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public ConstructionSite constructBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException {
+    public ConstructionSite constructBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException, InsufficientBuildQueuesException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
         return createConstructionSite(planet, type, 1);
     }
 
-    private ConstructionSite createConstructionSite(Planet planet, BuildingType type, int level) throws InsufficientResourcesException {
+    private ConstructionSite createConstructionSite(Planet planet, BuildingType type, int level) throws InsufficientResourcesException, InsufficientBuildQueuesException {
         assert planet != null;
         assert type != null;
         assert level > 0;
@@ -76,6 +77,10 @@ public class BuildingServiceImpl implements BuildingService {
         Resources buildCost = calculateBuildCost(type, level);
         if (!planet.getResources().isEnough(buildCost)) {
             throw new InsufficientResourcesException(buildCost, planet.getResources());
+        }
+
+        if (!findConstructionSitesOnPlanet(planet).isEmpty()) {
+            throw new InsufficientBuildQueuesException();
         }
 
         Planet updatedPlanet = planet.withResources(planet.getResources().minus(buildCost));
@@ -94,7 +99,7 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException, InsufficientResourcesException {
+    public ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException, InsufficientResourcesException, InsufficientBuildQueuesException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
@@ -107,7 +112,7 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException {
+    public ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException, InsufficientBuildQueuesException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 

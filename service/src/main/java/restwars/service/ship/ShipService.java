@@ -1,5 +1,6 @@
 package restwars.service.ship;
 
+import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.player.Player;

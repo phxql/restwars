@@ -1,6 +1,4 @@
-package restwars.service.ship;
-
-import restwars.service.ServiceException;
+package restwars.service;
 
 public class InsufficientBuildQueuesException extends ServiceException {
 }

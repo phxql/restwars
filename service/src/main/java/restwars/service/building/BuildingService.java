@@ -1,5 +1,6 @@
 package restwars.service.building;
 
+import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.planet.Planet;
 import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
@@ -34,7 +35,7 @@ public interface BuildingService {
      * @return Construction site for the building.
      * @throws restwars.service.resource.InsufficientResourcesException If the given planet has not enough resources for the construction.
      */
-    ConstructionSite constructBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException;
+    ConstructionSite constructBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException, InsufficientBuildQueuesException;
 
     /**
      * Upgrades the given building on the given planet.
@@ -45,7 +46,7 @@ public interface BuildingService {
      * @throws BuildingNotFoundException      If a non-existent building should be upgraded.
      * @throws InsufficientResourcesException If the given planet has not enough resources for the upgrade.
      */
-    ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException, InsufficientResourcesException;
+    ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException, InsufficientResourcesException, InsufficientBuildQueuesException;
 
     /**
      * Constructs or upgrades the given building on the given planet.
@@ -55,7 +56,7 @@ public interface BuildingService {
      * @return Construction site for the building.
      * @throws InsufficientResourcesException If the given planet has not enough resources for the upgrade or construction.
      */
-    ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException;
+    ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException, InsufficientBuildQueuesException;
 
     /**
      * Adds the given building to the given planet.

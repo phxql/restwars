@@ -6,6 +6,7 @@ import restwars.rest.api.building.ConstructionSiteResponse;
 import restwars.rest.api.building.CreateBuildingRequest;
 import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
+import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
 import restwars.service.building.ConstructionSite;
@@ -57,6 +58,8 @@ public class ConstructionSiteSubResource {
             return ConstructionSiteResponse.fromConstructionSite(constructionSite);
         } catch (InsufficientResourcesException e) {
             throw new InsufficientResourcesWebException();
+        } catch (InsufficientBuildQueuesException e) {
+            throw new InsufficientBuildQueuesWebException();
         }
     }
 }

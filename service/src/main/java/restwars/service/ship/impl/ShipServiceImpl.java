@@ -3,6 +3,7 @@ package restwars.service.ship.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
