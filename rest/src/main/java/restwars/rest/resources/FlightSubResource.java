@@ -61,7 +61,7 @@ public class FlightSubResource {
 
             return FlightResponse.fromFlight(flight);
         } catch (FlightException e) {
-            throw new FlightWebException();
+            throw new FlightWebException(e.getReason());
         }
     }
 

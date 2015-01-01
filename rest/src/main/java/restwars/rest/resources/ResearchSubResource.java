@@ -55,7 +55,7 @@ public class ResearchSubResource {
             Research research = technologyService.researchTechnology(player, planet, type);
             return ResearchResponse.fromResearch(research);
         } catch (ResearchException e) {
-            throw new ResearchWebException();
+            throw new ResearchWebException(e.getReason());
         }
     }
 }

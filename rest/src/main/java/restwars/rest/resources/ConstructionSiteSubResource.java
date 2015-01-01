@@ -56,7 +56,7 @@ public class ConstructionSiteSubResource {
 
             return ConstructionSiteResponse.fromConstructionSite(constructionSite);
         } catch (BuildingException e) {
-            throw new BuildingWebException();
+            throw new BuildingWebException(e.getReason());
         }
     }
 }
