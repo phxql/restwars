@@ -1,5 +1,15 @@
 package restwars.rest;
 
+import com.wordnik.swagger.config.ConfigFactory;
+import com.wordnik.swagger.config.FilterFactory;
+import com.wordnik.swagger.config.ScannerFactory;
+import com.wordnik.swagger.config.SwaggerConfig;
+import com.wordnik.swagger.jaxrs.config.DefaultJaxrsScanner;
+import com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider;
+import com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON;
+import com.wordnik.swagger.jaxrs.listing.ResourceListingProvider;
+import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader;
+import com.wordnik.swagger.reader.ClassReaders;
 import dagger.ObjectGraph;
 import io.dropwizard.Application;
 import io.dropwizard.auth.basic.BasicAuthProvider;
@@ -8,12 +18,15 @@ import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.CompositionRoot;
 import restwars.rest.di.RestWarsModule;
-import restwars.rest.integration.UnitOfWorkResourceMethodDispatchAdapter;
+import restwars.rest.doc.ModelConverter;
+import restwars.rest.doc.SwaggerFilter;
+import restwars.rest.integration.database.UnitOfWorkResourceMethodDispatchAdapter;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.planet.Location;
@@ -26,6 +39,9 @@ import restwars.service.ship.*;
 import restwars.service.technology.TechnologyService;
 import restwars.service.unitofwork.UnitOfWorkService;
 
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import java.util.EnumSet;
 import java.util.List;
 
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
@@ -71,7 +87,37 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         environment.lifecycle().manage(compositionRoot.getClock());
 
-        loadDemoData(compositionRoot.getUnitOfWorkService(), compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
+        // loadDemoData(compositionRoot.getUnitOfWorkService(), compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
+
+        // Initialize swagger documentation
+        registerSwagger(environment);
+
+        registerCorsFilter(environment);
+    }
+
+    private void registerSwagger(Environment environment) {
+        environment.jersey().register(new ApiListingResourceJSON());
+        environment.jersey().register(new ResourceListingProvider());
+        environment.jersey().register(new ApiDeclarationProvider());
+        ScannerFactory.setScanner(new DefaultJaxrsScanner());
+        ClassReaders.setReader(new DefaultJaxrsApiReader());
+
+        SwaggerConfig config = ConfigFactory.config();
+        config.setApiVersion("1.0.0");
+        config.setBasePath("http://localhost:8080");
+
+        FilterFactory.setFilter(new SwaggerFilter());
+        ModelConverter.register();
+    }
+
+    private void registerCorsFilter(Environment environment) {
+        FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+        filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+        filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS");
+        filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+        filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
+        filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+        filter.setInitParameter("allowCredentials", "true");
     }
 
     private void loadDemoData(UnitOfWorkService unitOfWorkService, PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {

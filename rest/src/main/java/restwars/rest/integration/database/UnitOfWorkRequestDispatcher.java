@@ -1,4 +1,4 @@
-package restwars.rest.integration;
+package restwars.rest.integration.database;
 
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.core.HttpContext;

@@ -1,22 +1,31 @@
 package restwars.rest.api.ship;
 
 import com.google.common.base.Preconditions;
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import restwars.rest.util.Helper;
 import restwars.service.ship.Flight;
 
 import java.util.List;
 
+@ApiModel(description = "Flight")
 public class FlightResponse {
+    @ApiModelProperty(value = "Destination planet", required = true)
     private final String destination;
 
+    @ApiModelProperty(value = "Started in round", required = true)
     private final long startedInRound;
 
+    @ApiModelProperty(value = "Arrival in round", required = true)
     private final long arrivalInRound;
 
+    @ApiModelProperty(value = "Ships on the flight", required = true)
     private final List<ShipResponse> ships;
 
+    @ApiModelProperty(value = "Type", required = true)
     private final String type;
 
+    @ApiModelProperty(value = "Direction", required = true)
     private final String direction;
 
     public FlightResponse(String destination, long startedInRound, long arrivalInRound, List<ShipResponse> ships, String type, String direction) {

@@ -1,11 +1,16 @@
 package restwars.rest.api.player;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
+@ApiModel(description = "Player registration")
 public class RegisterPlayerRequest {
+    @ApiModelProperty(value = "Username", required = true)
     @NotEmpty
     private String username;
 
+    @ApiModelProperty(value = "Password", required = true)
     @NotEmpty
     private String password;
 

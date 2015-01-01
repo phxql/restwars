@@ -1,9 +1,12 @@
 package restwars.rest.api.technology;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
+@ApiModel(description = "Researches a new technology")
 public class ResearchRequest {
-
+    @ApiModelProperty(value = "Technology type", required = true)
     @NotEmpty
     private String type;
 

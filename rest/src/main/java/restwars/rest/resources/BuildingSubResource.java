@@ -1,6 +1,9 @@
 package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.building.BuildingResponse;
 import restwars.rest.resources.param.LocationParam;
@@ -16,6 +19,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import java.util.List;
 
+@Api(value = "/{location}/building", hidden = true)
 public class BuildingSubResource {
     private final PlanetService planetService;
     private final BuildingService buildingService;
@@ -27,7 +31,11 @@ public class BuildingSubResource {
     }
 
     @GET
-    public List<BuildingResponse> getBuildings(@Auth Player player, @PathParam("location") LocationParam location) {
+    @ApiOperation(value = "Get all buildings on a planet")
+    public List<BuildingResponse> getBuildings(
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("location") @ApiParam("Planet location") LocationParam location
+    ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 

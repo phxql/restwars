@@ -1,6 +1,9 @@
 package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.ship.CreateFlightRequest;
 import restwars.rest.api.ship.FlightResponse;
@@ -22,6 +25,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.util.List;
 
+@Api(value = "/{location}/flight", hidden = true)
 public class FlightSubResource {
     private final ShipService shipService;
     private final PlanetService planetService;
@@ -34,7 +38,11 @@ public class FlightSubResource {
 
     @GET
     @Path("/own")
-    public List<FlightResponse> getOwnFlights(@Auth Player player, @PathParam("location") LocationParam location) {
+    @ApiOperation("Lists own flights from or to this planet")
+    public List<FlightResponse> getOwnFlights(
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("location") @ApiParam("Planet location") LocationParam location
+    ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
@@ -46,7 +54,13 @@ public class FlightSubResource {
 
     @POST
     @Path("/to/{destination}")
-    public FlightResponse createFlight(@Auth Player player, @PathParam("start") LocationParam start, @PathParam("destination") LocationParam destination, @Valid CreateFlightRequest body) {
+    @ApiOperation("Creates a flight")
+    public FlightResponse createFlight(
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("start") @ApiParam("Start planet") LocationParam start,
+            @PathParam("destination") @ApiParam("Destination planet") LocationParam destination,
+            @Valid CreateFlightRequest body
+    ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");

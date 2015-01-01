@@ -1,6 +1,10 @@
 package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.planet.PlanetResponse;
 import restwars.rest.resources.param.LocationParam;
@@ -15,6 +19,9 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/v1/planet")
+@Api(value = "/v1/planet", description = "Planet management", authorizations = {
+        @Authorization("basicAuth")
+})
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class PlanetResource {
@@ -38,7 +45,8 @@ public class PlanetResource {
     }
 
     @GET
-    public List<PlanetResponse> index(@Auth Player player) {
+    @ApiOperation("Lists all planets for the current player")
+    public List<PlanetResponse> index(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
         List<Planet> planets = planetService.findWithOwner(player);
 
@@ -47,7 +55,11 @@ public class PlanetResource {
 
     @GET
     @Path("/{location}")
-    public PlanetResponse getPlanet(@Auth Player player, @PathParam("location") LocationParam location) {
+    @ApiOperation("Returns the planet at the given location")
+    public PlanetResponse getPlanet(
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("location") @ApiParam(value = "Planet location", required = true) LocationParam location
+    ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
@@ -57,31 +69,37 @@ public class PlanetResource {
     }
 
     @Path("/{location}/building")
+    @ApiOperation("Buildings")
     public BuildingSubResource getBuildings() {
         return buildingSubResource;
     }
 
     @Path("/{location}/construction-site")
+    @ApiOperation("Construction sites")
     public ConstructionSiteSubResource getConstructionSites() {
         return constructionSiteSubResource;
     }
 
     @Path("/{location}/research")
+    @ApiOperation("Researches")
     public ResearchSubResource getResearches() {
         return researchSubResource;
     }
 
     @Path("/{location}/ship-in-construction")
+    @ApiOperation("Ships in construction")
     public ShipInConstructionSubResource getShipsInConstruction() {
         return shipInConstructionSubResource;
     }
 
     @Path("/{location}/ship")
+    @ApiOperation("Ships")
     public ShipSubResource getShips() {
         return shipSubResource;
     }
 
     @Path("/{location}/flight")
+    @ApiOperation("Incoming and outgoing flights")
     public FlightSubResource getFlights() {
         return flightSubResource;
     }

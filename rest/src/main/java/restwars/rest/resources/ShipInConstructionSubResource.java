@@ -1,6 +1,9 @@
 package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.ship.ShipInConstructionResponse;
 import restwars.rest.resources.param.LocationParam;
@@ -16,6 +19,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import java.util.List;
 
+@Api(value = "/{location}/ship-in-construction", hidden = true)
 public class ShipInConstructionSubResource {
     private final ShipService shipService;
     private final PlanetService planetService;
@@ -27,7 +31,11 @@ public class ShipInConstructionSubResource {
     }
 
     @GET
-    public List<ShipInConstructionResponse> getShipsInConstruction(@Auth Player player, @PathParam("location") LocationParam location) {
+    @ApiOperation("Lists all ships in construction on the planet")
+    public List<ShipInConstructionResponse> getShipsInConstruction(
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("location") @ApiParam("Planet location") LocationParam location
+    ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
