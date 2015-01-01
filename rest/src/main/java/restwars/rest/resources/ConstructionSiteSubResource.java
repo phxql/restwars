@@ -1,6 +1,9 @@
 package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.building.ConstructionSiteResponse;
 import restwars.rest.api.building.CreateBuildingRequest;
@@ -21,6 +24,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import java.util.List;
 
+@Api(value = "/{location}/construction-site", hidden = true)
 public class ConstructionSiteSubResource {
     private final PlanetService planetService;
     private final BuildingService buildingService;
@@ -32,7 +36,10 @@ public class ConstructionSiteSubResource {
     }
 
     @GET
-    public List<ConstructionSiteResponse> getConstructionSites(@Auth Player player, @PathParam("location") LocationParam location) {
+    @ApiOperation(value = "Get all construction sites on a planet")
+    public List<ConstructionSiteResponse> getConstructionSites(
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("location") @ApiParam("Planet location") LocationParam location) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
@@ -43,7 +50,12 @@ public class ConstructionSiteSubResource {
     }
 
     @POST
-    public ConstructionSiteResponse build(@Auth Player player, @PathParam("location") LocationParam location, @Valid CreateBuildingRequest data) {
+    @ApiOperation("Creates a new construction site")
+    public ConstructionSiteResponse build(
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("location") @ApiParam("Planet location") LocationParam location,
+            @Valid CreateBuildingRequest data
+    ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(data, "data");

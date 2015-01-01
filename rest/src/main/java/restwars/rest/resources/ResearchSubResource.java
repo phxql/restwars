@@ -1,6 +1,9 @@
 package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.technology.ResearchRequest;
 import restwars.rest.api.technology.ResearchResponse;
@@ -21,6 +24,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import java.util.List;
 
+@Api(value = "/{location}/research", hidden = true)
 public class ResearchSubResource {
     private final TechnologyService technologyService;
     private final PlanetService planetService;
@@ -32,7 +36,11 @@ public class ResearchSubResource {
     }
 
     @GET
-    public List<ResearchResponse> getResearch(@Auth Player player, @PathParam("location") LocationParam location) {
+    @ApiOperation("Lists all running researches on a planet")
+    public List<ResearchResponse> getResearch(
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("location") @ApiParam("Planet location") LocationParam location
+    ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
@@ -43,7 +51,12 @@ public class ResearchSubResource {
     }
 
     @POST
-    public ResearchResponse research(@Auth Player player, @PathParam("location") LocationParam location, @Valid ResearchRequest data) {
+    @ApiOperation("Researches a new technology")
+    public ResearchResponse research(
+            @Auth @ApiParam(access = "internal") Player player,
+            @PathParam("location") @ApiParam("Planet location") LocationParam location,
+            @Valid ResearchRequest data
+    ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(data, "data");

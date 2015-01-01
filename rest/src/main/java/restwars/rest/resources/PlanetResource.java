@@ -69,32 +69,37 @@ public class PlanetResource {
     }
 
     @Path("/{location}/building")
-    @ApiOperation("Buildings of a planet")
+    @ApiOperation("Buildings")
     public BuildingSubResource getBuildings() {
         return buildingSubResource;
     }
 
     @Path("/{location}/construction-site")
+    @ApiOperation("Construction sites")
     public ConstructionSiteSubResource getConstructionSites() {
         return constructionSiteSubResource;
     }
 
     @Path("/{location}/research")
+    @ApiOperation("Researches")
     public ResearchSubResource getResearches() {
         return researchSubResource;
     }
 
     @Path("/{location}/ship-in-construction")
+    @ApiOperation("Ships in construction")
     public ShipInConstructionSubResource getShipsInConstruction() {
         return shipInConstructionSubResource;
     }
 
     @Path("/{location}/ship")
+    @ApiOperation("Ships")
     public ShipSubResource getShips() {
         return shipSubResource;
     }
 
     @Path("/{location}/flight")
+    @ApiOperation("Incoming and outgoing flights")
     public FlightSubResource getFlights() {
         return flightSubResource;
     }
