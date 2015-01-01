@@ -1,6 +1,10 @@
 package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.rest.api.technology.TechnologyResponse;
 import restwars.rest.util.Helper;
@@ -17,6 +21,9 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/v1/technology")
+@Api(value = "/v1/technology", description = "Technology management", authorizations = {
+        @Authorization("basicAuth")
+})
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class TechnologyResource {
@@ -28,7 +35,10 @@ public class TechnologyResource {
     }
 
     @GET
-    public List<TechnologyResponse> getTechnologies(@Auth Player player) {
+    @ApiOperation("Lists all researched technologies")
+    public List<TechnologyResponse> getTechnologies(
+            @Auth @ApiParam(access = "internal") Player player
+    ) {
         Preconditions.checkNotNull(player, "player");
 
         List<Technology> technologies = technologyService.findAllForPlayer(player);
