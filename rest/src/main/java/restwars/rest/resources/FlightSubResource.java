@@ -10,6 +10,7 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.resource.InsufficientResourcesException;
+import restwars.service.resource.Resources;
 import restwars.service.ship.Flight;
 import restwars.service.ship.InvalidFlightException;
 import restwars.service.ship.NotEnoughShipsException;
@@ -55,7 +56,10 @@ public class FlightSubResource {
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, start.getValue(), player);
         try {
-            Flight flight = shipService.sendShipsToPlanet(player, planet, destination.getValue(), body.getParsedShips(), body.getParsedType());
+            Flight flight = shipService.sendShipsToPlanet(
+                    player, planet, destination.getValue(), body.getParsedShips(), body.getParsedType(),
+                    new Resources(body.getCargoCrystals(), body.getCargoGas(), body.getCargoEnergy())
+            );
 
             return FlightResponse.fromFlight(flight);
         } catch (NotEnoughShipsException e) {

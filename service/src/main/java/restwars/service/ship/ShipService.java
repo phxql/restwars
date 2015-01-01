@@ -4,6 +4,7 @@ import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.player.Player;
 import restwars.service.resource.InsufficientResourcesException;
+import restwars.service.resource.Resources;
 
 import java.util.List;
 
@@ -47,10 +48,12 @@ public interface ShipService {
      * @param destination Destination planet.
      * @param ships       Ships.
      * @param flightType  Flight type.
+     * @param cargo       Cargo. Only available for transport and colonize flights.
+     *
      * @return Flight.
      * @throws NotEnoughShipsException If not enough ships are available on the start planet.
      */
-    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType) throws NotEnoughShipsException, InvalidFlightException, InsufficientResourcesException;
+    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws NotEnoughShipsException, InvalidFlightException, InsufficientResourcesException;
 
     /**
      * Finds all flights for a given player.

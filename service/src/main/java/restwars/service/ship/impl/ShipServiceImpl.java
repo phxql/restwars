@@ -173,8 +173,29 @@ public class ShipServiceImpl implements ShipService {
             case COLONIZE:
                 handleColonize(flight);
                 break;
+            case TRANSPORT:
+                handleTransport(flight);
+                break;
             default:
                 throw new AssertionError("Unknown flight type: " + flight.getType());
+        }
+    }
+
+    private void handleTransport(Flight flight) {
+        assert flight != null;
+        LOGGER.debug("Finishing transport flight");
+
+        Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
+        if (planet.isPresent()) {
+            LOGGER.debug("Transfering cargo to planet {}", planet.get());
+
+            Planet updatedPlanet = planet.get().withResources(planet.get().getResources().plus(flight.getCargo()));
+            planetDAO.update(updatedPlanet);
+
+            createReturnFlight(flight, flight.getShips(), Resources.NONE);
+        } else {
+            LOGGER.debug("Planet {} isn't colonized, creating return flight", flight.getDestination());
+            createReturnFlight(flight, flight.getShips(), flight.getCargo());
         }
     }
 
@@ -191,7 +212,8 @@ public class ShipServiceImpl implements ShipService {
 
             Planet newPlanet = new Planet(
                     uuidFactory.create(), flight.getDestination(), flight.getPlayerId(),
-                    universeConfiguration.getStartingResources().plus(Resources.energy(flight.getEnergyNeeded() / 2))
+                    // Store the remaining energy for the return flight and the cargo on the planet
+                    universeConfiguration.getStartingResources().plus(Resources.energy(flight.getEnergyNeeded() / 2)).plus(flight.getCargo())
             );
             planetDAO.insert(newPlanet);
 
@@ -240,7 +262,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     private Resources lootPlanet(Planet planet, Ships ships) {
-        long storageCapacity = ships.stream().mapToLong(s -> s.getType().getStorageCapacity()).sum();
+        long storageCapacity = calculateStorageCapacity(ships);
 
         long lootCrystals = storageCapacity / 3;
         long lootGas = storageCapacity / 3;
@@ -258,6 +280,10 @@ public class ShipServiceImpl implements ShipService {
         Resources resources = new Resources(lootCrystals, lootGas, lootEnergy);
         LOGGER.debug("Looted {} from planet {}", resources, planet.getLocation());
         return resources;
+    }
+
+    private long calculateStorageCapacity(Ships ships) {
+        return ships.stream().mapToLong(s -> s.getType().getStorageCapacity()).sum();
     }
 
     private void createReturnFlight(Flight flight, Ships ships, Resources cargo) {
@@ -287,12 +313,13 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType) throws NotEnoughShipsException, InvalidFlightException, InsufficientResourcesException {
+    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws NotEnoughShipsException, InvalidFlightException, InsufficientResourcesException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");
         Preconditions.checkNotNull(ships, "ships");
         Preconditions.checkNotNull(flightType, "flightType");
+        Preconditions.checkNotNull(cargo, "cargo");
 
         // Empty flights are forbidden
         if (ships.isEmpty()) {
@@ -301,6 +328,10 @@ public class ShipServiceImpl implements ShipService {
         // A colonize flight needs at least one colony ship
         if (flightType.equals(FlightType.COLONIZE) && ships.countByType(ShipType.COLONY) == 0) {
             throw new InvalidFlightException(InvalidFlightException.Reason.NO_COLONY_SHIP);
+        }
+        // Only transport and colonize flights can have cargo
+        if (!cargo.isEmpty() && !(flightType.equals(FlightType.COLONIZE) || flightType.equals(FlightType.TRANSPORT))) {
+            throw new InvalidFlightException(InvalidFlightException.Reason.NO_CARGO_ALLOWED);
         }
 
         long distance = start.getLocation().calculateDistance(destination);
@@ -316,7 +347,7 @@ public class ShipServiceImpl implements ShipService {
         }
 
         // Check if enough ships are on the start planet
-        Hangar hangar = hangarDAO.findWithPlanetId(start.getId()).orElseThrow(NotEnoughShipsException::new);
+        Hangar hangar = getOrCreateHangar(start.getId(), start.getOwnerId());
         for (Ship ship : ships) {
             if (hangar.getShips().countByType(ship.getType()) < ship.getAmount()) {
                 throw new NotEnoughShipsException();
@@ -330,6 +361,19 @@ public class ShipServiceImpl implements ShipService {
 
         // Decrease energy on start planet
         start = start.withResources(start.getResources().minus(Resources.energy(totalEnergyNeeded)));
+
+        if (!cargo.isEmpty()) {
+            // Check cargo space and resource availability
+            if (cargo.sum() > calculateStorageCapacity(ships)) {
+                throw new InvalidFlightException(InvalidFlightException.Reason.NOT_ENOUGH_CARGO_SPACE);
+            }
+            if (!start.getResources().isEnough(cargo)) {
+                throw new InsufficientResourcesException(cargo, start.getResources());
+            }
+
+            // Decrease resources
+            start = start.withResources(start.getResources().minus(cargo));
+        }
         planetDAO.update(start);
 
         // Remove ships from the planet
@@ -337,7 +381,7 @@ public class ShipServiceImpl implements ShipService {
         hangarDAO.update(updatedHangar);
 
         // Start the flight
-        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, totalEnergyNeeded, flightType, player.getId(), FlightDirection.OUTWARD, Resources.NONE);
+        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, totalEnergyNeeded, flightType, player.getId(), FlightDirection.OUTWARD, cargo);
         flightDAO.insert(flight);
         return flight;
     }
