@@ -1,9 +1,7 @@
 package restwars.service.technology;
 
-import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.planet.Planet;
 import restwars.service.player.Player;
-import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 
 import java.util.List;
@@ -21,7 +19,7 @@ public interface TechnologyService {
      * @param technology Technology to research.
      * @return Research.
      */
-    Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws InsufficientResourcesException, InsufficientResearchCenterException, InsufficientBuildQueuesException;
+    Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws ResearchFailedException;
 
     /**
      * Finds all running researches on the given planet.

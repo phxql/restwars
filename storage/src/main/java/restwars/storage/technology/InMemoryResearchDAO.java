@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import restwars.service.technology.Research;
 import restwars.service.technology.ResearchDAO;
+import restwars.service.technology.TechnologyType;
 
 import javax.inject.Singleton;
 import java.util.List;
@@ -32,6 +33,11 @@ public class InMemoryResearchDAO implements ResearchDAO {
         Preconditions.checkNotNull(planetId, "planetId");
 
         return researches.values().stream().filter(r -> r.getPlanetId().equals(planetId)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Research> findWithPlayerAndType(UUID playerId, TechnologyType type) {
+        return researches.values().stream().filter(r -> r.getPlayerId().equals(playerId) && r.getType().equals(type)).collect(Collectors.toList());
     }
 
     @Override
