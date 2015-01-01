@@ -1,4 +1,4 @@
-package restwars.service.ship.impl;
+package restwars.service.ship.impl.flighthandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

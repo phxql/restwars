@@ -1,4 +1,4 @@
-package restwars.service.ship.impl;
+package restwars.service.ship.impl.flighthandler;
 
 import org.testng.annotations.Test;
 import restwars.service.ship.Fight;

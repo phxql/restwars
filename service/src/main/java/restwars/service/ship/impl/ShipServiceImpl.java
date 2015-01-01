@@ -16,6 +16,9 @@ import restwars.service.player.Player;
 import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 import restwars.service.ship.*;
+import restwars.service.ship.impl.flighthandler.AttackFlightHandler;
+import restwars.service.ship.impl.flighthandler.ColonizeFlightHandler;
+import restwars.service.ship.impl.flighthandler.TransportFlightHandler;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -31,14 +34,16 @@ public class ShipServiceImpl implements ShipService {
     private final PlanetDAO planetDAO;
     private final RoundService roundService;
     private final FlightDAO flightDAO;
-    private final UniverseConfiguration universeConfiguration;
     private final BuildingDAO buildingDAO;
 
-    private final FightCalculator fightCalculator = new FightCalculator();
+    private final TransportFlightHandler transportFlightHandler;
+    private final ColonizeFlightHandler colonizeFlightHandler;
+    private final AttackFlightHandler attackFlightHandler;
+    private final ShipUtils shipUtils;
 
     @Inject
     public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO) {
-        this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
+        Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
@@ -46,6 +51,11 @@ public class ShipServiceImpl implements ShipService {
         this.hangarDAO = Preconditions.checkNotNull(hangarDAO, "hangarDAO");
         this.shipInConstructionDAO = Preconditions.checkNotNull(shipInConstructionDAO, "shipInConstructionDAO");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
+
+        transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
+        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration);
+        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
+        shipUtils = new ShipUtils();
     }
 
     @Override
@@ -136,9 +146,7 @@ public class ShipServiceImpl implements ShipService {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(ships, "ships");
 
-        // TODO: Code smell - Code duplication from finishShipsInConstruction, refactor!
-
-        Hangar hangar = getOrCreateHangar(planet.getId(), player.getId());
+        Hangar hangar = shipUtils.getOrCreateHangar(hangarDAO, uuidFactory, planet.getId(), player.getId());
 
         Hangar updatedHangar = hangar.withShips(hangar.getShips().plus(ships));
         hangarDAO.update(updatedHangar);
@@ -150,7 +158,7 @@ public class ShipServiceImpl implements ShipService {
 
         // Land ships in hangar
         Planet planet = planetDAO.findWithLocation(flight.getStart()).get();
-        Hangar hangar = getOrCreateHangar(planet.getId(), flight.getPlayerId());
+        Hangar hangar = shipUtils.getOrCreateHangar(hangarDAO, uuidFactory, planet.getId(), flight.getPlayerId());
         hangar = hangar.withShips(hangar.getShips().plus(flight.getShips()));
         hangarDAO.update(hangar);
 
@@ -168,141 +176,17 @@ public class ShipServiceImpl implements ShipService {
 
         switch (flight.getType()) {
             case ATTACK:
-                handleAttack(flight);
+                attackFlightHandler.handle(flight);
                 break;
             case COLONIZE:
-                handleColonize(flight);
+                colonizeFlightHandler.handle(flight);
                 break;
             case TRANSPORT:
-                handleTransport(flight);
+                transportFlightHandler.handle(flight);
                 break;
             default:
                 throw new AssertionError("Unknown flight type: " + flight.getType());
         }
-    }
-
-    private void handleTransport(Flight flight) {
-        assert flight != null;
-        LOGGER.debug("Finishing transport flight");
-
-        Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
-        if (planet.isPresent()) {
-            LOGGER.debug("Transfering cargo to planet {}", planet.get());
-
-            Planet updatedPlanet = planet.get().withResources(planet.get().getResources().plus(flight.getCargo()));
-            planetDAO.update(updatedPlanet);
-
-            createReturnFlight(flight, flight.getShips(), Resources.NONE);
-        } else {
-            LOGGER.debug("Planet {} isn't colonized, creating return flight", flight.getDestination());
-            createReturnFlight(flight, flight.getShips(), flight.getCargo());
-        }
-    }
-
-    private void handleColonize(Flight flight) {
-        assert flight != null;
-        LOGGER.debug("Finishing colonizing flight");
-
-        Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
-        if (planet.isPresent()) {
-            LOGGER.debug("Planet is already colonized, creating return flight");
-            createReturnFlight(flight, flight.getShips(), flight.getCargo());
-        } else {
-            LOGGER.debug("Player {} colonized new planet at {}", flight.getPlayerId(), flight.getDestination());
-
-            Planet newPlanet = new Planet(
-                    uuidFactory.create(), flight.getDestination(), flight.getPlayerId(),
-                    // Store the remaining energy for the return flight and the cargo on the planet
-                    universeConfiguration.getStartingResources().plus(Resources.energy(flight.getEnergyNeeded() / 2)).plus(flight.getCargo())
-            );
-            planetDAO.insert(newPlanet);
-
-            // Land the ships on the new planet
-            Hangar hangar = getOrCreateHangar(newPlanet.getId(), flight.getPlayerId());
-            Hangar updatedHangar = hangar.withShips(flight.getShips().minus(ShipType.COLONY, 1));
-            hangarDAO.update(updatedHangar);
-
-            flightDAO.delete(flight);
-        }
-    }
-
-    /**
-     * Handles an attack flight.
-     *
-     * @param flight Flight to handle.
-     */
-    private void handleAttack(Flight flight) {
-        assert flight != null;
-        LOGGER.debug("Handling attack of flight {}", flight);
-
-        Optional<Planet> planet = planetDAO.findWithLocation(flight.getDestination());
-        if (planet.isPresent()) {
-            Hangar hangar = getOrCreateHangar(planet.get().getId(), planet.get().getOwnerId());
-
-            Fight fight = fightCalculator.attack(flight.getShips(), hangar.getShips());
-
-            // Update defenders hangar
-            hangarDAO.update(hangar.withShips(fight.getRemainingDefenderShips()));
-
-            if (fight.getRemainingAttackerShips().isEmpty()) {
-                LOGGER.debug("Attacker lost all ships");
-                flightDAO.delete(flight);
-            } else {
-                Resources cargo = Resources.NONE;
-                if (fight.getRemainingDefenderShips().isEmpty()) {
-                    cargo = lootPlanet(planet.get(), fight.getRemainingAttackerShips());
-                }
-
-                createReturnFlight(flight, fight.getRemainingAttackerShips(), cargo);
-            }
-        } else {
-            // Planet is not colonized, create return flight
-            createReturnFlight(flight, flight.getShips(), flight.getCargo());
-        }
-    }
-
-    private Resources lootPlanet(Planet planet, Ships ships) {
-        long storageCapacity = calculateStorageCapacity(ships);
-
-        long lootCrystals = storageCapacity / 3;
-        long lootGas = storageCapacity / 3;
-        long lootEnergy = storageCapacity - lootCrystals - lootGas;
-
-        // TODO - Gameplay: Implement a more greedy looting strategy
-        lootCrystals = Math.min(planet.getResources().getCrystals(), lootCrystals);
-        lootGas = Math.min(planet.getResources().getGas(), lootGas);
-        lootEnergy = Math.min(planet.getResources().getEnergy(), lootEnergy);
-
-        // Decrease resources on planet
-        planet = planet.withResources(planet.getResources().minus(new Resources(lootCrystals, lootGas, lootEnergy)));
-        planetDAO.update(planet);
-
-        Resources resources = new Resources(lootCrystals, lootGas, lootEnergy);
-        LOGGER.debug("Looted {} from planet {}", resources, planet.getLocation());
-        return resources;
-    }
-
-    private long calculateStorageCapacity(Ships ships) {
-        return ships.stream().mapToLong(s -> s.getType().getStorageCapacity()).sum();
-    }
-
-    private void createReturnFlight(Flight flight, Ships ships, Resources cargo) {
-        assert flight != null;
-        assert ships != null;
-
-        long distance = flight.getStart().calculateDistance(flight.getDestination());
-        int speed = findSpeedOfSlowestShip(ships);
-        long started = roundService.getCurrentRound();
-        long arrival = started + (long) Math.ceil(distance / speed);
-
-        Flight returnFlight = new Flight(
-                flight.getId(), flight.getStart(), flight.getDestination(),
-                flight.getStartedInRound(), arrival, ships, flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
-                FlightDirection.RETURN, cargo
-        );
-        flightDAO.update(returnFlight);
-
-        LOGGER.debug("Created return flight {}", returnFlight);
     }
 
     @Override
@@ -347,7 +231,7 @@ public class ShipServiceImpl implements ShipService {
         }
 
         // Check if enough ships are on the start planet
-        Hangar hangar = getOrCreateHangar(start.getId(), start.getOwnerId());
+        Hangar hangar = shipUtils.getOrCreateHangar(hangarDAO, uuidFactory, start.getId(), start.getOwnerId());
         for (Ship ship : ships) {
             if (hangar.getShips().countByType(ship.getType()) < ship.getAmount()) {
                 throw new NotEnoughShipsException();
@@ -355,7 +239,7 @@ public class ShipServiceImpl implements ShipService {
         }
 
         // Calculate arrival time
-        int speed = findSpeedOfSlowestShip(ships);
+        int speed = shipUtils.findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
         long arrives = started + (long) Math.ceil(distance / speed);
 
@@ -364,7 +248,7 @@ public class ShipServiceImpl implements ShipService {
 
         if (!cargo.isEmpty()) {
             // Check cargo space and resource availability
-            if (cargo.sum() > calculateStorageCapacity(ships)) {
+            if (cargo.sum() > shipUtils.calculateStorageCapacity(ships)) {
                 throw new InvalidFlightException(InvalidFlightException.Reason.NOT_ENOUGH_CARGO_SPACE);
             }
             if (!start.getResources().isEnough(cargo)) {
@@ -386,35 +270,17 @@ public class ShipServiceImpl implements ShipService {
         return flight;
     }
 
-    private int findSpeedOfSlowestShip(Ships ships) {
-        assert ships != null;
-        assert !ships.isEmpty();
-
-        return ships.asList().stream().mapToInt(s -> s.getType().getSpeed()).min().getAsInt();
-    }
-
     @Override
     public void finishShipsInConstruction() {
         long round = roundService.getCurrentRound();
 
         List<ShipInConstruction> doneShips = shipInConstructionDAO.findWithDone(round);
         for (ShipInConstruction ship : doneShips) {
-            Hangar hangar = getOrCreateHangar(ship.getPlanetId(), ship.getPlayerId());
+            Hangar hangar = shipUtils.getOrCreateHangar(hangarDAO, uuidFactory, ship.getPlanetId(), ship.getPlayerId());
 
             Hangar updatedHangar = hangar.withShips(hangar.getShips().plus(ship.getType(), 1));
             hangarDAO.update(updatedHangar);
             shipInConstructionDAO.delete(ship);
         }
-    }
-
-    private Hangar getOrCreateHangar(UUID planetId, UUID playerId) {
-        Optional<Hangar> mayBeHangar = hangarDAO.findWithPlanetId(planetId);
-        Hangar hangar = mayBeHangar.orElse(new Hangar(uuidFactory.create(), planetId, playerId, Ships.EMPTY));
-
-        if (!mayBeHangar.isPresent()) {
-            hangarDAO.insert(hangar);
-        }
-
-        return hangar;
     }
 }
