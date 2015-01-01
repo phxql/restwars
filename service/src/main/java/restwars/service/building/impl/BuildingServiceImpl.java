@@ -3,13 +3,11 @@ package restwars.service.building.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.building.*;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
-import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 
 import javax.inject.Inject;
@@ -62,25 +60,25 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public ConstructionSite constructBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException, InsufficientBuildQueuesException {
+    public ConstructionSite constructBuilding(Planet planet, BuildingType type) throws BuildingException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
         return createConstructionSite(planet, type, 1);
     }
 
-    private ConstructionSite createConstructionSite(Planet planet, BuildingType type, int level) throws InsufficientResourcesException, InsufficientBuildQueuesException {
+    private ConstructionSite createConstructionSite(Planet planet, BuildingType type, int level) throws BuildingException {
         assert planet != null;
         assert type != null;
         assert level > 0;
 
         Resources buildCost = calculateBuildCost(type, level);
         if (!planet.getResources().isEnough(buildCost)) {
-            throw new InsufficientResourcesException(buildCost, planet.getResources());
+            throw new BuildingException(BuildingException.Reason.INSUFFICIENT_RESOURCES);
         }
 
         if (!findConstructionSitesOnPlanet(planet).isEmpty()) {
-            throw new InsufficientBuildQueuesException();
+            throw new BuildingException(BuildingException.Reason.NOT_ENOUGH_BUILD_QUEUES);
         }
 
         Planet updatedPlanet = planet.withResources(planet.getResources().minus(buildCost));
@@ -99,20 +97,20 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingNotFoundException, InsufficientResourcesException, InsufficientBuildQueuesException {
+    public ConstructionSite upgradeBuilding(Planet planet, BuildingType type) throws BuildingException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
         List<Building> buildings = findBuildingsOnPlanet(planet);
         Optional<Building> existingBuilding = buildings.stream().filter(b -> b.getType().equals(type)).findFirst();
 
-        Building building = existingBuilding.orElseThrow(BuildingNotFoundException::new);
+        Building building = existingBuilding.orElseThrow(() -> new BuildingException(BuildingException.Reason.EXISTING_BUILDING_NOT_FOUND));
 
         return createConstructionSite(planet, type, building.getLevel() + 1);
     }
 
     @Override
-    public ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type) throws InsufficientResourcesException, InsufficientBuildQueuesException {
+    public ConstructionSite constructOrUpgradeBuilding(Planet planet, BuildingType type) throws BuildingException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
@@ -120,11 +118,7 @@ public class BuildingServiceImpl implements BuildingService {
         Optional<Building> existingBuilding = buildings.stream().filter(b -> b.getType().equals(type)).findFirst();
 
         if (existingBuilding.isPresent()) {
-            try {
-                return upgradeBuilding(planet, type);
-            } catch (BuildingNotFoundException e) {
-                throw new AssertionError("Can't happen");
-            }
+            return upgradeBuilding(planet, type);
         } else {
             return constructBuilding(planet, type);
         }
