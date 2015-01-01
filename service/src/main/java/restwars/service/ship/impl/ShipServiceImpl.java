@@ -3,7 +3,6 @@ package restwars.service.ship.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
@@ -14,7 +13,6 @@ import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.Player;
-import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 import restwars.service.ship.impl.flighthandler.AttackFlightHandler;
@@ -67,23 +65,23 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException, InsufficientShipyardException, InsufficientBuildQueuesException {
+    public ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws BuildShipException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
         if (!hasShipyard(planet)) {
-            throw new InsufficientShipyardException(1);
+            throw new BuildShipException(BuildShipException.Reason.NO_SHIPYARD);
         }
 
         List<ShipInConstruction> shipsInConstruction = shipInConstructionDAO.findWithPlanetId(planet.getId());
         if (!shipsInConstruction.isEmpty()) {
-            throw new InsufficientBuildQueuesException();
+            throw new BuildShipException(BuildShipException.Reason.NOT_ENOUGH_BUILD_QUEUES);
         }
 
         Resources buildCost = type.getBuildCost();
         if (!planet.getResources().isEnough(buildCost)) {
-            throw new InsufficientResourcesException(buildCost, planet.getResources());
+            throw new BuildShipException(BuildShipException.Reason.INSUFFICIENT_RESOURCES);
         }
 
         Planet updatedPlanet = planet.withResources(planet.getResources().minus(buildCost));
@@ -201,7 +199,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws NotEnoughShipsException, InvalidFlightException, InsufficientResourcesException {
+    public Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws InvalidFlightException {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");
@@ -231,14 +229,14 @@ public class ShipServiceImpl implements ShipService {
         long totalEnergyNeeded = (long) Math.ceil(energyNeeded);
         // Check if planet has enough energy
         if (!start.getResources().isEnoughEnergy(totalEnergyNeeded)) {
-            throw new InsufficientResourcesException(Resources.energy(totalEnergyNeeded), start.getResources());
+            throw new InvalidFlightException(InvalidFlightException.Reason.INSUFFICIENT_FUEL);
         }
 
         // Check if enough ships are on the start planet
         Hangar hangar = shipUtils.getOrCreateHangar(hangarDAO, uuidFactory, start.getId(), start.getOwnerId());
         for (Ship ship : ships) {
             if (hangar.getShips().countByType(ship.getType()) < ship.getAmount()) {
-                throw new NotEnoughShipsException();
+                throw new InvalidFlightException(InvalidFlightException.Reason.NOT_ENOUGH_SHIPS_ON_PLANET);
             }
         }
 
@@ -256,7 +254,7 @@ public class ShipServiceImpl implements ShipService {
                 throw new InvalidFlightException(InvalidFlightException.Reason.NOT_ENOUGH_CARGO_SPACE);
             }
             if (!start.getResources().isEnough(cargo)) {
-                throw new InsufficientResourcesException(cargo, start.getResources());
+                throw new InvalidFlightException(InvalidFlightException.Reason.INSUFFICIENT_RESOURCES);
             }
 
             // Decrease resources

@@ -9,11 +9,9 @@ import restwars.rest.util.Helper;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
-import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 import restwars.service.ship.Flight;
 import restwars.service.ship.InvalidFlightException;
-import restwars.service.ship.NotEnoughShipsException;
 import restwars.service.ship.ShipService;
 
 import javax.inject.Inject;
@@ -62,12 +60,8 @@ public class FlightSubResource {
             );
 
             return FlightResponse.fromFlight(flight);
-        } catch (NotEnoughShipsException e) {
-            throw new NotEnoughShipsWebException();
         } catch (InvalidFlightException e) {
             throw new InvalidFlightsWebException();
-        } catch (InsufficientResourcesException e) {
-            throw new InsufficientResourcesWebException();
         }
     }
 

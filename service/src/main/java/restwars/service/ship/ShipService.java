@@ -1,10 +1,8 @@
 package restwars.service.ship;
 
-import restwars.service.InsufficientBuildQueuesException;
 import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.player.Player;
-import restwars.service.resource.InsufficientResourcesException;
 import restwars.service.resource.Resources;
 
 import java.util.List;
@@ -18,7 +16,7 @@ public interface ShipService {
      * @param type   Type of ship.
      * @return Ship in construction.
      */
-    ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws InsufficientResourcesException, InsufficientShipyardException, InsufficientBuildQueuesException;
+    ShipInConstruction buildShip(Player player, Planet planet, ShipType type) throws BuildShipException;
 
     /**
      * Finds all ships in construction on the given planet.
@@ -52,9 +50,8 @@ public interface ShipService {
      * @param cargo       Cargo. Only available for transport and colonize flights.
      *
      * @return Flight.
-     * @throws NotEnoughShipsException If not enough ships are available on the start planet.
      */
-    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws NotEnoughShipsException, InvalidFlightException, InsufficientResourcesException;
+    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws InvalidFlightException;
 
     /**
      * Finds all flights for a given player.

@@ -10,7 +10,7 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.technology.Research;
-import restwars.service.technology.ResearchFailedException;
+import restwars.service.technology.ResearchException;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.TechnologyType;
 
@@ -54,7 +54,7 @@ public class ResearchSubResource {
         try {
             Research research = technologyService.researchTechnology(player, planet, type);
             return ResearchResponse.fromResearch(research);
-        } catch (ResearchFailedException e) {
+        } catch (ResearchException e) {
             throw new ResearchFailedWebException();
         }
     }

@@ -83,7 +83,7 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
-    public Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws ResearchFailedException {
+    public Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws ResearchException {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(technology, "technology");
         Preconditions.checkNotNull(player, "player");
@@ -91,17 +91,17 @@ public class TechnologyServiceImpl implements TechnologyService {
         // Ensure that the planet has a research center
         boolean hasResearchCenter = buildingDAO.findWithPlanetId(planet.getId()).stream().anyMatch(b -> b.getType().equals(BuildingType.RESEARCH_CENTER));
         if (!hasResearchCenter) {
-            throw new ResearchFailedException(ResearchFailedException.Reason.NO_RESEARCH_CENTER);
+            throw new ResearchException(ResearchException.Reason.NO_RESEARCH_CENTER);
         }
 
         // Ensure that no other research is running on that planet
         if (!researchDAO.findWithPlanetId(planet.getId()).isEmpty()) {
-            throw new ResearchFailedException(ResearchFailedException.Reason.NOT_ENOUGH_RESEARCH_QUEUES);
+            throw new ResearchException(ResearchException.Reason.NOT_ENOUGH_RESEARCH_QUEUES);
         }
 
         // Ensure that the research is not running on other planets
         if (!researchDAO.findWithPlayerAndType(player.getId(), technology).isEmpty()) {
-            throw new ResearchFailedException(ResearchFailedException.Reason.ALREADY_RUNNING);
+            throw new ResearchException(ResearchException.Reason.ALREADY_RUNNING);
         }
 
         Optional<Technology> existingTechnology = technologyDAO.findWithPlayerId(player.getId(), technology);
@@ -109,7 +109,7 @@ public class TechnologyServiceImpl implements TechnologyService {
 
         Resources researchCost = calculateResearchCost(technology, level);
         if (!planet.getResources().isEnough(researchCost)) {
-            throw new ResearchFailedException(ResearchFailedException.Reason.INSUFFICIENT_RESOURCES);
+            throw new ResearchException(ResearchException.Reason.INSUFFICIENT_RESOURCES);
         }
 
         Planet updatedPlanet = planet.withResources(planet.getResources().minus(researchCost));

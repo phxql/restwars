@@ -19,7 +19,7 @@ public interface TechnologyService {
      * @param technology Technology to research.
      * @return Research.
      */
-    Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws ResearchFailedException;
+    Research researchTechnology(Player player, Planet planet, TechnologyType technology) throws ResearchException;
 
     /**
      * Finds all running researches on the given planet.
