@@ -146,8 +146,6 @@ public class ShipServiceImpl implements ShipService {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(ships, "ships");
 
-        // TODO: Code smell - Code duplication from finishShipsInConstruction, refactor!
-
         Hangar hangar = shipUtils.getOrCreateHangar(hangarDAO, uuidFactory, planet.getId(), player.getId());
 
         Hangar updatedHangar = hangar.withShips(hangar.getShips().plus(ships));
