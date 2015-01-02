@@ -9,5 +9,10 @@ public class Main {
         PlayerResponse response = client.getPlayerResource().me();
 
         System.out.println(response);
+
+        System.out.println(client.getMetadataResource().allTechnologies(1));
+        System.out.println(client.getMetadataResource().allBuildings(1));
+        System.out.println(client.getMetadataResource().allShips());
+        System.out.println(client.getMetadataResource().allFlightTypes());
     }
 }

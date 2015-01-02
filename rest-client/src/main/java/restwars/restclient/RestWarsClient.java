@@ -2,6 +2,7 @@ package restwars.restclient;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
+import restwars.restapi.MetadataResource;
 import restwars.restapi.PlayerResource;
 
 import javax.ws.rs.client.Client;
@@ -12,6 +13,7 @@ public class RestWarsClient {
     private final Client client;
     private final String url;
     private PlayerResource playerResource;
+    private MetadataResource metadataResource;
 
     public RestWarsClient(String url) {
         client = ClientBuilder.newClient();
@@ -32,9 +34,14 @@ public class RestWarsClient {
     private void createProxies(String url) {
         WebTarget target = client.target(url);
         playerResource = WebResourceFactory.newResource(PlayerResource.class, target);
+        metadataResource = WebResourceFactory.newResource(MetadataResource.class, target);
     }
 
     public PlayerResource getPlayerResource() {
         return playerResource;
+    }
+
+    public MetadataResource getMetadataResource() {
+        return metadataResource;
     }
 }

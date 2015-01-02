@@ -7,16 +7,19 @@ import restwars.restapi.dto.ResourcesResponse;
 @ApiModel(description = "Technology metadata")
 public class TechnologyMetadataResponse {
     @ApiModelProperty(value = "Technology type", required = true)
-    private final String type;
+    private String type;
 
     @ApiModelProperty(value = "Level", required = true)
-    private final int level;
+    private int level;
 
     @ApiModelProperty(value = "Research time in rounds", required = true)
-    private final long researchTime;
+    private long researchTime;
 
     @ApiModelProperty(value = "Research cost", required = true)
-    private final ResourcesResponse researchCost;
+    private ResourcesResponse researchCost;
+
+    public TechnologyMetadataResponse() {
+    }
 
     public TechnologyMetadataResponse(String type, int level, long researchTime, ResourcesResponse researchCost) {
         this.type = type;
@@ -39,5 +42,31 @@ public class TechnologyMetadataResponse {
 
     public ResourcesResponse getResearchCost() {
         return researchCost;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setResearchTime(long researchTime) {
+        this.researchTime = researchTime;
+    }
+
+    public void setResearchCost(ResourcesResponse researchCost) {
+        this.researchCost = researchCost;
+    }
+
+    @Override
+    public String toString() {
+        return "TechnologyMetadataResponse{" +
+                "type='" + type + '\'' +
+                ", level=" + level +
+                ", researchTime=" + researchTime +
+                ", researchCost=" + researchCost +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package restwars.restapi.dto.metadata;
 
+import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import restwars.restapi.dto.ResourcesResponse;
@@ -7,25 +8,28 @@ import restwars.restapi.dto.ResourcesResponse;
 @ApiModel(description = "Ship metadata")
 public class ShipMetadataResponse {
     @ApiModelProperty(value = "Ship type", required = true)
-    private final String type;
+    private String type;
 
     @ApiModelProperty(value = "Build time in rounds", required = true)
-    private final long buildTime;
+    private long buildTime;
 
     @ApiModelProperty(value = "Build cost", required = true)
-    private final ResourcesResponse buildCost;
+    private ResourcesResponse buildCost;
 
     @ApiModelProperty(value = "Speed", required = true)
-    private final int speed;
+    private int speed;
 
     @ApiModelProperty(value = "Attack points", required = true)
-    private final int attackPoints;
+    private int attackPoints;
 
     @ApiModelProperty(value = "Defense points", required = true)
-    private final int defensePoints;
+    private int defensePoints;
 
     @ApiModelProperty(value = "Storage capacity", required = true)
-    private final long storageCapacity;
+    private long storageCapacity;
+
+    public ShipMetadataResponse() {
+    }
 
     public ShipMetadataResponse(String type, long buildTime, ResourcesResponse buildCost, int speed, int attackPoints, int defensePoints, long storageCapacity) {
         this.type = type;
@@ -63,5 +67,46 @@ public class ShipMetadataResponse {
 
     public long getStorageCapacity() {
         return storageCapacity;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setBuildTime(long buildTime) {
+        this.buildTime = buildTime;
+    }
+
+    public void setBuildCost(ResourcesResponse buildCost) {
+        this.buildCost = buildCost;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public void setAttackPoints(int attackPoints) {
+        this.attackPoints = attackPoints;
+    }
+
+    public void setDefensePoints(int defensePoints) {
+        this.defensePoints = defensePoints;
+    }
+
+    public void setStorageCapacity(long storageCapacity) {
+        this.storageCapacity = storageCapacity;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("type", type)
+                .add("buildTime", buildTime)
+                .add("buildCost", buildCost)
+                .add("speed", speed)
+                .add("attackPoints", attackPoints)
+                .add("defensePoints", defensePoints)
+                .add("storageCapacity", storageCapacity)
+                .toString();
     }
 }
