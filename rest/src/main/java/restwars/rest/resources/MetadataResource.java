@@ -16,11 +16,13 @@ import javax.ws.rs.core.MediaType;
 public class MetadataResource {
     private final BuildingMetadataSubResource buildingMetadataSubResource;
     private final ShipMetadataSubResource shipMetadataSubResource;
+    private final TechnologyMetadataSubResource technologyMetadataSubResource;
 
     @Inject
-    public MetadataResource(BuildingMetadataSubResource buildingMetadataSubResource, ShipMetadataSubResource shipMetadataSubResource) {
+    public MetadataResource(BuildingMetadataSubResource buildingMetadataSubResource, ShipMetadataSubResource shipMetadataSubResource, TechnologyMetadataSubResource technologyMetadataSubResource) {
         this.buildingMetadataSubResource = buildingMetadataSubResource;
         this.shipMetadataSubResource = shipMetadataSubResource;
+        this.technologyMetadataSubResource = technologyMetadataSubResource;
     }
 
     @Path("/building")
@@ -33,5 +35,11 @@ public class MetadataResource {
     @ApiOperation("Ship metadata")
     public ShipMetadataSubResource getShipMetadataSubResource() {
         return shipMetadataSubResource;
+    }
+
+    @Path("/technology")
+    @ApiOperation("Technology metadata")
+    public TechnologyMetadataSubResource getTechnologyMetadataSubResource() {
+        return technologyMetadataSubResource;
     }
 }
