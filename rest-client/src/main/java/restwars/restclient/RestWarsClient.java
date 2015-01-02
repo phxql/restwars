@@ -2,9 +2,7 @@ package restwars.restclient;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
-import restwars.restapi.MetadataResource;
-import restwars.restapi.PlayerResource;
-import restwars.restapi.TechnologyResource;
+import restwars.restapi.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -16,6 +14,8 @@ public class RestWarsClient {
     private PlayerResource playerResource;
     private MetadataResource metadataResource;
     private TechnologyResource technologyResource;
+    private BuildingResource buildingResource;
+    private PlanetResource planetResource;
 
     public RestWarsClient(String url) {
         client = ClientBuilder.newClient();
@@ -38,6 +38,8 @@ public class RestWarsClient {
         playerResource = WebResourceFactory.newResource(PlayerResource.class, target);
         metadataResource = WebResourceFactory.newResource(MetadataResource.class, target);
         technologyResource = WebResourceFactory.newResource(TechnologyResource.class, target);
+        buildingResource = WebResourceFactory.newResource(BuildingResource.class, target);
+        planetResource = WebResourceFactory.newResource(PlanetResource.class, target);
     }
 
     public PlayerResource getPlayerResource() {
@@ -50,5 +52,13 @@ public class RestWarsClient {
 
     public TechnologyResource getTechnologyResource() {
         return technologyResource;
+    }
+
+    public BuildingResource getBuildingResource() {
+        return buildingResource;
+    }
+
+    public PlanetResource getPlanetResource() {
+        return planetResource;
     }
 }
