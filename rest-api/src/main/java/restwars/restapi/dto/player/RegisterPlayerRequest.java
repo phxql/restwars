@@ -14,6 +14,14 @@ public class RegisterPlayerRequest {
     @NotEmpty
     private String password;
 
+    public RegisterPlayerRequest() {
+    }
+
+    public RegisterPlayerRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public String getUsername() {
         return username;
     }
