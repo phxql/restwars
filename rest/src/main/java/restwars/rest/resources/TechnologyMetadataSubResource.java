@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import restwars.rest.api.ResourcesResponse;
-import restwars.rest.api.metadata.TechnologyMetadataResponse;
+import restwars.rest.mapper.ResourcesMapper;
+import restwars.restapi.dto.metadata.TechnologyMetadataResponse;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.TechnologyType;
 
@@ -33,7 +33,7 @@ public class TechnologyMetadataSubResource {
         return Stream.of(TechnologyType.values())
                 .map(t -> new TechnologyMetadataResponse(
                         t.name(), sanitizedLevel, technologyService.calculateResearchTime(t, sanitizedLevel),
-                        ResourcesResponse.fromResources(technologyService.calculateResearchCost(t, sanitizedLevel))
+                        ResourcesMapper.fromResources(technologyService.calculateResearchCost(t, sanitizedLevel))
                 ))
                 .collect(Collectors.toList());
     }

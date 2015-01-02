@@ -5,9 +5,10 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.ship.ShipResponse;
+import restwars.rest.mapper.ShipMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
+import restwars.restapi.dto.ship.ShipResponse;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -42,6 +43,6 @@ public class ShipSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Ship> ships = shipService.findShipsOnPlanet(planet).asList();
 
-        return Helper.mapToList(ships, ShipResponse::fromShip);
+        return Helper.mapToList(ships, ShipMapper::fromShip);
     }
 }

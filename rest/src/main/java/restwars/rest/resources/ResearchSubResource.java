@@ -5,10 +5,11 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.technology.ResearchRequest;
-import restwars.rest.api.technology.ResearchResponse;
+import restwars.rest.mapper.ResearchMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
+import restwars.restapi.dto.technology.ResearchRequest;
+import restwars.restapi.dto.technology.ResearchResponse;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -47,7 +48,7 @@ public class ResearchSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Research> researches = technologyService.findResearchesOnPlanet(planet);
 
-        return Helper.mapToList(researches, ResearchResponse::fromResearch);
+        return Helper.mapToList(researches, ResearchMapper::fromResearch);
     }
 
     @POST
@@ -66,7 +67,7 @@ public class ResearchSubResource {
         TechnologyType type = Helper.parseTechnologyType(data.getType());
         try {
             Research research = technologyService.researchTechnology(player, planet, type);
-            return ResearchResponse.fromResearch(research);
+            return ResearchMapper.fromResearch(research);
         } catch (ResearchException e) {
             throw new ResearchWebException(e.getReason());
         }

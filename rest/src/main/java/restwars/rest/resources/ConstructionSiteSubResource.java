@@ -5,10 +5,11 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.building.ConstructionSiteResponse;
-import restwars.rest.api.building.CreateBuildingRequest;
+import restwars.rest.mapper.ConstructionSiteMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
+import restwars.restapi.dto.building.ConstructionSiteResponse;
+import restwars.restapi.dto.building.CreateBuildingRequest;
 import restwars.service.building.BuildingException;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
@@ -46,7 +47,7 @@ public class ConstructionSiteSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<ConstructionSite> constructionSites = buildingService.findConstructionSitesOnPlanet(planet);
 
-        return Helper.mapToList(constructionSites, ConstructionSiteResponse::fromConstructionSite);
+        return Helper.mapToList(constructionSites, ConstructionSiteMapper::fromConstructionSite);
     }
 
     @POST
@@ -66,7 +67,7 @@ public class ConstructionSiteSubResource {
         try {
             ConstructionSite constructionSite = buildingService.constructOrUpgradeBuilding(planet, type);
 
-            return ConstructionSiteResponse.fromConstructionSite(constructionSite);
+            return ConstructionSiteMapper.fromConstructionSite(constructionSite);
         } catch (BuildingException e) {
             throw new BuildingWebException(e.getReason());
         }
