@@ -4,6 +4,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import restwars.restapi.MetadataResource;
 import restwars.restapi.PlayerResource;
+import restwars.restapi.TechnologyResource;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -14,6 +15,7 @@ public class RestWarsClient {
     private final String url;
     private PlayerResource playerResource;
     private MetadataResource metadataResource;
+    private TechnologyResource technologyResource;
 
     public RestWarsClient(String url) {
         client = ClientBuilder.newClient();
@@ -35,6 +37,7 @@ public class RestWarsClient {
         WebTarget target = client.target(url);
         playerResource = WebResourceFactory.newResource(PlayerResource.class, target);
         metadataResource = WebResourceFactory.newResource(MetadataResource.class, target);
+        technologyResource = WebResourceFactory.newResource(TechnologyResource.class, target);
     }
 
     public PlayerResource getPlayerResource() {
@@ -43,5 +46,9 @@ public class RestWarsClient {
 
     public MetadataResource getMetadataResource() {
         return metadataResource;
+    }
+
+    public TechnologyResource getTechnologyResource() {
+        return technologyResource;
     }
 }
