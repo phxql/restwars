@@ -15,15 +15,23 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class MetadataResource {
     private final BuildingMetadataSubResource buildingMetadataSubResource;
+    private final ShipMetadataSubResource shipMetadataSubResource;
 
     @Inject
-    public MetadataResource(BuildingMetadataSubResource buildingMetadataSubResource) {
+    public MetadataResource(BuildingMetadataSubResource buildingMetadataSubResource, ShipMetadataSubResource shipMetadataSubResource) {
         this.buildingMetadataSubResource = buildingMetadataSubResource;
+        this.shipMetadataSubResource = shipMetadataSubResource;
     }
 
     @Path("/building")
     @ApiOperation("Building metadata")
     public BuildingMetadataSubResource getBuildingMetadataSubResource() {
         return buildingMetadataSubResource;
+    }
+
+    @Path("/ship")
+    @ApiOperation("Ship metadata")
+    public ShipMetadataSubResource getShipMetadataSubResource() {
+        return shipMetadataSubResource;
     }
 }
