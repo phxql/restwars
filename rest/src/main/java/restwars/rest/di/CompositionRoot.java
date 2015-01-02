@@ -24,13 +24,14 @@ public class CompositionRoot {
     private final PlayerResource playerResource;
     private final TechnologyResource technologyResource;
     private final PlanetResource planetResource;
+    private final MetadataResource metadataResource;
     private final PlayerAuthenticator playerAuthenticator;
     private final Clock clock;
 
     private final UnitOfWorkService unitOfWorkService;
 
     @Inject
-    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, PlayerAuthenticator playerAuthenticator, Clock clock, UnitOfWorkService unitOfWorkService) {
+    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, PlayerAuthenticator playerAuthenticator, Clock clock, UnitOfWorkService unitOfWorkService) {
         this.playerService = playerService;
         this.planetService = planetService;
         this.buildingService = buildingService;
@@ -41,6 +42,7 @@ public class CompositionRoot {
         this.playerResource = playerResource;
         this.technologyResource = technologyResource;
         this.planetResource = planetResource;
+        this.metadataResource = metadataResource;
         this.playerAuthenticator = playerAuthenticator;
         this.clock = clock;
         this.unitOfWorkService = unitOfWorkService;
@@ -96,5 +98,9 @@ public class CompositionRoot {
 
     public UnitOfWorkService getUnitOfWorkService() {
         return unitOfWorkService;
+    }
+
+    public MetadataResource getMetadataResource() {
+        return metadataResource;
     }
 }
