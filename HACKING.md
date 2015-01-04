@@ -18,3 +18,11 @@
 * Run `java -jar rest-*.jar server config.yaml`
 * The server is now starting up, you can see the provided endpoints in the console log
 * The server is running on `http://localhost:8080`
+
+## Hacking a client
+### Get the webservice documentation
+* Start the RESTwars server
+* `git clone git@github.com:swagger-api/swagger-ui.git`
+* `cd` into `swagger-ui/dist` and open the file `index.html` in your browser
+* Enter `http://localhost:8080/api-docs` in the textfield on the top, then click on the "Explore" button
+  * The webservice endpoints which are protected with basic auth aren't usable yet with the Swagger UI, see https://github.com/swagger-api/swagger-ui/issues/764
