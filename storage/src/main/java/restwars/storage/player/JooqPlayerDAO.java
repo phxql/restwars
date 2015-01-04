@@ -8,6 +8,7 @@ import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
+import restwars.storage.mapper.PlayerMapper;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -45,12 +46,6 @@ public class JooqPlayerDAO extends AbstractJooqDAO implements PlayerDAO {
             return Optional.empty();
         }
 
-        return Optional.of(fromRecord(record));
-    }
-
-    private Player fromRecord(Record record) {
-        assert record != null;
-
-        return new Player(record.getValue(PLAYER.ID), record.getValue(PLAYER.USERNAME), record.getValue(PLAYER.PASSWORD));
+        return Optional.of(PlayerMapper.fromRecord(record));
     }
 }

@@ -168,6 +168,8 @@ public class BuildingServiceImpl implements BuildingService {
                 return level;
             case SOLAR_PANELS:
                 return level;
+            case TELESCOPE:
+                return level;
             default:
                 throw new AssertionError("Unknown building type " + type);
         }
@@ -190,6 +192,8 @@ public class BuildingServiceImpl implements BuildingService {
             case RESEARCH_CENTER:
                 return new Resources(level, level, level);
             case SHIPYARD:
+                return new Resources(level, level, level);
+            case TELESCOPE:
                 return new Resources(level, level, level);
             default:
                 throw new AssertionError("Unknown building type: " + type);

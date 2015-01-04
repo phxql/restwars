@@ -6,7 +6,8 @@ public enum BuildingType {
     CRYSTAL_MINE(2),
     GAS_REFINERY(3),
     SOLAR_PANELS(4),
-    RESEARCH_CENTER(5);
+    RESEARCH_CENTER(5),
+    TELESCOPE(6);
 
     private final int id;
 

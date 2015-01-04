@@ -20,6 +20,8 @@ import restwars.service.ship.ShipService;
 import restwars.service.ship.impl.ShipServiceImpl;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.impl.TechnologyServiceImpl;
+import restwars.service.telescope.TelescopeService;
+import restwars.service.telescope.impl.TelescopeServiceImpl;
 
 @Module(library = true, complete = false)
 public class ServiceModule {
@@ -66,5 +68,10 @@ public class ServiceModule {
     @Provides
     RoundService providesRoundService(RoundServiceImpl roundService) {
         return roundService;
+    }
+
+    @Provides
+    TelescopeService telescopeService(TelescopeServiceImpl telescopeService) {
+        return telescopeService;
     }
 }
