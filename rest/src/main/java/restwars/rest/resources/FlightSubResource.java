@@ -60,7 +60,7 @@ public class FlightSubResource {
     @ApiOperation("Creates a flight")
     public FlightResponse createFlight(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("start") @ApiParam("Start planet") LocationParam start,
+            @PathParam("location") @ApiParam("Start planet") LocationParam start,
             @PathParam("destination") @ApiParam("Destination planet") LocationParam destination,
             @Valid CreateFlightRequest body
     ) {

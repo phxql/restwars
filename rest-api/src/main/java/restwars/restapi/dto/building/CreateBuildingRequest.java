@@ -10,6 +10,13 @@ public class CreateBuildingRequest {
     @NotEmpty
     private String type;
 
+    public CreateBuildingRequest() {
+    }
+
+    public CreateBuildingRequest(String type) {
+        this.type = type;
+    }
+
     public String getType() {
         return type;
     }

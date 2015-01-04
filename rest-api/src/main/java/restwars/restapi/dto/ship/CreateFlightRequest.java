@@ -31,6 +31,17 @@ public class CreateFlightRequest {
     @ApiModelProperty(value = "Amount of energy in cargo", required = true)
     private long cargoEnergy;
 
+    public CreateFlightRequest() {
+    }
+
+    public CreateFlightRequest(String type, List<ShipRequest> ships, long cargoCrystals, long cargoGas, long cargoEnergy) {
+        this.type = type;
+        this.ships = ships;
+        this.cargoCrystals = cargoCrystals;
+        this.cargoGas = cargoGas;
+        this.cargoEnergy = cargoEnergy;
+    }
+
     public long getCargoCrystals() {
         return cargoCrystals;
     }

@@ -8,22 +8,25 @@ import java.util.List;
 @ApiModel(description = "Flight")
 public class FlightResponse {
     @ApiModelProperty(value = "Destination planet", required = true)
-    private final String destination;
+    private String destination;
 
     @ApiModelProperty(value = "Started in round", required = true)
-    private final long startedInRound;
+    private long startedInRound;
 
     @ApiModelProperty(value = "Arrival in round", required = true)
-    private final long arrivalInRound;
+    private long arrivalInRound;
 
     @ApiModelProperty(value = "Ships on the flight", required = true)
-    private final List<ShipResponse> ships;
+    private List<ShipResponse> ships;
 
     @ApiModelProperty(value = "Type", required = true)
-    private final String type;
+    private String type;
 
     @ApiModelProperty(value = "Direction", required = true)
-    private final String direction;
+    private String direction;
+
+    public FlightResponse() {
+    }
 
     public FlightResponse(String destination, long startedInRound, long arrivalInRound, List<ShipResponse> ships, String type, String direction) {
         this.destination = destination;
@@ -56,5 +59,29 @@ public class FlightResponse {
 
     public String getDirection() {
         return direction;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void setStartedInRound(long startedInRound) {
+        this.startedInRound = startedInRound;
+    }
+
+    public void setArrivalInRound(long arrivalInRound) {
+        this.arrivalInRound = arrivalInRound;
+    }
+
+    public void setShips(List<ShipResponse> ships) {
+        this.ships = ships;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 }

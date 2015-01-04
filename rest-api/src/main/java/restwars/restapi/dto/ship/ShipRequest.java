@@ -16,6 +16,14 @@ public class ShipRequest {
     @ApiModelProperty(value = "Amount", required = true)
     private int amount;
 
+    public ShipRequest() {
+    }
+
+    public ShipRequest(String type, int amount) {
+        this.type = type;
+        this.amount = amount;
+    }
+
     public String getType() {
         return type;
     }
