@@ -32,8 +32,7 @@ public class RestWarsClient {
     }
 
     public void setCredentials(String username, String password) {
-        HttpAuthenticationFeature authentication = HttpAuthenticationFeature.basicBuilder()
-                .nonPreemptive().credentials(username, password).build();
+        HttpAuthenticationFeature authentication = HttpAuthenticationFeature.basic(username, password);
         client.register(authentication);
 
         // We need to recreate the proxies to apply the changes
