@@ -17,6 +17,7 @@ import restwars.service.telescope.TelescopeService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class TelescopeSubResource {
     }
 
     @GET
+    @Path("/scan")
     @ApiOperation("Lists all planets in vicinity")
     public List<PlanetScanResponse> scan(
             @Auth @ApiParam(access = "internal") Player player,

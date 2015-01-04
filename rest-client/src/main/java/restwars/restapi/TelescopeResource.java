@@ -11,5 +11,6 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public interface TelescopeResource {
     @GET
+    @Path("/scan")
     List<PlanetScanResponse> scan(@PathParam("location") String location);
 }
