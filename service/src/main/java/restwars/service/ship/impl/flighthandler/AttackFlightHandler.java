@@ -60,6 +60,7 @@ public class AttackFlightHandler extends AbstractFlightHandler {
         long lootGas = storageCapacity / 3;
         long lootEnergy = storageCapacity - lootCrystals - lootGas;
 
+        // TODO - Gameplay: Energy can't be stolen
         // TODO - Gameplay: Implement a more greedy looting strategy
         lootCrystals = Math.min(planet.getResources().getCrystals(), lootCrystals);
         lootGas = Math.min(planet.getResources().getGas(), lootGas);

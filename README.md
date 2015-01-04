@@ -38,8 +38,30 @@ Generates energy. Upgrading the panels increases the generation rate.
 Allows the construction of ships. Upgrading the shipyard speeds up the construction of ships.
 
 ### Research center
-Enables research. Upgrading the research center speeds up the research.
+Enables research of technologies. Upgrading the research center speeds up the research.
+
+### Telescope
+Enables scanning the area around the planet. Upgrading the telescope widens the scan area.
 
 ## Ships
+### Mosquito
+Small fighter ship.
 
-## Research
+### Colony
+Can colonize planets.
+
+## Technology
+### Crystal mine efficiency
+The crystal mines generate more crystals per round.
+
+### Gas refinery efficiency
+The gas refineries generate more gas per round.
+
+### Solar panels efficiency
+The solar panels generate more energy per round.
+
+### Build cost reduction
+Reduces the build cost for buildings.
+
+### Build time reduction
+Reduces the build time for buildings.
