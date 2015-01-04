@@ -2,7 +2,8 @@ package restwars.rest.resources;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import restwars.rest.api.metadata.FlightTypeMetadataResponse;
+import restwars.rest.mapper.FlightMapper;
+import restwars.restapi.dto.metadata.FlightTypeMetadataResponse;
 import restwars.service.ship.FlightType;
 
 import javax.inject.Inject;
@@ -22,6 +23,6 @@ public class FlightMetadataSubResource {
     @Path("/type")
     @ApiOperation("Lists all flight types")
     public List<FlightTypeMetadataResponse> flightTypes() {
-        return Stream.of(FlightType.values()).map(FlightTypeMetadataResponse::fromFlightType).collect(Collectors.toList());
+        return Stream.of(FlightType.values()).map(FlightMapper::fromFlightType).collect(Collectors.toList());
     }
 }

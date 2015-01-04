@@ -5,16 +5,18 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.ship.BuildShipRequest;
-import restwars.rest.api.ship.ShipInConstructionResponse;
+import restwars.rest.mapper.ShipInConstructionMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
+import restwars.restapi.dto.ship.BuildShipRequest;
+import restwars.restapi.dto.ship.ShipInConstructionResponse;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.ship.BuildShipException;
 import restwars.service.ship.ShipInConstruction;
 import restwars.service.ship.ShipService;
+import restwars.service.ship.ShipType;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -46,7 +48,7 @@ public class ShipInConstructionSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
 
         List<ShipInConstruction> shipsInConstruction = shipService.findShipsInConstructionOnPlanet(planet);
-        return Helper.mapToList(shipsInConstruction, ShipInConstructionResponse::fromShipInConstruction);
+        return Helper.mapToList(shipsInConstruction, ShipInConstructionMapper::fromShipInConstruction);
     }
 
     @POST
@@ -63,8 +65,8 @@ public class ShipInConstructionSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
 
         try {
-            ShipInConstruction shipInConstruction = shipService.buildShip(player, planet, data.getParsedType());
-            return ShipInConstructionResponse.fromShipInConstruction(shipInConstruction);
+            ShipInConstruction shipInConstruction = shipService.buildShip(player, planet, ShipType.valueOf(data.getType()));
+            return ShipInConstructionMapper.fromShipInConstruction(shipInConstruction);
         } catch (BuildShipException e) {
             throw new BuildShipWebException(e.getReason());
         }

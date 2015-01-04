@@ -2,7 +2,8 @@ package restwars.rest.resources;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import restwars.rest.api.metadata.ShipMetadataResponse;
+import restwars.rest.mapper.ShipMapper;
+import restwars.restapi.dto.metadata.ShipMetadataResponse;
 import restwars.service.ship.ShipType;
 
 import javax.inject.Inject;
@@ -20,6 +21,6 @@ public class ShipMetadataSubResource {
     @GET
     @ApiOperation("Lists all ships")
     public List<ShipMetadataResponse> all() {
-        return Stream.of(ShipType.values()).map(ShipMetadataResponse::fromShipType).collect(Collectors.toList());
+        return Stream.of(ShipType.values()).map(ShipMapper::fromShipType).collect(Collectors.toList());
     }
 }

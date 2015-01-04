@@ -6,9 +6,10 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.planet.PlanetResponse;
+import restwars.rest.mapper.PlanetMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
+import restwars.restapi.dto.planet.PlanetResponse;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -50,7 +51,7 @@ public class PlanetResource {
         Preconditions.checkNotNull(player, "player");
         List<Planet> planets = planetService.findWithOwner(player);
 
-        return Helper.mapToList(planets, PlanetResponse::fromPlanet);
+        return Helper.mapToList(planets, PlanetMapper::fromPlanet);
     }
 
     @GET
@@ -65,7 +66,7 @@ public class PlanetResource {
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
 
-        return PlanetResponse.fromPlanet(planet);
+        return PlanetMapper.fromPlanet(planet);
     }
 
     @Path("/{location}/building")

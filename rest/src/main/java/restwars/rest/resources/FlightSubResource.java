@@ -5,16 +5,19 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.ship.CreateFlightRequest;
-import restwars.rest.api.ship.FlightResponse;
+import restwars.rest.mapper.FlightMapper;
+import restwars.rest.mapper.ShipMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
+import restwars.restapi.dto.ship.CreateFlightRequest;
+import restwars.restapi.dto.ship.FlightResponse;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
 import restwars.service.ship.Flight;
 import restwars.service.ship.FlightException;
+import restwars.service.ship.FlightType;
 import restwars.service.ship.ShipService;
 
 import javax.inject.Inject;
@@ -49,7 +52,7 @@ public class FlightSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Flight> flights = shipService.findFlightsStartedFromPlanet(planet);
 
-        return Helper.mapToList(flights, FlightResponse::fromFlight);
+        return Helper.mapToList(flights, FlightMapper::fromFlight);
     }
 
     @POST
@@ -57,7 +60,7 @@ public class FlightSubResource {
     @ApiOperation("Creates a flight")
     public FlightResponse createFlight(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("start") @ApiParam("Start planet") LocationParam start,
+            @PathParam("location") @ApiParam("Start planet") LocationParam start,
             @PathParam("destination") @ApiParam("Destination planet") LocationParam destination,
             @Valid CreateFlightRequest body
     ) {
@@ -69,11 +72,11 @@ public class FlightSubResource {
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, start.getValue(), player);
         try {
             Flight flight = shipService.sendShipsToPlanet(
-                    player, planet, destination.getValue(), body.getParsedShips(), body.getParsedType(),
+                    player, planet, destination.getValue(), ShipMapper.fromShips(body.getShips()), FlightType.valueOf(body.getType()),
                     new Resources(body.getCargoCrystals(), body.getCargoGas(), body.getCargoEnergy())
             );
 
-            return FlightResponse.fromFlight(flight);
+            return FlightMapper.fromFlight(flight);
         } catch (FlightException e) {
             throw new FlightWebException(e.getReason());
         }

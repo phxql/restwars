@@ -6,10 +6,10 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
-import restwars.rest.api.planet.PlanetResponse;
-import restwars.rest.api.player.PlayerResponse;
-import restwars.rest.api.player.RegisterPlayerRequest;
+import restwars.rest.mapper.PlanetMapper;
 import restwars.rest.util.Helper;
+import restwars.restapi.dto.player.PlayerResponse;
+import restwars.restapi.dto.player.RegisterPlayerRequest;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -48,7 +48,7 @@ public class PlayerResource {
     public PlayerResponse me(@Auth @ApiParam(access = "internal") Player player) {
         List<Planet> planets = planetService.findWithOwner(player);
 
-        return new PlayerResponse(player.getUsername(), Helper.mapToList(planets, PlanetResponse::fromPlanet));
+        return new PlayerResponse(player.getUsername(), Helper.mapToList(planets, PlanetMapper::fromPlanet));
     }
 
     @POST
