@@ -3,9 +3,11 @@ package restwars.storage.planet;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.NotImplementedException;
 import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
+import restwars.service.telescope.PlanetWithOwner;
 
 import javax.inject.Singleton;
 import java.util.List;
@@ -49,6 +51,11 @@ public class InMemoryPlanetDAO implements PlanetDAO {
         Preconditions.checkNotNull(id, "id");
 
         return Optional.ofNullable(planets.get(id));
+    }
+
+    @Override
+    public List<PlanetWithOwner> findInRange(int galaxyMin, int galaxyMax, int solarSystemMin, int solarSystemMax, int planetMin, int planetMax) {
+        throw new NotImplementedException();
     }
 
     @Override

@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory;
 import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
-import restwars.service.resource.Resources;
+import restwars.service.telescope.PlanetWithOwner;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
+import restwars.storage.mapper.PlanetMapper;
+import restwars.storage.mapper.PlayerMapper;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static restwars.storage.jooq.Tables.PLANET;
+import static restwars.storage.jooq.Tables.PLAYER;
 
 public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JooqPlanetDAO.class);
@@ -51,7 +54,7 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
         LOGGER.debug("Finding planet with owner id {}", ownerId);
 
         Result<Record> result = context().select().from(PLANET).where(PLANET.OWNER_ID.eq(ownerId)).fetch();
-        return result.stream().map(this::fromRecord).collect(Collectors.toList());
+        return result.stream().map(PlanetMapper::fromRecord).collect(Collectors.toList());
     }
 
     @Override
@@ -70,7 +73,7 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
             return Optional.empty();
         }
 
-        return Optional.of(fromRecord(record));
+        return Optional.of(PlanetMapper.fromRecord(record));
     }
 
     @Override
@@ -96,7 +99,7 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
     public List<Planet> findAll() {
         LOGGER.debug("Finding all planets");
 
-        return context().select().from(PLANET).fetch().stream().map(this::fromRecord).collect(Collectors.toList());
+        return context().select().from(PLANET).fetch().stream().map(PlanetMapper::fromRecord).collect(Collectors.toList());
     }
 
     @Override
@@ -111,15 +114,19 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
             return Optional.empty();
         }
 
-        return Optional.of(fromRecord(record));
+        return Optional.of(PlanetMapper.fromRecord(record));
     }
 
-    private Planet fromRecord(Record record) {
-        return new Planet(
-                record.getValue(PLANET.ID), new Location(record.getValue(PLANET.LOCATION_GALAXY),
-                record.getValue(PLANET.LOCATION_SOLAR_SYSTEM), record.getValue(PLANET.LOCATION_PLANET)),
-                record.getValue(PLANET.OWNER_ID), new Resources(record.getValue(PLANET.CRYSTALS),
-                record.getValue(PLANET.GAS), record.getValue(PLANET.ENERGY))
-        );
+    @Override
+    public List<PlanetWithOwner> findInRange(int galaxyMin, int galaxyMax, int solarSystemMin, int solarSystemMax, int planetMin, int planetMax) {
+        LOGGER.debug("Finding planet in range: galaxy {} - {}, solar system {} - {}, planet {} - {}", galaxyMin, galaxyMax, solarSystemMin, solarSystemMax, planetMin, planetMax);
+
+        Result<Record> result = context().select().from(PLANET).join(PLAYER).on(PLAYER.ID.eq(PLANET.OWNER_ID))
+                .where(PLANET.LOCATION_GALAXY.between(galaxyMin, galaxyMax))
+                .and(PLANET.LOCATION_SOLAR_SYSTEM.between(solarSystemMin, solarSystemMax))
+                .and(PLANET.LOCATION_PLANET.between(planetMin, planetMax))
+                .fetch();
+
+        return result.stream().map(r -> new PlanetWithOwner(PlanetMapper.fromRecord(r), PlayerMapper.fromRecord(r))).collect(Collectors.toList());
     }
 }

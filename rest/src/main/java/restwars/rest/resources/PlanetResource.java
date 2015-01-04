@@ -33,9 +33,11 @@ public class PlanetResource {
     private final ShipInConstructionSubResource shipInConstructionSubResource;
     private final ShipSubResource shipSubResource;
     private final FlightSubResource flightSubResource;
+    private final TelescopeSubResource telescopeSubResource;
 
     @Inject
-    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource, FlightSubResource flightSubResource) {
+    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource, FlightSubResource flightSubResource, TelescopeSubResource telescopeSubResource) {
+        this.telescopeSubResource = Preconditions.checkNotNull(telescopeSubResource, "telescopeSubResource");
         this.flightSubResource = Preconditions.checkNotNull(flightSubResource, "flightSubResource");
         this.shipSubResource = Preconditions.checkNotNull(shipSubResource, "shipSubResource");
         this.shipInConstructionSubResource = Preconditions.checkNotNull(shipInConstructionSubResource, "shipInConstructionSubResource");
@@ -104,4 +106,11 @@ public class PlanetResource {
     public FlightSubResource getFlights() {
         return flightSubResource;
     }
+
+    @Path("/{location}/telescope")
+    @ApiOperation("Telescope")
+    public TelescopeSubResource getTelescope() {
+        return telescopeSubResource;
+    }
+
 }

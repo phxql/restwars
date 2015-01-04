@@ -1,5 +1,7 @@
 package restwars.service.planet;
 
+import restwars.service.telescope.PlanetWithOwner;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,4 +54,17 @@ public interface PlanetDAO {
      * @return Planet if found.
      */
     Optional<Planet> findWithId(UUID id);
+
+    /**
+     * Finds all planets in the given range.
+     *
+     * @param galaxyMin      Minimum galaxy value.
+     * @param galaxyMax      Maximum galaxy value.
+     * @param solarSystemMin Minimum solar system value.
+     * @param solarSystemMax Maximum solar system value.
+     * @param planetMin      Minimum planet value.
+     * @param planetMax      Maximum planet value.
+     * @return Planet with their owners.
+     */
+    List<PlanetWithOwner> findInRange(int galaxyMin, int galaxyMax, int solarSystemMin, int solarSystemMax, int planetMin, int planetMax);
 }
