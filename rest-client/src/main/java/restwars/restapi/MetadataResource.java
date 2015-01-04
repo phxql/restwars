@@ -1,10 +1,7 @@
 package restwars.restapi;
 
 
-import restwars.restapi.dto.metadata.BuildingMetadataResponse;
-import restwars.restapi.dto.metadata.FlightTypeMetadataResponse;
-import restwars.restapi.dto.metadata.ShipMetadataResponse;
-import restwars.restapi.dto.metadata.TechnologyMetadataResponse;
+import restwars.restapi.dto.metadata.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -29,4 +26,8 @@ public interface MetadataResource {
     @GET
     @Path("/flight/type")
     List<FlightTypeMetadataResponse> allFlightTypes();
+
+    @GET
+    @Path("/configuration")
+    ConfigurationMetadataResponse getConfiguration();
 }

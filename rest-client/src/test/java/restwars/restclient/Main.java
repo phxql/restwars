@@ -9,6 +9,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         RestWarsClient client = new RestWarsClient("http://localhost:8080");
         System.out.println("Ping: " + client.getSystemResource().ping());
+        System.out.println("Configuration: " + client.getMetadataResource().getConfiguration());
 
         client.setCredentials("foo", "foo");
 

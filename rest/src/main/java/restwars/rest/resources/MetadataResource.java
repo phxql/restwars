@@ -18,13 +18,15 @@ public class MetadataResource {
     private final ShipMetadataSubResource shipMetadataSubResource;
     private final TechnologyMetadataSubResource technologyMetadataSubResource;
     private final FlightMetadataSubResource flightMetadataSubResource;
+    private final ConfigurationMetadataSubResource configurationMetadataSubResource;
 
     @Inject
-    public MetadataResource(BuildingMetadataSubResource buildingMetadataSubResource, ShipMetadataSubResource shipMetadataSubResource, TechnologyMetadataSubResource technologyMetadataSubResource, FlightMetadataSubResource flightMetadataSubResource) {
+    public MetadataResource(BuildingMetadataSubResource buildingMetadataSubResource, ShipMetadataSubResource shipMetadataSubResource, TechnologyMetadataSubResource technologyMetadataSubResource, FlightMetadataSubResource flightMetadataSubResource, ConfigurationMetadataSubResource configurationMetadataSubResource) {
         this.buildingMetadataSubResource = buildingMetadataSubResource;
         this.shipMetadataSubResource = shipMetadataSubResource;
         this.technologyMetadataSubResource = technologyMetadataSubResource;
         this.flightMetadataSubResource = flightMetadataSubResource;
+        this.configurationMetadataSubResource = configurationMetadataSubResource;
     }
 
     @Path("/building")
@@ -49,5 +51,11 @@ public class MetadataResource {
     @ApiOperation("Flight metadata")
     public FlightMetadataSubResource getFlightMetadataSubResource() {
         return flightMetadataSubResource;
+    }
+
+    @Path("/configuration")
+    @ApiOperation("Configuration metadata")
+    public ConfigurationMetadataSubResource getConfigurationMetadataSubResource() {
+        return configurationMetadataSubResource;
     }
 }
