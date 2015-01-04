@@ -37,7 +37,7 @@ public class ResourceServiceImpl implements ResourceService {
             case GAS_REFINERY:
                 return new Resources(0, level, 0);
             case SOLAR_PANELS:
-                return new Resources(0, 0, level * 10);
+                return new Resources(0, 0, level * 10L);
             default:
                 return Resources.NONE;
         }

@@ -182,7 +182,7 @@ public class BuildingServiceImpl implements BuildingService {
 
         switch (type) {
             case COMMAND_CENTER:
-                return new Resources(level * 10, level * 10, level * 100);
+                return new Resources(level * 10L, level * 10L, level * 100L);
             case CRYSTAL_MINE:
                 return new Resources(level, level, level);
             case GAS_REFINERY:
