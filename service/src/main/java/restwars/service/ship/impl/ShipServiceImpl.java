@@ -243,7 +243,7 @@ public class ShipServiceImpl implements ShipService {
         // Calculate arrival time
         int speed = shipUtils.findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
-        long arrives = started + (long) Math.ceil(distance / speed);
+        long arrives = started + (long) Math.ceil(distance / (double) speed);
 
         // Decrease energy on start planet
         start = start.withResources(start.getResources().minus(Resources.energy(totalEnergyNeeded)));
