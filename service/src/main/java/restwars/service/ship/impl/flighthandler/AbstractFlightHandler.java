@@ -44,7 +44,7 @@ public abstract class AbstractFlightHandler {
         long distance = flight.getStart().calculateDistance(flight.getDestination());
         int speed = shipUtils.findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
-        long arrival = started + (long) Math.ceil(distance / speed);
+        long arrival = started + (long) Math.ceil(distance / (double) speed);
 
         Flight returnFlight = new Flight(
                 flight.getId(), flight.getStart(), flight.getDestination(),
