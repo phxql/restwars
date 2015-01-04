@@ -1,5 +1,6 @@
 package restwars.restapi.dto.player;
 
+import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -36,5 +37,13 @@ public class RegisterPlayerRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("username", username)
+                .add("password", password)
+                .toString();
     }
 }

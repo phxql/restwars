@@ -1,5 +1,6 @@
 package restwars.restapi.dto.ship;
 
+import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
@@ -83,5 +84,17 @@ public class FlightResponse {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("destination", destination)
+                .add("startedInRound", startedInRound)
+                .add("arrivalInRound", arrivalInRound)
+                .add("ships", ships)
+                .add("type", type)
+                .add("direction", direction)
+                .toString();
     }
 }

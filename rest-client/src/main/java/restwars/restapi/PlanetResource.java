@@ -15,5 +15,5 @@ public interface PlanetResource {
 
     @GET
     @Path("/{location}")
-    public PlanetResponse getPlanet(@PathParam("location") String location);
+    PlanetResponse getPlanet(@PathParam("location") String location);
 }

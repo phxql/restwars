@@ -18,6 +18,10 @@ public class RestWarsClient {
     private PlanetResource planetResource;
     private ConstructionSiteResource constructionSiteResource;
     private FlightResource flightResource;
+    private ResearchResource researchResource;
+    private ShipResource shipResource;
+    private ShipInConstructionResource shipInConstructionResource;
+    private SystemResource systemResource;
 
     public RestWarsClient(String url) {
         client = ClientBuilder.newClient();
@@ -44,6 +48,10 @@ public class RestWarsClient {
         planetResource = WebResourceFactory.newResource(PlanetResource.class, target);
         constructionSiteResource = WebResourceFactory.newResource(ConstructionSiteResource.class, target);
         flightResource = WebResourceFactory.newResource(FlightResource.class, target);
+        researchResource = WebResourceFactory.newResource(ResearchResource.class, target);
+        shipResource = WebResourceFactory.newResource(ShipResource.class, target);
+        shipInConstructionResource = WebResourceFactory.newResource(ShipInConstructionResource.class, target);
+        systemResource = WebResourceFactory.newResource(SystemResource.class, target);
     }
 
     public PlayerResource getPlayerResource() {
@@ -72,5 +80,21 @@ public class RestWarsClient {
 
     public FlightResource getFlightResource() {
         return flightResource;
+    }
+
+    public ResearchResource getResearchResource() {
+        return researchResource;
+    }
+
+    public ShipResource getShipResource() {
+        return shipResource;
+    }
+
+    public ShipInConstructionResource getShipInConstructionResource() {
+        return shipInConstructionResource;
+    }
+
+    public SystemResource getSystemResource() {
+        return systemResource;
     }
 }

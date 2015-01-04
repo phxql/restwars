@@ -12,8 +12,8 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public interface ConstructionSiteResource {
     @GET
-    public List<ConstructionSiteResponse> getConstructionSites(@PathParam("location") String location);
+    List<ConstructionSiteResponse> getConstructionSites(@PathParam("location") String location);
 
     @POST
-    public ConstructionSiteResponse build(@PathParam("location") String location, CreateBuildingRequest data);
+    ConstructionSiteResponse build(@PathParam("location") String location, CreateBuildingRequest data);
 }

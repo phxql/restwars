@@ -13,9 +13,9 @@ import java.util.List;
 public interface FlightResource {
     @GET
     @Path("/own")
-    public List<FlightResponse> getOwnFlights(@PathParam("location") String location);
+    List<FlightResponse> getOwnFlights(@PathParam("location") String location);
 
     @POST
     @Path("/to/{destination}")
-    public FlightResponse createFlight(@PathParam("location") String start, @PathParam("destination") String destination, CreateFlightRequest body);
+    FlightResponse createFlight(@PathParam("location") String start, @PathParam("destination") String destination, CreateFlightRequest body);
 }

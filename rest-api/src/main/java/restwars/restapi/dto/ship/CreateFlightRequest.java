@@ -1,5 +1,6 @@
 package restwars.restapi.dto.ship;
 
+import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -80,5 +81,16 @@ public class CreateFlightRequest {
 
     public void setShips(List<ShipRequest> ships) {
         this.ships = ships;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("type", type)
+                .add("ships", ships)
+                .add("cargoCrystals", cargoCrystals)
+                .add("cargoGas", cargoGas)
+                .add("cargoEnergy", cargoEnergy)
+                .toString();
     }
 }

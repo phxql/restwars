@@ -7,6 +7,8 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         RestWarsClient client = new RestWarsClient("http://localhost:8080");
+        System.out.println("Ping: " + client.getSystemResource().ping());
+
         client.setCredentials("foo", "foo");
 
         List<PlanetResponse> planets = client.getPlanetResource().allPlanets();
@@ -24,6 +26,14 @@ public class Main {
             System.out.println();
             System.out.println("Flights");
             System.out.println(client.getFlightResource().getOwnFlights(planet.getLocation()));
+
+            System.out.println();
+            System.out.println("Research");
+            System.out.println(client.getResearchResource().getResearch(planet.getLocation()));
+
+            System.out.println();
+            System.out.println("Ships");
+            System.out.println(client.getShipResource().getShips(planet.getLocation()));
         }
     }
 }

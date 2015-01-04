@@ -20,13 +20,13 @@ public interface MetadataResource {
 
     @GET
     @Path("/ship")
-    public List<ShipMetadataResponse> allShips();
+    List<ShipMetadataResponse> allShips();
 
     @GET
     @Path("/technology")
-    public List<TechnologyMetadataResponse> allTechnologies(@QueryParam("level") int level);
+    List<TechnologyMetadataResponse> allTechnologies(@QueryParam("level") int level);
 
     @GET
     @Path("/flight/type")
-    public List<FlightTypeMetadataResponse> allFlightTypes();
+    List<FlightTypeMetadataResponse> allFlightTypes();
 }
