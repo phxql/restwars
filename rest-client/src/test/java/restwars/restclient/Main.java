@@ -13,9 +13,14 @@ public class Main {
 
         client.setCredentials("foo", "foo");
 
+        System.out.println();
+        System.out.println("Events");
+        System.out.println(client.getEventResource().getEvents(1));
+
         while (true) {
             List<PlanetResponse> planets = client.getPlanetResource().allPlanets();
             for (PlanetResponse planet : planets) {
+                System.out.println();
                 System.out.println("Planet " + planet);
 
                 // client.getConstructionSiteResource().build(planet.getLocation(), new CreateBuildingRequest("TELESCOPE"));
