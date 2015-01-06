@@ -129,7 +129,8 @@ public class ShipServiceImpl implements ShipService {
     public void finishFlights() {
         LOGGER.trace("Enter: finishFlights()");
 
-        List<Flight> flights = flightDAO.findWithArrival(roundService.getCurrentRound());
+        long round = roundService.getCurrentRound();
+        List<Flight> flights = flightDAO.findWithArrival(round);
 
         for (Flight flight : flights) {
             switch (flight.getDirection()) {
@@ -137,7 +138,7 @@ public class ShipServiceImpl implements ShipService {
                     finishOutwardFlight(flight);
                     break;
                 case RETURN:
-                    finishReturnFlight(flight);
+                    finishReturnFlight(flight, round);
                     break;
                 default:
                     throw new AssertionError("Unknown flight direction value: " + flight.getDirection());
@@ -159,7 +160,7 @@ public class ShipServiceImpl implements ShipService {
         hangarDAO.update(updatedHangar);
     }
 
-    private void finishReturnFlight(Flight flight) {
+    private void finishReturnFlight(Flight flight, long round) {
         assert flight != null;
         LOGGER.debug("Finishing return flight {}", flight);
 
@@ -174,6 +175,9 @@ public class ShipServiceImpl implements ShipService {
         planetDAO.update(planet);
 
         flightDAO.delete(flight);
+
+        // Create event
+        eventDAO.insert(new Event(uuidFactory.create(), flight.getPlayerId(), planet.getId(), EventType.FLIGHT_RETURNED, round));
     }
 
     private void finishOutwardFlight(Flight flight) {
