@@ -24,5 +24,4 @@ public enum FlightType {
 
         throw new IllegalArgumentException("Unknown id: " + id);
     }
-
 }

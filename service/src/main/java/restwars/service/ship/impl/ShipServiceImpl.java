@@ -43,12 +43,13 @@ public class ShipServiceImpl implements ShipService {
     private final ColonizeFlightHandler colonizeFlightHandler;
     private final AttackFlightHandler attackFlightHandler;
     private final ShipUtils shipUtils;
+    private final FightDAO fightDAO;
 
     @Inject
     public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO, FightDAO fightDAO) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
-        Preconditions.checkNotNull(fightDAO, "fightDAO");
 
+        this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
@@ -207,6 +208,13 @@ public class ShipServiceImpl implements ShipService {
         Preconditions.checkNotNull(player, "player");
 
         return flightDAO.findWithPlayerId(player.getId());
+    }
+
+    @Override
+    public List<FightWithPlanetAndPlayer> findFightsWithPlayerSinceRound(Player player, long round) {
+        Preconditions.checkNotNull(player, "player");
+
+        return fightDAO.findFightsWithPlayerSinceRound(player.getId(), round);
     }
 
     @Override

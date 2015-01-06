@@ -273,6 +273,9 @@
             <column name="planet_id" type="uuid">
                 <constraints nullable="false" references="planet(id)" foreignKeyName="fight_planet_id"/>
             </column>
+            <column name="round" type="long">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="fight_ships">
