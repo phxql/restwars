@@ -1,9 +1,9 @@
 package restwars.service.event.impl;
 
 import com.google.common.base.Preconditions;
-import restwars.service.event.Event;
 import restwars.service.event.EventDAO;
 import restwars.service.event.EventService;
+import restwars.service.event.EventWithPlanet;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -18,7 +18,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findSince(UUID playerId, long round) {
+    public List<EventWithPlanet> findSince(UUID playerId, long round) {
         Preconditions.checkNotNull(playerId, "playerId");
 
         return eventDAO.findSince(playerId, round);

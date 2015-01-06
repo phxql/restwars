@@ -11,6 +11,6 @@ public interface EventService {
      * @param round    Round (inclusive).
      * @return All events which have occurred since the given round.
      */
-    List<Event> findSince(UUID playerId, long round);
+    List<EventWithPlanet> findSince(UUID playerId, long round);
 
 }
