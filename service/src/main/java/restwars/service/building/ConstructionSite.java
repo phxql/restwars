@@ -14,11 +14,13 @@ public class ConstructionSite {
 
     private final UUID planetId;
 
+    private final UUID playerId;
+
     private final long started;
 
     private final long done;
 
-    public ConstructionSite(UUID id, BuildingType type, int level, UUID planetId, long started, long done) {
+    public ConstructionSite(UUID id, BuildingType type, int level, UUID planetId, UUID playerId, long started, long done) {
         Preconditions.checkArgument(level > 0, "level must be > 0");
         Preconditions.checkArgument(started > 0, "started must be > 0");
         Preconditions.checkArgument(done > 0, "done must be > 0");
@@ -26,6 +28,7 @@ public class ConstructionSite {
 
         this.id = Preconditions.checkNotNull(id, "id");
         this.type = Preconditions.checkNotNull(type, "type");
+        this.playerId = Preconditions.checkNotNull(playerId, "playerId");
         this.level = level;
         this.planetId = Preconditions.checkNotNull(planetId, "planetId");
         this.started = started;
@@ -56,6 +59,10 @@ public class ConstructionSite {
         return done;
     }
 
+    public UUID getPlayerId() {
+        return playerId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,13 +74,15 @@ public class ConstructionSite {
                 Objects.equal(this.type, that.type) &&
                 Objects.equal(this.level, that.level) &&
                 Objects.equal(this.planetId, that.planetId) &&
+                Objects.equal(this.playerId, that.playerId) &&
                 Objects.equal(this.started, that.started) &&
                 Objects.equal(this.done, that.done);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, type, level, planetId, started, done);
+        return Objects.hashCode(id, type, level, planetId, playerId, started,
+                done);
     }
 
     @Override
@@ -83,6 +92,7 @@ public class ConstructionSite {
                 .add("type", type)
                 .add("level", level)
                 .add("planetId", planetId)
+                .add("playerId", playerId)
                 .add("started", started)
                 .add("done", done)
                 .toString();

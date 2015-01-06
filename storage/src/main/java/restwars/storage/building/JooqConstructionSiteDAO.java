@@ -35,10 +35,10 @@ public class JooqConstructionSiteDAO extends AbstractJooqDAO implements Construc
         context()
                 .insertInto(
                         CONSTRUCTION_SITE, CONSTRUCTION_SITE.ID, CONSTRUCTION_SITE.TYPE, CONSTRUCTION_SITE.LEVEL,
-                        CONSTRUCTION_SITE.PLANET_ID, CONSTRUCTION_SITE.STARTED, CONSTRUCTION_SITE.DONE)
+                        CONSTRUCTION_SITE.PLANET_ID, CONSTRUCTION_SITE.PLAYER_ID, CONSTRUCTION_SITE.STARTED, CONSTRUCTION_SITE.DONE)
                 .values(
                         constructionSite.getId(), constructionSite.getType().getId(), constructionSite.getLevel(),
-                        constructionSite.getPlanetId(), constructionSite.getStarted(), constructionSite.getDone()
+                        constructionSite.getPlanetId(), constructionSite.getPlayerId(), constructionSite.getStarted(), constructionSite.getDone()
                 ).execute();
     }
 
@@ -78,7 +78,7 @@ public class JooqConstructionSiteDAO extends AbstractJooqDAO implements Construc
 
         return new ConstructionSite(
                 record.getId(), BuildingType.fromId(record.getType()), record.getLevel(), record.getPlanetId(),
-                record.getStarted(), record.getDone()
+                record.getPlayerId(), record.getStarted(), record.getDone()
         );
     }
 }

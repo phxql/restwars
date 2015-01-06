@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.ConstructionSiteDAO;
+import restwars.service.event.EventDAO;
 import restwars.service.infrastructure.RoundDAO;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.PlayerDAO;
@@ -14,6 +15,7 @@ import restwars.service.technology.ResearchDAO;
 import restwars.service.technology.TechnologyDAO;
 import restwars.storage.building.JooqBuildingDAO;
 import restwars.storage.building.JooqConstructionSiteDAO;
+import restwars.storage.event.JooqEventDAO;
 import restwars.storage.planet.JooqPlanetDAO;
 import restwars.storage.player.JooqPlayerDAO;
 import restwars.storage.round.JooqRoundDAO;
@@ -78,5 +80,11 @@ public class JooqDAOModule {
     @Singleton
     FlightDAO providesFlightDAO(JooqFlightDAO jooqFlightDAO) {
         return jooqFlightDAO;
+    }
+
+    @Provides
+    @Singleton
+    EventDAO providesEventDAO(JooqEventDAO jooqEventDAO) {
+        return jooqEventDAO;
     }
 }

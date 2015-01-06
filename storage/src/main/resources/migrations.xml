@@ -72,6 +72,9 @@
             <column name="planet_id" type="uuid">
                 <constraints nullable="false" references="planet(id)" foreignKeyName="construction_site_planet_id"/>
             </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="construction_site_player_id"/>
+            </column>
             <column name="started" type="long">
                 <constraints nullable="false"/>
             </column>
@@ -238,5 +241,24 @@
             </column>
         </createTable>
         <addPrimaryKey tableName="flight_ships" columnNames="flight_id, type"/>
+
+        <createTable tableName="event">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="event_player_id"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="event_planet_id"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="round" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
     </changeSet>
 </databaseChangeLog>
