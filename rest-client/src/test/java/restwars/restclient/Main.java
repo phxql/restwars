@@ -13,11 +13,15 @@ public class Main {
 
         client.setCredentials("foo", "foo");
 
-        System.out.println();
-        System.out.println("Events");
-        System.out.println(client.getEventResource().getEvents(1));
-
         while (true) {
+            System.out.println();
+            System.out.println("Events");
+            System.out.println(client.getEventResource().getEvents(1));
+
+            System.out.println();
+            System.out.println("Fights");
+            System.out.println(client.getFightResource().ownFights(1));
+
             List<PlanetResponse> planets = client.getPlanetResource().allPlanets();
             for (PlanetResponse planet : planets) {
                 System.out.println();

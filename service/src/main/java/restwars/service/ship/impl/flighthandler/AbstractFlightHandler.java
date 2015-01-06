@@ -83,5 +83,5 @@ public abstract class AbstractFlightHandler {
         return uuidFactory;
     }
 
-    public abstract void handle(Flight flight);
+    public abstract void handle(Flight flight, long round);
 }

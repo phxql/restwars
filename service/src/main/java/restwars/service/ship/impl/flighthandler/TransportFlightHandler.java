@@ -21,7 +21,7 @@ public class TransportFlightHandler extends AbstractFlightHandler {
     }
 
     @Override
-    public void handle(Flight flight) {
+    public void handle(Flight flight, long round) {
         assert flight != null;
         LOGGER.debug("Finishing transport flight");
 

@@ -43,10 +43,13 @@ public class ShipServiceImpl implements ShipService {
     private final ColonizeFlightHandler colonizeFlightHandler;
     private final AttackFlightHandler attackFlightHandler;
     private final ShipUtils shipUtils;
+    private final FightDAO fightDAO;
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO, FightDAO fightDAO) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
+
+        this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
@@ -58,7 +61,7 @@ public class ShipServiceImpl implements ShipService {
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
         colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration);
-        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
+        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO);
         shipUtils = new ShipUtils();
     }
 
@@ -135,7 +138,7 @@ public class ShipServiceImpl implements ShipService {
         for (Flight flight : flights) {
             switch (flight.getDirection()) {
                 case OUTWARD:
-                    finishOutwardFlight(flight);
+                    finishOutwardFlight(flight, round);
                     break;
                 case RETURN:
                     finishReturnFlight(flight, round);
@@ -180,20 +183,20 @@ public class ShipServiceImpl implements ShipService {
         eventDAO.insert(new Event(uuidFactory.create(), flight.getPlayerId(), planet.getId(), EventType.FLIGHT_RETURNED, round));
     }
 
-    private void finishOutwardFlight(Flight flight) {
+    private void finishOutwardFlight(Flight flight, long round) {
         assert flight != null;
 
         LOGGER.debug("Finishing outward flight {}", flight);
 
         switch (flight.getType()) {
             case ATTACK:
-                attackFlightHandler.handle(flight);
+                attackFlightHandler.handle(flight, round);
                 break;
             case COLONIZE:
-                colonizeFlightHandler.handle(flight);
+                colonizeFlightHandler.handle(flight, round);
                 break;
             case TRANSPORT:
-                transportFlightHandler.handle(flight);
+                transportFlightHandler.handle(flight, round);
                 break;
             default:
                 throw new AssertionError("Unknown flight type: " + flight.getType());
@@ -205,6 +208,13 @@ public class ShipServiceImpl implements ShipService {
         Preconditions.checkNotNull(player, "player");
 
         return flightDAO.findWithPlayerId(player.getId());
+    }
+
+    @Override
+    public List<FightWithPlanetAndPlayer> findFightsWithPlayerSinceRound(Player player, long round) {
+        Preconditions.checkNotNull(player, "player");
+
+        return fightDAO.findFightsWithPlayerSinceRound(player.getId(), round);
     }
 
     @Override

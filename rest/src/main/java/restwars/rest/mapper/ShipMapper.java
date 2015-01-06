@@ -21,6 +21,12 @@ public final class ShipMapper {
         return new ShipResponse(ship.getType().toString(), ship.getAmount());
     }
 
+    public static List<ShipResponse> fromShips(Ships ships) {
+        Preconditions.checkNotNull(ships, "ships");
+
+        return ships.stream().map(ShipMapper::fromShip).collect(Collectors.toList());
+    }
+
     public static ShipMetadataResponse fromShipType(ShipType shipType) {
         Preconditions.checkNotNull(shipType, "shipType");
 

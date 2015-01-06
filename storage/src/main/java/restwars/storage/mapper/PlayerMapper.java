@@ -10,8 +10,12 @@ public final class PlayerMapper {
     }
 
     public static Player fromRecord(Record record) {
+        return fromRecord(record, PLAYER);
+    }
+
+    public static Player fromRecord(Record record, restwars.storage.jooq.tables.Player alias) {
         return new Player(
-                record.getValue(PLAYER.ID), record.getValue(PLAYER.USERNAME), record.getValue(PLAYER.PASSWORD)
+                record.getValue(alias.ID), record.getValue(alias.USERNAME), record.getValue(alias.PASSWORD)
         );
     }
 }

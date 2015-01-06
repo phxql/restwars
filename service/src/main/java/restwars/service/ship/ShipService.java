@@ -48,7 +48,6 @@ public interface ShipService {
      * @param ships       Ships.
      * @param flightType  Flight type.
      * @param cargo       Cargo. Only available for transport and colonize flights.
-     *
      * @return Flight.
      */
     Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws FlightException;
@@ -60,6 +59,15 @@ public interface ShipService {
      * @return Player.
      */
     List<Flight> findFlightsForPlayer(Player player);
+
+    /**
+     * Finds all fights where the given player is either the attacker or the defender which happend since the given round.
+     *
+     * @param player Player.
+     * @param round  Round (inclusive).
+     * @return Fights.
+     */
+    List<FightWithPlanetAndPlayer> findFightsWithPlayerSinceRound(Player player, long round);
 
     /**
      * Find all flights which were started from a given planet.

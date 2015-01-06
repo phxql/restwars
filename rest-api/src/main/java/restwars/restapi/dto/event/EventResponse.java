@@ -7,7 +7,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "An event")
 public class EventResponse {
     @ApiModelProperty(value = "Planet", required = true)
-    private String planetId;
+    private String location;
     @ApiModelProperty(value = "Type", required = true)
     private String type;
     @ApiModelProperty(value = "Round", required = true)
@@ -16,18 +16,18 @@ public class EventResponse {
     public EventResponse() {
     }
 
-    public EventResponse(String planetId, String type, long round) {
-        this.planetId = planetId;
+    public EventResponse(String location, String type, long round) {
+        this.location = location;
         this.type = type;
         this.round = round;
     }
 
-    public String getPlanetId() {
-        return planetId;
+    public String getLocation() {
+        return location;
     }
 
-    public void setPlanetId(String planetId) {
-        this.planetId = planetId;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getType() {
@@ -49,7 +49,7 @@ public class EventResponse {
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("planetId", planetId)
+                .add("location", location)
                 .add("type", type)
                 .add("round", round)
                 .toString();

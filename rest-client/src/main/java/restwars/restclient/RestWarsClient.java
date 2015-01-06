@@ -24,6 +24,7 @@ public class RestWarsClient {
     private SystemResource systemResource;
     private TelescopeResource telescopeResource;
     private EventResource eventResource;
+    private FightResource fightResource;
 
     public RestWarsClient(String url) {
         client = ClientBuilder.newClient();
@@ -55,6 +56,7 @@ public class RestWarsClient {
         systemResource = WebResourceFactory.newResource(SystemResource.class, target);
         telescopeResource = WebResourceFactory.newResource(TelescopeResource.class, target);
         eventResource = WebResourceFactory.newResource(EventResource.class, target);
+        fightResource = WebResourceFactory.newResource(FightResource.class, target);
     }
 
     public PlayerResource getPlayerResource() {
@@ -107,5 +109,9 @@ public class RestWarsClient {
 
     public EventResource getEventResource() {
         return eventResource;
+    }
+
+    public FightResource getFightResource() {
+        return fightResource;
     }
 }

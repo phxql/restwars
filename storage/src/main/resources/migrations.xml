@@ -260,5 +260,38 @@
             </column>
         </createTable>
 
+        <createTable tableName="fight">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="attacker_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="fight_attacker_id"/>
+            </column>
+            <column name="defender_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="fight_defender_id"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="fight_planet_id"/>
+            </column>
+            <column name="round" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="fight_ships">
+            <column name="fight_id" type="uuid">
+                <constraints nullable="false" references="fight(id)" foreignKeyName="fight_ships_fight_id"/>
+            </column>
+            <column name="category" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="fight_ships" columnNames="fight_id, type, category"/>
     </changeSet>
 </databaseChangeLog>
