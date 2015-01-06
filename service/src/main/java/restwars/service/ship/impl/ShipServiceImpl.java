@@ -7,6 +7,9 @@ import restwars.service.UniverseConfiguration;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
+import restwars.service.event.Event;
+import restwars.service.event.EventDAO;
+import restwars.service.event.EventType;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Location;
@@ -34,6 +37,7 @@ public class ShipServiceImpl implements ShipService {
     private final RoundService roundService;
     private final FlightDAO flightDAO;
     private final BuildingDAO buildingDAO;
+    private final EventDAO eventDAO;
 
     private final TransportFlightHandler transportFlightHandler;
     private final ColonizeFlightHandler colonizeFlightHandler;
@@ -41,7 +45,7 @@ public class ShipServiceImpl implements ShipService {
     private final ShipUtils shipUtils;
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
@@ -50,6 +54,7 @@ public class ShipServiceImpl implements ShipService {
         this.hangarDAO = Preconditions.checkNotNull(hangarDAO, "hangarDAO");
         this.shipInConstructionDAO = Preconditions.checkNotNull(shipInConstructionDAO, "shipInConstructionDAO");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
+        this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
         colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration);
@@ -283,6 +288,9 @@ public class ShipServiceImpl implements ShipService {
             Hangar updatedHangar = hangar.withShips(hangar.getShips().plus(ship.getType(), 1));
             hangarDAO.update(updatedHangar);
             shipInConstructionDAO.delete(ship);
+
+            // Create event
+            eventDAO.insert(new Event(uuidFactory.create(), ship.getPlayerId(), ship.getPlanetId(), EventType.SHIP_COMPLETED, round));
         }
     }
 }

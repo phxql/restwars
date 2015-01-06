@@ -2,7 +2,8 @@ package restwars.service.event;
 
 public enum EventType {
     BUILDING_COMPLETED(0),
-    RESEARCH_COMPLETED(1);
+    RESEARCH_COMPLETED(1),
+    SHIP_COMPLETED(2);
 
     private final int id;
 
