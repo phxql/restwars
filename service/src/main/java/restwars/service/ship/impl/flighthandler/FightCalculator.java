@@ -1,7 +1,9 @@
 package restwars.service.ship.impl.flighthandler;
 
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.ship.Fight;
 import restwars.service.ship.Ship;
 import restwars.service.ship.ShipType;
@@ -9,6 +11,7 @@ import restwars.service.ship.Ships;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class FightCalculator {
@@ -19,7 +22,13 @@ public class FightCalculator {
      */
     private final Random random = new Random();
 
-    public Fight attack(Ships attackingShips, Ships defendingShips) {
+    private final UUIDFactory uuidFactory;
+
+    public FightCalculator(UUIDFactory uuidFactory) {
+        this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
+    }
+
+    public Fight attack(UUID attackerId, UUID defenderId, UUID planetId, Ships attackingShips, Ships defendingShips) {
         LOGGER.debug("Fight between {} and {}", attackingShips, defendingShips);
 
         Ships remainingDefendingShips = fight(attackingShips, defendingShips);
@@ -28,7 +37,7 @@ public class FightCalculator {
         LOGGER.debug("Remaining ships from attacker: {}", remainingAttackingShips);
         LOGGER.debug("Remaining ships from defender: {}", remainingDefendingShips);
 
-        return new Fight(attackingShips, defendingShips, remainingAttackingShips, remainingDefendingShips);
+        return new Fight(uuidFactory.create(), attackerId, defenderId, planetId, attackingShips, defendingShips, remainingAttackingShips, remainingDefendingShips);
     }
 
     /**

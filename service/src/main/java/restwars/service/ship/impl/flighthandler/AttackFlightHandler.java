@@ -19,7 +19,7 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory) {
         super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
 
-        this.fightCalculator = new FightCalculator();
+        this.fightCalculator = new FightCalculator(uuidFactory);
     }
 
     @Override
@@ -29,9 +29,10 @@ public class AttackFlightHandler extends AbstractFlightHandler {
 
         Optional<Planet> planet = getPlanetDAO().findWithLocation(flight.getDestination());
         if (planet.isPresent()) {
-            Hangar hangar = getOrCreateHangar(planet.get().getId(), planet.get().getOwnerId());
+            Planet defenderPlanet = planet.get();
 
-            Fight fight = fightCalculator.attack(flight.getShips(), hangar.getShips());
+            Hangar hangar = getOrCreateHangar(defenderPlanet.getId(), defenderPlanet.getOwnerId());
+            Fight fight = fightCalculator.attack(flight.getPlayerId(), defenderPlanet.getOwnerId(), defenderPlanet.getId(), flight.getShips(), hangar.getShips());
 
             // Update defenders hangar
             getHangarDAO().update(hangar.withShips(fight.getRemainingDefenderShips()));
@@ -42,7 +43,7 @@ public class AttackFlightHandler extends AbstractFlightHandler {
             } else {
                 Resources cargo = Resources.NONE;
                 if (fight.getRemainingDefenderShips().isEmpty()) {
-                    cargo = lootPlanet(planet.get(), fight.getRemainingAttackerShips());
+                    cargo = lootPlanet(defenderPlanet, fight.getRemainingAttackerShips());
                 }
 
                 createReturnFlight(flight, fight.getRemainingAttackerShips(), cargo);
