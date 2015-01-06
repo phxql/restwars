@@ -28,6 +28,10 @@ public interface MetadataResource {
     List<FlightTypeMetadataResponse> allFlightTypes();
 
     @GET
+    @Path("/event/type")
+    List<EventTypeMetadataResponse> allEventTypes();
+
+    @GET
     @Path("/configuration")
     ConfigurationMetadataResponse getConfiguration();
 }
