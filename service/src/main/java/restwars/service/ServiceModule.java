@@ -4,6 +4,8 @@ import dagger.Module;
 import dagger.Provides;
 import restwars.service.building.BuildingService;
 import restwars.service.building.impl.BuildingServiceImpl;
+import restwars.service.event.EventService;
+import restwars.service.event.impl.EventServiceImpl;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.infrastructure.impl.RoundServiceImpl;
@@ -71,7 +73,12 @@ public class ServiceModule {
     }
 
     @Provides
-    TelescopeService telescopeService(TelescopeServiceImpl telescopeService) {
+    TelescopeService providesTelescopeService(TelescopeServiceImpl telescopeService) {
         return telescopeService;
+    }
+
+    @Provides
+    EventService providesEventService(EventServiceImpl eventService) {
+        return eventService;
     }
 }

@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.building.*;
+import restwars.service.event.Event;
+import restwars.service.event.EventDAO;
+import restwars.service.event.EventType;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -23,14 +26,16 @@ public class BuildingServiceImpl implements BuildingService {
     private final RoundService roundService;
     private final PlanetDAO planetDAO;
     private final ConstructionSiteDAO constructionSiteDAO;
+    private final EventDAO eventDAO;
 
     @Inject
-    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO) {
+    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO, EventDAO eventDAO) {
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.constructionSiteDAO = Preconditions.checkNotNull(constructionSiteDAO, "constructionSiteDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
+        this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
     }
 
     @Override
@@ -87,7 +92,7 @@ public class BuildingServiceImpl implements BuildingService {
         UUID id = uuidFactory.create();
         long buildTime = calculateBuildTime(type, level);
         long currentRound = roundService.getCurrentRound();
-        ConstructionSite constructionSite = new ConstructionSite(id, type, level, updatedPlanet.getId(), currentRound, currentRound + buildTime);
+        ConstructionSite constructionSite = new ConstructionSite(id, type, level, updatedPlanet.getId(), updatedPlanet.getOwnerId(), currentRound, currentRound + buildTime);
 
         LOGGER.debug("Creating construction site {} on planet {}", constructionSite, updatedPlanet);
 
@@ -145,6 +150,9 @@ public class BuildingServiceImpl implements BuildingService {
                 LOGGER.debug("Updating building {}", updatedBuilding);
                 buildingDAO.update(updatedBuilding);
             }
+
+            // Create event
+            eventDAO.insert(new Event(uuidFactory.create(), constructionSite.getPlayerId(), constructionSite.getPlanetId(), EventType.BUILDING_COMPLETED, round));
 
             constructionSiteDAO.delete(constructionSite);
         }

@@ -84,6 +84,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         environment.jersey().register(compositionRoot.getPlayerResource());
         environment.jersey().register(compositionRoot.getPlanetResource());
         environment.jersey().register(compositionRoot.getTechnologyResource());
+        environment.jersey().register(compositionRoot.getEventResource());
         environment.jersey().register(compositionRoot.getMetadataResource());
 
         environment.lifecycle().manage(compositionRoot.getClock());
