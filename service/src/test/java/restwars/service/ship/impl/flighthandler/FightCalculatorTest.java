@@ -21,6 +21,7 @@ public class FightCalculatorTest {
     private static final UUID ATTACKER_ID = UUID.randomUUID();
     private static final UUID DEFENDER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final long ROUND = 1L;
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -32,7 +33,7 @@ public class FightCalculatorTest {
 
     @Test
     public void testAttack() throws Exception {
-        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 5)), new Ships(new Ship(ShipType.MOSQUITO, 3)));
+        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 5)), new Ships(new Ship(ShipType.MOSQUITO, 3)), ROUND);
 
         assertThat(fight.getRemainingAttackerShips().countByType(ShipType.MOSQUITO), is(2L));
         assertThat(fight.getRemainingDefenderShips().countByType(ShipType.MOSQUITO), is(0L));
@@ -40,7 +41,7 @@ public class FightCalculatorTest {
 
     @Test
     public void testAttack2() throws Exception {
-        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 5)), new Ships(new Ship(ShipType.MOSQUITO, 5)));
+        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 5)), new Ships(new Ship(ShipType.MOSQUITO, 5)), ROUND);
 
         assertThat(fight.getRemainingAttackerShips().countByType(ShipType.MOSQUITO), is(0L));
         assertThat(fight.getRemainingDefenderShips().countByType(ShipType.MOSQUITO), is(0L));
@@ -48,7 +49,7 @@ public class FightCalculatorTest {
 
     @Test
     public void testAttack3() throws Exception {
-        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 3)), new Ships(new Ship(ShipType.MOSQUITO, 5)));
+        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 3)), new Ships(new Ship(ShipType.MOSQUITO, 5)), ROUND);
 
         assertThat(fight.getRemainingAttackerShips().countByType(ShipType.MOSQUITO), is(0L));
         assertThat(fight.getRemainingDefenderShips().countByType(ShipType.MOSQUITO), is(2L));
@@ -56,7 +57,7 @@ public class FightCalculatorTest {
 
     @Test
     public void testAttack4() throws Exception {
-        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 5)), new Ships(new Ship(ShipType.COLONY, 1)));
+        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 5)), new Ships(new Ship(ShipType.COLONY, 1)), ROUND);
 
         assertThat(fight.getRemainingAttackerShips().countByType(ShipType.MOSQUITO), is(5L));
         assertThat(fight.getRemainingDefenderShips().countByType(ShipType.COLONY), is(0L));
@@ -64,7 +65,7 @@ public class FightCalculatorTest {
 
     @Test
     public void testAttack5() throws Exception {
-        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 4)), new Ships(new Ship(ShipType.COLONY, 1)));
+        Fight fight = sut.attack(ATTACKER_ID, DEFENDER_ID, PLANET_ID, new Ships(new Ship(ShipType.MOSQUITO, 4)), new Ships(new Ship(ShipType.COLONY, 1)), ROUND);
 
         assertThat(fight.getRemainingAttackerShips().countByType(ShipType.MOSQUITO), is(4L));
         assertThat(fight.getRemainingDefenderShips().countByType(ShipType.COLONY), is(1L));

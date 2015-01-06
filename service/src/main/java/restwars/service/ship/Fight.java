@@ -22,7 +22,10 @@ public class Fight {
 
     private final Ships remainingDefenderShips;
 
-    public Fight(UUID id, UUID attackerId, UUID defenderId, UUID planetId, Ships attackingShips, Ships defendingShips, Ships remainingAttackerShips, Ships remainingDefenderShips) {
+    private final long round;
+
+    public Fight(UUID id, UUID attackerId, UUID defenderId, UUID planetId, Ships attackingShips, Ships defendingShips, Ships remainingAttackerShips, Ships remainingDefenderShips, long round) {
+        this.round = round;
         this.id = Preconditions.checkNotNull(id, "id");
         this.attackerId = Preconditions.checkNotNull(attackerId, "attackerId");
         this.defenderId = Preconditions.checkNotNull(defenderId, "defenderId");
@@ -65,27 +68,8 @@ public class Fight {
         return remainingDefenderShips;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Fight that = (Fight) o;
-
-        return Objects.equal(this.id, that.id) &&
-                Objects.equal(this.attackerId, that.attackerId) &&
-                Objects.equal(this.defenderId, that.defenderId) &&
-                Objects.equal(this.planetId, that.planetId) &&
-                Objects.equal(this.attackingShips, that.attackingShips) &&
-                Objects.equal(this.defendingShips, that.defendingShips) &&
-                Objects.equal(this.remainingAttackerShips, that.remainingAttackerShips) &&
-                Objects.equal(this.remainingDefenderShips, that.remainingDefenderShips);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id, attackerId, defenderId, planetId, attackingShips, defendingShips,
-                remainingAttackerShips, remainingDefenderShips);
+    public long getRound() {
+        return round;
     }
 
     @Override
@@ -99,6 +83,7 @@ public class Fight {
                 .add("defendingShips", defendingShips)
                 .add("remainingAttackerShips", remainingAttackerShips)
                 .add("remainingDefenderShips", remainingDefenderShips)
+                .add("round", round)
                 .toString();
     }
 }

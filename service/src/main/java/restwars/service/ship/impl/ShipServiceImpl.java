@@ -137,7 +137,7 @@ public class ShipServiceImpl implements ShipService {
         for (Flight flight : flights) {
             switch (flight.getDirection()) {
                 case OUTWARD:
-                    finishOutwardFlight(flight);
+                    finishOutwardFlight(flight, round);
                     break;
                 case RETURN:
                     finishReturnFlight(flight, round);
@@ -182,20 +182,20 @@ public class ShipServiceImpl implements ShipService {
         eventDAO.insert(new Event(uuidFactory.create(), flight.getPlayerId(), planet.getId(), EventType.FLIGHT_RETURNED, round));
     }
 
-    private void finishOutwardFlight(Flight flight) {
+    private void finishOutwardFlight(Flight flight, long round) {
         assert flight != null;
 
         LOGGER.debug("Finishing outward flight {}", flight);
 
         switch (flight.getType()) {
             case ATTACK:
-                attackFlightHandler.handle(flight);
+                attackFlightHandler.handle(flight, round);
                 break;
             case COLONIZE:
-                colonizeFlightHandler.handle(flight);
+                colonizeFlightHandler.handle(flight, round);
                 break;
             case TRANSPORT:
-                transportFlightHandler.handle(flight);
+                transportFlightHandler.handle(flight, round);
                 break;
             default:
                 throw new AssertionError("Unknown flight type: " + flight.getType());

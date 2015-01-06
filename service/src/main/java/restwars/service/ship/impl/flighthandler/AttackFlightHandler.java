@@ -26,7 +26,7 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     }
 
     @Override
-    public void handle(Flight flight) {
+    public void handle(Flight flight, long round) {
         assert flight != null;
         LOGGER.debug("Handling attack of flight {}", flight);
 
@@ -35,7 +35,7 @@ public class AttackFlightHandler extends AbstractFlightHandler {
             Planet defenderPlanet = planet.get();
 
             Hangar hangar = getOrCreateHangar(defenderPlanet.getId(), defenderPlanet.getOwnerId());
-            Fight fight = fightCalculator.attack(flight.getPlayerId(), defenderPlanet.getOwnerId(), defenderPlanet.getId(), flight.getShips(), hangar.getShips());
+            Fight fight = fightCalculator.attack(flight.getPlayerId(), defenderPlanet.getOwnerId(), defenderPlanet.getId(), flight.getShips(), hangar.getShips(), round);
 
             // Update defenders hangar
             getHangarDAO().update(hangar.withShips(fight.getRemainingDefenderShips()));

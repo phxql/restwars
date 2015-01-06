@@ -28,7 +28,7 @@ public class FightCalculator {
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
     }
 
-    public Fight attack(UUID attackerId, UUID defenderId, UUID planetId, Ships attackingShips, Ships defendingShips) {
+    public Fight attack(UUID attackerId, UUID defenderId, UUID planetId, Ships attackingShips, Ships defendingShips, long round) {
         LOGGER.debug("Fight between {} and {}", attackingShips, defendingShips);
 
         Ships remainingDefendingShips = fight(attackingShips, defendingShips);
@@ -37,7 +37,7 @@ public class FightCalculator {
         LOGGER.debug("Remaining ships from attacker: {}", remainingAttackingShips);
         LOGGER.debug("Remaining ships from defender: {}", remainingDefendingShips);
 
-        return new Fight(uuidFactory.create(), attackerId, defenderId, planetId, attackingShips, defendingShips, remainingAttackingShips, remainingDefendingShips);
+        return new Fight(uuidFactory.create(), attackerId, defenderId, planetId, attackingShips, defendingShips, remainingAttackingShips, remainingDefendingShips, round);
     }
 
     /**
