@@ -1,5 +1,6 @@
 package restwars.service.ship.impl.flighthandler;
 
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.infrastructure.RoundService;
@@ -15,10 +16,12 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(AttackFlightHandler.class);
 
     private final FightCalculator fightCalculator;
+    private final FightDAO fightDAO;
 
-    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory) {
+    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO) {
         super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
 
+        this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
         this.fightCalculator = new FightCalculator(uuidFactory);
     }
 
@@ -48,6 +51,9 @@ public class AttackFlightHandler extends AbstractFlightHandler {
 
                 createReturnFlight(flight, fight.getRemainingAttackerShips(), cargo);
             }
+
+            // Store fight
+            fightDAO.insert(fight);
         } else {
             // Planet is not colonized, create return flight
             createReturnFlight(flight, flight.getShips(), flight.getCargo());

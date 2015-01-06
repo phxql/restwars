@@ -45,8 +45,10 @@ public class ShipServiceImpl implements ShipService {
     private final ShipUtils shipUtils;
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO, FightDAO fightDAO) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
+        Preconditions.checkNotNull(fightDAO, "fightDAO");
+
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
@@ -58,7 +60,7 @@ public class ShipServiceImpl implements ShipService {
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
         colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration);
-        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
+        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO);
         shipUtils = new ShipUtils();
     }
 
