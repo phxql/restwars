@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
+import restwars.service.event.Event;
+import restwars.service.event.EventDAO;
+import restwars.service.event.EventType;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -27,15 +30,17 @@ public class TechnologyServiceImpl implements TechnologyService {
     private final RoundService roundService;
     private final ResearchDAO researchDAO;
     private final BuildingDAO buildingDAO;
+    private final EventDAO eventDAO;
 
     @Inject
-    public TechnologyServiceImpl(UUIDFactory uuidFactory, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO, BuildingDAO buildingDAO) {
+    public TechnologyServiceImpl(UUIDFactory uuidFactory, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO, BuildingDAO buildingDAO, EventDAO eventDAO) {
         this.researchDAO = Preconditions.checkNotNull(researchDAO, "researchDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
+        this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
     }
 
     @Override
@@ -70,6 +75,9 @@ public class TechnologyServiceImpl implements TechnologyService {
                 Technology updatedTechnology = existingTechnology.get().withLevel(research.getLevel());
                 technologyDAO.update(updatedTechnology);
             }
+
+            // Create event
+            eventDAO.insert(new Event(uuidFactory.create(), research.getPlayerId(), research.getPlanetId(), EventType.RESEARCH_COMPLETED, round));
 
             researchDAO.delete(research);
         }
