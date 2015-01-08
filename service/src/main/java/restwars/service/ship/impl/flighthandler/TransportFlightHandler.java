@@ -2,7 +2,9 @@ package restwars.service.ship.impl.flighthandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.event.Event;
 import restwars.service.event.EventDAO;
+import restwars.service.event.EventType;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -34,6 +36,9 @@ public class TransportFlightHandler extends AbstractFlightHandler {
             getPlanetDAO().update(updatedPlanet);
 
             createReturnFlight(flight, flight.getShips(), Resources.NONE);
+
+            // Create event
+            getEventDAO().insert(new Event(getUuidFactory().create(), flight.getPlayerId(), updatedPlanet.getId(), EventType.TRANSPORT_ARRIVED, round));
         } else {
             LOGGER.debug("Planet {} isn't colonized, creating return flight", flight.getDestination());
 

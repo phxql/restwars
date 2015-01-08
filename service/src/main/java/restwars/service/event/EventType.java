@@ -5,7 +5,8 @@ public enum EventType {
     RESEARCH_COMPLETED(1),
     SHIP_COMPLETED(2),
     FLIGHT_RETURNED(3),
-    PLANET_COLONIZED(4);
+    PLANET_COLONIZED(4),
+    TRANSPORT_ARRIVED(5);
 
     private final int id;
 
