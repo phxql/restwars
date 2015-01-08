@@ -3,6 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.event.EventDAO;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -18,8 +19,8 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     private final FightCalculator fightCalculator;
     private final FightDAO fightDAO;
 
-    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
+    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO, EventDAO eventDAO) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
         this.fightCalculator = new FightCalculator(uuidFactory);

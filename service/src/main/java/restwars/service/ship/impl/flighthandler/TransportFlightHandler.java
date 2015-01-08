@@ -2,6 +2,7 @@ package restwars.service.ship.impl.flighthandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.event.EventDAO;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -16,8 +17,8 @@ import java.util.Optional;
 public class TransportFlightHandler extends AbstractFlightHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransportFlightHandler.class);
 
-    public TransportFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
+    public TransportFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventDAO eventDAO) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
     }
 
     @Override

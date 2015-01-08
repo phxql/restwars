@@ -3,6 +3,9 @@ package restwars.service.ship.impl.flighthandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.UniverseConfiguration;
+import restwars.service.event.Event;
+import restwars.service.event.EventDAO;
+import restwars.service.event.EventType;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -18,8 +21,8 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
 
     private final UniverseConfiguration universeConfiguration;
 
-    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory);
+    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventDAO eventDAO) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
         this.universeConfiguration = universeConfiguration;
     }
 
@@ -48,6 +51,9 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
             getHangarDAO().update(updatedHangar);
 
             getFlightDAO().delete(flight);
+
+            // Create event
+            getEventDAO().insert(new Event(getUuidFactory().create(), flight.getPlayerId(), newPlanet.getId(), EventType.PLANET_COLONIZED, round));
         }
     }
 }
