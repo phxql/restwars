@@ -3,7 +3,9 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.event.Event;
 import restwars.service.event.EventDAO;
+import restwars.service.event.EventType;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -12,6 +14,7 @@ import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class AttackFlightHandler extends AbstractFlightHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(AttackFlightHandler.class);
@@ -36,7 +39,8 @@ public class AttackFlightHandler extends AbstractFlightHandler {
             Planet defenderPlanet = planet.get();
 
             Hangar hangar = getOrCreateHangar(defenderPlanet.getId(), defenderPlanet.getOwnerId());
-            Fight fight = fightCalculator.attack(flight.getPlayerId(), defenderPlanet.getOwnerId(), defenderPlanet.getId(), flight.getShips(), hangar.getShips(), round);
+            UUID attackerId = flight.getPlayerId();
+            Fight fight = fightCalculator.attack(attackerId, defenderPlanet.getOwnerId(), defenderPlanet.getId(), flight.getShips(), hangar.getShips(), round);
 
             // Update defenders hangar
             getHangarDAO().update(hangar.withShips(fight.getRemainingDefenderShips()));
@@ -55,6 +59,9 @@ public class AttackFlightHandler extends AbstractFlightHandler {
 
             // Store fight
             fightDAO.insert(fight);
+
+            // Create event
+            getEventDAO().insert(new Event(getUuidFactory().create(), attackerId, planet.get().getId(), EventType.FIGHT_HAPPENED, round));
         } else {
             // Planet is not colonized, create return flight
             createReturnFlight(flight, flight.getShips(), flight.getCargo());
