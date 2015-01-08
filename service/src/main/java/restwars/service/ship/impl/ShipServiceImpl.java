@@ -239,6 +239,9 @@ public class ShipServiceImpl implements ShipService {
             throw new FlightException(FlightException.Reason.NO_CARGO_ALLOWED);
         }
 
+        // TODO: Gameplay - A transport can only transfer resources to friendly planets
+        // TODO: Gameplay - An attack mustn't target a friendly planet
+
         long distance = start.getLocation().calculateDistance(destination);
         double energyNeeded = 0;
         for (Ship ship : ships) {
