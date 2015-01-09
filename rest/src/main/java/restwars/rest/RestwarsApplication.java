@@ -67,12 +67,15 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
     }
 
     @Override
-    public void run(RestwarsConfiguration restwarsConfiguration, Environment environment) throws Exception {
+    public void run(RestwarsConfiguration configuration, Environment environment) throws Exception {
         // Start connection pool
-        ManagedDataSource dataSource = restwarsConfiguration.getDatabase().build(environment.metrics(), "datasource");
+        ManagedDataSource dataSource = configuration.getDatabase().build(environment.metrics(), "datasource");
         environment.lifecycle().manage(dataSource);
 
-        UniverseConfiguration universeConfiguration = new UniverseConfiguration(2, 2, 2, new Resources(1000L, 200L, 200L), 5);
+        UniverseConfiguration universeConfiguration = new UniverseConfiguration(
+                configuration.getGalaxies(), configuration.getSolarSystems(), configuration.getPlanets(),
+                new Resources(1000L, 200L, 200L), configuration.getRoundTime()
+        );
 
         ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);

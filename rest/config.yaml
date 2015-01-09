@@ -1,9 +1,26 @@
+# Server name
 serverName: localhost
+
+# Number of galaxies
+galaxies: 3
+
+# Number of solar systems in a galaxy
+solarSystems: 3
+
+# Number of planets in a solar system
+planets: 3
+
+# Round time in seconds
+roundTime: 5
+
+# Database configuration
 database:
     driverClass: org.h2.Driver
     url: jdbc:h2:/tmp/restwars
     user:
     password:
+
+# Logging configuration
 logging:
     level: WARN
     loggers:
