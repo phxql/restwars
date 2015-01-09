@@ -1,5 +1,6 @@
 package restwars.service.technology;
 
+import restwars.service.building.Buildings;
 import restwars.service.planet.Planet;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
@@ -32,11 +33,21 @@ public interface TechnologyService {
     /**
      * Calculates the research time for the given type and level of technology.
      *
-     * @param type  Type of technology.
+     * @param technology  Type of technology.
      * @param level Level to research.
+     * @param buildings Buildings on the planet where the research is done.
      * @return Research time in rounds.
      */
-    long calculateResearchTime(TechnologyType type, int level);
+    long calculateResearchTime(TechnologyType technology, int level, Buildings buildings);
+
+    /**
+     * Calculates the research time for the given type and level of technology without applying bonuses.
+     *
+     * @param technology Type of technology.
+     * @param level      Level to research.
+     * @return Research time in rounds.
+     */
+    long calculateResearchTimeWithoutBonuses(TechnologyType technology, int level);
 
     /**
      * Calculates the research cost for the given type and level of technology.

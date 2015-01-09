@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
+import restwars.service.building.Buildings;
 import restwars.service.event.Event;
 import restwars.service.event.EventDAO;
 import restwars.service.event.EventType;
@@ -15,11 +16,11 @@ import restwars.service.planet.PlanetDAO;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
 import restwars.service.technology.*;
+import restwars.util.MathExt;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class TechnologyServiceImpl implements TechnologyService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TechnologyServiceImpl.class);
@@ -96,9 +97,10 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkNotNull(technology, "technology");
         Preconditions.checkNotNull(player, "player");
 
+        Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
+
         // Ensure that the planet has a research center
-        boolean hasResearchCenter = buildingDAO.findWithPlanetId(planet.getId()).stream().anyMatch(b -> b.getType().equals(BuildingType.RESEARCH_CENTER));
-        if (!hasResearchCenter) {
+        if (!buildings.has(BuildingType.RESEARCH_CENTER)) {
             throw new ResearchException(ResearchException.Reason.NO_RESEARCH_CENTER);
         }
 
@@ -123,10 +125,9 @@ public class TechnologyServiceImpl implements TechnologyService {
         Planet updatedPlanet = planet.withResources(planet.getResources().minus(researchCost));
         planetDAO.update(updatedPlanet);
 
-        UUID id = uuidFactory.create();
-        long researchTime = calculateResearchTime(technology, level);
+        long researchTime = calculateResearchTime(technology, level, buildings);
         long currentRound = roundService.getCurrentRound();
-        Research research = new Research(id, technology, level, currentRound, currentRound + researchTime, updatedPlanet.getId(), player.getId());
+        Research research = new Research(uuidFactory.create(), technology, level, currentRound, currentRound + researchTime, updatedPlanet.getId(), player.getId());
 
         LOGGER.debug("Creating research {} on planet {}", research, updatedPlanet);
         researchDAO.insert(research);
@@ -135,24 +136,41 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
-    public long calculateResearchTime(TechnologyType technology, int level) {
+    public long calculateResearchTime(TechnologyType technology, int level, Buildings buildings) {
         Preconditions.checkNotNull(technology, "technology");
         Preconditions.checkArgument(level > 0, "level must be > 0");
+        Preconditions.checkNotNull(buildings, "buildings");
 
+        int researchTime;
         switch (technology) {
             case BUILDING_BUILD_COST_REDUCTION:
-                return level;
+                researchTime = level;
+                break;
             case BUILDING_BUILD_TIME_REDUCTION:
-                return level;
+                researchTime = level;
+                break;
             case CRYSTAL_MINE_EFFICIENCY:
-                return level;
+                researchTime = level;
+                break;
             case GAS_REFINERY_EFFICIENCY:
-                return level;
+                researchTime = level;
+                break;
             case SOLAR_PANELS_EFFICIENCY:
-                return level;
+                researchTime = level;
+                break;
             default:
                 throw new AssertionError("Unknown technology: " + technology);
         }
+
+        int researchCenterLevel = buildings.getLevel(BuildingType.RESEARCH_CENTER);
+        double timeMultiplier = Math.max(1 - researchCenterLevel * 0.01, 0);
+
+        return MathExt.floorLong(researchTime * timeMultiplier);
+    }
+
+    @Override
+    public long calculateResearchTimeWithoutBonuses(TechnologyType technology, int level) {
+        return calculateResearchTime(technology, level, Buildings.NONE);
     }
 
     @Override

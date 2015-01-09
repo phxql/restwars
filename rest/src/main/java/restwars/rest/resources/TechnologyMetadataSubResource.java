@@ -32,7 +32,7 @@ public class TechnologyMetadataSubResource {
 
         return Stream.of(TechnologyType.values())
                 .map(t -> new TechnologyMetadataResponse(
-                        t.name(), sanitizedLevel, technologyService.calculateResearchTime(t, sanitizedLevel),
+                        t.name(), sanitizedLevel, technologyService.calculateResearchTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(technologyService.calculateResearchCost(t, sanitizedLevel))
                 ))
                 .collect(Collectors.toList());
