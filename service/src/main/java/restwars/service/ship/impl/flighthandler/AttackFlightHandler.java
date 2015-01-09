@@ -38,30 +38,35 @@ public class AttackFlightHandler extends AbstractFlightHandler {
         if (planet.isPresent()) {
             Planet defenderPlanet = planet.get();
 
-            Hangar hangar = getOrCreateHangar(defenderPlanet.getId(), defenderPlanet.getOwnerId());
-            UUID attackerId = flight.getPlayerId();
-            Fight fight = fightCalculator.attack(attackerId, defenderPlanet.getOwnerId(), defenderPlanet.getId(), flight.getShips(), hangar.getShips(), round);
-
-            // Update defenders hangar
-            getHangarDAO().update(hangar.withShips(fight.getRemainingDefenderShips()));
-
-            if (fight.getRemainingAttackerShips().isEmpty()) {
-                LOGGER.debug("Attacker lost all ships");
-                getFlightDAO().delete(flight);
+            if (defenderPlanet.getOwnerId().equals(flight.getPlayerId())) {
+                // Planet is friendly, create return flight
+                createReturnFlight(flight, flight.getShips(), flight.getCargo());
             } else {
-                Resources cargo = Resources.NONE;
-                if (fight.getRemainingDefenderShips().isEmpty()) {
-                    cargo = lootPlanet(defenderPlanet, fight.getRemainingAttackerShips());
+                Hangar hangar = getOrCreateHangar(defenderPlanet.getId(), defenderPlanet.getOwnerId());
+                UUID attackerId = flight.getPlayerId();
+                Fight fight = fightCalculator.attack(attackerId, defenderPlanet.getOwnerId(), defenderPlanet.getId(), flight.getShips(), hangar.getShips(), round);
+
+                // Update defenders hangar
+                getHangarDAO().update(hangar.withShips(fight.getRemainingDefenderShips()));
+
+                if (fight.getRemainingAttackerShips().isEmpty()) {
+                    LOGGER.debug("Attacker lost all ships");
+                    getFlightDAO().delete(flight);
+                } else {
+                    Resources cargo = Resources.NONE;
+                    if (fight.getRemainingDefenderShips().isEmpty()) {
+                        cargo = lootPlanet(defenderPlanet, fight.getRemainingAttackerShips());
+                    }
+
+                    createReturnFlight(flight, fight.getRemainingAttackerShips(), cargo);
                 }
 
-                createReturnFlight(flight, fight.getRemainingAttackerShips(), cargo);
+                // Store fight
+                fightDAO.insert(fight);
+
+                // Create event
+                getEventDAO().insert(new Event(getUuidFactory().create(), attackerId, planet.get().getId(), EventType.FIGHT_HAPPENED, round));
             }
-
-            // Store fight
-            fightDAO.insert(fight);
-
-            // Create event
-            getEventDAO().insert(new Event(getUuidFactory().create(), attackerId, planet.get().getId(), EventType.FIGHT_HAPPENED, round));
         } else {
             // Planet is not colonized, create return flight
             createReturnFlight(flight, flight.getShips(), flight.getCargo());
