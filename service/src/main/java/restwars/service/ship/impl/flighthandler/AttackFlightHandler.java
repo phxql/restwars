@@ -54,10 +54,8 @@ public class AttackFlightHandler extends AbstractFlightHandler {
                     LOGGER.debug("Attacker lost all ships");
                     getFlightDAO().delete(flight);
                 } else {
-                    Resources cargo = Resources.NONE;
-                    if (fight.getRemainingDefenderShips().isEmpty()) {
-                        cargo = lootPlanet(defenderPlanet, fight.getRemainingAttackerShips());
-                    }
+                    LOGGER.debug("Looting planet {}", defenderPlanet);
+                    Resources cargo = lootPlanet(defenderPlanet, fight.getRemainingAttackerShips());
 
                     createReturnFlight(flight, fight.getRemainingAttackerShips(), cargo);
                 }
@@ -69,6 +67,7 @@ public class AttackFlightHandler extends AbstractFlightHandler {
                 getEventDAO().insert(new Event(getUuidFactory().create(), attackerId, planet.get().getId(), EventType.FIGHT_HAPPENED, round));
             }
         } else {
+            LOGGER.debug("Planet {} is not colonized, creating return flight", flight.getDestination());
             // Planet is not colonized, create return flight
             createReturnFlight(flight, flight.getShips(), flight.getCargo());
         }
@@ -77,21 +76,18 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     private Resources lootPlanet(Planet planet, Ships ships) {
         long storageCapacity = getShipUtils().calculateStorageCapacity(ships);
 
-        long lootCrystals = storageCapacity / 3;
-        long lootGas = storageCapacity / 3;
-        long lootEnergy = storageCapacity - lootCrystals - lootGas;
+        long lootCrystals = storageCapacity / 2;
+        long lootGas = storageCapacity - lootCrystals;
 
-        // TODO - Gameplay: Energy can't be stolen
         // TODO - Gameplay: Implement a more greedy looting strategy
         lootCrystals = Math.min(planet.getResources().getCrystals(), lootCrystals);
         lootGas = Math.min(planet.getResources().getGas(), lootGas);
-        lootEnergy = Math.min(planet.getResources().getEnergy(), lootEnergy);
 
         // Decrease resources on planet
-        planet = planet.withResources(planet.getResources().minus(new Resources(lootCrystals, lootGas, lootEnergy)));
+        planet = planet.withResources(planet.getResources().minus(new Resources(lootCrystals, lootGas, 0)));
         getPlanetDAO().update(planet);
 
-        Resources resources = new Resources(lootCrystals, lootGas, lootEnergy);
+        Resources resources = new Resources(lootCrystals, lootGas, 0);
         LOGGER.debug("Looted {} from planet {}", resources, planet.getLocation());
         return resources;
     }

@@ -243,6 +243,11 @@ public class ShipServiceImpl implements ShipService {
             throw new FlightException(FlightException.Reason.NO_CARGO_ALLOWED);
         }
 
+        // Energy can't be put in cargo
+        if (cargo.containsEnergy()) {
+            throw new FlightException(FlightException.Reason.CANT_CARGO_ENERGY);
+        }
+
         long distance = start.getLocation().calculateDistance(destination);
         double energyNeeded = 0;
         for (Ship ship : ships) {

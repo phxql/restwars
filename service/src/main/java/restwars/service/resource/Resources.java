@@ -29,6 +29,10 @@ public class Resources {
         return energy;
     }
 
+    public boolean containsEnergy() {
+        return energy > 0;
+    }
+
     public Resources plus(Resources other) {
         return new Resources(crystals + other.getCrystals(), gas + other.getGas(), energy + other.getEnergy());
     }

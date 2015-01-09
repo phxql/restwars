@@ -11,7 +11,8 @@ public class FlightException extends ServiceException {
         NOT_ENOUGH_CARGO_SPACE,
         INSUFFICIENT_FUEL,
         NOT_ENOUGH_SHIPS_ON_PLANET,
-        INSUFFICIENT_RESOURCES
+        INSUFFICIENT_RESOURCES,
+        CANT_CARGO_ENERGY
     }
 
     private final Reason reason;
