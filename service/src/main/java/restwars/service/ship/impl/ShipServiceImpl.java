@@ -21,12 +21,11 @@ import restwars.service.ship.*;
 import restwars.service.ship.impl.flighthandler.AttackFlightHandler;
 import restwars.service.ship.impl.flighthandler.ColonizeFlightHandler;
 import restwars.service.ship.impl.flighthandler.TransportFlightHandler;
-import restwars.service.technology.TechnologyDAO;
+import restwars.util.MathExt;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class ShipServiceImpl implements ShipService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShipServiceImpl.class);
@@ -40,7 +39,6 @@ public class ShipServiceImpl implements ShipService {
     private final BuildingDAO buildingDAO;
     private final FightDAO fightDAO;
     private final EventDAO eventDAO;
-    private final TechnologyDAO technologyDAO;
 
     private final TransportFlightHandler transportFlightHandler;
     private final ColonizeFlightHandler colonizeFlightHandler;
@@ -48,7 +46,7 @@ public class ShipServiceImpl implements ShipService {
     private final ShipUtils shipUtils;
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO, FightDAO fightDAO, TechnologyDAO technologyDAO) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO, FightDAO fightDAO) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
@@ -60,7 +58,6 @@ public class ShipServiceImpl implements ShipService {
         this.shipInConstructionDAO = Preconditions.checkNotNull(shipInConstructionDAO, "shipInConstructionDAO");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
-        this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
         colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventDAO);
@@ -81,7 +78,9 @@ public class ShipServiceImpl implements ShipService {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
 
-        if (!hasShipyard(planet)) {
+        Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
+
+        if (!buildings.has(BuildingType.SHIPYARD)) {
             throw new BuildShipException(BuildShipException.Reason.NO_SHIPYARD);
         }
 
@@ -98,18 +97,15 @@ public class ShipServiceImpl implements ShipService {
         Planet updatedPlanet = planet.withResources(planet.getResources().minus(buildCost));
         planetDAO.update(updatedPlanet);
 
-        UUID id = uuidFactory.create();
-        long buildTime = type.getBuildTime();
+        int shipyardLevel = buildings.getLevel(BuildingType.SHIPYARD);
+        double timeMultiplier = Math.max(1 - shipyardLevel * 0.01, 0);
+
+        long buildTime = MathExt.floorLong(type.getBuildTime() * timeMultiplier);
         long currentRound = roundService.getCurrentRound();
-        ShipInConstruction shipInConstruction = new ShipInConstruction(id, type, planet.getId(), player.getId(), currentRound, currentRound + buildTime);
+        ShipInConstruction shipInConstruction = new ShipInConstruction(uuidFactory.create(), type, planet.getId(), player.getId(), currentRound, currentRound + buildTime);
         shipInConstructionDAO.insert(shipInConstruction);
 
         return shipInConstruction;
-    }
-
-    private boolean hasShipyard(Planet planet) {
-        Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
-        return buildings.stream().anyMatch(b -> b.getType().equals(BuildingType.SHIPYARD));
     }
 
     @Override

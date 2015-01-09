@@ -22,6 +22,10 @@ public class Buildings extends ForwardingList<Building> {
         return buildings.stream().filter(b -> b.getType().equals(type)).findAny().map(Building::getLevel).orElse(0);
     }
 
+    public boolean has(BuildingType type) {
+        return buildings.stream().anyMatch(b -> b.getType().equals(type));
+    }
+
     @Override
     protected List<Building> delegate() {
         return buildings;
