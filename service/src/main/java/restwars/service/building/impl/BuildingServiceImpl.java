@@ -98,7 +98,7 @@ public class BuildingServiceImpl implements BuildingService {
         planetDAO.update(updatedPlanet);
 
         UUID id = uuidFactory.create();
-        long buildTime = calculateBuildTime(type, level);
+        long buildTime = calculateBuildTime(type, level, technologies);
         long currentRound = roundService.getCurrentRound();
         ConstructionSite constructionSite = new ConstructionSite(id, type, level, updatedPlanet.getId(), updatedPlanet.getOwnerId(), currentRound, currentRound + buildTime);
 
@@ -167,34 +167,49 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public long calculateBuildTime(BuildingType type, int level) {
+    public long calculateBuildTime(BuildingType type, int level, List<Technology> technologies) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");
+        Preconditions.checkNotNull(technologies, "technologies");
 
+        int buildTime;
         switch (type) {
             case COMMAND_CENTER:
-                return level;
+                buildTime = level;
+                break;
             case CRYSTAL_MINE:
-                return level;
+                buildTime = level;
+                break;
             case GAS_REFINERY:
-                return level;
+                buildTime = level;
+                break;
             case RESEARCH_CENTER:
-                return level;
+                buildTime = level;
+                break;
             case SHIPYARD:
-                return level;
+                buildTime = level;
+                break;
             case SOLAR_PANELS:
-                return level;
+                buildTime = level;
+                break;
             case TELESCOPE:
-                return level;
+                buildTime = level;
+                break;
             default:
                 throw new AssertionError("Unknown building type " + type);
         }
+
+        int technologyLevel = getTechnologyLevel(technologies, TechnologyType.BUILDING_BUILD_TIME_REDUCTION);
+        double timeMultiplier = Math.max(1 - technologyLevel * 0.01, 0);
+
+        return MathExt.floorLong(buildTime * timeMultiplier);
     }
 
     @Override
     public Resources calculateBuildCost(BuildingType type, int level, List<Technology> technologies) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");
+        Preconditions.checkNotNull(technologies, "technologies");
 
         Resources cost;
         switch (type) {
@@ -223,9 +238,13 @@ public class BuildingServiceImpl implements BuildingService {
                 throw new AssertionError("Unknown building type: " + type);
         }
 
-        int technologyLevel = technologies.stream().filter(t -> t.getType().equals(TechnologyType.BUILDING_BUILD_COST_REDUCTION)).findAny().map(Technology::getLevel).orElse(0);
+        int technologyLevel = getTechnologyLevel(technologies, TechnologyType.BUILDING_BUILD_COST_REDUCTION);
         double costMultiplier = Math.max(1 - technologyLevel * 0.01, 0);
 
         return new Resources(MathExt.floorLong(cost.getCrystals() * costMultiplier), MathExt.floorLong(cost.getGas() * costMultiplier), MathExt.floorLong(cost.getEnergy() * costMultiplier));
+    }
+
+    private Integer getTechnologyLevel(List<Technology> technologies, TechnologyType type) {
+        return technologies.stream().filter(t -> t.getType().equals(type)).findAny().map(Technology::getLevel).orElse(0);
     }
 }

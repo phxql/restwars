@@ -67,9 +67,10 @@ public interface BuildingService {
      *
      * @param type  Type of building.
      * @param level Level to build.
+     * @param technologies
      * @return Build time in rounds.
      */
-    long calculateBuildTime(BuildingType type, int level);
+    long calculateBuildTime(BuildingType type, int level, List<Technology> technologies);
 
     /**
      * Calculates the build cost for the given type and level of building.
