@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.technology.Technologies;
 import restwars.service.technology.Technology;
 import restwars.service.technology.TechnologyDAO;
 import restwars.service.technology.TechnologyType;
@@ -12,7 +13,6 @@ import restwars.storage.jooq.AbstractJooqDAO;
 import restwars.storage.jooq.tables.records.TechnologyRecord;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,13 +28,13 @@ public class JooqTechnologyDAO extends AbstractJooqDAO implements TechnologyDAO 
     }
 
     @Override
-    public List<Technology> findAllWithPlayerId(UUID playerId) {
+    public Technologies findAllWithPlayerId(UUID playerId) {
         Preconditions.checkNotNull(playerId, "playerId");
 
         LOGGER.debug("Finding technologies with player id {}", playerId);
 
         Result<TechnologyRecord> record = context().selectFrom(TECHNOLOGY).where(TECHNOLOGY.PLAYER_ID.eq(playerId)).fetch();
-        return record.stream().map(this::fromRecord).collect(Collectors.toList());
+        return new Technologies(record.stream().map(this::fromRecord).collect(Collectors.toList()));
     }
 
     private Technology fromRecord(TechnologyRecord record) {

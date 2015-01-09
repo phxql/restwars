@@ -44,7 +44,7 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
-    public List<Technology> findAllForPlayer(Player player) {
+    public Technologies findAllForPlayer(Player player) {
         Preconditions.checkNotNull(player, "player");
 
         return technologyDAO.findAllWithPlayerId(player.getId());

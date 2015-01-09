@@ -6,11 +6,12 @@ import org.slf4j.LoggerFactory;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
+import restwars.service.building.Buildings;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.resource.ResourceService;
 import restwars.service.resource.Resources;
-import restwars.service.technology.Technology;
+import restwars.service.technology.Technologies;
 import restwars.service.technology.TechnologyDAO;
 import restwars.service.technology.TechnologyType;
 
@@ -32,30 +33,26 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resources calculateGatheredResources(BuildingType type, int level, List<Technology> technologies) {
+    public Resources calculateGatheredResources(BuildingType type, int level, Technologies technologies) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");
 
         switch (type) {
             case CRYSTAL_MINE: {
-                double technologyBonus = getTechnologyLevel(technologies, TechnologyType.CRYSTAL_MINE_EFFICIENCY) * 0.10;
+                double technologyBonus = technologies.getLevel(TechnologyType.CRYSTAL_MINE_EFFICIENCY) * 0.10;
                 return new Resources((long) Math.ceil(level * (1 + technologyBonus)), 0, 0);
             }
             case GAS_REFINERY: {
-                double technologyBonus = getTechnologyLevel(technologies, TechnologyType.GAS_REFINERY_EFFICIENCY) * 0.10;
+                double technologyBonus = technologies.getLevel(TechnologyType.GAS_REFINERY_EFFICIENCY) * 0.10;
                 return new Resources(0, (long) Math.ceil(level * (1 + technologyBonus)), 0);
             }
             case SOLAR_PANELS: {
-                double technologyBonus = getTechnologyLevel(technologies, TechnologyType.SOLAR_PANELS_EFFICIENCY) * 0.10;
+                double technologyBonus = technologies.getLevel(TechnologyType.SOLAR_PANELS_EFFICIENCY) * 0.10;
                 return new Resources(0, 0, (long) Math.ceil(level * 10L * (1 + technologyBonus)));
             }
             default:
                 return Resources.NONE;
         }
-    }
-
-    private int getTechnologyLevel(List<Technology> technologies, TechnologyType type) {
-        return technologies.stream().filter(t -> t.getType().equals(type)).findAny().map(Technology::getLevel).orElse(0);
     }
 
     @Override
@@ -74,8 +71,8 @@ public class ResourceServiceImpl implements ResourceService {
 
         Resources totalGathered = Resources.NONE;
 
-        List<Building> buildings = buildingService.findBuildingsOnPlanet(planet);
-        List<Technology> technologies = technologyDAO.findAllWithPlayerId(planet.getOwnerId());
+        Buildings buildings = buildingService.findBuildingsOnPlanet(planet);
+        Technologies technologies = technologyDAO.findAllWithPlayerId(planet.getOwnerId());
         for (Building building : buildings) {
             Resources gatheredResources = calculateGatheredResources(building.getType(), building.getLevel(), technologies);
             totalGathered = totalGathered.plus(gatheredResources);

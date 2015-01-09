@@ -10,7 +10,7 @@ import restwars.rest.mapper.TechnologyMapper;
 import restwars.rest.util.Helper;
 import restwars.restapi.dto.technology.TechnologyResponse;
 import restwars.service.player.Player;
-import restwars.service.technology.Technology;
+import restwars.service.technology.Technologies;
 import restwars.service.technology.TechnologyService;
 
 import javax.inject.Inject;
@@ -42,7 +42,7 @@ public class TechnologyResource {
     ) {
         Preconditions.checkNotNull(player, "player");
 
-        List<Technology> technologies = technologyService.findAllForPlayer(player);
+        Technologies technologies = technologyService.findAllForPlayer(player);
         return Helper.mapToList(technologies, TechnologyMapper::fromTechnology);
     }
 }

@@ -9,8 +9,8 @@ import restwars.rest.mapper.BuildingMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
 import restwars.restapi.dto.building.BuildingResponse;
-import restwars.service.building.Building;
 import restwars.service.building.BuildingService;
+import restwars.service.building.Buildings;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
@@ -41,7 +41,7 @@ public class BuildingSubResource {
         Preconditions.checkNotNull(location, "location");
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
-        List<Building> buildings = buildingService.findBuildingsOnPlanet(planet);
+        Buildings buildings = buildingService.findBuildingsOnPlanet(planet);
 
         return Helper.mapToList(buildings, BuildingMapper::fromBuilding);
     }

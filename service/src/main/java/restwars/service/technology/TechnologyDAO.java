@@ -1,6 +1,5 @@
 package restwars.service.technology;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,7 +13,7 @@ public interface TechnologyDAO {
      * @param playerId Id of the player.
      * @return List of technologies.
      */
-    List<Technology> findAllWithPlayerId(UUID playerId);
+    Technologies findAllWithPlayerId(UUID playerId);
 
     /**
      * Finds the technology with the given type for the given player.

@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
+import restwars.service.building.Buildings;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,13 +28,13 @@ public class JooqBuildingDAO extends AbstractJooqDAO implements BuildingDAO {
     }
 
     @Override
-    public List<Building> findWithPlanetId(UUID planetId) {
+    public Buildings findWithPlanetId(UUID planetId) {
         Preconditions.checkNotNull(planetId, "planetId");
 
         LOGGER.debug("Finding buildings with planet id {}", planetId);
 
         Result<Record> result = context().select().from(BUILDING).where(BUILDING.PLANET_ID.eq(planetId)).fetch();
-        return result.stream().map(this::fromRecord).collect(Collectors.toList());
+        return new Buildings(result.stream().map(this::fromRecord).collect(Collectors.toList()));
     }
 
     private Building fromRecord(Record record) {

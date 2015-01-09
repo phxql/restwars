@@ -1,6 +1,5 @@
 package restwars.service.building;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,7 +13,7 @@ public interface BuildingDAO {
      * @param planetId Id of the planet.
      * @return Buildings.
      */
-    List<Building> findWithPlanetId(UUID planetId);
+    Buildings findWithPlanetId(UUID planetId);
 
     /**
      * Inserts the given building.

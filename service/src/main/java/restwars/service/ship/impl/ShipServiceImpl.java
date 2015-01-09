@@ -4,9 +4,9 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.UniverseConfiguration;
-import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
+import restwars.service.building.Buildings;
 import restwars.service.event.Event;
 import restwars.service.event.EventDAO;
 import restwars.service.event.EventType;
@@ -21,6 +21,7 @@ import restwars.service.ship.*;
 import restwars.service.ship.impl.flighthandler.AttackFlightHandler;
 import restwars.service.ship.impl.flighthandler.ColonizeFlightHandler;
 import restwars.service.ship.impl.flighthandler.TransportFlightHandler;
+import restwars.service.technology.TechnologyDAO;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -37,16 +38,17 @@ public class ShipServiceImpl implements ShipService {
     private final RoundService roundService;
     private final FlightDAO flightDAO;
     private final BuildingDAO buildingDAO;
+    private final FightDAO fightDAO;
     private final EventDAO eventDAO;
+    private final TechnologyDAO technologyDAO;
 
     private final TransportFlightHandler transportFlightHandler;
     private final ColonizeFlightHandler colonizeFlightHandler;
     private final AttackFlightHandler attackFlightHandler;
     private final ShipUtils shipUtils;
-    private final FightDAO fightDAO;
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO, FightDAO fightDAO) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO, FightDAO fightDAO, TechnologyDAO technologyDAO) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
@@ -58,6 +60,7 @@ public class ShipServiceImpl implements ShipService {
         this.shipInConstructionDAO = Preconditions.checkNotNull(shipInConstructionDAO, "shipInConstructionDAO");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
+        this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
         colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventDAO);
@@ -105,7 +108,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     private boolean hasShipyard(Planet planet) {
-        List<Building> buildings = buildingDAO.findWithPlanetId(planet.getId());
+        Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
         return buildings.stream().anyMatch(b -> b.getType().equals(BuildingType.SHIPYARD));
     }
 

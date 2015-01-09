@@ -53,7 +53,7 @@ public interface TechnologyService {
      * @param player Player.
      * @return All technologies for the given player.
      */
-    List<Technology> findAllForPlayer(Player player);
+    Technologies findAllForPlayer(Player player);
 
     /**
      * Finds a technology with a given type for a given player.

@@ -2,7 +2,7 @@ package restwars.service.building;
 
 import restwars.service.planet.Planet;
 import restwars.service.resource.Resources;
-import restwars.service.technology.Technology;
+import restwars.service.technology.Technologies;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface BuildingService {
      * @param planet Planet.
      * @return Buildings.
      */
-    List<Building> findBuildingsOnPlanet(Planet planet);
+    Buildings findBuildingsOnPlanet(Planet planet);
 
     /**
      * Returns the construction sites on the given planet.
@@ -71,7 +71,7 @@ public interface BuildingService {
      * @param buildings    Buildings on the planet.
      * @return Build time in rounds.
      */
-    long calculateBuildTime(BuildingType type, int level, List<Technology> technologies, List<Building> buildings);
+    long calculateBuildTime(BuildingType type, int level, Technologies technologies, Buildings buildings);
 
     /**
      * Calculates the build time for the given type and level of building without applying bonuses.
@@ -90,7 +90,16 @@ public interface BuildingService {
      * @param technologies
      * @return Build cost.
      */
-    Resources calculateBuildCost(BuildingType type, int level, List<Technology> technologies);
+    Resources calculateBuildCost(BuildingType type, int level, Technologies technologies);
+
+    /**
+     * Calculates the build cost for the given type and level of building without applying bonuses.
+     *
+     * @param type  Type of building.
+     * @param level Level to build.
+     * @return Build cost.
+     */
+    Resources calculateBuildCostWithoutBonuses(BuildingType type, int level);
 
     /**
      * Finishes all construction sites which are done in the current round.
