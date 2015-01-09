@@ -39,6 +39,7 @@ public class AttackFlightHandler extends AbstractFlightHandler {
             Planet defenderPlanet = planet.get();
 
             if (defenderPlanet.getOwnerId().equals(flight.getPlayerId())) {
+                LOGGER.debug("Planet {} is friendly, creating return flight", flight.getDestination());
                 // Planet is friendly, create return flight
                 createReturnFlight(flight, flight.getShips(), flight.getCargo());
             } else {
