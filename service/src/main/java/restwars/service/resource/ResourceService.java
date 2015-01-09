@@ -2,6 +2,9 @@ package restwars.service.resource;
 
 import restwars.service.building.BuildingType;
 import restwars.service.planet.Planet;
+import restwars.service.technology.Technology;
+
+import java.util.List;
 
 /**
  * Service to manage resources.
@@ -24,7 +27,8 @@ public interface ResourceService {
      *
      * @param type  Building type.
      * @param level Level.
+     * @param technologies
      * @return Gathered resources in one round.
      */
-    Resources calculateGatheredResources(BuildingType type, int level);
+    Resources calculateGatheredResources(BuildingType type, int level, List<Technology> technologies);
 }
