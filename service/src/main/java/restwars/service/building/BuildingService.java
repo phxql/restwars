@@ -65,18 +65,28 @@ public interface BuildingService {
     /**
      * Calculates the build time for the given type and level of building.
      *
-     * @param type  Type of building.
-     * @param level Level to build.
-     * @param technologies
+     * @param type         Type of building.
+     * @param level        Level to build.
+     * @param technologies Technologies of the player.
+     * @param buildings    Buildings on the planet.
      * @return Build time in rounds.
      */
-    long calculateBuildTime(BuildingType type, int level, List<Technology> technologies);
+    long calculateBuildTime(BuildingType type, int level, List<Technology> technologies, List<Building> buildings);
+
+    /**
+     * Calculates the build time for the given type and level of building without applying bonuses.
+     *
+     * @param type  Type of building.
+     * @param level Level to build.
+     * @return Build time in rounds.
+     */
+    long calculateBuildTimeWithoutBonuses(BuildingType type, int level);
 
     /**
      * Calculates the build cost for the given type and level of building.
      *
-     * @param type  Type of building.
-     * @param level Level to build.
+     * @param type         Type of building.
+     * @param level        Level to build.
      * @param technologies
      * @return Build cost.
      */

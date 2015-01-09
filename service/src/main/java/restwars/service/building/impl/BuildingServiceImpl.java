@@ -18,6 +18,7 @@ import restwars.service.technology.TechnologyType;
 import restwars.util.MathExt;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,6 +85,7 @@ public class BuildingServiceImpl implements BuildingService {
         assert level > 0;
 
         List<Technology> technologies = technologyDAO.findAllWithPlayerId(planet.getOwnerId());
+        List<Building> buildings = buildingDAO.findWithPlanetId(planet.getId());
 
         Resources buildCost = calculateBuildCost(type, level, technologies);
         if (!planet.getResources().isEnough(buildCost)) {
@@ -98,7 +100,7 @@ public class BuildingServiceImpl implements BuildingService {
         planetDAO.update(updatedPlanet);
 
         UUID id = uuidFactory.create();
-        long buildTime = calculateBuildTime(type, level, technologies);
+        long buildTime = calculateBuildTime(type, level, technologies, buildings);
         long currentRound = roundService.getCurrentRound();
         ConstructionSite constructionSite = new ConstructionSite(id, type, level, updatedPlanet.getId(), updatedPlanet.getOwnerId(), currentRound, currentRound + buildTime);
 
@@ -167,10 +169,11 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public long calculateBuildTime(BuildingType type, int level, List<Technology> technologies) {
+    public long calculateBuildTime(BuildingType type, int level, List<Technology> technologies, List<Building> buildings) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");
         Preconditions.checkNotNull(technologies, "technologies");
+        Preconditions.checkNotNull(buildings, "buildings");
 
         int buildTime;
         switch (type) {
@@ -199,10 +202,18 @@ public class BuildingServiceImpl implements BuildingService {
                 throw new AssertionError("Unknown building type " + type);
         }
 
+        int commandCenterLevel = getBuildingLevel(buildings, BuildingType.COMMAND_CENTER);
         int technologyLevel = getTechnologyLevel(technologies, TechnologyType.BUILDING_BUILD_TIME_REDUCTION);
-        double timeMultiplier = Math.max(1 - technologyLevel * 0.01, 0);
+
+        int effectiveLevel = commandCenterLevel + technologyLevel;
+        double timeMultiplier = Math.max(1 - effectiveLevel * 0.01, 0);
 
         return MathExt.floorLong(buildTime * timeMultiplier);
+    }
+
+    @Override
+    public long calculateBuildTimeWithoutBonuses(BuildingType type, int level) {
+        return calculateBuildTime(type, level, Collections.emptyList(), Collections.emptyList());
     }
 
     @Override
@@ -244,7 +255,11 @@ public class BuildingServiceImpl implements BuildingService {
         return new Resources(MathExt.floorLong(cost.getCrystals() * costMultiplier), MathExt.floorLong(cost.getGas() * costMultiplier), MathExt.floorLong(cost.getEnergy() * costMultiplier));
     }
 
-    private Integer getTechnologyLevel(List<Technology> technologies, TechnologyType type) {
+    private int getBuildingLevel(List<Building> buildings, BuildingType type) {
+        return buildings.stream().filter(b -> b.getType().equals(type)).findAny().map(Building::getLevel).orElse(0);
+    }
+
+    private int getTechnologyLevel(List<Technology> technologies, TechnologyType type) {
         return technologies.stream().filter(t -> t.getType().equals(type)).findAny().map(Technology::getLevel).orElse(0);
     }
 }
