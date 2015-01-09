@@ -30,15 +30,21 @@ public class TransportFlightHandler extends AbstractFlightHandler {
 
         Optional<Planet> planet = getPlanetDAO().findWithLocation(flight.getDestination());
         if (planet.isPresent()) {
-            LOGGER.debug("Transfering cargo to planet {}", planet.get());
+            if (planet.get().getOwnerId().equals(flight.getPlayerId())) {
+                LOGGER.debug("Transfering cargo to planet {}", planet.get());
 
-            Planet updatedPlanet = planet.get().withResources(planet.get().getResources().plus(flight.getCargo()));
-            getPlanetDAO().update(updatedPlanet);
+                Planet updatedPlanet = planet.get().withResources(planet.get().getResources().plus(flight.getCargo()));
+                getPlanetDAO().update(updatedPlanet);
 
-            createReturnFlight(flight, flight.getShips(), Resources.NONE);
+                createReturnFlight(flight, flight.getShips(), Resources.NONE);
 
-            // Create event
-            getEventDAO().insert(new Event(getUuidFactory().create(), flight.getPlayerId(), updatedPlanet.getId(), EventType.TRANSPORT_ARRIVED, round));
+                // Create event
+                getEventDAO().insert(new Event(getUuidFactory().create(), flight.getPlayerId(), updatedPlanet.getId(), EventType.TRANSPORT_ARRIVED, round));
+            } else {
+                LOGGER.debug("Tried to transport to enemy planet {} , creating return flight", flight.getDestination());
+
+                createReturnFlight(flight, flight.getShips(), flight.getCargo());
+            }
         } else {
             LOGGER.debug("Planet {} isn't colonized, creating return flight", flight.getDestination());
 
