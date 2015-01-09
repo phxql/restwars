@@ -8,8 +8,21 @@ import java.util.UUID;
  * DAO for technologies.
  */
 public interface TechnologyDAO {
+    /**
+     * Finds all technologies for the given player.
+     *
+     * @param playerId Id of the player.
+     * @return List of technologies.
+     */
     List<Technology> findAllWithPlayerId(UUID playerId);
 
+    /**
+     * Finds the technology with the given type for the given player.
+     *
+     * @param playerId Id of the player.
+     * @param type     Technology type.
+     * @return Technology.
+     */
     Optional<Technology> findWithPlayerId(UUID playerId, TechnologyType type);
 
     /**
