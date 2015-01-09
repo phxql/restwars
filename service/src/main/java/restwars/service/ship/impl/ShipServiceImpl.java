@@ -225,6 +225,11 @@ public class ShipServiceImpl implements ShipService {
         Preconditions.checkNotNull(flightType, "flightType");
         Preconditions.checkNotNull(cargo, "cargo");
 
+        // Start and destination must differ
+        if (start.getLocation().equals(destination)) {
+            throw new FlightException(FlightException.Reason.SAME_START_AND_DESTINATION);
+        }
+
         // Empty flights are forbidden
         if (ships.isEmpty()) {
             throw new FlightException(FlightException.Reason.NO_SHIPS);
@@ -237,9 +242,6 @@ public class ShipServiceImpl implements ShipService {
         if (!cargo.isEmpty() && !(flightType.equals(FlightType.COLONIZE) || flightType.equals(FlightType.TRANSPORT))) {
             throw new FlightException(FlightException.Reason.NO_CARGO_ALLOWED);
         }
-
-        // TODO: Gameplay - A transport can only transfer resources to friendly planets
-        // TODO: Gameplay - An attack mustn't target a friendly planet
 
         long distance = start.getLocation().calculateDistance(destination);
         double energyNeeded = 0;
