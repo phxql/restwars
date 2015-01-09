@@ -12,6 +12,7 @@ import restwars.service.building.BuildingType;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.QueryParam;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,7 +34,7 @@ public class BuildingMetadataSubResource {
         return Stream.of(BuildingType.values())
                 .map(t -> new BuildingMetadataResponse(
                         t.name(), sanitizedLevel, buildingService.calculateBuildTime(t, sanitizedLevel),
-                        ResourcesMapper.fromResources(buildingService.calculateBuildCost(t, sanitizedLevel))
+                        ResourcesMapper.fromResources(buildingService.calculateBuildCost(t, sanitizedLevel, Collections.emptyList()))
                 ))
                 .collect(Collectors.toList());
     }

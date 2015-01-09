@@ -2,6 +2,7 @@ package restwars.service.building;
 
 import restwars.service.planet.Planet;
 import restwars.service.resource.Resources;
+import restwars.service.technology.Technology;
 
 import java.util.List;
 
@@ -75,9 +76,10 @@ public interface BuildingService {
      *
      * @param type  Type of building.
      * @param level Level to build.
+     * @param technologies
      * @return Build cost.
      */
-    Resources calculateBuildCost(BuildingType type, int level);
+    Resources calculateBuildCost(BuildingType type, int level, List<Technology> technologies);
 
     /**
      * Finishes all construction sites which are done in the current round.

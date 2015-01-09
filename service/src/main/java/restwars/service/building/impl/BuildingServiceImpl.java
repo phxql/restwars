@@ -12,6 +12,10 @@ import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.resource.Resources;
+import restwars.service.technology.Technology;
+import restwars.service.technology.TechnologyDAO;
+import restwars.service.technology.TechnologyType;
+import restwars.util.MathExt;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -27,15 +31,17 @@ public class BuildingServiceImpl implements BuildingService {
     private final PlanetDAO planetDAO;
     private final ConstructionSiteDAO constructionSiteDAO;
     private final EventDAO eventDAO;
+    private final TechnologyDAO technologyDAO;
 
     @Inject
-    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO, EventDAO eventDAO) {
+    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO, EventDAO eventDAO, TechnologyDAO technologyDAO) {
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.constructionSiteDAO = Preconditions.checkNotNull(constructionSiteDAO, "constructionSiteDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
+        this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
     }
 
     @Override
@@ -77,7 +83,9 @@ public class BuildingServiceImpl implements BuildingService {
         assert type != null;
         assert level > 0;
 
-        Resources buildCost = calculateBuildCost(type, level);
+        List<Technology> technologies = technologyDAO.findAllWithPlayerId(planet.getOwnerId());
+
+        Resources buildCost = calculateBuildCost(type, level, technologies);
         if (!planet.getResources().isEnough(buildCost)) {
             throw new BuildingException(BuildingException.Reason.INSUFFICIENT_RESOURCES);
         }
@@ -184,27 +192,40 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public Resources calculateBuildCost(BuildingType type, int level) {
+    public Resources calculateBuildCost(BuildingType type, int level, List<Technology> technologies) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");
 
+        Resources cost;
         switch (type) {
             case COMMAND_CENTER:
-                return new Resources(level * 10L, level * 10L, level * 100L);
+                cost = new Resources(level * 10L, level * 10L, level * 100L);
+                break;
             case CRYSTAL_MINE:
-                return new Resources(level, level, level);
+                cost = new Resources(level, level, level);
+                break;
             case GAS_REFINERY:
-                return new Resources(level, level, level);
+                cost = new Resources(level, level, level);
+                break;
             case SOLAR_PANELS:
-                return new Resources(level, level, level);
+                cost = new Resources(level, level, level);
+                break;
             case RESEARCH_CENTER:
-                return new Resources(level, level, level);
+                cost = new Resources(level, level, level);
+                break;
             case SHIPYARD:
-                return new Resources(level, level, level);
+                cost = new Resources(level, level, level);
+                break;
             case TELESCOPE:
-                return new Resources(level, level, level);
+                cost = new Resources(level, level, level);
+                break;
             default:
                 throw new AssertionError("Unknown building type: " + type);
         }
+
+        int technologyLevel = technologies.stream().filter(t -> t.getType().equals(TechnologyType.BUILDING_BUILD_COST_REDUCTION)).findAny().map(Technology::getLevel).orElse(0);
+        double costMultiplier = Math.max(1 - technologyLevel * 0.01, 0);
+
+        return new Resources(MathExt.floorLong(cost.getCrystals() * costMultiplier), MathExt.floorLong(cost.getGas() * costMultiplier), MathExt.floorLong(cost.getEnergy() * costMultiplier));
     }
 }
