@@ -140,9 +140,9 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkArgument(level > 0, "level must be > 0");
 
         switch (technology) {
-            case BUILD_COST_REDUCTION:
+            case BUILDING_BUILD_COST_REDUCTION:
                 return level;
-            case BUILD_TIME_REDUCTION:
+            case BUILDING_BUILD_TIME_REDUCTION:
                 return level;
             case CRYSTAL_MINE_EFFICIENCY:
                 return level;
@@ -161,9 +161,9 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkArgument(level > 0, "level must be > 0");
 
         switch (technology) {
-            case BUILD_COST_REDUCTION:
+            case BUILDING_BUILD_COST_REDUCTION:
                 return new Resources(level, level, level);
-            case BUILD_TIME_REDUCTION:
+            case BUILDING_BUILD_TIME_REDUCTION:
                 return new Resources(level, level, level);
             case CRYSTAL_MINE_EFFICIENCY:
                 return new Resources(level, level, level);
