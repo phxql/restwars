@@ -96,12 +96,12 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         // loadDemoData(compositionRoot.getUnitOfWorkService(), compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
 
         // Initialize swagger documentation
-        registerSwagger(environment);
+        registerSwagger(environment, configuration);
 
         registerCorsFilter(environment);
     }
 
-    private void registerSwagger(Environment environment) {
+    private void registerSwagger(Environment environment, RestwarsConfiguration configuration) {
         environment.jersey().register(new ApiListingResourceJSON());
         environment.jersey().register(new ResourceListingProvider());
         environment.jersey().register(new ApiDeclarationProvider());
@@ -110,7 +110,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         SwaggerConfig config = ConfigFactory.config();
         config.setApiVersion("1.0.0");
-        config.setBasePath("http://localhost:8080");
+        config.setBasePath(String.format("http://%s:8080", configuration.getServerName()));
 
         FilterFactory.setFilter(new SwaggerFilter());
         ModelConverter.register();
