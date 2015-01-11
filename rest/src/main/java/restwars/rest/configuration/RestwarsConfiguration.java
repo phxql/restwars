@@ -39,6 +39,10 @@ public class RestwarsConfiguration extends Configuration {
     }
 
     public String getPublicUrl() {
+        if (publicUrl.endsWith("/")) {
+            return publicUrl.substring(0, publicUrl.length() - 1);
+        }
+
         return publicUrl;
     }
 
