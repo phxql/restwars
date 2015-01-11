@@ -65,6 +65,13 @@
         <profile>
             <id>dist</id>
             <build>
+                <resources>
+                    <!-- Enable filtering of resources to get the build.properties variables filled -->
+                    <resource>
+                        <directory>${basedir}/src/main/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
                 <plugins>
                     <!-- Adds the main class and the dependencies to the manifest -->
                     <plugin>
@@ -78,9 +85,6 @@
                                     <mainClass>restwars.rest.RestwarsApplication</mainClass>
                                     <classpathPrefix>lib/</classpathPrefix>
                                 </manifest>
-                                <manifestEntries>
-                                    <Git-Revision>${buildNumber}</Git-Revision>
-                                </manifestEntries>
                             </archive>
                         </configuration>
                     </plugin>

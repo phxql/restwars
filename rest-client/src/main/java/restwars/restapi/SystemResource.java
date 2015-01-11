@@ -14,4 +14,9 @@ public interface SystemResource {
     @Path("/ping")
     @Produces(MediaType.TEXT_PLAIN)
     String ping();
+
+    @GET
+    @Path("/version")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String version();
 }
