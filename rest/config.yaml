@@ -1,5 +1,5 @@
 # Server hostname
-serverName: localhost
+publicUrl: http://localhost:8080/
 
 # Number of galaxies
 galaxies: 3

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 
 public class RestwarsConfiguration extends Configuration {
     @NotEmpty
-    private String serverName;
+    private String publicUrl;
 
     @Valid
     @NotNull
@@ -38,12 +38,12 @@ public class RestwarsConfiguration extends Configuration {
         this.database = database;
     }
 
-    public String getServerName() {
-        return serverName;
+    public String getPublicUrl() {
+        return publicUrl;
     }
 
-    public void setServerName(String serverName) {
-        this.serverName = serverName;
+    public void setPublicUrl(String publicUrl) {
+        this.publicUrl = publicUrl;
     }
 
     public int getGalaxies() {

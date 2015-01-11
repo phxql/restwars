@@ -110,7 +110,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         SwaggerConfig config = ConfigFactory.config();
         config.setApiVersion("1.0.0");
-        config.setBasePath(String.format("http://%s:8080", configuration.getServerName()));
+        config.setBasePath(configuration.getPublicUrl());
 
         FilterFactory.setFilter(new SwaggerFilter());
         ModelConverter.register();
