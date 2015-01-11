@@ -47,9 +47,12 @@ public class PlanetServiceImpl implements PlanetService {
         Planet planet = new Planet(id, location, owner.getId(), universeConfiguration.getStartingResources());
         planetDAO.insert(planet);
 
-        buildingService.addBuilding(planet, BuildingType.COMMAND_CENTER, 1);
+        buildingService.manifestBuilding(planet, BuildingType.COMMAND_CENTER, 1);
+        buildingService.manifestBuilding(planet, BuildingType.CRYSTAL_MINE, 1);
+        buildingService.manifestBuilding(planet, BuildingType.GAS_REFINERY, 1);
+        buildingService.manifestBuilding(planet, BuildingType.SOLAR_PANELS, 1);
 
-        LOGGER.debug("Created planet {}", planet);
+        LOGGER.debug("Created starter planet {}", planet);
 
         return planet;
     }

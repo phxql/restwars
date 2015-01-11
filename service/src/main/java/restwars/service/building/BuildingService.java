@@ -60,7 +60,7 @@ public interface BuildingService {
      * @param type   Building type.
      * @param level  Building level.
      */
-    void addBuilding(Planet planet, BuildingType type, int level);
+    void manifestBuilding(Planet planet, BuildingType type, int level);
 
     /**
      * Calculates the build time for the given type and level of building.

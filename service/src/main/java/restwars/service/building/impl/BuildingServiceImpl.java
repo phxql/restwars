@@ -59,7 +59,7 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public void addBuilding(Planet planet, BuildingType type, int level) {
+    public void manifestBuilding(Planet planet, BuildingType type, int level) {
         Preconditions.checkNotNull(planet, "planet");
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0);
