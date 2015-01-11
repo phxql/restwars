@@ -9,11 +9,15 @@ public class FlightTypeMetadataResponse {
     @ApiModelProperty(value = "Flight type", required = true)
     private String type;
 
+    @ApiModelProperty(value = "Description", required = true)
+    private String description;
+
     public FlightTypeMetadataResponse() {
     }
 
-    public FlightTypeMetadataResponse(String type) {
+    public FlightTypeMetadataResponse(String type, String description) {
         this.type = type;
+        this.description = description;
     }
 
     public String getType() {
@@ -24,11 +28,19 @@ public class FlightTypeMetadataResponse {
         this.type = type;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("type", type)
+                .add("description", description)
                 .toString();
     }
 }
