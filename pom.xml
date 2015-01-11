@@ -102,4 +102,8 @@
             </plugin>
         </plugins>
     </build>
+
+    <scm>
+        <connection>scm:git:git://github.com:phxql/restwars.git</connection>
+    </scm>
 </project>
