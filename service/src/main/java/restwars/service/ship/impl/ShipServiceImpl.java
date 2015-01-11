@@ -20,6 +20,7 @@ import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 import restwars.service.ship.impl.flighthandler.AttackFlightHandler;
 import restwars.service.ship.impl.flighthandler.ColonizeFlightHandler;
+import restwars.service.ship.impl.flighthandler.TransferFlightHandler;
 import restwars.service.ship.impl.flighthandler.TransportFlightHandler;
 import restwars.util.MathExt;
 
@@ -43,6 +44,7 @@ public class ShipServiceImpl implements ShipService {
     private final TransportFlightHandler transportFlightHandler;
     private final ColonizeFlightHandler colonizeFlightHandler;
     private final AttackFlightHandler attackFlightHandler;
+    private final TransferFlightHandler transferFlightHandler;
     private final ShipUtils shipUtils;
 
     @Inject
@@ -62,6 +64,7 @@ public class ShipServiceImpl implements ShipService {
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
         colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventDAO);
         attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventDAO);
+        transferFlightHandler = new TransferFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
         shipUtils = new ShipUtils();
     }
 
@@ -197,6 +200,9 @@ public class ShipServiceImpl implements ShipService {
             case TRANSPORT:
                 transportFlightHandler.handle(flight, round);
                 break;
+            case TRANSFER:
+                transferFlightHandler.handle(flight, round);
+                break;
             default:
                 throw new AssertionError("Unknown flight type: " + flight.getType());
         }
@@ -238,8 +244,8 @@ public class ShipServiceImpl implements ShipService {
         if (flightType.equals(FlightType.COLONIZE) && ships.countByType(ShipType.COLONY) == 0) {
             throw new FlightException(FlightException.Reason.NO_COLONY_SHIP);
         }
-        // Only transport and colonize flights can have cargo
-        if (!cargo.isEmpty() && !(flightType.equals(FlightType.COLONIZE) || flightType.equals(FlightType.TRANSPORT))) {
+        // Only transport, colonize and transfer flights can have cargo
+        if (!cargo.isEmpty() && !(flightType.equals(FlightType.COLONIZE) || flightType.equals(FlightType.TRANSPORT) || flightType.equals(FlightType.TRANSFER))) {
             throw new FlightException(FlightException.Reason.NO_CARGO_ALLOWED);
         }
 

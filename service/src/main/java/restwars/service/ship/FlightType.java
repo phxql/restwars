@@ -1,18 +1,28 @@
 package restwars.service.ship;
 
+import com.google.common.base.Preconditions;
+
 public enum FlightType {
-    ATTACK(0),
-    COLONIZE(1),
-    TRANSPORT(2);
+    ATTACK(0, "Attacks an enemy planet"),
+    COLONIZE(1, "Colonized an empty planet"),
+    TRANSPORT(2, "Transport resources to a friendly planet"),
+    TRANSFER(3, "Transfer ships to a friendly planet");
 
     private final int id;
 
-    FlightType(int id) {
+    private final String description;
+
+    FlightType(int id, String description) {
         this.id = id;
+        this.description = Preconditions.checkNotNull(description, "description");
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public static FlightType fromId(int id) {

@@ -24,6 +24,6 @@ public final class FlightMapper {
     public static FlightTypeMetadataResponse fromFlightType(FlightType flightType) {
         Preconditions.checkNotNull(flightType, "flightType");
 
-        return new FlightTypeMetadataResponse(flightType.name());
+        return new FlightTypeMetadataResponse(flightType.name(), flightType.getDescription());
     }
 }
