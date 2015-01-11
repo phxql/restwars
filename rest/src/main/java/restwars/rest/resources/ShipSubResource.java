@@ -16,11 +16,16 @@ import restwars.service.ship.Ship;
 import restwars.service.ship.ShipService;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Api(value = "/{location}/ship", hidden = true)
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class ShipSubResource {
     private final ShipService shipService;
     private final PlanetService planetService;

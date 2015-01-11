@@ -20,12 +20,13 @@ import restwars.service.ship.ShipType;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Api(value = "/{location}/ship-in-construction", hidden = true)
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class ShipInConstructionSubResource {
     private final ShipService shipService;
     private final PlanetService planetService;
