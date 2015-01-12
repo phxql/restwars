@@ -165,7 +165,7 @@ public class TechnologyServiceImpl implements TechnologyService {
         int researchCenterLevel = buildings.getLevel(BuildingType.RESEARCH_CENTER);
         double timeMultiplier = Math.max(1 - researchCenterLevel * 0.01, 0);
 
-        return MathExt.floorLong(researchTime * timeMultiplier);
+        return Math.max(MathExt.floorLong(researchTime * timeMultiplier), 1);
     }
 
     @Override
