@@ -103,7 +103,7 @@ public class ShipServiceImpl implements ShipService {
         int shipyardLevel = buildings.getLevel(BuildingType.SHIPYARD);
         double timeMultiplier = Math.max(1 - shipyardLevel * 0.01, 0);
 
-        long buildTime = MathExt.floorLong(type.getBuildTime() * timeMultiplier);
+        long buildTime = Math.max(MathExt.floorLong(type.getBuildTime() * timeMultiplier), 1);
         long currentRound = roundService.getCurrentRound();
         ShipInConstruction shipInConstruction = new ShipInConstruction(uuidFactory.create(), type, planet.getId(), player.getId(), currentRound, currentRound + buildTime);
         shipInConstructionDAO.insert(shipInConstruction);
