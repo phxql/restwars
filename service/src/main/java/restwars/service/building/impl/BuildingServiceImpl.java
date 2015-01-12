@@ -212,7 +212,7 @@ public class BuildingServiceImpl implements BuildingService {
         int effectiveLevel = commandCenterLevel + technologyLevel;
         double timeMultiplier = Math.max(1 - effectiveLevel * 0.01, 0);
 
-        return MathExt.floorLong(buildTime * timeMultiplier);
+        return Math.max(MathExt.floorLong(buildTime * timeMultiplier), 1);
     }
 
     @Override
