@@ -36,8 +36,19 @@ public final class ShipMapper {
         );
     }
 
+    /**
+     * Converts a list of ShipRequests into a Ships object.
+     * <p/>
+     * This method won't include ships which have an amount of 0 or less.
+     *
+     * @param ships List of ShipRequests.
+     * @return Ships object.
+     */
     public static Ships fromShips(List<ShipRequest> ships) {
+        Preconditions.checkNotNull(ships, "ships");
+
         return new Ships(ships.stream()
+                .filter(s -> s.getAmount() > 0)
                 .map(s -> new Ship(ShipType.valueOf(s.getType()), s.getAmount()))
                 .collect(Collectors.toList())
         );

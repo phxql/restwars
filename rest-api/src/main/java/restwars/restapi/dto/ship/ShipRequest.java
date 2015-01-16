@@ -13,7 +13,7 @@ public class ShipRequest {
     @ApiModelProperty(value = "Ship type", required = true)
     private String type;
 
-    @Min(1)
+    @Min(0)
     @ApiModelProperty(value = "Amount", required = true)
     private int amount;
 
