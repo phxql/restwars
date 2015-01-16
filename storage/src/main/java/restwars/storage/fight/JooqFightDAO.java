@@ -7,6 +7,7 @@ import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.planet.Planet;
+import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
@@ -64,8 +65,11 @@ public class JooqFightDAO extends AbstractJooqDAO implements FightDAO {
         LOGGER.debug("Inserting fight {}", fight);
 
         context()
-                .insertInto(FIGHT, FIGHT.ID, FIGHT.ATTACKER_ID, FIGHT.DEFENDER_ID, FIGHT.PLANET_ID, FIGHT.ROUND)
-                .values(fight.getId(), fight.getAttackerId(), fight.getDefenderId(), fight.getPlanetId(), fight.getRound())
+                .insertInto(FIGHT, FIGHT.ID, FIGHT.ATTACKER_ID, FIGHT.DEFENDER_ID, FIGHT.PLANET_ID, FIGHT.ROUND, FIGHT.CRYSTALS_LOOTED, FIGHT.GAS_LOOTED)
+                .values(
+                        fight.getId(), fight.getAttackerId(), fight.getDefenderId(), fight.getPlanetId(),
+                        fight.getRound(), fight.getLoot().getCrystals(), fight.getLoot().getGas()
+                )
                 .execute();
 
         insertShips(fight, fight.getAttackingShips(), Category.ATTACKER_SHIP);
@@ -133,7 +137,8 @@ public class JooqFightDAO extends AbstractJooqDAO implements FightDAO {
             Fight fight = new Fight(
                     main.getValue(FIGHT.ID), main.getValue(FIGHT.ATTACKER_ID), main.getValue(FIGHT.DEFENDER_ID),
                     main.getValue(FIGHT.PLANET_ID), attackerShips, defenderShips, remainingAttackerShips,
-                    remainingDefenderShips, main.getValue(FIGHT.ROUND)
+                    remainingDefenderShips, main.getValue(FIGHT.ROUND),
+                    new Resources(main.getValue(FIGHT.CRYSTALS_LOOTED), main.getValue(FIGHT.GAS_LOOTED), 0)
             );
             Planet planet = PlanetMapper.fromRecord(main);
             restwars.service.player.Player attacker = PlayerMapper.fromRecord(main, attackerAlias);

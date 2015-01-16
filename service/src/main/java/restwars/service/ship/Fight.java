@@ -2,6 +2,7 @@ package restwars.service.ship;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import restwars.service.resource.Resources;
 
 import java.util.UUID;
 
@@ -24,7 +25,9 @@ public class Fight {
 
     private final long round;
 
-    public Fight(UUID id, UUID attackerId, UUID defenderId, UUID planetId, Ships attackingShips, Ships defendingShips, Ships remainingAttackerShips, Ships remainingDefenderShips, long round) {
+    private final Resources loot;
+
+    public Fight(UUID id, UUID attackerId, UUID defenderId, UUID planetId, Ships attackingShips, Ships defendingShips, Ships remainingAttackerShips, Ships remainingDefenderShips, long round, Resources loot) {
         this.round = round;
         this.id = Preconditions.checkNotNull(id, "id");
         this.attackerId = Preconditions.checkNotNull(attackerId, "attackerId");
@@ -34,6 +37,7 @@ public class Fight {
         this.defendingShips = Preconditions.checkNotNull(defendingShips, "defendingShips");
         this.remainingAttackerShips = Preconditions.checkNotNull(remainingAttackerShips, "remainingAttackerShips");
         this.remainingDefenderShips = Preconditions.checkNotNull(remainingDefenderShips, "remainingDefenderShips");
+        this.loot = Preconditions.checkNotNull(loot, "loot");
     }
 
     public UUID getId() {
@@ -72,6 +76,16 @@ public class Fight {
         return round;
     }
 
+    public Resources getLoot() {
+        return loot;
+    }
+
+    public Fight withLoot(Resources loot) {
+        Preconditions.checkNotNull(loot, "loot");
+
+        return new Fight(id, attackerId, defenderId, planetId, attackingShips, defendingShips, remainingAttackerShips, remainingDefenderShips, round, loot);
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -84,6 +98,7 @@ public class Fight {
                 .add("remainingAttackerShips", remainingAttackerShips)
                 .add("remainingDefenderShips", remainingDefenderShips)
                 .add("round", round)
+                .add("loot", loot)
                 .toString();
     }
 }

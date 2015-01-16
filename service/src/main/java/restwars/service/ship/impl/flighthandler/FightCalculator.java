@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.infrastructure.UUIDFactory;
+import restwars.service.resource.Resources;
 import restwars.service.ship.Fight;
 import restwars.service.ship.Ship;
 import restwars.service.ship.ShipType;
@@ -37,7 +38,7 @@ public class FightCalculator {
         LOGGER.debug("Remaining ships from attacker: {}", remainingAttackingShips);
         LOGGER.debug("Remaining ships from defender: {}", remainingDefendingShips);
 
-        return new Fight(uuidFactory.create(), attackerId, defenderId, planetId, attackingShips, defendingShips, remainingAttackingShips, remainingDefendingShips, round);
+        return new Fight(uuidFactory.create(), attackerId, defenderId, planetId, attackingShips, defendingShips, remainingAttackingShips, remainingDefendingShips, round, Resources.NONE);
     }
 
     /**

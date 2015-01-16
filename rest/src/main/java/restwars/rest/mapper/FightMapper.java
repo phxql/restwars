@@ -16,7 +16,8 @@ public final class FightMapper {
                 fight.getDefender().getUsername(), ShipMapper.fromShips(fight.getFight().getAttackingShips()),
                 ShipMapper.fromShips(fight.getFight().getDefendingShips()),
                 ShipMapper.fromShips(fight.getFight().getRemainingAttackerShips()),
-                ShipMapper.fromShips(fight.getFight().getRemainingDefenderShips()), fight.getFight().getRound()
+                ShipMapper.fromShips(fight.getFight().getRemainingDefenderShips()), fight.getFight().getRound(),
+                ResourcesMapper.fromResources(fight.getFight().getLoot())
         );
     }
 }

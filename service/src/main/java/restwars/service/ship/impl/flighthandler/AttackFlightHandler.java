@@ -56,9 +56,11 @@ public class AttackFlightHandler extends AbstractFlightHandler {
                     getFlightDAO().delete(flight);
                 } else {
                     LOGGER.debug("Looting planet {}", defenderPlanet);
-                    Resources cargo = lootPlanet(defenderPlanet, fight.getRemainingAttackerShips());
+                    Resources loot = lootPlanet(defenderPlanet, fight.getRemainingAttackerShips());
 
-                    createReturnFlight(flight, fight.getRemainingAttackerShips(), cargo);
+                    fight = fight.withLoot(loot);
+
+                    createReturnFlight(flight, fight.getRemainingAttackerShips(), loot);
                 }
 
                 // Store fight

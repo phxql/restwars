@@ -3,6 +3,7 @@ package restwars.restapi.dto.ship;
 import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import restwars.restapi.dto.ResourcesResponse;
 
 import java.util.List;
 
@@ -32,10 +33,13 @@ public class FightResponse {
     @ApiModelProperty(value = "Round in which the fight happened", required = true)
     private long round;
 
+    @ApiModelProperty(value = "Loot", required = true)
+    private ResourcesResponse loot;
+
     public FightResponse() {
     }
 
-    public FightResponse(String location, String attacker, String defender, List<ShipResponse> attackerShips, List<ShipResponse> defenderShips, List<ShipResponse> remainingAttackerShips, List<ShipResponse> remainingDefenderShips, long round) {
+    public FightResponse(String location, String attacker, String defender, List<ShipResponse> attackerShips, List<ShipResponse> defenderShips, List<ShipResponse> remainingAttackerShips, List<ShipResponse> remainingDefenderShips, long round, ResourcesResponse loot) {
         this.location = location;
         this.attacker = attacker;
         this.defender = defender;
@@ -44,6 +48,7 @@ public class FightResponse {
         this.remainingAttackerShips = remainingAttackerShips;
         this.remainingDefenderShips = remainingDefenderShips;
         this.round = round;
+        this.loot = loot;
     }
 
     public String getLocation() {
@@ -110,6 +115,14 @@ public class FightResponse {
         this.round = round;
     }
 
+    public ResourcesResponse getLoot() {
+        return loot;
+    }
+
+    public void setLoot(ResourcesResponse loot) {
+        this.loot = loot;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -121,6 +134,7 @@ public class FightResponse {
                 .add("remainingAttackerShips", remainingAttackerShips)
                 .add("remainingDefenderShips", remainingDefenderShips)
                 .add("round", round)
+                .add("loot", loot)
                 .toString();
     }
 }

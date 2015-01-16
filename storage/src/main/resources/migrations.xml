@@ -276,6 +276,12 @@
             <column name="round" type="long">
                 <constraints nullable="false"/>
             </column>
+            <column name="crystals_looted" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gas_looted" type="long">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="fight_ships">
