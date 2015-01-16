@@ -2,8 +2,8 @@ package restwars.service.security.impl;
 
 import com.google.common.base.Splitter;
 import com.google.common.io.BaseEncoding;
-import restwars.service.security.PasswordStorage;
-import restwars.service.security.PasswordStorageException;
+import restwars.service.security.PasswordException;
+import restwars.service.security.PasswordService;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -12,7 +12,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Iterator;
 
-public class Pbkdf2PasswordStorage implements PasswordStorage {
+public class Pbkdf2PasswordService implements PasswordService {
     private static final int ITERATION_COUNT = 512_000;
     private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA256";
     private final SecureRandom secureRandom;
@@ -22,7 +22,7 @@ public class Pbkdf2PasswordStorage implements PasswordStorage {
     private static final int VERSION_1 = 1;
     private static final int CURRENT_VERSION = VERSION_1;
 
-    public Pbkdf2PasswordStorage() {
+    public Pbkdf2PasswordService() {
         try {
             secureRandom = SecureRandom.getInstanceStrong();
         } catch (NoSuchAlgorithmException e) {
@@ -31,7 +31,7 @@ public class Pbkdf2PasswordStorage implements PasswordStorage {
     }
 
     @Override
-    public String store(String plaintext) {
+    public String hash(String plaintext) {
         byte[] salt = new byte[HASH_SIZE_IN_BITS / 8];
         secureRandom.nextBytes(salt);
 
@@ -54,14 +54,14 @@ public class Pbkdf2PasswordStorage implements PasswordStorage {
     }
 
     @Override
-    public boolean verify(String plaintext, String stored) throws PasswordStorageException {
-        Iterator<String> parts = Splitter.on(':').split(stored).iterator();
+    public boolean verify(String plaintext, String hash) throws PasswordException {
+        Iterator<String> parts = Splitter.on(':').split(hash).iterator();
         int version = Integer.parseInt(parts.next());
         switch (version) {
             case 1:
                 return verifyVersion1(parts, plaintext);
             default:
-                throw new PasswordStorageException("Unknown version: " + version);
+                throw new PasswordException("Unknown version: " + version);
         }
     }
 
