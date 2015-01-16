@@ -43,7 +43,7 @@ public class Main {
 
                 System.out.println();
                 System.out.println("Flights");
-                System.out.println(client.getFlightResource().getOwnFlights(planet.getLocation()));
+                System.out.println(client.getFlightResource().getOwnFlightsForPlanet(planet.getLocation()));
 
                 System.out.println();
                 System.out.println("Research");

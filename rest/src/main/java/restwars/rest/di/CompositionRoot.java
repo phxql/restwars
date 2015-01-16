@@ -28,6 +28,7 @@ public class CompositionRoot {
     private final EventResource eventResource;
     private final FightResource fightResource;
     private final RootResource rootResource;
+    private final FlightResource flightResource;
 
     private final PlayerAuthenticator playerAuthenticator;
     private final Clock clock;
@@ -35,7 +36,7 @@ public class CompositionRoot {
     private final UnitOfWorkService unitOfWorkService;
 
     @Inject
-    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, RootResource rootResource, PlayerAuthenticator playerAuthenticator, Clock clock, UnitOfWorkService unitOfWorkService) {
+    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, RootResource rootResource, FlightResource flightResource, PlayerAuthenticator playerAuthenticator, Clock clock, UnitOfWorkService unitOfWorkService) {
         this.playerService = playerService;
         this.planetService = planetService;
         this.buildingService = buildingService;
@@ -50,6 +51,7 @@ public class CompositionRoot {
         this.eventResource = eventResource;
         this.fightResource = fightResource;
         this.rootResource = rootResource;
+        this.flightResource = flightResource;
         this.playerAuthenticator = playerAuthenticator;
         this.clock = clock;
         this.unitOfWorkService = unitOfWorkService;
@@ -121,5 +123,9 @@ public class CompositionRoot {
 
     public RootResource getRootResource() {
         return rootResource;
+    }
+
+    public FlightResource getFlightResource() {
+        return flightResource;
     }
 }

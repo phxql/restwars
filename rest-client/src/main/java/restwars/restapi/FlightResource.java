@@ -7,15 +7,19 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/v1/planet/{location}/flight")
+@Path("/v1")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public interface FlightResource {
     @GET
-    @Path("/own")
-    List<FlightResponse> getOwnFlights(@PathParam("location") String location);
+    @Path("flight/own")
+    List<FlightResponse> getOwnFlights();
+
+    @GET
+    @Path("planet/{location}/flight/own")
+    List<FlightResponse> getOwnFlightsForPlanet(@PathParam("location") String location);
 
     @POST
-    @Path("/to/{destination}")
+    @Path("planet/{location}/flight/to/{destination}")
     FlightResponse createFlight(@PathParam("location") String start, @PathParam("destination") String destination, CreateFlightRequest body);
 }
