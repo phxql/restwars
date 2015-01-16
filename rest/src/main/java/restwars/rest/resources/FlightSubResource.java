@@ -73,7 +73,7 @@ public class FlightSubResource {
         try {
             Flight flight = shipService.sendShipsToPlanet(
                     player, planet, destination.getValue(), ShipMapper.fromShips(body.getShips()), FlightType.valueOf(body.getType()),
-                    new Resources(body.getCargoCrystals(), body.getCargoGas(), body.getCargoEnergy())
+                    new Resources(body.getCargoCrystals(), body.getCargoGas(), 0)
             );
 
             return FlightMapper.fromFlight(flight);
