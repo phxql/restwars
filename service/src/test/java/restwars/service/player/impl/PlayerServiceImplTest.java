@@ -1,5 +1,6 @@
 package restwars.service.player.impl;
 
+import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import restwars.service.infrastructure.UUIDFactory;
@@ -27,6 +28,8 @@ public class PlayerServiceImplTest {
         planetService = mock(PlanetService.class);
 
         sut = new PlayerServiceImpl(uuidFactory, playerDAO, planetService);
+
+        when(playerDAO.findWithUsername(Matchers.anyString())).thenReturn(Optional.<Player>empty());
     }
 
     @Test
