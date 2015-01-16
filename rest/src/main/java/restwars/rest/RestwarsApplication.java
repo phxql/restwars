@@ -73,6 +73,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         environment.jersey().register(new UnitOfWorkResourceMethodDispatchAdapter(compositionRoot.getUnitOfWorkService()));
 
         environment.jersey().register(new BasicAuthProvider<>(compositionRoot.getPlayerAuthenticator(), "RESTwars"));
+        environment.jersey().register(compositionRoot.getRootResource());
         environment.jersey().register(compositionRoot.getSystemResource());
         environment.jersey().register(compositionRoot.getPlayerResource());
         environment.jersey().register(compositionRoot.getPlanetResource());

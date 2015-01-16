@@ -27,6 +27,7 @@ public class CompositionRoot {
     private final MetadataResource metadataResource;
     private final EventResource eventResource;
     private final FightResource fightResource;
+    private final RootResource rootResource;
 
     private final PlayerAuthenticator playerAuthenticator;
     private final Clock clock;
@@ -34,7 +35,7 @@ public class CompositionRoot {
     private final UnitOfWorkService unitOfWorkService;
 
     @Inject
-    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, PlayerAuthenticator playerAuthenticator, Clock clock, UnitOfWorkService unitOfWorkService) {
+    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, RootResource rootResource, PlayerAuthenticator playerAuthenticator, Clock clock, UnitOfWorkService unitOfWorkService) {
         this.playerService = playerService;
         this.planetService = planetService;
         this.buildingService = buildingService;
@@ -48,6 +49,7 @@ public class CompositionRoot {
         this.metadataResource = metadataResource;
         this.eventResource = eventResource;
         this.fightResource = fightResource;
+        this.rootResource = rootResource;
         this.playerAuthenticator = playerAuthenticator;
         this.clock = clock;
         this.unitOfWorkService = unitOfWorkService;
@@ -115,5 +117,9 @@ public class CompositionRoot {
 
     public FightResource getFightResource() {
         return fightResource;
+    }
+
+    public RootResource getRootResource() {
+        return rootResource;
     }
 }

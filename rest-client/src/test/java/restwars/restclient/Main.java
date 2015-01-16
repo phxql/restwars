@@ -15,6 +15,10 @@ public class Main {
 
         while (true) {
             System.out.println();
+            System.out.print("Current round: ");
+            System.out.println(client.getRootResource().generalInformation().getRound());
+
+            System.out.println();
             System.out.println("Events");
             System.out.println(client.getEventResource().getEvents(1));
 
