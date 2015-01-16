@@ -38,14 +38,15 @@ public class AttackFlightHandler extends AbstractFlightHandler {
         if (planet.isPresent()) {
             Planet defenderPlanet = planet.get();
 
-            if (defenderPlanet.getOwnerId().equals(flight.getPlayerId())) {
+            UUID defenderId = defenderPlanet.getOwnerId();
+            if (defenderId.equals(flight.getPlayerId())) {
                 LOGGER.debug("Planet {} is friendly, creating return flight", flight.getDestination());
                 // Planet is friendly, create return flight
                 createReturnFlight(flight, flight.getShips(), flight.getCargo());
             } else {
-                Hangar hangar = getOrCreateHangar(defenderPlanet.getId(), defenderPlanet.getOwnerId());
+                Hangar hangar = getOrCreateHangar(defenderPlanet.getId(), defenderId);
                 UUID attackerId = flight.getPlayerId();
-                Fight fight = fightCalculator.attack(attackerId, defenderPlanet.getOwnerId(), defenderPlanet.getId(), flight.getShips(), hangar.getShips(), round);
+                Fight fight = fightCalculator.attack(attackerId, defenderId, defenderPlanet.getId(), flight.getShips(), hangar.getShips(), round);
 
                 // Update defenders hangar
                 getHangarDAO().update(hangar.withShips(fight.getRemainingDefenderShips()));
@@ -63,8 +64,9 @@ public class AttackFlightHandler extends AbstractFlightHandler {
                 // Store fight
                 fightDAO.insert(fight);
 
-                // Create event
-                getEventDAO().insert(new Event(getUuidFactory().create(), attackerId, planet.get().getId(), EventType.FIGHT_HAPPENED, round));
+                // Create event for attacker and defender
+                getEventDAO().insert(new Event(getUuidFactory().create(), attackerId, defenderPlanet.getId(), EventType.FIGHT_HAPPENED, round));
+                getEventDAO().insert(new Event(getUuidFactory().create(), defenderId, defenderPlanet.getId(), EventType.FIGHT_HAPPENED, round));
             }
         } else {
             LOGGER.debug("Planet {} is not colonized, creating return flight", flight.getDestination());
