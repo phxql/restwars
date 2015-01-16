@@ -18,6 +18,8 @@ import restwars.service.player.PlayerService;
 import restwars.service.player.impl.PlayerServiceImpl;
 import restwars.service.resource.ResourceService;
 import restwars.service.resource.impl.ResourceServiceImpl;
+import restwars.service.security.PasswordService;
+import restwars.service.security.impl.Pbkdf2PasswordService;
 import restwars.service.ship.ShipService;
 import restwars.service.ship.impl.ShipServiceImpl;
 import restwars.service.technology.TechnologyService;
@@ -80,5 +82,10 @@ public class ServiceModule {
     @Provides
     EventService providesEventService(EventServiceImpl eventService) {
         return eventService;
+    }
+
+    @Provides
+    PasswordService providesPasswordService(Pbkdf2PasswordService passwordService) {
+        return passwordService;
     }
 }

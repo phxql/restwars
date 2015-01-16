@@ -1,5 +1,11 @@
-# Server hostname
+# Server URL
 publicUrl: http://localhost:8080/
+
+# Password iterations (See https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256)
+passwordIterations: 25000
+
+# Password cache
+passwordCache: maximumSize=10000,expireAfterWrite=20m
 
 # Number of galaxies
 galaxies: 3

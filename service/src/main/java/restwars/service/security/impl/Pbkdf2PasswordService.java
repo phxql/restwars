@@ -7,13 +7,14 @@ import restwars.service.security.PasswordService;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Iterator;
 
 public class Pbkdf2PasswordService implements PasswordService {
-    private static final int ITERATION_COUNT = 512_000;
     private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA256";
     private final SecureRandom secureRandom;
 
@@ -22,7 +23,12 @@ public class Pbkdf2PasswordService implements PasswordService {
     private static final int VERSION_1 = 1;
     private static final int CURRENT_VERSION = VERSION_1;
 
-    public Pbkdf2PasswordService() {
+    private final int iterations;
+
+    @Inject
+    public Pbkdf2PasswordService(@Named("passwordIterations") int iterations) {
+        this.iterations = iterations;
+
         try {
             secureRandom = SecureRandom.getInstanceStrong();
         } catch (NoSuchAlgorithmException e) {
@@ -35,7 +41,6 @@ public class Pbkdf2PasswordService implements PasswordService {
         byte[] salt = new byte[HASH_SIZE_IN_BITS / 8];
         secureRandom.nextBytes(salt);
 
-        int iterations = ITERATION_COUNT;
         byte[] hash = pbkdf2(plaintext, salt, iterations, HASH_SIZE_IN_BITS);
 
         return CURRENT_VERSION + ":" + iterations + ":" + BaseEncoding.base64().encode(salt) + ":" + BaseEncoding.base64().encode(hash);

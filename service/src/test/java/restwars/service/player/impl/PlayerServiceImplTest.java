@@ -7,6 +7,7 @@ import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
+import restwars.service.security.PasswordService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -26,8 +27,10 @@ public class PlayerServiceImplTest {
         uuidFactory = mock(UUIDFactory.class);
         playerDAO = mock(PlayerDAO.class);
         planetService = mock(PlanetService.class);
+        PasswordService passwordService = mock(PasswordService.class);
+        when(passwordService.hash(Matchers.anyString())).thenReturn("dummy-hash");
 
-        sut = new PlayerServiceImpl(uuidFactory, playerDAO, planetService);
+        sut = new PlayerServiceImpl(uuidFactory, playerDAO, planetService, passwordService);
 
         when(playerDAO.findWithUsername(Matchers.anyString())).thenReturn(Optional.<Player>empty());
     }
@@ -49,11 +52,13 @@ public class PlayerServiceImplTest {
 
         Player actual = sut.createPlayer("username", "password");
 
-        assertThat(actual.getId(), is(id));
-        assertThat(actual.getUsername(), is("username"));
-        assertThat(actual.getPassword(), is("password"));
+        Player expectedPlayer = new Player(id, "username", "dummy-hash");
 
-        verify(playerDAO).insert(new Player(id, "username", "password"));
-        verify(planetService).createStartPlanet(new Player(id, "username", "password"));
+        assertThat(actual.getId(), is(expectedPlayer.getId()));
+        assertThat(actual.getUsername(), is(expectedPlayer.getUsername()));
+        assertThat(actual.getPassword(), is(expectedPlayer.getPassword()));
+
+        verify(playerDAO).insert(expectedPlayer);
+        verify(planetService).createStartPlanet(expectedPlayer);
     }
 }
