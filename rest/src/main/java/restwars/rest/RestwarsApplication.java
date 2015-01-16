@@ -1,5 +1,6 @@
 package restwars.rest;
 
+import com.google.common.cache.CacheBuilderSpec;
 import com.wordnik.swagger.config.ConfigFactory;
 import com.wordnik.swagger.config.FilterFactory;
 import com.wordnik.swagger.config.ScannerFactory;
@@ -12,6 +13,7 @@ import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader;
 import com.wordnik.swagger.reader.ClassReaders;
 import dagger.ObjectGraph;
 import io.dropwizard.Application;
+import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
@@ -36,6 +38,7 @@ import java.util.EnumSet;
 
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RestwarsApplication.class);
+    public static final String REALM = "RESTwars";
 
     public static void main(String[] args) throws Exception {
         try {
@@ -67,12 +70,12 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
                 new Resources(1000L, 200L, 200L), configuration.getRoundTime()
         );
 
-        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource));
+        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource, configuration.getPasswordIterations()));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
 
         environment.jersey().register(new UnitOfWorkResourceMethodDispatchAdapter(compositionRoot.getUnitOfWorkService()));
 
-        environment.jersey().register(new BasicAuthProvider<>(compositionRoot.getPlayerAuthenticator(), "RESTwars"));
+        environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(environment.metrics(), compositionRoot.getPlayerAuthenticator(), CacheBuilderSpec.parse(configuration.getPasswordCache())), REALM));
         environment.jersey().register(compositionRoot.getRootResource());
         environment.jersey().register(compositionRoot.getSystemResource());
         environment.jersey().register(compositionRoot.getPlayerResource());

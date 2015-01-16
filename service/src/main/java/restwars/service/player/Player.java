@@ -30,7 +30,6 @@ public class Player {
         return password;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -10,16 +10,20 @@ import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.JooqDAOModule;
 import restwars.storage.jooq.JooqUnitOfWorkService;
 
+import javax.inject.Named;
+
 @Module(injects = CompositionRoot.class, includes = {
         JooqDAOModule.class, ServiceModule.class
 })
 public class RestWarsModule {
     private final UniverseConfiguration universeConfiguration;
     private final ManagedDataSource managedDataSource;
+    private final int passwordIterations;
 
-    public RestWarsModule(UniverseConfiguration universeConfiguration, ManagedDataSource managedDataSource) {
+    public RestWarsModule(UniverseConfiguration universeConfiguration, ManagedDataSource managedDataSource, int passwordIterations) {
         this.managedDataSource = Preconditions.checkNotNull(managedDataSource, "managedDataSource");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
+        this.passwordIterations = passwordIterations;
     }
 
     @Provides
@@ -30,5 +34,11 @@ public class RestWarsModule {
     @Provides
     UniverseConfiguration providesUniverseConfiguration() {
         return universeConfiguration;
+    }
+
+    @Provides
+    @Named("passwordIterations")
+    int providesPasswordIterations() {
+        return passwordIterations;
     }
 }

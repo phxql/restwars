@@ -18,6 +18,12 @@ public class RestwarsConfiguration extends Configuration {
     @JsonProperty("database")
     private DataSourceFactory database;
 
+    @NotEmpty
+    private String passwordCache;
+
+    @Min(1)
+    private int passwordIterations;
+
     @Min(1)
     private int galaxies;
 
@@ -80,5 +86,21 @@ public class RestwarsConfiguration extends Configuration {
 
     public void setRoundTime(int roundTime) {
         this.roundTime = roundTime;
+    }
+
+    public int getPasswordIterations() {
+        return passwordIterations;
+    }
+
+    public void setPasswordIterations(int passwordIterations) {
+        this.passwordIterations = passwordIterations;
+    }
+
+    public String getPasswordCache() {
+        return passwordCache;
+    }
+
+    public void setPasswordCache(String passwordCache) {
+        this.passwordCache = passwordCache;
     }
 }

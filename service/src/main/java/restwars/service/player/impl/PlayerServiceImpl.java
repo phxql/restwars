@@ -10,6 +10,7 @@ import restwars.service.player.CreatePlayerException;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 import restwars.service.player.PlayerService;
+import restwars.service.security.PasswordService;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -24,12 +25,14 @@ public class PlayerServiceImpl implements PlayerService {
     private final UUIDFactory uuidFactory;
     private final PlayerDAO playerDAO;
     private final PlanetService planetService;
+    private final PasswordService passwordService;
 
     @Inject
-    public PlayerServiceImpl(UUIDFactory uuidFactory, PlayerDAO playerDAO, PlanetService planetService) {
+    public PlayerServiceImpl(UUIDFactory uuidFactory, PlayerDAO playerDAO, PlanetService planetService, PasswordService passwordService) {
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.playerDAO = Preconditions.checkNotNull(playerDAO, "playerDAO");
+        this.passwordService = Preconditions.checkNotNull(passwordService, "passwordService");
     }
 
     @Override
@@ -48,7 +51,9 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         UUID id = uuidFactory.create();
-        Player player = new Player(id, username, password);
+        String hash = passwordService.hash(password);
+
+        Player player = new Player(id, username, hash);
         playerDAO.insert(player);
         LOGGER.debug("Created player {}", player);
 
