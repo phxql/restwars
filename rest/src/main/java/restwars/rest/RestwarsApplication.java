@@ -28,21 +28,11 @@ import restwars.rest.doc.ModelConverter;
 import restwars.rest.doc.SwaggerFilter;
 import restwars.rest.integration.database.UnitOfWorkResourceMethodDispatchAdapter;
 import restwars.service.UniverseConfiguration;
-import restwars.service.building.BuildingService;
-import restwars.service.planet.Location;
-import restwars.service.planet.Planet;
-import restwars.service.planet.PlanetService;
-import restwars.service.player.Player;
-import restwars.service.player.PlayerService;
 import restwars.service.resource.Resources;
-import restwars.service.ship.*;
-import restwars.service.technology.TechnologyService;
-import restwars.service.unitofwork.UnitOfWorkService;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import java.util.EnumSet;
-import java.util.List;
 
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RestwarsApplication.class);
@@ -124,27 +114,5 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
         filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
         filter.setInitParameter("allowCredentials", "true");
-    }
-
-    private void loadDemoData(UnitOfWorkService unitOfWorkService, PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService) {
-        unitOfWorkService.start();
-
-        Player player1 = playerService.createPlayer("player1", "player1");
-        List<Planet> player1planets = planetService.findWithOwner(player1);
-
-        Player player2 = playerService.createPlayer("player2", "player2");
-        List<Planet> player2planets = planetService.findWithOwner(player2);
-
-        try {
-            shipService.manifestShips(player1, player1planets.get(0), new Ships(new Ship(ShipType.MOSQUITO, 2), new Ship(ShipType.COLONY, 1)));
-            shipService.manifestShips(player2, player2planets.get(0), new Ships(new Ship(ShipType.MOSQUITO, 1)));
-
-            shipService.sendShipsToPlanet(player1, player1planets.get(0), player2planets.get(0).getLocation(), new Ships(new Ship(ShipType.MOSQUITO, 2)), FlightType.ATTACK, Resources.NONE);
-            shipService.sendShipsToPlanet(player1, player1planets.get(0), new Location(3, 3, 3), new Ships(new Ship(ShipType.COLONY, 1)), FlightType.COLONIZE, new Resources(100, 100, 100));
-        } catch (FlightException e) {
-            LOGGER.error("Exception while sending ships to planet", e);
-        }
-
-        unitOfWorkService.commit();
     }
 }

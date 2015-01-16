@@ -12,6 +12,7 @@ import restwars.restapi.dto.player.PlayerResponse;
 import restwars.restapi.dto.player.RegisterPlayerRequest;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
+import restwars.service.player.CreatePlayerException;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
 
@@ -56,8 +57,12 @@ public class PlayerResource {
     public Response register(@Valid RegisterPlayerRequest registration) {
         Preconditions.checkNotNull(registration, "registration");
 
-        playerService.createPlayer(registration.getUsername(), registration.getPassword());
+        try {
+            playerService.createPlayer(registration.getUsername(), registration.getPassword());
 
-        return Response.created(uriInfo.getAbsolutePathBuilder().path("/").build()).build();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path("/").build()).build();
+        } catch (CreatePlayerException e) {
+            throw new CreatePlayerWebException(e.getReason());
+        }
     }
 }

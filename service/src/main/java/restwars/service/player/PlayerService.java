@@ -12,8 +12,9 @@ public interface PlayerService {
      * @param username Username of the new player.
      * @param password Password of the new player.
      * @return Created player.
+     * @throws CreatePlayerException If the player couldn't be created.
      */
-    Player createPlayer(String username, String password);
+    Player createPlayer(String username, String password) throws CreatePlayerException;
 
     /**
      * Finds the player with the given username.
