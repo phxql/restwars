@@ -1,8 +1,12 @@
 package restwars.service.ship.impl.flighthandler;
 
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.UniverseConfiguration;
+import restwars.service.building.Building;
+import restwars.service.building.BuildingDAO;
+import restwars.service.building.BuildingType;
 import restwars.service.event.Event;
 import restwars.service.event.EventDAO;
 import restwars.service.event.EventType;
@@ -20,10 +24,12 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ColonizeFlightHandler.class);
 
     private final UniverseConfiguration universeConfiguration;
+    private final BuildingDAO buildingDAO;
 
-    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventDAO eventDAO) {
+    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventDAO eventDAO, BuildingDAO buildingDAO) {
         super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
-        this.universeConfiguration = universeConfiguration;
+        this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
+        this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
     }
 
     @Override
@@ -44,6 +50,10 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
                     universeConfiguration.getStartingResources().plus(Resources.energy(flight.getEnergyNeeded() / 2)).plus(flight.getCargo())
             );
             getPlanetDAO().insert(newPlanet);
+
+            // Create a command center on the planet
+            Building commandCenter = new Building(getUuidFactory().create(), BuildingType.COMMAND_CENTER, 1, newPlanet.getId());
+            buildingDAO.insert(commandCenter);
 
             // Land the ships on the new planet
             Hangar hangar = getOrCreateHangar(newPlanet.getId(), flight.getPlayerId());
