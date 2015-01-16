@@ -3,11 +3,15 @@ package restwars.restapi.dto.ship;
 import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import restwars.restapi.dto.ResourcesResponse;
 
 import java.util.List;
 
 @ApiModel(description = "Flight")
 public class FlightResponse {
+    @ApiModelProperty(value = "Start planet", required = true)
+    private String start;
+
     @ApiModelProperty(value = "Destination planet", required = true)
     private String destination;
 
@@ -26,16 +30,21 @@ public class FlightResponse {
     @ApiModelProperty(value = "Direction", required = true)
     private String direction;
 
+    @ApiModelProperty(value = "Cargo", required = true)
+    private ResourcesResponse cargo;
+
     public FlightResponse() {
     }
 
-    public FlightResponse(String destination, long startedInRound, long arrivalInRound, List<ShipResponse> ships, String type, String direction) {
+    public FlightResponse(String start, String destination, long startedInRound, long arrivalInRound, List<ShipResponse> ships, String type, String direction, ResourcesResponse cargo) {
+        this.start = start;
         this.destination = destination;
         this.startedInRound = startedInRound;
         this.arrivalInRound = arrivalInRound;
         this.ships = ships;
         this.type = type;
         this.direction = direction;
+        this.cargo = cargo;
     }
 
     public String getDestination() {
@@ -86,15 +95,33 @@ public class FlightResponse {
         this.direction = direction;
     }
 
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public ResourcesResponse getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(ResourcesResponse cargo) {
+        this.cargo = cargo;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
+                .add("start", start)
                 .add("destination", destination)
                 .add("startedInRound", startedInRound)
                 .add("arrivalInRound", arrivalInRound)
                 .add("ships", ships)
                 .add("type", type)
                 .add("direction", direction)
+                .add("cargo", cargo)
                 .toString();
     }
 }

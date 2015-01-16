@@ -15,9 +15,10 @@ public final class FlightMapper {
         Preconditions.checkNotNull(flight, "flight");
 
         return new FlightResponse(
+                flight.getStart().toString(),
                 flight.getDestination().toString(), flight.getStartedInRound(), flight.getArrivalInRound(),
                 Helper.mapToList(flight.getShips().asList(), ShipMapper::fromShip), flight.getType().toString(),
-                flight.getDirection().toString()
+                flight.getDirection().toString(), ResourcesMapper.fromResources(flight.getCargo())
         );
     }
 
