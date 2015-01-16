@@ -11,7 +11,11 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public interface FightResource {
     @GET
+    @Path("/{id}")
+    public FightResponse getFight(@PathParam("id") String id);
+
+    @GET
     @Path("/own")
-    public List<FightResponse> ownFights(@QueryParam("since") long round);
+    List<FightResponse> ownFights(@QueryParam("since") long round);
 }
 
