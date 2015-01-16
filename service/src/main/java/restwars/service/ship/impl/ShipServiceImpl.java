@@ -27,6 +27,7 @@ import restwars.util.MathExt;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class ShipServiceImpl implements ShipService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShipServiceImpl.class);
@@ -165,6 +166,11 @@ public class ShipServiceImpl implements ShipService {
 
         Hangar updatedHangar = hangar.withShips(hangar.getShips().plus(ships));
         hangarDAO.update(updatedHangar);
+    }
+
+    @Override
+    public Optional<FightWithPlanetAndPlayer> findFight(UUID id) {
+        return fightDAO.findWithId(id);
     }
 
     private void finishReturnFlight(Flight flight, long round) {

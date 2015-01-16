@@ -54,4 +54,14 @@ public class Player {
                 .add("username", username)
                 .toString();
     }
+
+    /**
+     * Determines if this player is the other player.
+     *
+     * @param other Other player.
+     * @return True if this player is the other player.
+     */
+    public boolean is(Player other) {
+        return id.equals(other.getId());
+    }
 }

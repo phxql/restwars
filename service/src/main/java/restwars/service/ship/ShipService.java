@@ -6,6 +6,8 @@ import restwars.service.player.Player;
 import restwars.service.resource.Resources;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface ShipService {
     /**
@@ -90,4 +92,12 @@ public interface ShipService {
      * @param ships  Ships.
      */
     void manifestShips(Player player, Planet planet, Ships ships);
+
+    /**
+     * Finds the fight with the given id.
+     *
+     * @param id Id.
+     * @return Fight, if found.
+     */
+    Optional<FightWithPlanetAndPlayer> findFight(UUID id);
 }

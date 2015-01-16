@@ -1,6 +1,7 @@
 package restwars.service.ship;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -13,6 +14,14 @@ public interface FightDAO {
      * @param fight Fight to insert.
      */
     void insert(Fight fight);
+
+    /**
+     * Finds the fight with the given id.
+     *
+     * @param id Id.
+     * @return Fight, if found.
+     */
+    Optional<FightWithPlanetAndPlayer> findWithId(UUID id);
 
     /**
      * Finds all fights where the given player is either the attacker or the defender which happend since the given round.

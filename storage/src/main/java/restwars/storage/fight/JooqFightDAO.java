@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.jooq.SelectOnConditionStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.planet.Planet;
@@ -12,12 +13,14 @@ import restwars.service.ship.*;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
 import restwars.storage.jooq.tables.Player;
+import restwars.storage.jooq.tables.records.FightRecord;
 import restwars.storage.mapper.PlanetMapper;
 import restwars.storage.mapper.PlayerMapper;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static restwars.storage.jooq.Tables.*;
@@ -25,6 +28,8 @@ import static restwars.storage.jooq.Tables.*;
 public class JooqFightDAO extends AbstractJooqDAO implements FightDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JooqFightDAO.class);
+    public static final Player ATTACKER_ALIAS = PLAYER.as("a");
+    public static final Player DEFENDER_ALIAS = PLAYER.as("d");
 
     private static enum Category {
         ATTACKER_SHIP(0),
@@ -53,10 +58,30 @@ public class JooqFightDAO extends AbstractJooqDAO implements FightDAO {
         }
     }
 
-
     @Inject
     public JooqFightDAO(UnitOfWorkService unitOfWorkService) {
         super(unitOfWorkService);
+    }
+
+    @Override
+    public Optional<FightWithPlanetAndPlayer> findWithId(UUID id) {
+        Preconditions.checkNotNull(id, "id");
+        LOGGER.debug("Finding fight with id {}", id);
+
+        FightRecord record = context().selectFrom(FIGHT).where(FIGHT.ID.eq(id)).fetchOne();
+
+        if (record == null) {
+            return Optional.empty();
+        }
+
+        Map<UUID, Result<Record>> result = selectFromFights()
+                .where(FIGHT.ID.eq(id))
+                .fetchGroups(FIGHT.ID);
+
+        List<FightWithPlanetAndPlayer> fight = readFights(result);
+        assert !fight.isEmpty();
+
+        return Optional.of(fight.get(0));
     }
 
     @Override
@@ -83,24 +108,15 @@ public class JooqFightDAO extends AbstractJooqDAO implements FightDAO {
         Preconditions.checkNotNull(playerId, "playerId");
         LOGGER.debug("Finding all fights with player {} since round {}", playerId, round);
 
-        Player attacker = PLAYER.as("a");
-        Player defender = PLAYER.as("d");
-
-        Map<UUID, Result<Record>> result = context()
-                .select()
-                .from(FIGHT)
-                .join(FIGHT_SHIPS).on(FIGHT_SHIPS.FIGHT_ID.eq(FIGHT.ID))
-                .join(PLANET).on(PLANET.ID.eq(FIGHT.PLANET_ID))
-                .join(attacker).on(attacker.ID.eq(FIGHT.ATTACKER_ID))
-                .join(defender).on(defender.ID.eq(FIGHT.DEFENDER_ID))
+        Map<UUID, Result<Record>> result = selectFromFights()
                 .where(FIGHT.ATTACKER_ID.eq(playerId).or(FIGHT.DEFENDER_ID.eq(playerId)))
                 .and(FIGHT.ROUND.greaterOrEqual(round))
                 .fetchGroups(FIGHT.ID);
 
-        return readFights(result, attacker, defender);
+        return readFights(result);
     }
 
-    private List<FightWithPlanetAndPlayer> readFights(Map<UUID, Result<Record>> queryResult, Player attackerAlias, Player defenderAlias) {
+    private List<FightWithPlanetAndPlayer> readFights(Map<UUID, Result<Record>> queryResult) {
         List<FightWithPlanetAndPlayer> result = Lists.newArrayList();
 
         for (Map.Entry<UUID, Result<Record>> entry : queryResult.entrySet()) {
@@ -141,13 +157,23 @@ public class JooqFightDAO extends AbstractJooqDAO implements FightDAO {
                     new Resources(main.getValue(FIGHT.CRYSTALS_LOOTED), main.getValue(FIGHT.GAS_LOOTED), 0)
             );
             Planet planet = PlanetMapper.fromRecord(main);
-            restwars.service.player.Player attacker = PlayerMapper.fromRecord(main, attackerAlias);
-            restwars.service.player.Player defender = PlayerMapper.fromRecord(main, defenderAlias);
+            restwars.service.player.Player attacker = PlayerMapper.fromRecord(main, ATTACKER_ALIAS);
+            restwars.service.player.Player defender = PlayerMapper.fromRecord(main, DEFENDER_ALIAS);
 
             result.add(new FightWithPlanetAndPlayer(fight, planet, attacker, defender));
         }
 
         return result;
+    }
+
+    private SelectOnConditionStep<Record> selectFromFights() {
+        return context()
+                .select()
+                .from(FIGHT)
+                .join(FIGHT_SHIPS).on(FIGHT_SHIPS.FIGHT_ID.eq(FIGHT.ID))
+                .join(PLANET).on(PLANET.ID.eq(FIGHT.PLANET_ID))
+                .join(ATTACKER_ALIAS).on(ATTACKER_ALIAS.ID.eq(FIGHT.ATTACKER_ID))
+                .join(DEFENDER_ALIAS).on(DEFENDER_ALIAS.ID.eq(FIGHT.DEFENDER_ID));
     }
 
     private void insertShips(Fight fight, Ships ships, Category category) {
