@@ -12,8 +12,9 @@ public final class FightMapper {
         Preconditions.checkNotNull(fight, "fight");
 
         return new FightResponse(
-                fight.getPlanet().getLocation().toString(), fight.getAttacker().getUsername(),
-                fight.getDefender().getUsername(), ShipMapper.fromShips(fight.getFight().getAttackingShips()),
+                fight.getFight().getId().toString(), fight.getPlanet().getLocation().toString(),
+                fight.getAttacker().getUsername(), fight.getDefender().getUsername(),
+                ShipMapper.fromShips(fight.getFight().getAttackingShips()),
                 ShipMapper.fromShips(fight.getFight().getDefendingShips()),
                 ShipMapper.fromShips(fight.getFight().getRemainingAttackerShips()),
                 ShipMapper.fromShips(fight.getFight().getRemainingDefenderShips()), fight.getFight().getRound(),

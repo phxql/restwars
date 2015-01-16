@@ -9,6 +9,9 @@ import java.util.List;
 
 @ApiModel(description = "An fight")
 public class FightResponse {
+    @ApiModelProperty(value = "Id", required = true)
+    private String id;
+
     @ApiModelProperty(value = "Planet", required = true)
     private String location;
 
@@ -39,7 +42,8 @@ public class FightResponse {
     public FightResponse() {
     }
 
-    public FightResponse(String location, String attacker, String defender, List<ShipResponse> attackerShips, List<ShipResponse> defenderShips, List<ShipResponse> remainingAttackerShips, List<ShipResponse> remainingDefenderShips, long round, ResourcesResponse loot) {
+    public FightResponse(String id, String location, String attacker, String defender, List<ShipResponse> attackerShips, List<ShipResponse> defenderShips, List<ShipResponse> remainingAttackerShips, List<ShipResponse> remainingDefenderShips, long round, ResourcesResponse loot) {
+        this.id = id;
         this.location = location;
         this.attacker = attacker;
         this.defender = defender;
@@ -123,9 +127,18 @@ public class FightResponse {
         this.loot = loot;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
+                .add("id", id)
                 .add("location", location)
                 .add("attacker", attacker)
                 .add("defender", defender)
