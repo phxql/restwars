@@ -4,6 +4,7 @@ import restwars.service.ServiceException;
 
 public class FlightException extends ServiceException {
     public static enum Reason {
+        INVALID_DESTINATION,
         SAME_START_AND_DESTINATION,
         NO_SHIPS,
         NO_COLONY_SHIP,

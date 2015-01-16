@@ -46,6 +46,7 @@ public class ShipServiceImpl implements ShipService {
     private final AttackFlightHandler attackFlightHandler;
     private final TransferFlightHandler transferFlightHandler;
     private final ShipUtils shipUtils;
+    private final UniverseConfiguration universeConfiguration;
 
     @Inject
     public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventDAO eventDAO, FightDAO fightDAO) {
@@ -60,6 +61,7 @@ public class ShipServiceImpl implements ShipService {
         this.shipInConstructionDAO = Preconditions.checkNotNull(shipInConstructionDAO, "shipInConstructionDAO");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
+        this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
         colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventDAO, buildingDAO);
@@ -235,7 +237,10 @@ public class ShipServiceImpl implements ShipService {
         if (start.getLocation().equals(destination)) {
             throw new FlightException(FlightException.Reason.SAME_START_AND_DESTINATION);
         }
-
+        // Check if destination is in the universe
+        if (!destination.isValid(universeConfiguration.getPlanetsPerSolarSystem(), universeConfiguration.getSolarSystemsPerGalaxy(), universeConfiguration.getGalaxyCount())) {
+            throw new FlightException(FlightException.Reason.INVALID_DESTINATION);
+        }
         // Empty flights are forbidden
         if (ships.isEmpty()) {
             throw new FlightException(FlightException.Reason.NO_SHIPS);
@@ -248,7 +253,6 @@ public class ShipServiceImpl implements ShipService {
         if (!cargo.isEmpty() && !(flightType.equals(FlightType.COLONIZE) || flightType.equals(FlightType.TRANSPORT) || flightType.equals(FlightType.TRANSFER))) {
             throw new FlightException(FlightException.Reason.NO_CARGO_ALLOWED);
         }
-
         // Energy can't be put in cargo
         if (cargo.containsEnergy()) {
             throw new FlightException(FlightException.Reason.CANT_CARGO_ENERGY);

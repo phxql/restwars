@@ -32,6 +32,12 @@ public class Location {
         return planet;
     }
 
+    public boolean isValid(int maxPlanet, int maxSolarSystem, int maxGalaxy) {
+        return planet > 0 && planet <= maxPlanet &&
+                solarSystem > 0 && solarSystem <= maxSolarSystem &&
+                galaxy > 0 && galaxy <= maxGalaxy;
+    }
+
     public static Location parse(String value) {
         Preconditions.checkNotNull(value, "value");
 
