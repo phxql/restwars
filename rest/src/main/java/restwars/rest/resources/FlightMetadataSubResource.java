@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Subresource for flight metadata.
+ */
 @Api(value = "/flight", hidden = true)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,6 +27,11 @@ public class FlightMetadataSubResource {
     public FlightMetadataSubResource() {
     }
 
+    /**
+     * Lists all flight types.
+     *
+     * @return All flight types.
+     */
     @GET
     @Path("/type")
     @ApiOperation("Lists all flight types")

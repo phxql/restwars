@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Resource for fights.
+ */
 @Path("/v1/fight")
 @Api(value = "/v1/fight", description = "Fights", authorizations = {
         @Authorization("basicAuth")
@@ -34,6 +37,13 @@ public class FightResource {
         this.shipService = Preconditions.checkNotNull(shipService, "shipService");
     }
 
+    /**
+     * Returns the fight with the given id.
+     *
+     * @param player Player.
+     * @param id     Id of the fight.
+     * @return Fight with the given id.
+     */
     @GET
     @Path("/{id}")
     @ApiOperation("Reads a fight")
@@ -57,6 +67,13 @@ public class FightResource {
         return FightMapper.fromFight(fight.get());
     }
 
+    /**
+     * Lists all fights where the player has participated since the given round.
+     *
+     * @param player Player.
+     * @param round  Round, inclusive.
+     * @return All fights where the player has participated since the given round.
+     */
     @GET
     @Path("/own")
     @ApiOperation("Lists all own fights since a round")

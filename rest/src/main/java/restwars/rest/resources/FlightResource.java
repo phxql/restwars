@@ -21,6 +21,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ * Resource for flights.
+ */
 @Path("/v1/flight")
 @Api(value = "/v1/flight", description = "Flights", authorizations = {
         @Authorization("basicAuth")
@@ -35,6 +38,12 @@ public class FlightResource {
         this.shipService = Preconditions.checkNotNull(shipService, "shipService");
     }
 
+    /**
+     * Lists all flights from the player.
+     *
+     * @param player Player.
+     * @return All flights from the player.
+     */
     @GET
     @Path("/own")
     @ApiOperation("Lists all own flights")

@@ -18,6 +18,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ * Resource for events.
+ */
 @Path("/v1/event")
 @Api(value = "/v1/event", description = "Events", authorizations = {
         @Authorization("basicAuth")
@@ -32,6 +35,13 @@ public class EventResource {
         this.eventService = eventService;
     }
 
+    /**
+     * Lists all events since a given round.
+     *
+     * @param player Player.
+     * @param round  Round, inclusive.
+     * @return All events since the given round.
+     */
     @GET
     @ApiOperation("Lists all events since a round")
     public List<EventResponse> getEvents(

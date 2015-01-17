@@ -26,6 +26,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ * Subresource for flights to or from a planet.
+ */
 @Api(value = "/{location}/flight", hidden = true)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -39,6 +42,13 @@ public class FlightSubResource {
         this.shipService = Preconditions.checkNotNull(shipService, "shipService");
     }
 
+    /**
+     * Lists all flights from the player to or from the given location.
+     *
+     * @param player   Player.
+     * @param location Location.
+     * @return All flights from the player to or from the given location.
+     */
     @GET
     @Path("/own")
     @ApiOperation("Lists own flights from or to this planet")
@@ -55,6 +65,15 @@ public class FlightSubResource {
         return Helper.mapToList(flights, FlightMapper::fromFlight);
     }
 
+    /**
+     * Creates a new flight.
+     *
+     * @param player      Player.
+     * @param start       Location of the start planet.
+     * @param destination Location of the destination planet.
+     * @param data        Information about the new flight.
+     * @return Flight.
+     */
     @POST
     @Path("/to/{destination}")
     @ApiOperation("Creates a flight")
@@ -62,18 +81,18 @@ public class FlightSubResource {
             @Auth @ApiParam(access = "internal") Player player,
             @PathParam("location") @ApiParam("Start planet") LocationParam start,
             @PathParam("destination") @ApiParam("Destination planet") LocationParam destination,
-            @Valid CreateFlightRequest body
+            @Valid CreateFlightRequest data
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(start, "start");
         Preconditions.checkNotNull(destination, "destination");
-        Preconditions.checkNotNull(body, "body");
+        Preconditions.checkNotNull(data, "data");
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, start.getValue(), player);
         try {
             Flight flight = shipService.sendShipsToPlanet(
-                    player, planet, destination.getValue(), ShipMapper.fromShips(body.getShips()), FlightType.valueOf(body.getType()),
-                    new Resources(body.getCargoCrystals(), body.getCargoGas(), 0)
+                    player, planet, destination.getValue(), ShipMapper.fromShips(data.getShips()), FlightType.valueOf(data.getType()),
+                    new Resources(data.getCargoCrystals(), data.getCargoGas(), 0)
             );
 
             return FlightMapper.fromFlight(flight);

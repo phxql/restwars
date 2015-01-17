@@ -6,7 +6,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Is thrown if a flight couldn't be started.
+ */
 public class FlightWebException extends WebApplicationException {
+    /**
+     * Response body.
+     */
     public static class Body {
         private final FlightException.Reason reason;
 
