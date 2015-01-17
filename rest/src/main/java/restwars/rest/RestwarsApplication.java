@@ -88,8 +88,6 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         environment.lifecycle().manage(compositionRoot.getClock());
 
-        // loadDemoData(compositionRoot.getUnitOfWorkService(), compositionRoot.getPlayerService(), compositionRoot.getPlanetService(), compositionRoot.getBuildingService(), compositionRoot.getTechnologyService(), compositionRoot.getShipService());
-
         // Initialize swagger documentation
         registerSwagger(environment, configuration);
 
