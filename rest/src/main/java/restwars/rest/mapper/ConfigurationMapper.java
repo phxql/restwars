@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import restwars.restapi.dto.metadata.ConfigurationMetadataResponse;
 import restwars.service.UniverseConfiguration;
 
+/**
+ * Maps configuration objects to DTOs and vice versa.
+ */
 public final class ConfigurationMapper {
     private ConfigurationMapper() {
     }

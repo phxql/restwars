@@ -12,6 +12,9 @@ import restwars.storage.jooq.JooqUnitOfWorkService;
 
 import javax.inject.Named;
 
+/**
+ * Dagger module for RESTwars.
+ */
 @Module(injects = CompositionRoot.class, includes = {
         JooqDAOModule.class, ServiceModule.class
 })

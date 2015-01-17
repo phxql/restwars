@@ -7,6 +7,9 @@ import restwars.restapi.dto.ship.FlightResponse;
 import restwars.service.ship.Flight;
 import restwars.service.ship.FlightType;
 
+/**
+ * Maps flight entities to DTOs and vice versa.
+ */
 public final class FlightMapper {
     private FlightMapper() {
     }

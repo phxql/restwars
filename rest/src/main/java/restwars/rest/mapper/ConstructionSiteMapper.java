@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import restwars.restapi.dto.building.ConstructionSiteResponse;
 import restwars.service.building.ConstructionSite;
 
+/**
+ * Maps construction site entities to DTOs and vice versa.
+ */
 public final class ConstructionSiteMapper {
     private ConstructionSiteMapper() {
     }

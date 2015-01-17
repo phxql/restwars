@@ -13,6 +13,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+/**
+ * Subresource for configuration metadata.
+ */
 @Api(value = "/configuration", hidden = true)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,6 +27,11 @@ public class ConfigurationMetadataSubResource {
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
     }
 
+    /**
+     * Returns the current server configuration.
+     *
+     * @return Server configuration.
+     */
     @GET
     @ApiOperation("Configuration")
     public ConfigurationMetadataResponse getConfiguration() {

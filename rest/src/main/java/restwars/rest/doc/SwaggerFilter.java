@@ -8,6 +8,10 @@ import com.wordnik.swagger.model.Parameter;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Filter class to remove all JAXRS parameters annotated with access="internal". Otherwise the @Auth annotated parameters
+ * from Dropwizard confuse Swagger.
+ */
 public class SwaggerFilter implements SwaggerSpecFilter {
     @Override
     public boolean isOperationAllowed(Operation operation, ApiDescription apiDescription, Map<String, List<String>> map, Map<String, String> map1, Map<String, List<String>> map2) {

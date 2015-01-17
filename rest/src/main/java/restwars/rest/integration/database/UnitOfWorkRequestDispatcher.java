@@ -5,6 +5,10 @@ import com.sun.jersey.api.core.HttpContext;
 import com.sun.jersey.spi.dispatch.RequestDispatcher;
 import restwars.service.unitofwork.UnitOfWorkService;
 
+/**
+ * Starts a unit of work before processing the request and commits the unit of work after request. If the request is
+ * aborted, the unit of work will also be aborted.
+ */
 public class UnitOfWorkRequestDispatcher implements RequestDispatcher {
     private final RequestDispatcher dispatcher;
     private final UnitOfWorkService unitOfWorkService;

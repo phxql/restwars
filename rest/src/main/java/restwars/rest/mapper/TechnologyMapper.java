@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import restwars.restapi.dto.technology.TechnologyResponse;
 import restwars.service.technology.Technology;
 
+/**
+ * Maps technology entities to DTOs and vice versa.
+ */
 public final class TechnologyMapper {
     private TechnologyMapper() {
     }

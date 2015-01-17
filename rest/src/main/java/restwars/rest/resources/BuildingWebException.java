@@ -6,7 +6,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Is thrown if a construction site couldn't be created.
+ */
 public class BuildingWebException extends WebApplicationException {
+    /**
+     * Response body.
+     */
     public static class Body {
         private final BuildingException.Reason reason;
 

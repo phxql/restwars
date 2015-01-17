@@ -10,6 +10,9 @@ import restwars.service.planet.Planet;
 
 import java.util.UUID;
 
+/**
+ * Maps event entities to DTOs and vice versa.
+ */
 public final class EventMapper {
     private EventMapper() {
     }

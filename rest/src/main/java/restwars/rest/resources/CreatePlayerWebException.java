@@ -6,7 +6,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Is thrown if a player couldn't be created.
+ */
 public class CreatePlayerWebException extends WebApplicationException {
+    /**
+     * Response body.
+     */
     public static class Body {
         private final CreatePlayerException.Reason reason;
 

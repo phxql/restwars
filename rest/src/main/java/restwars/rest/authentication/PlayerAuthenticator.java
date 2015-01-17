@@ -12,6 +12,9 @@ import restwars.service.security.PasswordService;
 import javax.inject.Inject;
 import java.util.Optional;
 
+/**
+ * Authenticates a player.
+ */
 public class PlayerAuthenticator implements Authenticator<BasicCredentials, Player> {
     private final PlayerService playerService;
     private final PasswordService passwordService;

@@ -9,30 +9,58 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+/**
+ * RESTwars configuration.
+ */
 public class RestwarsConfiguration extends Configuration {
+    /**
+     * Public URL of the server.
+     */
     @NotEmpty
     private String publicUrl;
 
+    /**
+     * Database configuration.
+     */
     @Valid
     @NotNull
     @JsonProperty("database")
     private DataSourceFactory database;
 
+    /**
+     * Password cache configuration.
+     */
     @NotEmpty
     private String passwordCache;
 
+    /**
+     * Number of password iterations. More iterations = more secure password storage but also an increased CPU load when
+     * checking a password.
+     */
     @Min(1)
     private int passwordIterations;
 
+    /**
+     * Number of galaxies in the universe.
+     */
     @Min(1)
     private int galaxies;
 
+    /**
+     * Number of solar systems in a galaxy.
+     */
     @Min(1)
     private int solarSystems;
 
+    /**
+     * Number of planets in a solar system.
+     */
     @Min(1)
     private int planets;
 
+    /**
+     * Round time in seconds.
+     */
     @Min(1)
     private int roundTime;
 

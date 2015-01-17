@@ -12,6 +12,9 @@ import restwars.service.unitofwork.UnitOfWorkService;
 
 import javax.inject.Inject;
 
+/**
+ * Composition root of the dependency injection.
+ */
 public class CompositionRoot {
     private final PlayerService playerService;
     private final PlanetService planetService;

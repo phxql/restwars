@@ -6,6 +6,9 @@ import restwars.restapi.dto.planet.PlanetScanResponse;
 import restwars.service.planet.Planet;
 import restwars.service.telescope.PlanetWithOwner;
 
+/**
+ * Maps planet entities to DTOs and vice versa.
+ */
 public final class PlanetMapper {
     private PlanetMapper() {
     }

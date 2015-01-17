@@ -5,6 +5,9 @@ import restwars.service.planet.Location;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+/**
+ * Param for JAXRS. Parses a string into a {@link restwars.service.planet.Location} object.
+ */
 public class LocationParam {
     private final Location location;
 

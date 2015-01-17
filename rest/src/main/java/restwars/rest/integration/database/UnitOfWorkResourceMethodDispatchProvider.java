@@ -6,6 +6,9 @@ import com.sun.jersey.spi.container.ResourceMethodDispatchProvider;
 import com.sun.jersey.spi.dispatch.RequestDispatcher;
 import restwars.service.unitofwork.UnitOfWorkService;
 
+/**
+ * Provider which wires the UnitOfWorkRequestDispatcher and the UnitOfWorkService together.
+ */
 public class UnitOfWorkResourceMethodDispatchProvider implements ResourceMethodDispatchProvider {
     private final UnitOfWorkService unitOfWorkService;
     private final ResourceMethodDispatchProvider provider;

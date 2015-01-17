@@ -24,6 +24,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ * Subresource for construction sites on a planet.
+ */
 @Api(value = "/{location}/construction-site", hidden = true)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -37,6 +40,13 @@ public class ConstructionSiteSubResource {
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
     }
 
+    /**
+     * Lists all construction sites on the planet with the given location.
+     *
+     * @param player   Player.
+     * @param location Planet location.
+     * @return All construction sites on the planet.
+     */
     @GET
     @ApiOperation(value = "Get all construction sites on a planet")
     public List<ConstructionSiteResponse> getConstructionSites(
@@ -51,6 +61,14 @@ public class ConstructionSiteSubResource {
         return Helper.mapToList(constructionSites, ConstructionSiteMapper::fromConstructionSite);
     }
 
+    /**
+     * Creates a new construction site on the planet with the given location.
+     *
+     * @param player   Player.
+     * @param location Planet location.
+     * @param data     Information about the new construction site.
+     * @return The constructed construction site.
+     */
     @POST
     @ApiOperation("Creates a new construction site")
     public ConstructionSiteResponse build(

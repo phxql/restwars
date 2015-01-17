@@ -11,6 +11,9 @@ import restwars.service.ship.Ships;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Maps ships objects to DTOs and vice versa.
+ */
 public final class ShipMapper {
     private ShipMapper() {
     }

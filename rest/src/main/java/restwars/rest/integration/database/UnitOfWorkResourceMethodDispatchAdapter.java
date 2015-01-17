@@ -7,6 +7,9 @@ import restwars.service.unitofwork.UnitOfWorkService;
 
 import javax.ws.rs.ext.Provider;
 
+/**
+ * Adapter to register the UnitOfWorkRequestDispatcher.
+ */
 @Provider
 public class UnitOfWorkResourceMethodDispatchAdapter implements ResourceMethodDispatchAdapter {
     private final UnitOfWorkService unitOfWorkService;

@@ -23,6 +23,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ * Subresource for buildings on a planet.
+ */
 @Api(value = "/{location}/building", hidden = true)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -36,6 +39,13 @@ public class BuildingSubResource {
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
     }
 
+    /**
+     * Lists all buildings on the planet with the given location.
+     *
+     * @param player   Player.
+     * @param location Planet location.
+     * @return All buildings on the planet.
+     */
     @GET
     @ApiOperation(value = "Get all buildings on a planet")
     public List<BuildingResponse> getBuildings(

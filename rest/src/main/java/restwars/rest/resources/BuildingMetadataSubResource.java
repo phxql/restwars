@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Subresource for building metadata.
+ */
 @Api(value = "/building", hidden = true)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -30,6 +33,12 @@ public class BuildingMetadataSubResource {
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
     }
 
+    /**
+     * Lists metadata for all buildings.
+     *
+     * @param level Building level for which the resource cost and build time should be returned.
+     * @return Metadata for all buildings.
+     */
     @GET
     @ApiOperation("Lists all buildings")
     public List<BuildingMetadataResponse> all(@QueryParam("level") @ApiParam(value = "Building level", defaultValue = "1") int level) {

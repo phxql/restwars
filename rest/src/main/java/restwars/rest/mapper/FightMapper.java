@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import restwars.restapi.dto.ship.FightResponse;
 import restwars.service.ship.FightWithPlanetAndPlayer;
 
+/**
+ * Maps fight entities to DTOs and vice versa.
+ */
 public final class FightMapper {
     private FightMapper() {
     }

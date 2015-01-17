@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import restwars.restapi.dto.technology.ResearchResponse;
 import restwars.service.technology.Research;
 
+/**
+ * Maps research entities to DTOs and vice versa.
+ */
 public final class ResearchMapper {
     private ResearchMapper() {
     }

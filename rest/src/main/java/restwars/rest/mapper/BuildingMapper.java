@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import restwars.restapi.dto.building.BuildingResponse;
 import restwars.service.building.Building;
 
+/**
+ * Maps building entities to DTOs and vice versa.
+ */
 public final class BuildingMapper {
     private BuildingMapper() {
     }
