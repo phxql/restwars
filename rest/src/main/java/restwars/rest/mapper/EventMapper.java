@@ -8,6 +8,8 @@ import restwars.service.event.EventType;
 import restwars.service.event.EventWithPlanet;
 import restwars.service.planet.Planet;
 
+import java.util.UUID;
+
 public final class EventMapper {
     private EventMapper() {
     }
@@ -17,7 +19,7 @@ public final class EventMapper {
 
         Event event = eventWithPlanet.getEvent();
         Planet planet = eventWithPlanet.getPlanet();
-        return new EventResponse(planet.getLocation().toString(), event.getType().name(), event.getRound());
+        return new EventResponse(planet.getLocation().toString(), event.getType().name(), event.getRound(), event.getFightId().map(UUID::toString).orElse(null));
     }
 
     public static EventTypeMetadataResponse fromEventType(EventType eventType) {

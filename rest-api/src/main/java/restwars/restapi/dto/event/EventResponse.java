@@ -12,14 +12,17 @@ public class EventResponse {
     private String type;
     @ApiModelProperty(value = "Round", required = true)
     private long round;
+    @ApiModelProperty(value = "Fight id", required = false)
+    private String fightId;
 
     public EventResponse() {
     }
 
-    public EventResponse(String location, String type, long round) {
+    public EventResponse(String location, String type, long round, String fightId) {
         this.location = location;
         this.type = type;
         this.round = round;
+        this.fightId = fightId;
     }
 
     public String getLocation() {
@@ -46,12 +49,21 @@ public class EventResponse {
         this.round = round;
     }
 
+    public String getFightId() {
+        return fightId;
+    }
+
+    public void setFightId(String fightId) {
+        this.fightId = fightId;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("location", location)
                 .add("type", type)
                 .add("round", round)
+                .add("fightId", fightId)
                 .toString();
     }
 }
