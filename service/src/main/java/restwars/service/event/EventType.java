@@ -1,23 +1,32 @@
 package restwars.service.event;
 
+import com.google.common.base.Preconditions;
+
 public enum EventType {
-    BUILDING_COMPLETED(0),
-    RESEARCH_COMPLETED(1),
-    SHIP_COMPLETED(2),
-    FLIGHT_RETURNED(3),
-    PLANET_COLONIZED(4),
-    TRANSPORT_ARRIVED(5),
-    FIGHT_HAPPENED(6),
-    TRANSFER_ARRIVED(7);
+    BUILDING_COMPLETED(0, "A building has been constructed"),
+    RESEARCH_COMPLETED(1, "A technology has been researched"),
+    SHIP_COMPLETED(2, "A ship has been constructed"),
+    FLIGHT_RETURNED(3, "A flight has returned"),
+    PLANET_COLONIZED(4, "A new planet has been colonized"),
+    TRANSPORT_ARRIVED(5, "A transport has arrived"),
+    FIGHT_HAPPENED(6, "A fight has happened"),
+    TRANSFER_ARRIVED(7, "A ship transfer has been finished");
 
     private final int id;
 
-    EventType(int id) {
+    private final String description;
+
+    EventType(int id, String description) {
         this.id = id;
+        this.description = Preconditions.checkNotNull(description, "description");
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public static EventType fromId(int id) {

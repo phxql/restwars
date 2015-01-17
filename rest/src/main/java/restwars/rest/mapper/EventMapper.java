@@ -26,6 +26,6 @@ public final class EventMapper {
     }
 
     public static EventTypeMetadataResponse fromEventType(EventType eventType) {
-        return new EventTypeMetadataResponse(eventType.name());
+        return new EventTypeMetadataResponse(eventType.name(), eventType.getDescription());
     }
 }
