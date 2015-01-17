@@ -1,5 +1,7 @@
 package restwars.service.building;
 
+import com.google.common.base.Preconditions;
+
 public enum BuildingType {
     COMMAND_CENTER(0, "Constructs buildings"),
     SHIPYARD(1, "Constructs ships"),
@@ -15,7 +17,7 @@ public enum BuildingType {
 
     BuildingType(int id, String description) {
         this.id = id;
-        this.description = description;
+        this.description = Preconditions.checkNotNull(description, "description");
     }
 
     public int getId() {

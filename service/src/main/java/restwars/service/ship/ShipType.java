@@ -27,7 +27,6 @@ public enum ShipType {
 
     ShipType(int id, Resources buildCost, long buildTime, double flightCostModifier, int speed, int attackPoints, int defensePoints, long storageCapacity, String description) {
         this.id = id;
-        this.description = description;
         Preconditions.checkArgument(buildTime > 0, "buildTime must be > 0");
         Preconditions.checkArgument(speed > 0, "speed must be > 0");
         Preconditions.checkArgument(attackPoints >= 0, "attackPoints must be >= 0");
@@ -41,6 +40,7 @@ public enum ShipType {
         this.flightCostModifier = flightCostModifier;
         this.speed = speed;
         this.storageCapacity = storageCapacity;
+        this.description = Preconditions.checkNotNull(description, "description");
     }
 
     public int getId() {
