@@ -32,7 +32,8 @@ public final class ShipMapper {
 
         return new ShipMetadataResponse(
                 shipType.name(), shipType.getBuildTime(), ResourcesMapper.fromResources(shipType.getBuildCost()),
-                shipType.getSpeed(), shipType.getAttackPoints(), shipType.getDefensePoints(), shipType.getStorageCapacity()
+                shipType.getSpeed(), shipType.getAttackPoints(), shipType.getDefensePoints(), shipType.getStorageCapacity(),
+                shipType.getDescription()
         );
     }
 

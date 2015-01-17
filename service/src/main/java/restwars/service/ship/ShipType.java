@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import restwars.service.resource.Resources;
 
 public enum ShipType {
-    MOSQUITO(0, new Resources(1, 1, 1), 1, 1.0, 1, 1, 1, 100),
-    COLONY(1, new Resources(1, 1, 1), 1, 1.0, 1, 0, 5, 10000);
+    MOSQUITO(0, new Resources(1, 1, 1), 1, 1.0, 1, 1, 1, 100, "Small and cheap fighter ship"),
+    COLONY(1, new Resources(1, 1, 1), 1, 1.0, 1, 0, 5, 10000, "Colonizes planets");
 
     private final int id;
 
@@ -23,8 +23,11 @@ public enum ShipType {
 
     private final long storageCapacity;
 
-    ShipType(int id, Resources buildCost, long buildTime, double flightCostModifier, int speed, int attackPoints, int defensePoints, long storageCapacity) {
+    private final String description;
+
+    ShipType(int id, Resources buildCost, long buildTime, double flightCostModifier, int speed, int attackPoints, int defensePoints, long storageCapacity, String description) {
         this.id = id;
+        this.description = description;
         Preconditions.checkArgument(buildTime > 0, "buildTime must be > 0");
         Preconditions.checkArgument(speed > 0, "speed must be > 0");
         Preconditions.checkArgument(attackPoints >= 0, "attackPoints must be >= 0");
@@ -70,6 +73,10 @@ public enum ShipType {
 
     public long getStorageCapacity() {
         return storageCapacity;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public static ShipType fromId(int id) {
