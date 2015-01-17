@@ -38,7 +38,8 @@ public class BuildingMetadataSubResource {
         return Stream.of(BuildingType.values())
                 .map(t -> new BuildingMetadataResponse(
                         t.name(), sanitizedLevel, buildingService.calculateBuildTimeWithoutBonuses(t, sanitizedLevel),
-                        ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(t, sanitizedLevel))
+                        ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(t, sanitizedLevel)),
+                        t.getDescription()
                 ))
                 .collect(Collectors.toList());
     }

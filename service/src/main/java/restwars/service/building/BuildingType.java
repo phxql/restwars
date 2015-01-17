@@ -1,22 +1,29 @@
 package restwars.service.building;
 
 public enum BuildingType {
-    COMMAND_CENTER(0),
-    SHIPYARD(1),
-    CRYSTAL_MINE(2),
-    GAS_REFINERY(3),
-    SOLAR_PANELS(4),
-    RESEARCH_CENTER(5),
-    TELESCOPE(6);
+    COMMAND_CENTER(0, "Constructs buildings"),
+    SHIPYARD(1, "Constructs ships"),
+    CRYSTAL_MINE(2, "Gathers crystals"),
+    GAS_REFINERY(3, "Gathers gas"),
+    SOLAR_PANELS(4, "Gathers energy"),
+    RESEARCH_CENTER(5, "Researches technology"),
+    TELESCOPE(6, "Scans the area for other planets");
 
     private final int id;
 
-    BuildingType(int id) {
+    private final String description;
+
+    BuildingType(int id, String description) {
         this.id = id;
+        this.description = description;
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public static BuildingType fromId(int id) {
