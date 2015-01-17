@@ -3,8 +3,8 @@ package restwars.service.ship;
 import com.google.common.base.Preconditions;
 
 public enum FlightType {
-    ATTACK(0, "Attacks an enemy planet"),
-    COLONIZE(1, "Colonized an empty planet"),
+    ATTACK(0, "Attack an enemy planet"),
+    COLONIZE(1, "Colonize an empty planet"),
     TRANSPORT(2, "Transport resources to a friendly planet"),
     TRANSFER(3, "Transfer ships to a friendly planet");
 
