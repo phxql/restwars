@@ -3,7 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.event.EventDAO;
+import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.PlanetDAO;
@@ -23,15 +23,15 @@ public abstract class AbstractFlightHandler {
     private final HangarDAO hangarDAO;
     private final UUIDFactory uuidFactory;
     private final ShipUtils shipUtils;
-    private final EventDAO eventDAO;
+    private final EventService eventService;
 
-    public AbstractFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventDAO eventDAO) {
+    public AbstractFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService) {
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.hangarDAO = Preconditions.checkNotNull(hangarDAO, "hangarDAO");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
-        this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
+        this.eventService = Preconditions.checkNotNull(eventService, "eventService");
 
         shipUtils = new ShipUtils();
     }
@@ -86,8 +86,8 @@ public abstract class AbstractFlightHandler {
         return uuidFactory;
     }
 
-    protected EventDAO getEventDAO() {
-        return eventDAO;
+    protected EventService getEventService() {
+        return eventService;
     }
 
     public abstract void handle(Flight flight, long round);

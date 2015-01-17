@@ -4,9 +4,7 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.building.*;
-import restwars.service.event.Event;
-import restwars.service.event.EventDAO;
-import restwars.service.event.EventType;
+import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -30,17 +28,17 @@ public class BuildingServiceImpl implements BuildingService {
     private final RoundService roundService;
     private final PlanetDAO planetDAO;
     private final ConstructionSiteDAO constructionSiteDAO;
-    private final EventDAO eventDAO;
+    private final EventService eventService;
     private final TechnologyDAO technologyDAO;
 
     @Inject
-    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO, EventDAO eventDAO, TechnologyDAO technologyDAO) {
+    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO, EventService eventService, TechnologyDAO technologyDAO) {
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.constructionSiteDAO = Preconditions.checkNotNull(constructionSiteDAO, "constructionSiteDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
-        this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
+        this.eventService = Preconditions.checkNotNull(eventService, "eventService");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
     }
 
@@ -166,7 +164,7 @@ public class BuildingServiceImpl implements BuildingService {
             }
 
             // Create event
-            eventDAO.insert(new Event(uuidFactory.create(), constructionSite.getPlayerId(), constructionSite.getPlanetId(), EventType.BUILDING_COMPLETED, round));
+            eventService.createBuildingCompletedEvent(constructionSite.getPlayerId(), constructionSite.getPlanetId());
 
             constructionSiteDAO.delete(constructionSite);
         }

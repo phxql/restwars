@@ -3,9 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.event.Event;
-import restwars.service.event.EventDAO;
-import restwars.service.event.EventType;
+import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -22,8 +20,8 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     private final FightCalculator fightCalculator;
     private final FightDAO fightDAO;
 
-    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO, EventDAO eventDAO) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
+    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO, EventService eventService) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
         this.fightCalculator = new FightCalculator(uuidFactory);
@@ -67,8 +65,7 @@ public class AttackFlightHandler extends AbstractFlightHandler {
                 fightDAO.insert(fight);
 
                 // Create event for attacker and defender
-                getEventDAO().insert(new Event(getUuidFactory().create(), attackerId, defenderPlanet.getId(), EventType.FIGHT_HAPPENED, round));
-                getEventDAO().insert(new Event(getUuidFactory().create(), defenderId, defenderPlanet.getId(), EventType.FIGHT_HAPPENED, round));
+                getEventService().createFightHappenedEvent(attackerId, defenderId, defenderPlanet.getId(), fight.getId());
             }
         } else {
             LOGGER.debug("Planet {} is not colonized, creating return flight", flight.getDestination());

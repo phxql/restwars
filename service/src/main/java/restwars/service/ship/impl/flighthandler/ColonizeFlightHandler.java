@@ -7,9 +7,7 @@ import restwars.service.UniverseConfiguration;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
-import restwars.service.event.Event;
-import restwars.service.event.EventDAO;
-import restwars.service.event.EventType;
+import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -26,8 +24,8 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
     private final UniverseConfiguration universeConfiguration;
     private final BuildingDAO buildingDAO;
 
-    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventDAO eventDAO, BuildingDAO buildingDAO) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
+    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventService eventService, BuildingDAO buildingDAO) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
     }
@@ -63,7 +61,7 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
             getFlightDAO().delete(flight);
 
             // Create event
-            getEventDAO().insert(new Event(getUuidFactory().create(), flight.getPlayerId(), newPlanet.getId(), EventType.PLANET_COLONIZED, round));
+            getEventService().createPlanetColonizedEvent(flight.getPlayerId(), newPlanet.getId());
         }
     }
 }

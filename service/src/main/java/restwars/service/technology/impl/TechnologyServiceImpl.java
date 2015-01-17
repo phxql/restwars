@@ -6,9 +6,7 @@ import org.slf4j.LoggerFactory;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
 import restwars.service.building.Buildings;
-import restwars.service.event.Event;
-import restwars.service.event.EventDAO;
-import restwars.service.event.EventType;
+import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -31,17 +29,17 @@ public class TechnologyServiceImpl implements TechnologyService {
     private final RoundService roundService;
     private final ResearchDAO researchDAO;
     private final BuildingDAO buildingDAO;
-    private final EventDAO eventDAO;
+    private final EventService eventService;
 
     @Inject
-    public TechnologyServiceImpl(UUIDFactory uuidFactory, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO, BuildingDAO buildingDAO, EventDAO eventDAO) {
+    public TechnologyServiceImpl(UUIDFactory uuidFactory, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO, BuildingDAO buildingDAO, EventService eventService) {
         this.researchDAO = Preconditions.checkNotNull(researchDAO, "researchDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
-        this.eventDAO = Preconditions.checkNotNull(eventDAO, "eventDAO");
+        this.eventService = Preconditions.checkNotNull(eventService, "eventService");
     }
 
     @Override
@@ -78,7 +76,7 @@ public class TechnologyServiceImpl implements TechnologyService {
             }
 
             // Create event
-            eventDAO.insert(new Event(uuidFactory.create(), research.getPlayerId(), research.getPlanetId(), EventType.RESEARCH_COMPLETED, round));
+            eventService.createResearchCompletedEvent(research.getPlayerId(), research.getPlanetId());
 
             researchDAO.delete(research);
         }

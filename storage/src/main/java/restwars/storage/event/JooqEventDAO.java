@@ -36,8 +36,8 @@ public class JooqEventDAO extends AbstractJooqDAO implements EventDAO {
         LOGGER.debug("Inserting event {}", event);
 
         context()
-                .insertInto(EVENT, EVENT.ID, EVENT.PLAYER_ID, EVENT.PLANET_ID, EVENT.TYPE, EVENT.ROUND)
-                .values(event.getId(), event.getPlayerId(), event.getPlanetId(), event.getType().getId(), event.getRound())
+                .insertInto(EVENT, EVENT.ID, EVENT.PLAYER_ID, EVENT.PLANET_ID, EVENT.TYPE, EVENT.ROUND, EVENT.FIGHT_ID)
+                .values(event.getId(), event.getPlayerId(), event.getPlanetId(), event.getType().getId(), event.getRound(), event.getFightId().orElse(null))
                 .execute();
     }
 

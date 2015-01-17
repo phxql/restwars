@@ -3,9 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.event.Event;
-import restwars.service.event.EventDAO;
-import restwars.service.event.EventType;
+import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -21,8 +19,8 @@ public class TransferFlightHandler extends AbstractFlightHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransferFlightHandler.class);
 
-    public TransferFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventDAO eventDAO) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
+    public TransferFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
     }
 
     @Override
@@ -47,7 +45,7 @@ public class TransferFlightHandler extends AbstractFlightHandler {
                 getFlightDAO().delete(flight);
 
                 // Create event
-                getEventDAO().insert(new Event(getUuidFactory().create(), flight.getPlayerId(), planet.get().getId(), EventType.TRANSFER_ARRIVED, round));
+                getEventService().createTransferArrivedEvent(flight.getPlayerId(), planet.get().getId());
             } else {
                 LOGGER.debug("Tried to transfer to enemy planet {} , creating return flight", flight.getDestination());
 

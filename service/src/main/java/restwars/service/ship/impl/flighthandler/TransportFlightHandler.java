@@ -2,9 +2,7 @@ package restwars.service.ship.impl.flighthandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.event.Event;
-import restwars.service.event.EventDAO;
-import restwars.service.event.EventType;
+import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -19,8 +17,8 @@ import java.util.Optional;
 public class TransportFlightHandler extends AbstractFlightHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransportFlightHandler.class);
 
-    public TransportFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventDAO eventDAO) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventDAO);
+    public TransportFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
     }
 
     @Override
@@ -39,7 +37,7 @@ public class TransportFlightHandler extends AbstractFlightHandler {
                 createReturnFlight(flight, flight.getShips(), Resources.NONE);
 
                 // Create event
-                getEventDAO().insert(new Event(getUuidFactory().create(), flight.getPlayerId(), updatedPlanet.getId(), EventType.TRANSPORT_ARRIVED, round));
+                getEventService().createTransportArrivedEvent(flight.getPlayerId(), updatedPlanet.getId());
             } else {
                 LOGGER.debug("Tried to transport to enemy planet {} , creating return flight", flight.getDestination());
 

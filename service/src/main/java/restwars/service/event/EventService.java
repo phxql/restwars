@@ -13,4 +13,76 @@ public interface EventService {
      */
     List<EventWithPlanet> findSince(UUID playerId, long round);
 
+    /**
+     * Creates a research completed event.
+     *
+     * @param playerId Id of the player.
+     * @param planetId Id of the planet.
+     * @return Created event.
+     */
+    Event createResearchCompletedEvent(UUID playerId, UUID planetId);
+
+    /**
+     * Creates a building completed event.
+     *
+     * @param playerId Id of the player.
+     * @param planetId Id of the planet.
+     * @return Created event.
+     */
+    Event createBuildingCompletedEvent(UUID playerId, UUID planetId);
+
+    /**
+     * Creates a transfer arrived event.
+     *
+     * @param playerId Id of the player.
+     * @param planetId Id of the planet.
+     * @return Created event.
+     */
+    Event createTransferArrivedEvent(UUID playerId, UUID planetId);
+
+    /**
+     * Creates a planet colonized event.
+     *
+     * @param playerId Id of the player.
+     * @param planetId Id of the planet.
+     * @return Created event.
+     */
+    Event createPlanetColonizedEvent(UUID playerId, UUID planetId);
+
+    /**
+     * Creates a transport arrived event.
+     *
+     * @param playerId Id of the player.
+     * @param planetId Id of the planet.
+     * @return Created event.
+     */
+    Event createTransportArrivedEvent(UUID playerId, UUID planetId);
+
+    /**
+     * Creates a flight returned event.
+     *
+     * @param playerId Id of the player.
+     * @param planetId Id of the planet.
+     * @return Created event.
+     */
+    Event createFlightReturnedEvent(UUID playerId, UUID planetId);
+
+    /**
+     * Creates a ship completed event.
+     *
+     * @param playerId Id of the player.
+     * @param planetId Id of the planet.
+     * @return Created event.
+     */
+    Event createShipCompletedEvent(UUID playerId, UUID planetId);
+
+    /**
+     * Creates a transfer arrived event.
+     *
+     * @param attackerId Id of the attacker.
+     * @param defenderId Id of the defender.
+     * @param planetId   Id of the planet.
+     * @param fightId    Id of the fight.
+     */
+    void createFightHappenedEvent(UUID attackerId, UUID defenderId, UUID planetId, UUID fightId);
 }

@@ -242,24 +242,6 @@
         </createTable>
         <addPrimaryKey tableName="flight_ships" columnNames="flight_id, type"/>
 
-        <createTable tableName="event">
-            <column name="id" type="uuid">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="player_id" type="uuid">
-                <constraints nullable="false" references="player(id)" foreignKeyName="event_player_id"/>
-            </column>
-            <column name="planet_id" type="uuid">
-                <constraints nullable="false" references="planet(id)" foreignKeyName="event_planet_id"/>
-            </column>
-            <column name="type" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="round" type="long">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
         <createTable tableName="fight">
             <column name="id" type="uuid">
                 <constraints primaryKey="true" nullable="false"/>
@@ -299,5 +281,26 @@
             </column>
         </createTable>
         <addPrimaryKey tableName="fight_ships" columnNames="fight_id, type, category"/>
+
+        <createTable tableName="event">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="event_player_id"/>
+            </column>
+            <column name="planet_id" type="uuid">
+                <constraints nullable="false" references="planet(id)" foreignKeyName="event_planet_id"/>
+            </column>
+            <column name="type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="round" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fight_id" type="uuid">
+                <constraints nullable="true" references="fight(id)" foreignKeyName="event_fight_id"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>
