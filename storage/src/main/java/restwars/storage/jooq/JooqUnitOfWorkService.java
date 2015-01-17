@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class JooqUnitOfWorkService implements UnitOfWorkService {
     private final ManagedDataSource managedDataSource;
 
-    private static final ThreadLocal<UnitOfWork> currentUnitOfWork = new ThreadLocal<>();
+    private static final ThreadLocal<UnitOfWork> CURRENT_UNIT_OF_WORK = new ThreadLocal<>();
 
     public JooqUnitOfWorkService(ManagedDataSource managedDataSource) {
         this.managedDataSource = managedDataSource;
@@ -19,7 +19,7 @@ public class JooqUnitOfWorkService implements UnitOfWorkService {
 
     @Override
     public UnitOfWork getCurrent() {
-        UnitOfWork current = currentUnitOfWork.get();
+        UnitOfWork current = CURRENT_UNIT_OF_WORK.get();
         if (current == null) {
             throw new IllegalStateException("No current unit of work found");
         }
@@ -34,7 +34,7 @@ public class JooqUnitOfWorkService implements UnitOfWorkService {
             connection.setAutoCommit(false);
             JooqUnitOfWork unitOfWork = new JooqUnitOfWork(connection);
 
-            currentUnitOfWork.set(unitOfWork);
+            CURRENT_UNIT_OF_WORK.set(unitOfWork);
 
             return unitOfWork;
         } catch (SQLException e) {
@@ -47,7 +47,7 @@ public class JooqUnitOfWorkService implements UnitOfWorkService {
         JooqUnitOfWork jooqUnitOfWork = getCurrentJooq();
 
         try {
-            currentUnitOfWork.remove();
+            CURRENT_UNIT_OF_WORK.remove();
 
             jooqUnitOfWork.getConnection().commit();
             jooqUnitOfWork.getConnection().close();
@@ -61,7 +61,7 @@ public class JooqUnitOfWorkService implements UnitOfWorkService {
         JooqUnitOfWork jooqUnitOfWork = getCurrentJooq();
 
         try {
-            currentUnitOfWork.remove();
+            CURRENT_UNIT_OF_WORK.remove();
 
             jooqUnitOfWork.getConnection().rollback();
             jooqUnitOfWork.getConnection().close();
