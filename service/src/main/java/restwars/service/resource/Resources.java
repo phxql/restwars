@@ -2,7 +2,9 @@ package restwars.service.resource;
 
 import com.google.common.base.Objects;
 
-public class Resources {
+import java.io.Serializable;
+
+public class Resources implements Serializable {
     public static final Resources NONE = new Resources(0, 0, 0);
 
     private final long crystals;
