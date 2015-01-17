@@ -1,5 +1,6 @@
 package restwars.restapi.dto.metadata;
 
+import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import restwars.restapi.dto.ResourcesResponse;
@@ -18,14 +19,26 @@ public class TechnologyMetadataResponse {
     @ApiModelProperty(value = "Research cost", required = true)
     private ResourcesResponse researchCost;
 
+    @ApiModelProperty(value = "Description", required = true)
+    private String description;
+
     public TechnologyMetadataResponse() {
     }
 
-    public TechnologyMetadataResponse(String type, int level, long researchTime, ResourcesResponse researchCost) {
+    public TechnologyMetadataResponse(String type, int level, long researchTime, ResourcesResponse researchCost, String description) {
         this.type = type;
         this.level = level;
         this.researchTime = researchTime;
         this.researchCost = researchCost;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getType() {
@@ -62,11 +75,12 @@ public class TechnologyMetadataResponse {
 
     @Override
     public String toString() {
-        return "TechnologyMetadataResponse{" +
-                "type='" + type + '\'' +
-                ", level=" + level +
-                ", researchTime=" + researchTime +
-                ", researchCost=" + researchCost +
-                '}';
+        return Objects.toStringHelper(this)
+                .add("type", type)
+                .add("level", level)
+                .add("researchTime", researchTime)
+                .add("researchCost", researchCost)
+                .add("description", description)
+                .toString();
     }
 }
