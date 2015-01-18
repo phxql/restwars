@@ -82,6 +82,10 @@ public class Prerequisites {
         return new Prerequisites(Lists.newArrayList(new Building(type, level)), Collections.emptyList());
     }
 
+    public static Prerequisites buildings(Building... buildings) {
+        return new Prerequisites(Lists.newArrayList(buildings), Collections.emptyList());
+    }
+
     public static Prerequisites technology(TechnologyType type, int level) {
         return new Prerequisites(Collections.emptyList(), Lists.newArrayList(new Technology(type, level)));
     }
