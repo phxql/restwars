@@ -10,7 +10,7 @@ public enum BuildingType {
     SOLAR_PANELS(4, "Gathers energy", Prerequisites.building(BuildingType.COMMAND_CENTER, 1)),
     RESEARCH_CENTER(5, "Researches technology", Prerequisites.building(BuildingType.COMMAND_CENTER, 1)),
     TELESCOPE(6, "Scans the area for other planets", Prerequisites.building(BuildingType.COMMAND_CENTER, 1)),
-    SHIPYARD(1, "Constructs ships", Prerequisites.buildings(new Prerequisites.Building(BuildingType.COMMAND_CENTER, 1), new Prerequisites.Building(BuildingType.TELESCOPE, 1)));
+    SHIPYARD(1, "Constructs ships", Prerequisites.buildings(new Prerequisites.Building(BuildingType.COMMAND_CENTER, 1), new Prerequisites.Building(BuildingType.RESEARCH_CENTER, 1), new Prerequisites.Building(BuildingType.TELESCOPE, 1)));
 
     private final int id;
 
