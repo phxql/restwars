@@ -22,15 +22,19 @@ public class BuildingMetadataResponse {
     @ApiModelProperty(value = "Description", required = true)
     private String description;
 
+    @ApiModelProperty(value = "Prerequisites", required = true)
+    private PrerequisitesResponse prerequisites;
+
     public BuildingMetadataResponse() {
     }
 
-    public BuildingMetadataResponse(String type, int level, long buildTime, ResourcesResponse buildCost, String description) {
+    public BuildingMetadataResponse(String type, int level, long buildTime, ResourcesResponse buildCost, String description, PrerequisitesResponse prerequisites) {
         this.type = type;
         this.level = level;
         this.buildTime = buildTime;
         this.buildCost = buildCost;
         this.description = description;
+        this.prerequisites = prerequisites;
     }
 
     public String getType() {
@@ -73,6 +77,14 @@ public class BuildingMetadataResponse {
         this.description = description;
     }
 
+    public PrerequisitesResponse getPrerequisites() {
+        return prerequisites;
+    }
+
+    public void setPrerequisites(PrerequisitesResponse prerequisites) {
+        this.prerequisites = prerequisites;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -81,6 +93,7 @@ public class BuildingMetadataResponse {
                 .add("buildTime", buildTime)
                 .add("buildCost", buildCost)
                 .add("description", description)
+                .add("prerequisites", prerequisites)
                 .toString();
     }
 }
