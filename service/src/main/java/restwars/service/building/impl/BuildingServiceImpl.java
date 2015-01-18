@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class BuildingServiceImpl implements BuildingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildingServiceImpl.class);
@@ -87,8 +86,8 @@ public class BuildingServiceImpl implements BuildingService {
         Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
 
         boolean prerequisitesFulfilled = type.getPrerequisites().fulfilled(
-                buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())).collect(Collectors.toList()),
-                technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel())).collect(Collectors.toList())
+                buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())),
+                technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel()))
         );
         if (!prerequisitesFulfilled) {
             throw new BuildingException(BuildingException.Reason.PREREQUISITES_NOT_FULFILLED);
