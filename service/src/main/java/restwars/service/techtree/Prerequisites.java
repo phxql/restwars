@@ -9,7 +9,6 @@ import restwars.service.technology.TechnologyType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Prerequisites.
@@ -93,13 +92,9 @@ public class Prerequisites {
     }
 
     public boolean fulfilled(Collection<Building> availableBuildings, Collection<Technology> availableTechnologies) {
-        return fulfilled(availableBuildings.stream(), availableTechnologies.stream());
-    }
-
-    public boolean fulfilled(Stream<Building> availableBuildings, Stream<Technology> availableTechnologies) {
         // Check that every building requirement and technology requirement is fulfilled
 
-        return buildings.stream().allMatch(b -> availableBuildings.anyMatch(ab -> ab.getType().equals(b.getType()) && ab.getLevel() >= b.getLevel())) &&
-                technologies.stream().allMatch(t -> availableTechnologies.anyMatch(at -> at.getType().equals(t.getType()) && at.getLevel() >= t.getLevel()));
+        return buildings.stream().allMatch(b -> availableBuildings.stream().anyMatch(ab -> ab.getType().equals(b.getType()) && ab.getLevel() >= b.getLevel())) &&
+                technologies.stream().allMatch(t -> availableTechnologies.stream().anyMatch(at -> at.getType().equals(t.getType()) && at.getLevel() >= t.getLevel()));
     }
 }

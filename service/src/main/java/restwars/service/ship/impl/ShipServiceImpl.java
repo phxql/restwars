@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ShipServiceImpl implements ShipService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShipServiceImpl.class);
@@ -96,8 +97,8 @@ public class ShipServiceImpl implements ShipService {
 
         // Check prerequisites
         boolean prerequisitesFulfilled = type.getPrerequisites().fulfilled(
-                buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())),
-                technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel()))
+                buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())).collect(Collectors.toList()),
+                technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel())).collect(Collectors.toList())
         );
         if (!prerequisitesFulfilled) {
             throw new BuildShipException(BuildShipException.Reason.PREREQUISITES_NOT_FULFILLED);
