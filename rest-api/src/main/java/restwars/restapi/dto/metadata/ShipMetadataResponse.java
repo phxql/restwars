@@ -31,10 +31,13 @@ public class ShipMetadataResponse {
     @ApiModelProperty(value = "Description", required = true)
     private String description;
 
+    @ApiModelProperty(value = "Prerequisites", required = true)
+    private PrerequisitesResponse prerequisites;
+
     public ShipMetadataResponse() {
     }
 
-    public ShipMetadataResponse(String type, long buildTime, ResourcesResponse buildCost, int speed, int attackPoints, int defensePoints, long storageCapacity, String description) {
+    public ShipMetadataResponse(String type, long buildTime, ResourcesResponse buildCost, int speed, int attackPoints, int defensePoints, long storageCapacity, String description, PrerequisitesResponse prerequisites) {
         this.type = type;
         this.buildTime = buildTime;
         this.buildCost = buildCost;
@@ -43,6 +46,7 @@ public class ShipMetadataResponse {
         this.defensePoints = defensePoints;
         this.storageCapacity = storageCapacity;
         this.description = description;
+        this.prerequisites = prerequisites;
     }
 
     public String getType() {
@@ -109,6 +113,14 @@ public class ShipMetadataResponse {
         this.description = description;
     }
 
+    public PrerequisitesResponse getPrerequisites() {
+        return prerequisites;
+    }
+
+    public void setPrerequisites(PrerequisitesResponse prerequisites) {
+        this.prerequisites = prerequisites;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -120,6 +132,7 @@ public class ShipMetadataResponse {
                 .add("defensePoints", defensePoints)
                 .add("storageCapacity", storageCapacity)
                 .add("description", description)
+                .add("prerequisites", prerequisites)
                 .toString();
     }
 }
