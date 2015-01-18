@@ -13,12 +13,14 @@ import restwars.service.resource.Resources;
 import restwars.service.technology.Technologies;
 import restwars.service.technology.TechnologyDAO;
 import restwars.service.technology.TechnologyType;
+import restwars.service.techtree.Prerequisites;
 import restwars.util.MathExt;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BuildingServiceImpl implements BuildingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildingServiceImpl.class);
@@ -84,13 +86,21 @@ public class BuildingServiceImpl implements BuildingService {
         Technologies technologies = technologyDAO.findAllWithPlayerId(planet.getOwnerId());
         Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
 
-        Resources buildCost = calculateBuildCost(type, level, technologies);
-        if (!planet.getResources().isEnough(buildCost)) {
-            throw new BuildingException(BuildingException.Reason.INSUFFICIENT_RESOURCES);
+        boolean prerequisitesFulfilled = type.getPrerequisites().fulfilled(
+                buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())).collect(Collectors.toList()),
+                technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel())).collect(Collectors.toList())
+        );
+        if (!prerequisitesFulfilled) {
+            throw new BuildingException(BuildingException.Reason.PREREQUISITES_NOT_FULFILLED);
         }
 
         if (!findConstructionSitesOnPlanet(planet).isEmpty()) {
             throw new BuildingException(BuildingException.Reason.NOT_ENOUGH_BUILD_QUEUES);
+        }
+
+        Resources buildCost = calculateBuildCost(type, level, technologies);
+        if (!planet.getResources().isEnough(buildCost)) {
+            throw new BuildingException(BuildingException.Reason.INSUFFICIENT_RESOURCES);
         }
 
         Planet updatedPlanet = planet.withResources(planet.getResources().minus(buildCost));
