@@ -6,7 +6,8 @@ public class BuildShipException extends ServiceException {
     public static enum Reason {
         NO_SHIPYARD,
         NOT_ENOUGH_BUILD_QUEUES,
-        INSUFFICIENT_RESOURCES
+        INSUFFICIENT_RESOURCES,
+        PREREQUISITES_NOT_FULFILLED
     }
 
     private final Reason reason;

@@ -7,7 +7,8 @@ public class ResearchException extends ServiceException {
         ALREADY_RUNNING,
         NOT_ENOUGH_RESEARCH_QUEUES,
         NO_RESEARCH_CENTER,
-        INSUFFICIENT_RESOURCES
+        INSUFFICIENT_RESOURCES,
+        PREREQUISITES_NOT_FULFILLED
     }
 
     private final Reason reason;

@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import restwars.rest.mapper.PrerequisitesMapper;
 import restwars.rest.mapper.ResourcesMapper;
 import restwars.restapi.dto.metadata.BuildingMetadataResponse;
 import restwars.service.building.BuildingService;
@@ -48,7 +49,7 @@ public class BuildingMetadataSubResource {
                 .map(t -> new BuildingMetadataResponse(
                         t.name(), sanitizedLevel, buildingService.calculateBuildTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(t, sanitizedLevel)),
-                        t.getDescription()
+                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(t.getPrerequisites())
                 ))
                 .collect(Collectors.toList());
     }

@@ -14,11 +14,13 @@ import restwars.service.planet.PlanetDAO;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
 import restwars.service.technology.*;
+import restwars.service.techtree.Prerequisites;
 import restwars.util.MathExt;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TechnologyServiceImpl implements TechnologyService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TechnologyServiceImpl.class);
@@ -96,10 +98,20 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkNotNull(player, "player");
 
         Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
+        Technologies technologies = technologyDAO.findAllWithPlayerId(player.getId());
 
         // Ensure that the planet has a research center
         if (!buildings.has(BuildingType.RESEARCH_CENTER)) {
             throw new ResearchException(ResearchException.Reason.NO_RESEARCH_CENTER);
+        }
+
+        // Check prerequisites
+        boolean prerequisitesFulfilled = technology.getPrerequisites().fulfilled(
+                buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())).collect(Collectors.toList()),
+                technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel())).collect(Collectors.toList())
+        );
+        if (!prerequisitesFulfilled) {
+            throw new ResearchException(ResearchException.Reason.PREREQUISITES_NOT_FULFILLED);
         }
 
         // Ensure that no other research is running on that planet

@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import restwars.rest.mapper.PrerequisitesMapper;
 import restwars.rest.mapper.ResourcesMapper;
 import restwars.restapi.dto.metadata.TechnologyMetadataResponse;
 import restwars.service.technology.TechnologyService;
@@ -39,7 +40,7 @@ public class TechnologyMetadataSubResource {
                 .map(t -> new TechnologyMetadataResponse(
                         t.name(), sanitizedLevel, technologyService.calculateResearchTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(technologyService.calculateResearchCost(t, sanitizedLevel)),
-                        t.getDescription()
+                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(t.getPrerequisites())
                 ))
                 .collect(Collectors.toList());
     }

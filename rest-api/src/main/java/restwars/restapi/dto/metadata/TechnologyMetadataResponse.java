@@ -22,15 +22,19 @@ public class TechnologyMetadataResponse {
     @ApiModelProperty(value = "Description", required = true)
     private String description;
 
+    @ApiModelProperty(value = "Prerequisites", required = true)
+    private PrerequisitesResponse prerequisites;
+
     public TechnologyMetadataResponse() {
     }
 
-    public TechnologyMetadataResponse(String type, int level, long researchTime, ResourcesResponse researchCost, String description) {
+    public TechnologyMetadataResponse(String type, int level, long researchTime, ResourcesResponse researchCost, String description, PrerequisitesResponse prerequisites) {
         this.type = type;
         this.level = level;
         this.researchTime = researchTime;
         this.researchCost = researchCost;
         this.description = description;
+        this.prerequisites = prerequisites;
     }
 
     public String getDescription() {
@@ -73,6 +77,14 @@ public class TechnologyMetadataResponse {
         this.researchCost = researchCost;
     }
 
+    public PrerequisitesResponse getPrerequisites() {
+        return prerequisites;
+    }
+
+    public void setPrerequisites(PrerequisitesResponse prerequisites) {
+        this.prerequisites = prerequisites;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -81,6 +93,7 @@ public class TechnologyMetadataResponse {
                 .add("researchTime", researchTime)
                 .add("researchCost", researchCost)
                 .add("description", description)
+                .add("prerequisites", prerequisites)
                 .toString();
     }
 }
