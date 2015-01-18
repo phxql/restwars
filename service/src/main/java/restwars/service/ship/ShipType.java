@@ -2,10 +2,11 @@ package restwars.service.ship;
 
 import com.google.common.base.Preconditions;
 import restwars.service.resource.Resources;
+import restwars.service.techtree.Prerequisites;
 
 public enum ShipType {
-    MOSQUITO(0, new Resources(1, 1, 1), 1, 1.0, 1, 1, 1, 100, "Small and cheap fighter ship"),
-    COLONY(1, new Resources(1, 1, 1), 1, 1.0, 1, 0, 5, 10000, "Colonizes planets");
+    MOSQUITO(0, new Resources(1, 1, 1), 1, 1.0, 1, 1, 1, 100, "Small and cheap fighter ship", Prerequisites.NONE),
+    COLONY(1, new Resources(1, 1, 1), 1, 1.0, 1, 0, 5, 10000, "Colonizes planets", Prerequisites.NONE);
 
     private final int id;
 
@@ -25,7 +26,9 @@ public enum ShipType {
 
     private final String description;
 
-    ShipType(int id, Resources buildCost, long buildTime, double flightCostModifier, int speed, int attackPoints, int defensePoints, long storageCapacity, String description) {
+    private final Prerequisites prerequisites;
+
+    ShipType(int id, Resources buildCost, long buildTime, double flightCostModifier, int speed, int attackPoints, int defensePoints, long storageCapacity, String description, Prerequisites prerequisites) {
         this.id = id;
         Preconditions.checkArgument(buildTime > 0, "buildTime must be > 0");
         Preconditions.checkArgument(speed > 0, "speed must be > 0");
@@ -41,6 +44,7 @@ public enum ShipType {
         this.speed = speed;
         this.storageCapacity = storageCapacity;
         this.description = Preconditions.checkNotNull(description, "description");
+        this.prerequisites = Preconditions.checkNotNull(prerequisites, "prerequisites");
     }
 
     public int getId() {
@@ -77,6 +81,10 @@ public enum ShipType {
 
     public String getDescription() {
         return description;
+    }
+
+    public Prerequisites getPrerequisites() {
+        return prerequisites;
     }
 
     public static ShipType fromId(int id) {

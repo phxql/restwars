@@ -20,6 +20,9 @@ import restwars.service.ship.impl.flighthandler.AttackFlightHandler;
 import restwars.service.ship.impl.flighthandler.ColonizeFlightHandler;
 import restwars.service.ship.impl.flighthandler.TransferFlightHandler;
 import restwars.service.ship.impl.flighthandler.TransportFlightHandler;
+import restwars.service.technology.Technologies;
+import restwars.service.technology.TechnologyDAO;
+import restwars.service.techtree.Prerequisites;
 import restwars.util.MathExt;
 
 import javax.inject.Inject;
@@ -39,6 +42,7 @@ public class ShipServiceImpl implements ShipService {
     private final BuildingDAO buildingDAO;
     private final FightDAO fightDAO;
     private final EventService eventService;
+    private final TechnologyDAO technologyDAO;
 
     private final TransportFlightHandler transportFlightHandler;
     private final ColonizeFlightHandler colonizeFlightHandler;
@@ -48,7 +52,7 @@ public class ShipServiceImpl implements ShipService {
     private final UniverseConfiguration universeConfiguration;
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
@@ -60,6 +64,7 @@ public class ShipServiceImpl implements ShipService {
         this.shipInConstructionDAO = Preconditions.checkNotNull(shipInConstructionDAO, "shipInConstructionDAO");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
+        this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
@@ -83,9 +88,19 @@ public class ShipServiceImpl implements ShipService {
         Preconditions.checkNotNull(type, "type");
 
         Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
+        Technologies technologies = technologyDAO.findAllWithPlayerId(player.getId());
 
         if (!buildings.has(BuildingType.SHIPYARD)) {
             throw new BuildShipException(BuildShipException.Reason.NO_SHIPYARD);
+        }
+
+        // Check prerequisites
+        boolean prerequisitesFulfilled = type.getPrerequisites().fulfilled(
+                buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())),
+                technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel()))
+        );
+        if (!prerequisitesFulfilled) {
+            throw new BuildShipException(BuildShipException.Reason.PREREQUISITES_NOT_FULFILLED);
         }
 
         List<ShipInConstruction> shipsInConstruction = shipInConstructionDAO.findWithPlanetId(planet.getId());
