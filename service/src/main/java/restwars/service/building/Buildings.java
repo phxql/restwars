@@ -18,6 +18,12 @@ public class Buildings extends ForwardingList<Building> {
         this.buildings = ImmutableList.copyOf(buildings);
     }
 
+    /**
+     * Returns the level of the given building. If the building doesn't exist, 0 is returned.
+     *
+     * @param type Building.
+     * @return Level of the building or 0, if the building doesn't exist.
+     */
     public int getLevel(BuildingType type) {
         return buildings.stream().filter(b -> b.getType().equals(type)).findAny().map(Building::getLevel).orElse(0);
     }
