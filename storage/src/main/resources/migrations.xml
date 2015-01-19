@@ -242,6 +242,16 @@
         </createTable>
         <addPrimaryKey tableName="flight_ships" columnNames="flight_id, type"/>
 
+        <createTable tableName="detected_flights">
+            <column name="flight_id" type="uuid">
+                <constraints primaryKey="true" nullable="false" references="flight(id)"
+                             foreignKeyName="detected_flights_flight_id"/>
+            </column>
+            <column name="approximated_fleet_size" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
         <createTable tableName="fight">
             <column name="id" type="uuid">
                 <constraints primaryKey="true" nullable="false"/>
