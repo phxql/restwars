@@ -9,6 +9,7 @@ import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.FlightMapper;
 import restwars.rest.util.Helper;
 import restwars.restapi.dto.ship.FlightResponse;
+import restwars.restapi.dto.ship.IncomingFlightResponse;
 import restwars.service.player.Player;
 import restwars.service.ship.Flight;
 import restwars.service.ship.ShipService;
@@ -19,6 +20,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -53,5 +55,16 @@ public class FlightResource {
         List<Flight> flights = shipService.findFlightsForPlayer(player);
 
         return Helper.mapToList(flights, FlightMapper::fromFlight);
+    }
+
+    @GET
+    @Path("/incoming")
+    @ApiOperation("Lists all incoming flights")
+    public List<IncomingFlightResponse> incomingFlights(@Auth @ApiParam(access = "internal") Player player) {
+        Preconditions.checkNotNull(player, "player");
+
+        // TODO: Implement this!
+
+        return Collections.emptyList();
     }
 }
