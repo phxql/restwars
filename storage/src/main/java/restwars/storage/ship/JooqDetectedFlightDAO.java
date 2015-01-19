@@ -16,6 +16,7 @@ import restwars.storage.mapper.DetectedFlightMapper;
 import restwars.storage.mapper.FlightMapper;
 import restwars.storage.mapper.PlayerMapper;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ import static restwars.storage.jooq.Tables.*;
 public class JooqDetectedFlightDAO extends AbstractJooqDAO implements DetectedFlightDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JooqDetectedFlightDAO.class);
 
+    @Inject
     public JooqDetectedFlightDAO(UnitOfWorkService unitOfWorkService) {
         super(unitOfWorkService);
     }

@@ -10,14 +10,14 @@ import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.Player;
+import restwars.service.ship.DetectedFlightDAO;
+import restwars.service.ship.DetectedFlightWithSender;
 import restwars.service.ship.ShipService;
-import restwars.service.telescope.IncomingFlight;
 import restwars.service.telescope.PlanetWithOwner;
 import restwars.service.telescope.ScanException;
 import restwars.service.telescope.TelescopeService;
 
 import javax.inject.Inject;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +25,11 @@ public class TelescopeServiceImpl implements TelescopeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TelescopeServiceImpl.class);
     private final PlanetDAO planetDAO;
     private final BuildingDAO buildingDAO;
+    private final DetectedFlightDAO detectedFlightDAO;
 
     @Inject
-    public TelescopeServiceImpl(PlanetDAO planetDAO, BuildingDAO buildingDAO, ShipService shipService) {
+    public TelescopeServiceImpl(PlanetDAO planetDAO, BuildingDAO buildingDAO, ShipService shipService, DetectedFlightDAO detectedFlightDAO) {
+        this.detectedFlightDAO = Preconditions.checkNotNull(detectedFlightDAO, "detectedFlightDAO");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
     }
@@ -49,11 +51,10 @@ public class TelescopeServiceImpl implements TelescopeService {
     }
 
     @Override
-    public List<IncomingFlight> findIncomingFlights(Player player) {
+    public List<DetectedFlightWithSender> detectFlights(Player player) {
         Preconditions.checkNotNull(player, "player");
         LOGGER.debug("Finding incoming flights for {}", player);
 
-        // TODO: Implement this!
-        return Collections.emptyList();
+        return detectedFlightDAO.findWithPlayer(player.getId());
     }
 }

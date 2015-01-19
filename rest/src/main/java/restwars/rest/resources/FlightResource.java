@@ -8,12 +8,12 @@ import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.FlightMapper;
 import restwars.rest.util.Helper;
+import restwars.restapi.dto.ship.DetectedFlightResponse;
 import restwars.restapi.dto.ship.FlightResponse;
-import restwars.restapi.dto.ship.IncomingFlightResponse;
 import restwars.service.player.Player;
+import restwars.service.ship.DetectedFlightWithSender;
 import restwars.service.ship.Flight;
 import restwars.service.ship.ShipService;
-import restwars.service.telescope.IncomingFlight;
 import restwars.service.telescope.TelescopeService;
 
 import javax.inject.Inject;
@@ -69,11 +69,11 @@ public class FlightResource {
     @GET
     @Path("/incoming")
     @ApiOperation("Lists all incoming flights")
-    public List<IncomingFlightResponse> incomingFlights(@Auth @ApiParam(access = "internal") Player player) {
+    public List<DetectedFlightResponse> incomingFlights(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
 
-        List<IncomingFlight> incomingFlights = telescopeService.findIncomingFlights(player);
+        List<DetectedFlightWithSender> incomingFlights = telescopeService.detectFlights(player);
 
-        return Helper.mapToList(incomingFlights, FlightMapper::fromIncomingFlight);
+        return Helper.mapToList(incomingFlights, FlightMapper::fromDetectedFlight);
     }
 }

@@ -4,8 +4,8 @@ import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "Incoming flight")
-public class IncomingFlightResponse {
+@ApiModel(description = "Detected flight")
+public class DetectedFlightResponse {
     @ApiModelProperty(value = "Start planet", required = true)
     private String start;
 
@@ -21,10 +21,10 @@ public class IncomingFlightResponse {
     @ApiModelProperty(value = "Approximated fleet size", required = true)
     private long approximatedFleetSize;
 
-    public IncomingFlightResponse() {
+    public DetectedFlightResponse() {
     }
 
-    public IncomingFlightResponse(String start, String player, String destination, long arrivalInRound, long approximatedFleetSize) {
+    public DetectedFlightResponse(String start, String player, String destination, long arrivalInRound, long approximatedFleetSize) {
         this.start = start;
         this.player = player;
         this.destination = destination;
