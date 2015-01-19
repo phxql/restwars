@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.event.EventService;
+import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
@@ -20,11 +21,11 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     private final FightCalculator fightCalculator;
     private final FightDAO fightDAO;
 
-    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO, EventService eventService) {
+    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO, EventService eventService, RandomNumberGenerator randomNumberGenerator) {
         super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
-        this.fightCalculator = new FightCalculator(uuidFactory);
+        this.fightCalculator = new FightCalculator(uuidFactory, randomNumberGenerator);
     }
 
     @Override

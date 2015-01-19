@@ -8,6 +8,7 @@ import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
 import restwars.service.building.Buildings;
 import restwars.service.event.EventService;
+import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Location;
@@ -53,8 +54,9 @@ public class ShipServiceImpl implements ShipService {
     private final UniverseConfiguration universeConfiguration;
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, RandomNumberGenerator randomNumberGenerator) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
+        Preconditions.checkNotNull(randomNumberGenerator, "randomNumberGenerator");
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
@@ -70,7 +72,7 @@ public class ShipServiceImpl implements ShipService {
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
         colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventService, buildingDAO);
-        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventService);
+        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventService, randomNumberGenerator);
         transferFlightHandler = new TransferFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
         shipUtils = new ShipUtils();
     }
