@@ -13,6 +13,8 @@ import restwars.restapi.dto.ship.IncomingFlightResponse;
 import restwars.service.player.Player;
 import restwars.service.ship.Flight;
 import restwars.service.ship.ShipService;
+import restwars.service.telescope.IncomingFlight;
+import restwars.service.telescope.TelescopeService;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -20,7 +22,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,9 +35,11 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class FlightResource {
     private final ShipService shipService;
+    private final TelescopeService telescopeService;
 
     @Inject
-    public FlightResource(ShipService shipService) {
+    public FlightResource(ShipService shipService, TelescopeService telescopeService) {
+        this.telescopeService = Preconditions.checkNotNull(telescopeService, "telescopeService");
         this.shipService = Preconditions.checkNotNull(shipService, "shipService");
     }
 
@@ -57,14 +60,20 @@ public class FlightResource {
         return Helper.mapToList(flights, FlightMapper::fromFlight);
     }
 
+    /**
+     * Lists all incoming flight on a planet from the player.
+     *
+     * @param player Player.
+     * @return All incoming flights.
+     */
     @GET
     @Path("/incoming")
     @ApiOperation("Lists all incoming flights")
     public List<IncomingFlightResponse> incomingFlights(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
 
-        // TODO: Implement this!
+        List<IncomingFlight> incomingFlights = telescopeService.findIncomingFlights(player);
 
-        return Collections.emptyList();
+        return Helper.mapToList(incomingFlights, FlightMapper::fromIncomingFlight);
     }
 }
