@@ -10,7 +10,9 @@ public enum EventType {
     PLANET_COLONIZED(4, "A new planet has been colonized"),
     TRANSPORT_ARRIVED(5, "A transport has arrived"),
     FIGHT_HAPPENED(6, "A fight has happened"),
-    TRANSFER_ARRIVED(7, "A ship transfer has been finished");
+    TRANSFER_ARRIVED(7, "A ship transfer has been finished"),
+    FLIGHT_DETECTED(8, "An enemy flight has been detected"),
+    FLIGHT_HAS_BEEN_DETECTED(9, "Your flight has been detected by the enemy");
 
     private final int id;
 

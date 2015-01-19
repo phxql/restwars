@@ -24,14 +24,16 @@ public abstract class AbstractFlightHandler {
     private final UUIDFactory uuidFactory;
     private final ShipUtils shipUtils;
     private final EventService eventService;
+    private final DetectedFlightDAO detectedFlightDAO;
 
-    public AbstractFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService) {
+    public AbstractFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService, DetectedFlightDAO detectedFlightDAO) {
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.hangarDAO = Preconditions.checkNotNull(hangarDAO, "hangarDAO");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
+        this.detectedFlightDAO = Preconditions.checkNotNull(detectedFlightDAO, "detectedFlightDAO");
 
         shipUtils = new ShipUtils();
     }
@@ -52,8 +54,8 @@ public abstract class AbstractFlightHandler {
         Flight returnFlight = new Flight(
                 flight.getId(), flight.getStart(), flight.getDestination(),
                 flight.getStartedInRound(), arrival, ships, flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
-                FlightDirection.RETURN, cargo
-        );
+                FlightDirection.RETURN, cargo, flight.isDetected());
+
         flightDAO.update(returnFlight);
         LOGGER.debug("Created return flight {}", returnFlight);
     }
@@ -88,6 +90,10 @@ public abstract class AbstractFlightHandler {
 
     protected EventService getEventService() {
         return eventService;
+    }
+
+    protected DetectedFlightDAO getDetectedFlightDAO() {
+        return detectedFlightDAO;
     }
 
     public abstract void handle(Flight flight, long round);

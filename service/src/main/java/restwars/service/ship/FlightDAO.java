@@ -57,8 +57,9 @@ public interface FlightDAO {
     /**
      * Finds all flights with the given type.
      *
-     * @param type Flight type.
-     * @return all flights with the given type.
+     * @param type     Flight type.
+     * @param detected Detection status.
+     * @return All flights with the given type.
      */
-    List<Flight> findWithType(FlightType type);
+    List<Flight> findWithTypeAndDetected(FlightType type, boolean detected);
 }

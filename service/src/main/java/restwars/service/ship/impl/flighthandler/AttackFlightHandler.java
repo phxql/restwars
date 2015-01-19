@@ -21,8 +21,8 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     private final FightCalculator fightCalculator;
     private final FightDAO fightDAO;
 
-    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO, EventService eventService, RandomNumberGenerator randomNumberGenerator) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
+    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO, EventService eventService, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
         this.fightCalculator = new FightCalculator(uuidFactory, randomNumberGenerator);
@@ -52,6 +52,8 @@ public class AttackFlightHandler extends AbstractFlightHandler {
 
                 if (fight.getRemainingAttackerShips().isEmpty()) {
                     LOGGER.debug("Attacker lost all ships");
+
+                    getDetectedFlightDAO().delete(flight.getId());
                     getFlightDAO().delete(flight);
                 } else {
                     LOGGER.debug("Looting planet {}", defenderPlanet);

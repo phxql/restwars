@@ -52,9 +52,17 @@ public class ShipServiceImpl implements ShipService {
     private final TransferFlightHandler transferFlightHandler;
     private final ShipUtils shipUtils;
     private final UniverseConfiguration universeConfiguration;
+    private final DetectedFlightDAO detectedFlightDAO;
+
+    @Override
+    public List<ShipInConstruction> findShipsInConstructionOnPlanet(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        return shipInConstructionDAO.findWithPlanetId(planet.getId());
+    }
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, RandomNumberGenerator randomNumberGenerator) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         Preconditions.checkNotNull(randomNumberGenerator, "randomNumberGenerator");
 
@@ -68,20 +76,14 @@ public class ShipServiceImpl implements ShipService {
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
+        this.detectedFlightDAO = Preconditions.checkNotNull(detectedFlightDAO, "detectedFlightDAO");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
 
-        transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
-        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventService, buildingDAO);
-        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventService, randomNumberGenerator);
-        transferFlightHandler = new TransferFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
+        transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
+        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventService, buildingDAO, detectedFlightDAO);
+        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventService, randomNumberGenerator, detectedFlightDAO);
+        transferFlightHandler = new TransferFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
         shipUtils = new ShipUtils();
-    }
-
-    @Override
-    public List<ShipInConstruction> findShipsInConstructionOnPlanet(Planet planet) {
-        Preconditions.checkNotNull(planet, "planet");
-
-        return shipInConstructionDAO.findWithPlanetId(planet.getId());
     }
 
     @Override
@@ -203,6 +205,7 @@ public class ShipServiceImpl implements ShipService {
         planet = planet.withResources(planet.getResources().plus(flight.getCargo()));
         planetDAO.update(planet);
 
+        detectedFlightDAO.delete(flight.getId());
         flightDAO.delete(flight);
 
         // Create event
@@ -327,7 +330,7 @@ public class ShipServiceImpl implements ShipService {
         hangarDAO.update(updatedHangar);
 
         // Start the flight
-        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, totalEnergyNeeded, flightType, player.getId(), FlightDirection.OUTWARD, cargo);
+        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, totalEnergyNeeded, flightType, player.getId(), FlightDirection.OUTWARD, cargo, false);
         flightDAO.insert(flight);
         return flight;
     }

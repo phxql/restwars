@@ -52,9 +52,15 @@ public class JooqDetectedFlightDAO extends AbstractJooqDAO implements DetectedFl
                 .where(DETECTED_FLIGHT.PLAYER_ID.eq(playerId))
                 .fetch();
 
-        result.stream().map(this::fromRecord).collect(Collectors.toList());
+        return result.stream().map(this::fromRecord).collect(Collectors.toList());
+    }
 
-        return null;
+    @Override
+    public void delete(UUID id) {
+        Preconditions.checkNotNull(id, "id");
+        LOGGER.debug("Deleting detected flight with id {}", id);
+
+        context().delete(DETECTED_FLIGHT).where(DETECTED_FLIGHT.FLIGHT_ID.eq(id)).execute();
     }
 
     private DetectedFlightWithSender fromRecord(Record record) {

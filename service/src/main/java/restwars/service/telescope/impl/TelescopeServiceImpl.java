@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
+import restwars.service.event.EventService;
 import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.planet.Location;
@@ -29,15 +30,17 @@ public class TelescopeServiceImpl implements TelescopeService {
     private final DetectedFlightDAO detectedFlightDAO;
     private final FlightDAO flightDAO;
     private final RoundService roundService;
+    private final EventService eventService;
     private final RandomNumberGenerator randomNumberGenerator;
 
     @Inject
-    public TelescopeServiceImpl(PlanetDAO planetDAO, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO, FlightDAO flightDAO, RoundService roundService, RandomNumberGenerator randomNumberGenerator) {
+    public TelescopeServiceImpl(PlanetDAO planetDAO, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO, FlightDAO flightDAO, RoundService roundService, RandomNumberGenerator randomNumberGenerator, EventService eventService) {
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.detectedFlightDAO = Preconditions.checkNotNull(detectedFlightDAO, "detectedFlightDAO");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
+        this.eventService = Preconditions.checkNotNull(eventService, "eventService");
         this.randomNumberGenerator = Preconditions.checkNotNull(randomNumberGenerator, "randomNumberGenerator");
     }
 
@@ -69,7 +72,7 @@ public class TelescopeServiceImpl implements TelescopeService {
     public void detectFlights() {
         LOGGER.debug("Detecting flights");
 
-        List<Flight> flights = flightDAO.findWithType(FlightType.ATTACK);
+        List<Flight> flights = flightDAO.findWithTypeAndDetected(FlightType.ATTACK, false);
         LOGGER.debug("Processing {} flights", flights.size());
 
         long currentRound = roundService.getCurrentRound();
@@ -80,7 +83,6 @@ public class TelescopeServiceImpl implements TelescopeService {
                 int range = calculateFlightDetectionRange(telescope.get().getLevel());
 
                 // TODO: Include fleet speed, otherwise the fast ships are detected at a greater distance
-                // TODO: Flights are detected multiple times
                 if (currentRound + range >= flight.getArrivalInRound()) {
                     detectFlight(flight, telescope.get().getLevel());
                 }
@@ -94,18 +96,25 @@ public class TelescopeServiceImpl implements TelescopeService {
         // Planet must exist, otherwise it couldn't have buildings on it
         Planet destinationPlanet = planetDAO.findWithLocation(flight.getDestination()).orElseThrow(AssertionError::new);
 
-        double variance = calculateFleetSizeVariance(level);
+        // If the destination planet is owned from the attacker, don't create any events
+        if (!destinationPlanet.getOwnerId().equals(flight.getPlayerId())) {
+            double variance = calculateFleetSizeVariance(level);
 
-        long realFleetSize = flight.getShips().amount();
-        long delta = MathExt.floorLong(realFleetSize * variance);
-        long approximatedFleetSize = randomNumberGenerator.nextLong(realFleetSize - delta, realFleetSize + delta);
+            long realFleetSize = flight.getShips().amount();
+            long delta = MathExt.floorLong(realFleetSize * variance);
+            long approximatedFleetSize = randomNumberGenerator.nextLong(realFleetSize - delta, realFleetSize + delta);
 
-        LOGGER.trace("Real fleet size {}, variance {}, delta {}, approximated fleet size {}", realFleetSize, variance, delta, approximatedFleetSize);
+            LOGGER.trace("Real fleet size {}, variance {}, delta {}, approximated fleet size {}", realFleetSize, variance, delta, approximatedFleetSize);
 
-        DetectedFlight detectedFlight = new DetectedFlight(flight.getId(), destinationPlanet.getOwnerId(), approximatedFleetSize);
-        detectedFlightDAO.insert(detectedFlight);
+            // Create detected flight
+            DetectedFlight detectedFlight = new DetectedFlight(flight.getId(), destinationPlanet.getOwnerId(), approximatedFleetSize);
+            detectedFlightDAO.insert(detectedFlight);
 
-        // TODO: Insert event
+            eventService.createFlightDetectedEvent(flight.getPlayerId(), destinationPlanet.getOwnerId(), destinationPlanet.getId(), flight.getId(), detectedFlight.getFlightId());
+        }
+
+        // Update flight - it has been detected
+        flightDAO.update(flight.withDetected(true));
     }
 
     @Override

@@ -21,4 +21,11 @@ public interface DetectedFlightDAO {
      * @return Detected flights.
      */
     List<DetectedFlightWithSender> findWithPlayer(UUID playerId);
+
+    /**
+     * Deletes the detected flight with the given id.
+     *
+     * @param id Id.
+     */
+    void delete(UUID id);
 }
