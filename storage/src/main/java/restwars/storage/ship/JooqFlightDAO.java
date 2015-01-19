@@ -7,10 +7,10 @@ import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.planet.Location;
-import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
+import restwars.storage.mapper.FlightMapper;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -135,19 +135,7 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
             UUID id = record.getValue(FLIGHT.ID);
             // If flight is not already known, create add it to map
             if (!flights.containsKey(id)) {
-                Location start = new Location(record.getValue(FLIGHT.START_GALAXY), record.getValue(FLIGHT.START_SOLAR_SYSTEM), record.getValue(FLIGHT.START_PLANET));
-                Location destination = new Location(record.getValue(FLIGHT.DESTINATION_GALAXY), record.getValue(FLIGHT.DESTINATION_SOLAR_SYSTEM), record.getValue(FLIGHT.DESTINATION_PLANET));
-                long startedInRound = record.getValue(FLIGHT.STARTED_IN_ROUND);
-                long arrivalInRound = record.getValue(FLIGHT.ARRIVAL_IN_ROUND);
-                long energyNeeded = record.getValue(FLIGHT.ENERGY_NEEDED);
-                FlightType type = FlightType.fromId(record.getValue(FLIGHT.TYPE));
-                FlightDirection direction = FlightDirection.fromId(record.getValue(FLIGHT.DIRECTION));
-                UUID recordPlayerId = record.getValue(FLIGHT.PLAYER_ID);
-                long cargoCrystals = record.getValue(FLIGHT.CARGO_CRYSTALS);
-                long cargoGas = record.getValue(FLIGHT.CARGO_GAS);
-                long cargoEnergy = record.getValue(FLIGHT.CARGO_ENERGY);
-
-                Flight flight = new Flight(id, start, destination, startedInRound, arrivalInRound, new Ships(), energyNeeded, type, recordPlayerId, direction, new Resources(cargoCrystals, cargoGas, cargoEnergy));
+                Flight flight = FlightMapper.fromRecordNoShips(record);
                 flights.put(id, flight);
 
                 flightShips.put(id, new Ships());
