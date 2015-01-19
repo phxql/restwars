@@ -11,7 +11,7 @@ public class BuildingTypeTest {
     public void testUniqueIds() throws Exception {
         for (BuildingType buildingType : BuildingType.values()) {
             if (Stream.of(BuildingType.values()).filter(t -> t.getId() == buildingType.getId()).count() > 1) {
-                fail("Id " + buildingType.getId() + " isn't unique");
+                fail("BuildingType id " + buildingType.getId() + " isn't unique");
             }
         }
     }
