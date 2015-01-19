@@ -224,9 +224,6 @@
             <column name="cargo_gas" type="long">
                 <constraints nullable="false"/>
             </column>
-            <column name="cargo_energy" type="long">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
 
         <createTable tableName="flight_ships">
