@@ -116,6 +116,17 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
     }
 
     @Override
+    public List<Flight> findWithType(FlightType type) {
+        Preconditions.checkNotNull(type, "type");
+        LOGGER.debug("Finding flights with type {}", type);
+
+        Result<Record> result = context().select().from(FLIGHT).join(FLIGHT_SHIPS).on(FLIGHT_SHIPS.FLIGHT_ID.eq(FLIGHT.ID))
+                .where(FLIGHT.TYPE.eq(type.getId())).fetch();
+
+        return readFlights(result);
+    }
+
+    @Override
     public List<Flight> findWithStart(Location location) {
         LOGGER.debug("Finding flights with start {}", location);
 
