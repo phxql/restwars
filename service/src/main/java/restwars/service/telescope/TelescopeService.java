@@ -22,4 +22,25 @@ public interface TelescopeService {
      * @return All incoming flights.
      */
     List<DetectedFlightWithSender> findDetectedFlights(Player player);
+
+    /**
+     * Detect flights.
+     */
+    void detectFlights();
+
+    /**
+     * Calculates the flight detection range for the given telescope level.
+     *
+     * @param telescopeLevel Telescope level.
+     * @return Flight detection range.
+     */
+    int calculateFlightDetectionRange(int telescopeLevel);
+
+    /**
+     * Calculates the fleet detection variance for the given telescope level.
+     *
+     * @param telescopeLevel Telescope level.
+     * @return Fleet detection variance.
+     */
+    double calculateFleetSizeVariance(int telescopeLevel);
 }

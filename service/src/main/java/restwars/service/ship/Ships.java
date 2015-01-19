@@ -121,6 +121,10 @@ public class Ships implements Iterable<Ship> {
         return ships.isEmpty();
     }
 
+    public long amount() {
+        return ships.values().stream().mapToLong(a -> a).sum();
+    }
+
     @Override
     public Iterator<Ship> iterator() {
         return asList().iterator();
