@@ -82,7 +82,7 @@ public class TelescopeServiceImpl implements TelescopeService {
             if (telescope.isPresent()) {
                 int range = calculateFlightDetectionRange(telescope.get().getLevel());
 
-                // TODO: Include fleet speed, otherwise the fast ships are detected at a greater distance
+                // TODO: Gameplay - Include fleet speed, otherwise the fast ships are detected at a greater distance
                 if (currentRound + range >= flight.getArrivalInRound()) {
                     detectFlight(flight, telescope.get().getLevel());
                 }
