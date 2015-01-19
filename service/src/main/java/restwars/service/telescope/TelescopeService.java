@@ -21,5 +21,5 @@ public interface TelescopeService {
      * @param player Player.
      * @return All incoming flights.
      */
-    List<DetectedFlightWithSender> detectFlights(Player player);
+    List<DetectedFlightWithSender> findDetectedFlights(Player player);
 }

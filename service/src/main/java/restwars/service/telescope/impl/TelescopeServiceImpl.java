@@ -51,9 +51,9 @@ public class TelescopeServiceImpl implements TelescopeService {
     }
 
     @Override
-    public List<DetectedFlightWithSender> detectFlights(Player player) {
+    public List<DetectedFlightWithSender> findDetectedFlights(Player player) {
         Preconditions.checkNotNull(player, "player");
-        LOGGER.debug("Finding incoming flights for {}", player);
+        LOGGER.debug("Finding detected flights for {}", player);
 
         return detectedFlightDAO.findWithPlayer(player.getId());
     }

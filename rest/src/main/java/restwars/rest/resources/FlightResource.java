@@ -72,7 +72,7 @@ public class FlightResource {
     public List<DetectedFlightResponse> incomingFlights(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
 
-        List<DetectedFlightWithSender> incomingFlights = telescopeService.detectFlights(player);
+        List<DetectedFlightWithSender> incomingFlights = telescopeService.findDetectedFlights(player);
 
         return Helper.mapToList(incomingFlights, FlightMapper::fromDetectedFlight);
     }
