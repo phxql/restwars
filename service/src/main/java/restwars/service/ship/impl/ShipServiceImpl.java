@@ -330,7 +330,7 @@ public class ShipServiceImpl implements ShipService {
         hangarDAO.update(updatedHangar);
 
         // Start the flight
-        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, totalEnergyNeeded, flightType, player.getId(), FlightDirection.OUTWARD, cargo, false);
+        Flight flight = new Flight(uuidFactory.create(), start.getLocation(), destination, started, arrives, ships, totalEnergyNeeded, flightType, player.getId(), FlightDirection.OUTWARD, cargo, speed, false);
         flightDAO.insert(flight);
         return flight;
     }

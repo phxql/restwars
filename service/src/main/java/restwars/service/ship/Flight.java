@@ -30,12 +30,15 @@ public class Flight {
 
     private final Resources cargo;
 
+    private final int speed;
+
     private final boolean detected;
 
-    public Flight(UUID id, Location start, Location destination, long startedInRound, long arrivalInRound, Ships ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction, Resources cargo, boolean detected) {
+    public Flight(UUID id, Location start, Location destination, long startedInRound, long arrivalInRound, Ships ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction, Resources cargo, int speed, boolean detected) {
         Preconditions.checkArgument(startedInRound > 0, "startedInRound must be > 0");
         Preconditions.checkArgument(arrivalInRound > 0, "arrivalInRound must be > 0");
         Preconditions.checkArgument(energyNeeded > 0, "energyNeeded must be > 0");
+        Preconditions.checkArgument(speed > 0, "speed must be > 0");
 
         this.cargo = Preconditions.checkNotNull(cargo, "cargo");
         this.start = Preconditions.checkNotNull(start, "start");
@@ -49,6 +52,7 @@ public class Flight {
         this.playerId = Preconditions.checkNotNull(playerId, "playerId");
         this.direction = Preconditions.checkNotNull(direction, "direction");
         this.detected = detected;
+        this.speed = speed;
     }
 
     public UUID getId() {
@@ -99,16 +103,20 @@ public class Flight {
         return detected;
     }
 
+    public int getSpeed() {
+        return speed;
+    }
+
     public Flight withCargo(Resources cargo) {
-        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction, cargo, detected);
+        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction, cargo, speed, detected);
     }
 
     public Flight withShips(Ships ships) {
-        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction, cargo, detected);
+        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction, cargo, speed, detected);
     }
 
     public Flight withDetected(boolean detected) {
-        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction, cargo, detected);
+        return new Flight(id, start, destination, startedInRound, arrivalInRound, ships, energyNeeded, type, playerId, direction, cargo, speed, detected);
     }
 
     @Override
@@ -125,6 +133,7 @@ public class Flight {
                 .add("type", type)
                 .add("direction", direction)
                 .add("cargo", cargo)
+                .add("speed", speed)
                 .add("detected", detected)
                 .toString();
     }

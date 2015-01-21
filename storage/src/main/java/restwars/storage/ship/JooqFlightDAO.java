@@ -40,13 +40,14 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
                         FLIGHT, FLIGHT.ID, FLIGHT.PLAYER_ID, FLIGHT.START_GALAXY, FLIGHT.START_SOLAR_SYSTEM, FLIGHT.START_PLANET,
                         FLIGHT.DESTINATION_GALAXY, FLIGHT.DESTINATION_SOLAR_SYSTEM, FLIGHT.DESTINATION_PLANET, FLIGHT.STARTED_IN_ROUND,
                         FLIGHT.ARRIVAL_IN_ROUND, FLIGHT.ENERGY_NEEDED, FLIGHT.TYPE, FLIGHT.DIRECTION, FLIGHT.CARGO_CRYSTALS,
-                        FLIGHT.CARGO_GAS, FLIGHT.DETECTED
+                        FLIGHT.CARGO_GAS, FLIGHT.SPEED, FLIGHT.DETECTED
                 )
                 .values(
                         flight.getId(), flight.getPlayerId(), flight.getStart().getGalaxy(), flight.getStart().getSolarSystem(), flight.getStart().getPlanet(),
                         flight.getDestination().getGalaxy(), flight.getDestination().getSolarSystem(), flight.getDestination().getPlanet(),
                         flight.getStartedInRound(), flight.getArrivalInRound(), flight.getEnergyNeeded(), flight.getType().getId(),
-                        flight.getDirection().getId(), flight.getCargo().getCrystals(), flight.getCargo().getGas(), flight.isDetected()
+                        flight.getDirection().getId(), flight.getCargo().getCrystals(), flight.getCargo().getGas(),
+                        flight.getSpeed(), flight.isDetected()
                 )
                 .execute();
 
@@ -93,6 +94,7 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
                 .set(FLIGHT.DIRECTION, flight.getDirection().getId())
                 .set(FLIGHT.CARGO_CRYSTALS, flight.getCargo().getCrystals())
                 .set(FLIGHT.CARGO_GAS, flight.getCargo().getGas())
+                .set(FLIGHT.SPEED, flight.getSpeed())
                 .set(FLIGHT.DETECTED, flight.isDetected())
                 .where(FLIGHT.ID.eq(flight.getId()))
                 .execute();

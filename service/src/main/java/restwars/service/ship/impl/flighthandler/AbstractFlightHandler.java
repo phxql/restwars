@@ -54,7 +54,7 @@ public abstract class AbstractFlightHandler {
         Flight returnFlight = new Flight(
                 flight.getId(), flight.getStart(), flight.getDestination(),
                 flight.getStartedInRound(), arrival, ships, flight.getEnergyNeeded(), flight.getType(), flight.getPlayerId(),
-                FlightDirection.RETURN, cargo, flight.isDetected());
+                FlightDirection.RETURN, cargo, speed, flight.isDetected());
 
         flightDAO.update(returnFlight);
         LOGGER.debug("Created return flight {}", returnFlight);
