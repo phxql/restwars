@@ -80,9 +80,8 @@ public class TelescopeServiceImpl implements TelescopeService {
         for (Flight flight : flights) {
             Optional<Building> telescope = buildingDAO.findWithPlanetLocationAndType(flight.getDestination(), BuildingType.TELESCOPE);
             if (telescope.isPresent()) {
-                int range = calculateFlightDetectionRange(telescope.get().getLevel());
+                int range = MathExt.floorInt(calculateFlightDetectionRange(telescope.get().getLevel()) * (1.0 / flight.getSpeed()));
 
-                // TODO: Gameplay - Include fleet speed, otherwise the fast ships are detected at a greater distance
                 if (currentRound + range >= flight.getArrivalInRound()) {
                     detectFlight(flight, telescope.get().getLevel());
                 }
