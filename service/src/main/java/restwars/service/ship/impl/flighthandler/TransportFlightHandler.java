@@ -8,6 +8,7 @@ import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.resource.Resources;
+import restwars.service.ship.DetectedFlightDAO;
 import restwars.service.ship.Flight;
 import restwars.service.ship.FlightDAO;
 import restwars.service.ship.HangarDAO;
@@ -17,8 +18,8 @@ import java.util.Optional;
 public class TransportFlightHandler extends AbstractFlightHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransportFlightHandler.class);
 
-    public TransportFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
+    public TransportFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService, DetectedFlightDAO detectedFlightDAO) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
     }
 
     @Override

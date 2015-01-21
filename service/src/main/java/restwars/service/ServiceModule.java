@@ -6,8 +6,10 @@ import restwars.service.building.BuildingService;
 import restwars.service.building.impl.BuildingServiceImpl;
 import restwars.service.event.EventService;
 import restwars.service.event.impl.EventServiceImpl;
+import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
+import restwars.service.infrastructure.impl.RandomNumberGeneratorImpl;
 import restwars.service.infrastructure.impl.RoundServiceImpl;
 import restwars.service.infrastructure.impl.UUIDFactoryImpl;
 import restwars.service.location.LocationFactory;
@@ -26,6 +28,8 @@ import restwars.service.technology.TechnologyService;
 import restwars.service.technology.impl.TechnologyServiceImpl;
 import restwars.service.telescope.TelescopeService;
 import restwars.service.telescope.impl.TelescopeServiceImpl;
+
+import javax.inject.Singleton;
 
 @Module(library = true, complete = false)
 public class ServiceModule {
@@ -85,7 +89,14 @@ public class ServiceModule {
     }
 
     @Provides
+    @Singleton
     PasswordService providesPasswordService(Pbkdf2PasswordService passwordService) {
         return passwordService;
+    }
+
+    @Provides
+    @Singleton
+    RandomNumberGenerator providesRandomNumberGenerator(RandomNumberGeneratorImpl randomNumberGenerator) {
+        return randomNumberGenerator;
     }
 }

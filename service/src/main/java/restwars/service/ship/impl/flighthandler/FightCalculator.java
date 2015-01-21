@@ -3,6 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.resource.Resources;
 import restwars.service.ship.Fight;
@@ -11,22 +12,18 @@ import restwars.service.ship.ShipType;
 import restwars.service.ship.Ships;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class FightCalculator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FightCalculator.class);
 
-    /**
-     * Random number generator.
-     */
-    private final Random random = new Random();
-
     private final UUIDFactory uuidFactory;
+    private final RandomNumberGenerator randomNumberGenerator;
 
-    public FightCalculator(UUIDFactory uuidFactory) {
+    public FightCalculator(UUIDFactory uuidFactory, RandomNumberGenerator randomNumberGenerator) {
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
+        this.randomNumberGenerator = Preconditions.checkNotNull(randomNumberGenerator, "randomNumberGenerator");
     }
 
     public Fight attack(UUID attackerId, UUID defenderId, UUID planetId, Ships attackingShips, Ships defendingShips, long round) {
@@ -60,7 +57,7 @@ public class FightCalculator {
             }
 
             // Randomly target a ship and destroy it
-            ShipType shipToDestroy = destroyableShips.get(random.nextInt(destroyableShips.size()));
+            ShipType shipToDestroy = destroyableShips.get(randomNumberGenerator.nextInt(destroyableShips.size()));
             remainingDefendingShips = remainingDefendingShips.minus(shipToDestroy, 1);
 
             attackerAttackPoints = attackerAttackPoints - shipToDestroy.getDefensePoints();

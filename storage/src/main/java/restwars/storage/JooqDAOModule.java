@@ -8,10 +8,7 @@ import restwars.service.event.EventDAO;
 import restwars.service.infrastructure.RoundDAO;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.PlayerDAO;
-import restwars.service.ship.FightDAO;
-import restwars.service.ship.FlightDAO;
-import restwars.service.ship.HangarDAO;
-import restwars.service.ship.ShipInConstructionDAO;
+import restwars.service.ship.*;
 import restwars.service.technology.ResearchDAO;
 import restwars.service.technology.TechnologyDAO;
 import restwars.storage.building.JooqBuildingDAO;
@@ -21,6 +18,7 @@ import restwars.storage.fight.JooqFightDAO;
 import restwars.storage.planet.JooqPlanetDAO;
 import restwars.storage.player.JooqPlayerDAO;
 import restwars.storage.round.JooqRoundDAO;
+import restwars.storage.ship.JooqDetectedFlightDAO;
 import restwars.storage.ship.JooqFlightDAO;
 import restwars.storage.ship.JooqHangarDAO;
 import restwars.storage.ship.JooqShipInConstructionDAO;
@@ -94,5 +92,11 @@ public class JooqDAOModule {
     @Singleton
     FightDAO providesFightDAO(JooqFightDAO jooqFightDAO) {
         return jooqFightDAO;
+    }
+
+    @Provides
+    @Singleton
+    DetectedFlightDAO providesDetectedFlightDAO(JooqDetectedFlightDAO jooqDetectedFlightDAO) {
+        return jooqDetectedFlightDAO;
     }
 }

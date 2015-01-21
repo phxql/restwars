@@ -1,6 +1,8 @@
 package restwars.service.telescope;
 
 import restwars.service.planet.Planet;
+import restwars.service.player.Player;
+import restwars.service.ship.DetectedFlightWithSender;
 
 import java.util.List;
 
@@ -12,4 +14,33 @@ public interface TelescopeService {
      * @return Planets in vicinity.
      */
     List<PlanetWithOwner> scan(Planet planet) throws ScanException;
+
+    /**
+     * Detects incoming flights for the given player.
+     *
+     * @param player Player.
+     * @return All incoming flights.
+     */
+    List<DetectedFlightWithSender> findDetectedFlights(Player player);
+
+    /**
+     * Detect flights.
+     */
+    void detectFlights();
+
+    /**
+     * Calculates the flight detection range for the given telescope level.
+     *
+     * @param telescopeLevel Telescope level.
+     * @return Flight detection range.
+     */
+    int calculateFlightDetectionRange(int telescopeLevel);
+
+    /**
+     * Calculates the fleet detection variance for the given telescope level.
+     *
+     * @param telescopeLevel Telescope level.
+     * @return Fleet detection variance.
+     */
+    double calculateFleetSizeVariance(int telescopeLevel);
 }

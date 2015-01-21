@@ -85,4 +85,15 @@ public interface EventService {
      * @param fightId    Id of the fight.
      */
     void createFightHappenedEvent(UUID attackerId, UUID defenderId, UUID planetId, UUID fightId);
+
+    /**
+     * Creates a flight detected event.
+     *
+     * @param attackerId       Id of the attacker.
+     * @param defenderId       Id of the defender.
+     * @param planetId         Id of the planet.
+     * @param flightId         Id of the flight.
+     * @param detectedFlightId Id of the detected flight.
+     */
+    void createFlightDetectedEvent(UUID attackerId, UUID defenderId, UUID planetId, UUID flightId, UUID detectedFlightId);
 }

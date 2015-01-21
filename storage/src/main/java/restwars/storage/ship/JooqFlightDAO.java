@@ -7,10 +7,10 @@ import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.planet.Location;
-import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
+import restwars.storage.mapper.FlightMapper;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -40,13 +40,14 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
                         FLIGHT, FLIGHT.ID, FLIGHT.PLAYER_ID, FLIGHT.START_GALAXY, FLIGHT.START_SOLAR_SYSTEM, FLIGHT.START_PLANET,
                         FLIGHT.DESTINATION_GALAXY, FLIGHT.DESTINATION_SOLAR_SYSTEM, FLIGHT.DESTINATION_PLANET, FLIGHT.STARTED_IN_ROUND,
                         FLIGHT.ARRIVAL_IN_ROUND, FLIGHT.ENERGY_NEEDED, FLIGHT.TYPE, FLIGHT.DIRECTION, FLIGHT.CARGO_CRYSTALS,
-                        FLIGHT.CARGO_GAS, FLIGHT.CARGO_ENERGY
+                        FLIGHT.CARGO_GAS, FLIGHT.SPEED, FLIGHT.DETECTED
                 )
                 .values(
                         flight.getId(), flight.getPlayerId(), flight.getStart().getGalaxy(), flight.getStart().getSolarSystem(), flight.getStart().getPlanet(),
                         flight.getDestination().getGalaxy(), flight.getDestination().getSolarSystem(), flight.getDestination().getPlanet(),
                         flight.getStartedInRound(), flight.getArrivalInRound(), flight.getEnergyNeeded(), flight.getType().getId(),
-                        flight.getDirection().getId(), flight.getCargo().getCrystals(), flight.getCargo().getGas(), flight.getCargo().getEnergy()
+                        flight.getDirection().getId(), flight.getCargo().getCrystals(), flight.getCargo().getGas(),
+                        flight.getSpeed(), flight.isDetected()
                 )
                 .execute();
 
@@ -93,7 +94,8 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
                 .set(FLIGHT.DIRECTION, flight.getDirection().getId())
                 .set(FLIGHT.CARGO_CRYSTALS, flight.getCargo().getCrystals())
                 .set(FLIGHT.CARGO_GAS, flight.getCargo().getGas())
-                .set(FLIGHT.CARGO_ENERGY, flight.getCargo().getEnergy())
+                .set(FLIGHT.SPEED, flight.getSpeed())
+                .set(FLIGHT.DETECTED, flight.isDetected())
                 .where(FLIGHT.ID.eq(flight.getId()))
                 .execute();
 
@@ -116,6 +118,19 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
     }
 
     @Override
+    public List<Flight> findWithTypeAndDetected(FlightType type, boolean detected) {
+        Preconditions.checkNotNull(type, "type");
+        LOGGER.debug("Finding flights with type {} and detection status {}", type, detected);
+
+        Result<Record> result = context().select().from(FLIGHT).join(FLIGHT_SHIPS).on(FLIGHT_SHIPS.FLIGHT_ID.eq(FLIGHT.ID))
+                .where(FLIGHT.TYPE.eq(type.getId()))
+                .and(FLIGHT.DETECTED.eq(detected))
+                .fetch();
+
+        return readFlights(result);
+    }
+
+    @Override
     public List<Flight> findWithStart(Location location) {
         LOGGER.debug("Finding flights with start {}", location);
 
@@ -135,19 +150,7 @@ public class JooqFlightDAO extends AbstractJooqDAO implements FlightDAO {
             UUID id = record.getValue(FLIGHT.ID);
             // If flight is not already known, create add it to map
             if (!flights.containsKey(id)) {
-                Location start = new Location(record.getValue(FLIGHT.START_GALAXY), record.getValue(FLIGHT.START_SOLAR_SYSTEM), record.getValue(FLIGHT.START_PLANET));
-                Location destination = new Location(record.getValue(FLIGHT.DESTINATION_GALAXY), record.getValue(FLIGHT.DESTINATION_SOLAR_SYSTEM), record.getValue(FLIGHT.DESTINATION_PLANET));
-                long startedInRound = record.getValue(FLIGHT.STARTED_IN_ROUND);
-                long arrivalInRound = record.getValue(FLIGHT.ARRIVAL_IN_ROUND);
-                long energyNeeded = record.getValue(FLIGHT.ENERGY_NEEDED);
-                FlightType type = FlightType.fromId(record.getValue(FLIGHT.TYPE));
-                FlightDirection direction = FlightDirection.fromId(record.getValue(FLIGHT.DIRECTION));
-                UUID recordPlayerId = record.getValue(FLIGHT.PLAYER_ID);
-                long cargoCrystals = record.getValue(FLIGHT.CARGO_CRYSTALS);
-                long cargoGas = record.getValue(FLIGHT.CARGO_GAS);
-                long cargoEnergy = record.getValue(FLIGHT.CARGO_ENERGY);
-
-                Flight flight = new Flight(id, start, destination, startedInRound, arrivalInRound, new Ships(), energyNeeded, type, recordPlayerId, direction, new Resources(cargoCrystals, cargoGas, cargoEnergy));
+                Flight flight = FlightMapper.fromRecordNoShips(record);
                 flights.put(id, flight);
 
                 flightShips.put(id, new Ships());

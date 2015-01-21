@@ -1,5 +1,7 @@
 package restwars.service.building;
 
+import restwars.service.planet.Location;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,4 +39,13 @@ public interface BuildingDAO {
      * @return Building.
      */
     Optional<Building> findWithPlanetIdAndType(UUID planetId, BuildingType type);
+
+    /**
+     * Returns the building on the given planet with the given type.
+     *
+     * @param location Location of the planet.
+     * @param type     Building type.
+     * @return Building.
+     */
+    Optional<Building> findWithPlanetLocationAndType(Location location, BuildingType type);
 }

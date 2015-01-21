@@ -9,8 +9,10 @@ import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
 import restwars.service.building.Buildings;
+import restwars.service.planet.Location;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
+import restwars.storage.mapper.BuildingMapper;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -18,6 +20,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static restwars.storage.jooq.Tables.BUILDING;
+import static restwars.storage.jooq.Tables.PLANET;
 
 public class JooqBuildingDAO extends AbstractJooqDAO implements BuildingDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JooqBuildingDAO.class);
@@ -34,16 +37,7 @@ public class JooqBuildingDAO extends AbstractJooqDAO implements BuildingDAO {
         LOGGER.debug("Finding buildings with planet id {}", planetId);
 
         Result<Record> result = context().select().from(BUILDING).where(BUILDING.PLANET_ID.eq(planetId)).fetch();
-        return new Buildings(result.stream().map(this::fromRecord).collect(Collectors.toList()));
-    }
-
-    private Building fromRecord(Record record) {
-        return new Building(
-                record.getValue(BUILDING.ID),
-                BuildingType.fromId(record.getValue(BUILDING.TYPE)),
-                record.getValue(BUILDING.LEVEL),
-                record.getValue(BUILDING.PLANET_ID)
-        );
+        return new Buildings(result.stream().map(BuildingMapper::fromRecord).collect(Collectors.toList()));
     }
 
     @Override
@@ -74,6 +68,28 @@ public class JooqBuildingDAO extends AbstractJooqDAO implements BuildingDAO {
     }
 
     @Override
+    public Optional<Building> findWithPlanetLocationAndType(Location location, BuildingType type) {
+        Preconditions.checkNotNull(location, "location");
+        Preconditions.checkNotNull(type, "type");
+
+        LOGGER.debug("Finding building with planet location {} and type {}", location, type);
+
+        Record record = context().select().from(BUILDING)
+                .join(PLANET).on(PLANET.ID.eq(BUILDING.PLANET_ID))
+                .where(BUILDING.TYPE.eq(type.getId()))
+                .and(PLANET.LOCATION_GALAXY.eq(location.getGalaxy()))
+                .and(PLANET.LOCATION_PLANET.eq(location.getPlanet()))
+                .and(PLANET.LOCATION_SOLAR_SYSTEM.eq(location.getSolarSystem()))
+                .fetchOne();
+
+        if (record == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(BuildingMapper.fromRecord(record));
+    }
+
+    @Override
     public Optional<Building> findWithPlanetIdAndType(UUID planetId, BuildingType type) {
         Preconditions.checkNotNull(planetId, "planetId");
         Preconditions.checkNotNull(type, "type");
@@ -85,6 +101,6 @@ public class JooqBuildingDAO extends AbstractJooqDAO implements BuildingDAO {
             return Optional.empty();
         }
 
-        return Optional.of(fromRecord(record));
+        return Optional.of(BuildingMapper.fromRecord(record));
     }
 }

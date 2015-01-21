@@ -24,8 +24,8 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
     private final UniverseConfiguration universeConfiguration;
     private final BuildingDAO buildingDAO;
 
-    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventService eventService, BuildingDAO buildingDAO) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService);
+    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventService eventService, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
     }
@@ -58,6 +58,7 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
             Hangar updatedHangar = hangar.withShips(flight.getShips().minus(ShipType.COLONY, 1));
             getHangarDAO().update(updatedHangar);
 
+            getDetectedFlightDAO().delete(flight.getId());
             getFlightDAO().delete(flight);
 
             // Create event

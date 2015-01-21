@@ -60,6 +60,24 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public void createFlightDetectedEvent(UUID attackerId, UUID defenderId, UUID planetId, UUID flightId, UUID detectedFlightId) {
+        Preconditions.checkNotNull(attackerId, "attackerId");
+        Preconditions.checkNotNull(defenderId, "defenderId");
+        Preconditions.checkNotNull(planetId, "planetId");
+        Preconditions.checkNotNull(flightId, "fightId");
+        Preconditions.checkNotNull(detectedFlightId, "detectedFlightId");
+        LOGGER.debug("Creating flight detected event for attacker {}, defender {} om planet {} with flight {} and detected flight {}", attackerId, defenderId, planetId, flightId, detectedFlightId);
+
+        long round = roundService.getCurrentRound();
+
+        Event attackerEvent = new Event(uuidFactory.create(), attackerId, planetId, EventType.FLIGHT_HAS_BEEN_DETECTED, round, Optional.<UUID>empty());
+        eventDAO.insert(attackerEvent);
+
+        Event defenderEvent = new Event(uuidFactory.create(), defenderId, planetId, EventType.FLIGHT_DETECTED, round, Optional.<UUID>empty());
+        eventDAO.insert(defenderEvent);
+    }
+
+    @Override
     public Event createTransportArrivedEvent(UUID playerId, UUID planetId) {
         Preconditions.checkNotNull(playerId, "playerId");
         Preconditions.checkNotNull(planetId, "planetId");
