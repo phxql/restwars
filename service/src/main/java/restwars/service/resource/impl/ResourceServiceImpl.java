@@ -13,7 +13,6 @@ import restwars.service.resource.ResourceService;
 import restwars.service.resource.Resources;
 import restwars.service.technology.Technologies;
 import restwars.service.technology.TechnologyDAO;
-import restwars.service.technology.TechnologyType;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -39,16 +38,13 @@ public class ResourceServiceImpl implements ResourceService {
 
         switch (type) {
             case CRYSTAL_MINE: {
-                double technologyBonus = technologies.getLevel(TechnologyType.CRYSTAL_MINE_EFFICIENCY) * 0.10;
-                return new Resources((long) Math.ceil(level * (1 + technologyBonus)), 0, 0);
+                return new Resources(level, 0, 0);
             }
             case GAS_REFINERY: {
-                double technologyBonus = technologies.getLevel(TechnologyType.GAS_REFINERY_EFFICIENCY) * 0.10;
-                return new Resources(0, (long) Math.ceil(level * (1 + technologyBonus)), 0);
+                return new Resources(0, level, 0);
             }
             case SOLAR_PANELS: {
-                double technologyBonus = technologies.getLevel(TechnologyType.SOLAR_PANELS_EFFICIENCY) * 0.10;
-                return new Resources(0, 0, (long) Math.ceil(level * 10L * (1 + technologyBonus)));
+                return new Resources(0, 0, level * 10L);
             }
             default:
                 return Resources.NONE;

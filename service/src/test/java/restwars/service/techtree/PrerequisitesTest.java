@@ -34,22 +34,24 @@ public class PrerequisitesTest {
 
     @Test
     public void testOneTechnology() throws Exception {
-        Prerequisites sut = Prerequisites.technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2);
+        Prerequisites sut = Prerequisites.technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 2);
 
-        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 1))), is(false));
-        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2))), is(true));
-        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 3))), is(true));
+        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 1))), is(false));
+        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 2))), is(true));
+        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 3))), is(true));
     }
 
     @Test
     public void testMultipleTechnologies() throws Exception {
-        Prerequisites sut = new Prerequisites(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2)));
+// TODO: Uncomment if there is more than one technology!
 
-        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2))), is(false));
-        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2))), is(false));
-        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 1), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 1))), is(false));
-        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 1), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2))), is(false));
-        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 1))), is(false));
-        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2))), is(true));
+//        Prerequisites sut = new Prerequisites(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2)));
+//
+//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2))), is(false));
+//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2))), is(false));
+//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 1), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 1))), is(false));
+//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 1), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2))), is(false));
+//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 1))), is(false));
+//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2))), is(true));
     }
 }

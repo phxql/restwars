@@ -156,18 +156,6 @@ public class TechnologyServiceImpl implements TechnologyService {
             case BUILDING_BUILD_COST_REDUCTION:
                 researchTime = level;
                 break;
-            case BUILDING_BUILD_TIME_REDUCTION:
-                researchTime = level;
-                break;
-            case CRYSTAL_MINE_EFFICIENCY:
-                researchTime = level;
-                break;
-            case GAS_REFINERY_EFFICIENCY:
-                researchTime = level;
-                break;
-            case SOLAR_PANELS_EFFICIENCY:
-                researchTime = level;
-                break;
             default:
                 throw new AssertionError("Unknown technology: " + technology);
         }
@@ -190,14 +178,6 @@ public class TechnologyServiceImpl implements TechnologyService {
 
         switch (technology) {
             case BUILDING_BUILD_COST_REDUCTION:
-                return new Resources(level, level, level);
-            case BUILDING_BUILD_TIME_REDUCTION:
-                return new Resources(level, level, level);
-            case CRYSTAL_MINE_EFFICIENCY:
-                return new Resources(level, level, level);
-            case GAS_REFINERY_EFFICIENCY:
-                return new Resources(level, level, level);
-            case SOLAR_PANELS_EFFICIENCY:
                 return new Resources(level, level, level);
             default:
                 throw new AssertionError("Unknown technology: " + technology);
