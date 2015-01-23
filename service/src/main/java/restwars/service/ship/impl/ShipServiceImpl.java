@@ -3,6 +3,7 @@ package restwars.service.ship.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.PlanetMechanics;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
@@ -62,9 +63,10 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO, PlanetMechanics planetMechanics) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         Preconditions.checkNotNull(randomNumberGenerator, "randomNumberGenerator");
+        Preconditions.checkNotNull(planetMechanics, "planetMechanics");
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
@@ -80,7 +82,7 @@ public class ShipServiceImpl implements ShipService {
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
-        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventService, buildingDAO, detectedFlightDAO);
+        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventService, buildingDAO, detectedFlightDAO, planetMechanics);
         attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventService, randomNumberGenerator, detectedFlightDAO);
         transferFlightHandler = new TransferFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
         shipUtils = new ShipUtils();
