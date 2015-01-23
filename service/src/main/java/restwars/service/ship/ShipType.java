@@ -6,12 +6,12 @@ import restwars.service.resource.Resources;
 import restwars.service.techtree.Prerequisites;
 
 public enum ShipType {
-    MOSQUITO(0, new Resources(1, 1, 1), 1, 1.0, 1, 1, 1, 100, "Small and cheap fighter ship", Prerequisites.NONE),
-    COLONY(1, new Resources(1, 1, 1), 1, 1.0, 1, 0, 5, 10000, "Colonizes planets", Prerequisites.NONE),
-    PROBE(2, new Resources(1, 1, 1), 1, 1.0, 1, 0, 1, 0, "Fast and cheap scout", Prerequisites.NONE),
-    MULE(3, new Resources(1, 1, 1), 1, 1.0, 1, 0, 5, 10000, "Freighter", Prerequisites.NONE),
-    DAGGER(4, new Resources(1, 1, 1), 1, 1, 2, 1, 1, 100, "Very fast fighter ship", Prerequisites.NONE),
-    DAEDALUS(5, new Resources(1, 1, 1), 10, 3, 1, 10, 10, 500, "Sophisticated fighter ship", Prerequisites.building(BuildingType.SHIPYARD, 5));
+    MOSQUITO(0, new Resources(1, 1, 1), 1, 1.0, 1.0, 1, 1, 100, "Small and cheap fighter ship", Prerequisites.NONE),
+    COLONY(1, new Resources(1, 1, 1), 1, 1.0, 1.0, 0, 5, 10000, "Colonizes planets", Prerequisites.NONE),
+    PROBE(2, new Resources(1, 1, 1), 1, 1.0, 1.0, 0, 1, 0, "Fast and cheap scout", Prerequisites.NONE),
+    MULE(3, new Resources(1, 1, 1), 1, 1.0, 1.0, 0, 5, 10000, "Freighter", Prerequisites.NONE),
+    DAGGER(4, new Resources(1, 1, 1), 1, 1, 2.0, 1, 1, 100, "Very fast fighter ship", Prerequisites.NONE),
+    DAEDALUS(5, new Resources(1, 1, 1), 10, 3, 1.0, 10, 10, 500, "Sophisticated fighter ship", Prerequisites.building(BuildingType.SHIPYARD, 5));
 
     private final int id;
 
@@ -21,7 +21,7 @@ public enum ShipType {
 
     private final double flightCostModifier;
 
-    private final int speed;
+    private final double speed;
 
     private final int attackPoints;
 
@@ -33,7 +33,7 @@ public enum ShipType {
 
     private final Prerequisites prerequisites;
 
-    ShipType(int id, Resources buildCost, long buildTime, double flightCostModifier, int speed, int attackPoints, int defensePoints, long storageCapacity, String description, Prerequisites prerequisites) {
+    ShipType(int id, Resources buildCost, long buildTime, double flightCostModifier, double speed, int attackPoints, int defensePoints, long storageCapacity, String description, Prerequisites prerequisites) {
         this.id = id;
         Preconditions.checkArgument(buildTime > 0, "buildTime must be > 0");
         Preconditions.checkArgument(speed > 0, "speed must be > 0");
@@ -68,7 +68,7 @@ public enum ShipType {
         return flightCostModifier;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 

@@ -37,7 +37,7 @@ public final class FlightMapper {
         UUID recordPlayerId = record.getValue(FLIGHT.PLAYER_ID);
         long cargoCrystals = record.getValue(FLIGHT.CARGO_CRYSTALS);
         long cargoGas = record.getValue(FLIGHT.CARGO_GAS);
-        int speed = record.getValue(FLIGHT.SPEED);
+        double speed = record.getValue(FLIGHT.SPEED);
         boolean detected = record.getValue(FLIGHT.DETECTED);
 
         return new Flight(id, start, destination, startedInRound, arrivalInRound, Ships.EMPTY, energyNeeded, type, recordPlayerId, direction, new Resources(cargoCrystals, cargoGas, 0), speed, detected);

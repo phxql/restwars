@@ -17,7 +17,7 @@ public class ShipMetadataResponse {
     private ResourcesResponse buildCost;
 
     @ApiModelProperty(value = "Speed", required = true)
-    private int speed;
+    private double speed;
 
     @ApiModelProperty(value = "Attack points", required = true)
     private int attackPoints;
@@ -37,7 +37,7 @@ public class ShipMetadataResponse {
     public ShipMetadataResponse() {
     }
 
-    public ShipMetadataResponse(String type, long buildTime, ResourcesResponse buildCost, int speed, int attackPoints, int defensePoints, long storageCapacity, String description, PrerequisitesResponse prerequisites) {
+    public ShipMetadataResponse(String type, long buildTime, ResourcesResponse buildCost, double speed, int attackPoints, int defensePoints, long storageCapacity, String description, PrerequisitesResponse prerequisites) {
         this.type = type;
         this.buildTime = buildTime;
         this.buildCost = buildCost;
@@ -61,7 +61,11 @@ public class ShipMetadataResponse {
         return buildCost;
     }
 
-    public int getSpeed() {
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public double getSpeed() {
         return speed;
     }
 

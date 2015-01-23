@@ -13,11 +13,17 @@ public class ShipUtils {
         return ships.stream().mapToLong(s -> s.getType().getStorageCapacity()).sum();
     }
 
-    public int findSpeedOfSlowestShip(Ships ships) {
+    /**
+     * Finds the speed of the slowest ship.
+     *
+     * @param ships Ships.
+     * @return Speed of the slowest ship.
+     */
+    public double findSpeedOfSlowestShip(Ships ships) {
         assert ships != null;
         assert !ships.isEmpty();
 
-        return ships.asList().stream().mapToInt(s -> s.getType().getSpeed()).min().getAsInt();
+        return ships.asList().stream().mapToDouble(s -> s.getType().getSpeed()).min().getAsDouble();
     }
 
     public Hangar getOrCreateHangar(HangarDAO hangarDAO, UUIDFactory uuidFactory, UUID planetId, UUID playerId) {

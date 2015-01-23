@@ -304,7 +304,7 @@ public class ShipServiceImpl implements ShipService {
         }
 
         // Calculate arrival time
-        int speed = shipUtils.findSpeedOfSlowestShip(ships);
+        double speed = shipUtils.findSpeedOfSlowestShip(ships);
         long started = roundService.getCurrentRound();
         long arrives = started + (long) Math.ceil(distance / (double) speed);
 

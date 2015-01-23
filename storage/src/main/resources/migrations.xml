@@ -224,7 +224,7 @@
             <column name="cargo_gas" type="long">
                 <constraints nullable="false"/>
             </column>
-            <column name="speed" type="int">
+            <column name="speed" type="double">
                 <constraints nullable="false"/>
             </column>
             <column name="detected" type="boolean">

@@ -30,11 +30,11 @@ public class Flight {
 
     private final Resources cargo;
 
-    private final int speed;
+    private final double speed;
 
     private final boolean detected;
 
-    public Flight(UUID id, Location start, Location destination, long startedInRound, long arrivalInRound, Ships ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction, Resources cargo, int speed, boolean detected) {
+    public Flight(UUID id, Location start, Location destination, long startedInRound, long arrivalInRound, Ships ships, long energyNeeded, FlightType type, UUID playerId, FlightDirection direction, Resources cargo, double speed, boolean detected) {
         Preconditions.checkArgument(startedInRound > 0, "startedInRound must be > 0");
         Preconditions.checkArgument(arrivalInRound > 0, "arrivalInRound must be > 0");
         Preconditions.checkArgument(energyNeeded > 0, "energyNeeded must be > 0");
@@ -103,7 +103,7 @@ public class Flight {
         return detected;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
