@@ -22,4 +22,13 @@ public class BuildingMechanicsImplTest {
         assertThat(sut.calculateBuildingBuildTimeSpeedup(2), is(0.1));
         assertThat(sut.calculateBuildingBuildTimeSpeedup(3), is(0.2));
     }
+
+    @Test
+    public void testCalculateShipBuildTimeSpeedup() throws Exception {
+        assertThat(sut.calculateShipBuildTimeSpeedup(1), is(0.0));
+        assertThat(sut.calculateShipBuildTimeSpeedup(2), is(0.1));
+        assertThat(sut.calculateShipBuildTimeSpeedup(3), is(0.2));
+    }
+
+
 }

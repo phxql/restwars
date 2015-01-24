@@ -3,6 +3,7 @@ package restwars.service.ship.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.BuildingMechanics;
 import restwars.mechanics.PlanetMechanics;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingDAO;
@@ -46,6 +47,7 @@ public class ShipServiceImpl implements ShipService {
     private final FightDAO fightDAO;
     private final EventService eventService;
     private final TechnologyDAO technologyDAO;
+    private final BuildingMechanics buildingMechanics;
 
     private final TransportFlightHandler transportFlightHandler;
     private final ColonizeFlightHandler colonizeFlightHandler;
@@ -63,7 +65,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO, PlanetMechanics planetMechanics) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO, PlanetMechanics planetMechanics, BuildingMechanics buildingMechanics) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         Preconditions.checkNotNull(randomNumberGenerator, "randomNumberGenerator");
         Preconditions.checkNotNull(planetMechanics, "planetMechanics");
@@ -77,6 +79,7 @@ public class ShipServiceImpl implements ShipService {
         this.shipInConstructionDAO = Preconditions.checkNotNull(shipInConstructionDAO, "shipInConstructionDAO");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
+        this.buildingMechanics = Preconditions.checkNotNull(buildingMechanics, "buildingMechanics");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
         this.detectedFlightDAO = Preconditions.checkNotNull(detectedFlightDAO, "detectedFlightDAO");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
@@ -124,9 +127,9 @@ public class ShipServiceImpl implements ShipService {
         planetDAO.update(updatedPlanet);
 
         int shipyardLevel = buildings.getLevel(BuildingType.SHIPYARD);
-        double timeMultiplier = Math.max(1 - shipyardLevel * 0.01, 0);
+        double speedup = 1 - buildingMechanics.calculateShipBuildTimeSpeedup(shipyardLevel);
+        long buildTime = Math.max(MathExt.floorLong(type.getBuildTime() * speedup), 1);
 
-        long buildTime = Math.max(MathExt.floorLong(type.getBuildTime() * timeMultiplier), 1);
         long currentRound = roundService.getCurrentRound();
         ShipInConstruction shipInConstruction = new ShipInConstruction(uuidFactory.create(), type, planet.getId(), player.getId(), currentRound, currentRound + buildTime);
         shipInConstructionDAO.insert(shipInConstruction);
