@@ -214,7 +214,6 @@ public class BuildingServiceImpl implements BuildingService {
 
         Resources cost = buildingMechanics.calculateBuildCost(type, level);
 
-        // TODO: Gamplay - Balancing
         int technologyLevel = technologies.getLevel(TechnologyType.BUILDING_BUILD_COST_REDUCTION);
         double buildCostReduction = technologyMechanics.calculateBuildCostReduction(technologyLevel);
         // TODO: Gameplay - This reaches eventually 0, further updates to the technology are worthless and the buildings are for free, fix this!
