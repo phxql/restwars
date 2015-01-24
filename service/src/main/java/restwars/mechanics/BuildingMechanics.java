@@ -11,7 +11,7 @@ public interface BuildingMechanics {
      * Calculates the build cost for the given building and level.
      *
      * @param type  Building.
-     * @param level Level.
+     * @param level Level. Must be > 0.
      * @return Build cost.
      */
     Resources calculateBuildCost(BuildingType type, int level);
@@ -20,7 +20,7 @@ public interface BuildingMechanics {
      * Calculates the build time for the given building and level.
      *
      * @param type  Building.
-     * @param level Level.
+     * @param level Level. Must be > 0.
      * @return Build time in rounds.
      */
     int calculateBuildTime(BuildingType type, int level);

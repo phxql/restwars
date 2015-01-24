@@ -87,47 +87,89 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
 
     @Override
     public int calculateCrystalsGathered(int level) {
-        Preconditions.checkArgument(level > 0, "level must be > 0");
+        Preconditions.checkArgument(level >= 0, "level must be >= 0");
+
+        if (level == 0) {
+            return 0;
+        }
 
         return 10 + (level - 1) * 5;
     }
 
     @Override
     public int calculateGasGathered(int level) {
-        Preconditions.checkArgument(level > 0, "level must be > 0");
+        Preconditions.checkArgument(level >= 0, "level must be >= 0");
+
+        if (level == 0) {
+            return 0;
+        }
 
         return MathExt.ceilInt(5 + (level - 1) * 2.5);
     }
 
     @Override
     public int calculateEnergyGathered(int level) {
-        Preconditions.checkArgument(level > 0, "level must be > 0");
+        Preconditions.checkArgument(level >= 0, "level must be >= 0");
+
+        if (level == 0) {
+            return 0;
+        }
 
         return 40 + (level - 1) * 20;
     }
 
     @Override
     public double calculateBuildingBuildTimeSpeedup(int level) {
+        Preconditions.checkArgument(level >= 0, "level must be >= 0");
+
+        if (level == 0) {
+            return 0;
+        }
+
         return (level - 1) * 0.1;
     }
 
     @Override
     public double calculateResearchTimeSpeedup(int level) {
+        Preconditions.checkArgument(level >= 0, "level must be >= 0");
+
+        if (level == 0) {
+            return 0;
+        }
+
         return (level - 1) * 0.1;
     }
 
     @Override
     public double calculateShipBuildTimeSpeedup(int level) {
+        Preconditions.checkArgument(level >= 0, "level must be >= 0");
+
+        if (level == 0) {
+            return 0;
+        }
+
         return (level - 1) * 0.1;
     }
 
     @Override
     public int calculateFlightDetectionRange(int level) {
+        Preconditions.checkArgument(level >= 0, "level must be >= 0");
+
+        if (level == 0) {
+            return 0;
+        }
+
         return level + 1;
     }
 
     @Override
     public double calculateFleetSizeVariance(int level) {
+        Preconditions.checkArgument(level >= 0, "level must be >= 0");
+
+        if (level == 0) {
+            return 1;
+        }
+
         // TODO: Gameplay - This reaches 0.0 on level 21, more levels aren't worth anything.
         return Math.max(1.0 - (level - 1) * 0.05, 0.0);
     }

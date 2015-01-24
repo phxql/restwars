@@ -3,6 +3,7 @@ package restwars.service.technology.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.BuildingMechanics;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
 import restwars.service.building.Buildings;
@@ -32,9 +33,10 @@ public class TechnologyServiceImpl implements TechnologyService {
     private final ResearchDAO researchDAO;
     private final BuildingDAO buildingDAO;
     private final EventService eventService;
+    private final BuildingMechanics buildingMechanics;
 
     @Inject
-    public TechnologyServiceImpl(UUIDFactory uuidFactory, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO, BuildingDAO buildingDAO, EventService eventService) {
+    public TechnologyServiceImpl(UUIDFactory uuidFactory, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO, BuildingDAO buildingDAO, EventService eventService, BuildingMechanics buildingMechanics) {
         this.researchDAO = Preconditions.checkNotNull(researchDAO, "researchDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
@@ -42,6 +44,7 @@ public class TechnologyServiceImpl implements TechnologyService {
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
+        this.buildingMechanics = Preconditions.checkNotNull(buildingMechanics, "buildingMechanics");
     }
 
     @Override
@@ -151,6 +154,7 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkArgument(level > 0, "level must be > 0");
         Preconditions.checkNotNull(buildings, "buildings");
 
+        // TODO: Gameplay - Balance this
         int researchTime;
         switch (technology) {
             case BUILDING_BUILD_COST_REDUCTION:
@@ -161,9 +165,10 @@ public class TechnologyServiceImpl implements TechnologyService {
         }
 
         int researchCenterLevel = buildings.getLevel(BuildingType.RESEARCH_CENTER);
-        double timeMultiplier = Math.max(1 - researchCenterLevel * 0.01, 0);
+        // TODO: This reaches 0 at a certain level, all subsequent updates of a research center are worthless. Fix this.
+        double speedup = 1 - buildingMechanics.calculateResearchTimeSpeedup(researchCenterLevel);
 
-        return Math.max(MathExt.floorLong(researchTime * timeMultiplier), 1);
+        return Math.max(MathExt.floorLong(researchTime * speedup), 1);
     }
 
     @Override
@@ -176,6 +181,7 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkNotNull(technology, "technology");
         Preconditions.checkArgument(level > 0, "level must be > 0");
 
+        // TODO: Gameplay - Balance this!
         switch (technology) {
             case BUILDING_BUILD_COST_REDUCTION:
                 return new Resources(level, level, level);
