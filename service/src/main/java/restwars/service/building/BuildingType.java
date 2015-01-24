@@ -4,12 +4,12 @@ import com.google.common.base.Preconditions;
 
 public enum BuildingType {
     COMMAND_CENTER(0, "Constructs buildings"),
+    SHIPYARD(1, "Constructs ships"),
     CRYSTAL_MINE(2, "Gathers crystals"),
     GAS_REFINERY(3, "Gathers gas"),
     SOLAR_PANELS(4, "Gathers energy"),
     RESEARCH_CENTER(5, "Researches technology"),
-    TELESCOPE(6, "Scans the area for other planets"),
-    SHIPYARD(1, "Constructs ships");
+    TELESCOPE(6, "Scans the area for other planets");
 
     private final int id;
 
