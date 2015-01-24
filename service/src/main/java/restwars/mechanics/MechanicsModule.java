@@ -2,6 +2,7 @@ package restwars.mechanics;
 
 import dagger.Module;
 import dagger.Provides;
+import restwars.mechanics.impl.BuildingMechanicsImpl;
 import restwars.mechanics.impl.PlanetMechanicsImpl;
 
 /**
@@ -12,5 +13,10 @@ public class MechanicsModule {
     @Provides
     PlanetMechanics providePlanetMechanics() {
         return PlanetMechanicsImpl.create();
+    }
+
+    @Provides
+    BuildingMechanics provideBuildingMechanics() {
+        return new BuildingMechanicsImpl();
     }
 }

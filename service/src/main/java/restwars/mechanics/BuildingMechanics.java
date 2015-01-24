@@ -52,6 +52,8 @@ public interface BuildingMechanics {
     /**
      * Calculates the building build time speedup for a command center with the given level.
      *
+     * If the build time speedup is for example 0.1, the building will be finished 10% faster.
+     *
      * @param level Level of the command center.
      * @return Building build time speedup.
      */
