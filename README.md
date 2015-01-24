@@ -9,7 +9,7 @@ The game takes place in a universe. The universe consists of galaxies which cons
 Each planet is identified with a set of coordinates: [g].[s].[p] where [g] is the number of the galaxy, [s] is the number of the solar system inside the galaxy and [p] is the number of the planet inside the solar system.
 
 ## New players 
-A new player start with one planet in a randomized location in the universe. At the beginning, the only building on the planet is the command station.
+A new player start with one planet in a randomized location in the universe.
 
 ## Resources
 ### Crystal
@@ -23,7 +23,7 @@ Energy is needed for every building, ship and research. Energy is also consumed 
 
 ## Buildings
 ### Command center
-Allows the construction of other buildings. Upgrading the command center speeds up the construction of other buildings as well as increasing the storage capacity for all resources.
+Allows the construction of other buildings. Upgrading the command center speeds up the construction of buildings.
 
 ### Crystal mine
 Generates crystals. Upgrading the mine increases up the generation rate.
@@ -41,27 +41,30 @@ Allows the construction of ships. Upgrading the shipyard speeds up the construct
 Enables research of technologies. Upgrading the research center speeds up the research.
 
 ### Telescope
-Enables scanning the area around the planet. Upgrading the telescope widens the scan area.
+Enables scanning the area around the planet. Upgrading the telescope widens the scan area and increases the range and accuracy of incoming enemy fleet detection.
 
 ## Ships
 ### Mosquito
-Small fighter ship.
+Small and cheap fighter ship.
+
+### Dagger
+Very fast fighter ship.
 
 ### Colony
-Can colonize planets.
+Colonizes planets.
+
+### Probe
+Fast and cheap scout.
+
+### Mule
+Freighter.
+
+### Daedalus
+Sophisticated fighter ship.
 
 ## Technology
-### Crystal mine efficiency
-The crystal mines generate more crystals per round.
-
-### Gas refinery efficiency
-The gas refineries generate more gas per round.
-
-### Solar panels efficiency
-The solar panels generate more energy per round.
-
 ### Build cost reduction
 Reduces the build cost for buildings.
 
-### Build time reduction
-Reduces the build time for buildings.
+### Combustion engine
+Reduces the flight cost for ships with combustion engines.
