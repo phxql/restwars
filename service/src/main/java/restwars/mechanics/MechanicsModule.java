@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import restwars.mechanics.impl.BuildingMechanicsImpl;
 import restwars.mechanics.impl.PlanetMechanicsImpl;
+import restwars.mechanics.impl.ShipMechanicsImpl;
 
 /**
  * Dagger module which provides the mechanics.
@@ -18,5 +19,10 @@ public class MechanicsModule {
     @Provides
     BuildingMechanics provideBuildingMechanics() {
         return new BuildingMechanicsImpl();
+    }
+
+    @Provides
+    ShipMechanics provideShipMechanics() {
+        return new ShipMechanicsImpl();
     }
 }
