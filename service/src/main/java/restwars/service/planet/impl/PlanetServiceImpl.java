@@ -9,10 +9,7 @@ import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.location.LocationFactory;
-import restwars.service.planet.Location;
-import restwars.service.planet.Planet;
-import restwars.service.planet.PlanetDAO;
-import restwars.service.planet.PlanetService;
+import restwars.service.planet.*;
 import restwars.service.player.Player;
 
 import javax.inject.Inject;
@@ -31,6 +28,8 @@ public class PlanetServiceImpl implements PlanetService {
     private final BuildingService buildingService;
     private final PlanetMechanics planetMechanics;
 
+    private static final int MAX_STARTER_TRIES = 1000;
+
     @Inject
     public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO, LocationFactory locationFactory, UniverseConfiguration universeConfiguration, BuildingService buildingService, PlanetMechanics planetMechanics) {
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
@@ -42,13 +41,22 @@ public class PlanetServiceImpl implements PlanetService {
     }
 
     @Override
-    public Planet createStartPlanet(Player owner) {
+    public Planet createStartPlanet(Player owner) throws CreateStartPlanetException {
         Preconditions.checkNotNull(owner, "owner");
 
-        UUID id = uuidFactory.create();
+        Location location = null;
+        for (int i = 0; i < MAX_STARTER_TRIES; i++) {
+            Location randomLocation = locationFactory.random(universeConfiguration.getGalaxyCount(), universeConfiguration.getSolarSystemsPerGalaxy(), universeConfiguration.getPlanetsPerSolarSystem());
+            if (!planetDAO.findWithLocation(randomLocation).isPresent()) {
+                location = randomLocation;
+                break;
+            }
+        }
+        if (location == null) {
+            throw new CreateStartPlanetException(CreateStartPlanetException.Reason.UNIVERSE_FULL);
+        }
 
-        // TODO: Check if the planet is already colonized and raise exception when universe is full.
-        Location location = locationFactory.random(universeConfiguration.getGalaxyCount(), universeConfiguration.getSolarSystemsPerGalaxy(), universeConfiguration.getPlanetsPerSolarSystem());
+        UUID id = uuidFactory.create();
         Planet planet = new Planet(id, location, owner.getId(), planetMechanics.getStarterPlanetResources());
         planetDAO.insert(planet);
 

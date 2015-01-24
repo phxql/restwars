@@ -1,17 +1,15 @@
-package restwars.service.player;
+package restwars.service.planet;
 
 import restwars.service.ServiceException;
 
-public class CreatePlayerException extends ServiceException {
+public class CreateStartPlanetException extends ServiceException {
     public static enum Reason {
-        DUPLICATE_USERNAME,
-        INVALID_USERNAME,
         UNIVERSE_FULL
     }
 
     private final Reason reason;
 
-    public CreatePlayerException(Reason reason) {
+    public CreateStartPlanetException(Reason reason) {
         this.reason = reason;
     }
 

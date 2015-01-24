@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.service.infrastructure.UUIDFactory;
+import restwars.service.planet.CreateStartPlanetException;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.CreatePlayerException;
@@ -57,7 +58,17 @@ public class PlayerServiceImpl implements PlayerService {
         playerDAO.insert(player);
         LOGGER.debug("Created player {}", player);
 
-        Planet planet = planetService.createStartPlanet(player);
+        Planet planet;
+        try {
+            planet = planetService.createStartPlanet(player);
+        } catch (CreateStartPlanetException e) {
+            switch (e.getReason()) {
+                case UNIVERSE_FULL:
+                    throw new CreatePlayerException(CreatePlayerException.Reason.UNIVERSE_FULL);
+                default:
+                    throw new AssertionError("Unknown reason: " + e.getReason());
+            }
+        }
         LOGGER.debug("Created player starting planet at {}", planet);
 
         return player;

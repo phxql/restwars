@@ -15,7 +15,7 @@ public interface PlanetService {
      * @param owner Owner of the planet.
      * @return Created planet.
      */
-    Planet createStartPlanet(Player owner);
+    Planet createStartPlanet(Player owner) throws CreateStartPlanetException;
 
     /**
      * Finds all planets which are owned by the given player.
