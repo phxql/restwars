@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import restwars.mechanics.BuildingMechanics;
 import restwars.service.building.BuildingType;
 import restwars.service.resource.Resources;
+import restwars.service.techtree.Prerequisites;
 import restwars.util.MathExt;
 
 public class BuildingMechanicsImpl implements BuildingMechanics {
@@ -171,6 +172,35 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
         }
 
         return level + 1;
+    }
+
+    @Override
+    public Prerequisites getPrerequisites(BuildingType type) {
+        Preconditions.checkNotNull(type, "type");
+
+        // TODO: Gameplay - balance this!
+        switch (type) {
+            case COMMAND_CENTER:
+                return Prerequisites.NONE;
+            case CRYSTAL_MINE:
+                return Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
+            case GAS_REFINERY:
+                return Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
+            case SOLAR_PANELS:
+                return Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
+            case RESEARCH_CENTER:
+                Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
+            case SHIPYARD:
+                Prerequisites.buildings(
+                        new Prerequisites.Building(BuildingType.COMMAND_CENTER, 1),
+                        new Prerequisites.Building(BuildingType.RESEARCH_CENTER, 1),
+                        new Prerequisites.Building(BuildingType.TELESCOPE, 1)
+                );
+            case TELESCOPE:
+                Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
+            default:
+                throw new IllegalArgumentException("Unknown building type " + type);
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package restwars.mechanics;
 
 import restwars.service.building.BuildingType;
 import restwars.service.resource.Resources;
+import restwars.service.techtree.Prerequisites;
 
 /**
  * Building mechanics.
@@ -100,4 +101,12 @@ public interface BuildingMechanics {
      * @return Fleet size variance.
      */
     double calculateFleetSizeVariance(int level);
+
+    /**
+     * Returns the prerequisites for the given building.
+     *
+     * @param type Building.
+     * @return Prerequisites.
+     */
+    Prerequisites getPrerequisites(BuildingType type);
 }

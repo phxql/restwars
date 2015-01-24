@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import restwars.mechanics.BuildingMechanics;
 import restwars.rest.mapper.PrerequisitesMapper;
 import restwars.rest.mapper.ResourcesMapper;
 import restwars.restapi.dto.metadata.BuildingMetadataResponse;
@@ -28,9 +29,11 @@ import java.util.stream.Stream;
 @Produces(MediaType.APPLICATION_JSON)
 public class BuildingMetadataSubResource {
     private final BuildingService buildingService;
+    private final BuildingMechanics buildingMechanics;
 
     @Inject
-    public BuildingMetadataSubResource(BuildingService buildingService) {
+    public BuildingMetadataSubResource(BuildingService buildingService, BuildingMechanics buildingMechanics) {
+        this.buildingMechanics = Preconditions.checkNotNull(buildingMechanics, "buildingMechanics");
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
     }
 
@@ -49,7 +52,7 @@ public class BuildingMetadataSubResource {
                 .map(t -> new BuildingMetadataResponse(
                         t.name(), sanitizedLevel, buildingService.calculateBuildTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(t, sanitizedLevel)),
-                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(t.getPrerequisites())
+                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(buildingMechanics.getPrerequisites(t))
                 ))
                 .collect(Collectors.toList());
     }

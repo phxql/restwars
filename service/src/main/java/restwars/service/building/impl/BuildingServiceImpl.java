@@ -89,7 +89,7 @@ public class BuildingServiceImpl implements BuildingService {
         Technologies technologies = technologyDAO.findAllWithPlayerId(planet.getOwnerId());
         Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
 
-        boolean prerequisitesFulfilled = type.getPrerequisites().fulfilled(
+        boolean prerequisitesFulfilled = buildingMechanics.getPrerequisites(type).fulfilled(
                 buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())).collect(Collectors.toList()),
                 technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel())).collect(Collectors.toList())
         );
