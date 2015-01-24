@@ -12,10 +12,13 @@ public class TechnologyMechanicsImpl implements TechnologyMechanics {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");
 
-        // TODO: Gameplay - balance this!
         switch (type) {
             case BUILDING_BUILD_COST_REDUCTION:
-                return new Resources(1, 1, 1);
+                return new Resources(
+                        200 + (level - 1) * 100,
+                        100 + (level - 1) * 50,
+                        800 + (level - 1) * 400
+                );
             default:
                 throw new IllegalArgumentException("Invalid technology: " + type);
         }
@@ -26,10 +29,9 @@ public class TechnologyMechanicsImpl implements TechnologyMechanics {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");
 
-        // TODO: Gameplay - balance this!
         switch (type) {
             case BUILDING_BUILD_COST_REDUCTION:
-                return 1;
+                return 50 + (level - 1) * 25;
             default:
                 throw new IllegalArgumentException("Invalid technology: " + type);
         }
@@ -39,7 +41,6 @@ public class TechnologyMechanicsImpl implements TechnologyMechanics {
     public Prerequisites getPrerequisites(TechnologyType type) {
         Preconditions.checkNotNull(type, "type");
 
-        // TODO: Gameplay - balance this!
         switch (type) {
             case BUILDING_BUILD_COST_REDUCTION:
                 return Prerequisites.NONE;
@@ -52,11 +53,6 @@ public class TechnologyMechanicsImpl implements TechnologyMechanics {
     public double calculateBuildCostReduction(int level) {
         Preconditions.checkArgument(level >= 0, "level must be >= 0");
 
-        if (level == 0) {
-            return 0;
-        }
-
-        // TODO: Gameplay - balance this!
-        return level * 0.01;
+        return level * 0.02;
     }
 }
