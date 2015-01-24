@@ -11,6 +11,7 @@ import restwars.service.planet.PlanetDAO;
 import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 import restwars.service.ship.impl.ShipUtils;
+import restwars.util.MathExt;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -52,7 +53,7 @@ public abstract class AbstractFlightHandler {
         long distance = flight.getStart().calculateDistance(flight.getDestination());
         double speed = shipUtils.findSpeedOfSlowestShip(ships, shipMechanics);
         long started = roundService.getCurrentRound();
-        long arrival = started + (long) Math.ceil(distance / (double) speed);
+        long arrival = started + MathExt.ceilLong(distance / speed);
 
         Flight returnFlight = new Flight(
                 flight.getId(), flight.getStart(), flight.getDestination(),

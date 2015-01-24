@@ -41,4 +41,12 @@ public interface TechnologyMechanics {
      * @return Build cost reduction.
      */
     double calculateBuildCostReduction(int level);
+
+    /**
+     * Calculates the flight cost reduction for the combustion engine technology with the given level.
+     *
+     * @param level Level of the combustion engine technology.
+     * @return Flight cost reduction.
+     */
+    double calculateCombustionFlightCostReduction(int level);
 }

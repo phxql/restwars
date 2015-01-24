@@ -2,8 +2,10 @@ package restwars.mechanics.impl;
 
 import com.google.common.base.Preconditions;
 import restwars.mechanics.ShipMechanics;
+import restwars.service.building.BuildingType;
 import restwars.service.resource.Resources;
 import restwars.service.ship.ShipType;
+import restwars.service.technology.TechnologyType;
 import restwars.service.techtree.Prerequisites;
 
 public class ShipMechanicsImpl implements ShipMechanics {
@@ -165,20 +167,25 @@ public class ShipMechanicsImpl implements ShipMechanics {
     public Prerequisites getPrerequisites(ShipType type) {
         Preconditions.checkNotNull(type, "type");
 
-        // TODO: Gameplay - Balance this!
         switch (type) {
             case MOSQUITO:
                 return Prerequisites.NONE;
             case DAGGER:
-                return Prerequisites.NONE;
+                return Prerequisites.technology(TechnologyType.COMBUSTION_ENGINE, 2);
             case DAEDALUS:
-                return Prerequisites.NONE;
+                return new Prerequisites(
+                        Prerequisites.building(BuildingType.SHIPYARD, 2),
+                        Prerequisites.technology(TechnologyType.COMBUSTION_ENGINE, 3)
+                );
             case COLONY:
-                return Prerequisites.NONE;
+                return new Prerequisites(
+                        Prerequisites.building(BuildingType.SHIPYARD, 2),
+                        Prerequisites.technology(TechnologyType.COMBUSTION_ENGINE, 1)
+                );
             case PROBE:
                 return Prerequisites.NONE;
             case MULE:
-                return Prerequisites.NONE;
+                return Prerequisites.technology(TechnologyType.COMBUSTION_ENGINE, 1);
             default:
                 throw new IllegalArgumentException("Unknown ship " + type);
         }

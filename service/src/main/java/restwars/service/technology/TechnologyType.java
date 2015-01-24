@@ -3,7 +3,8 @@ package restwars.service.technology;
 import com.google.common.base.Preconditions;
 
 public enum TechnologyType {
-    BUILDING_BUILD_COST_REDUCTION(3, "Reduces the build cost of buildings");
+    BUILDING_BUILD_COST_REDUCTION(0, "Reduces the build cost of buildings"),
+    COMBUSTION_ENGINE(1, "Reduces the flight cost for ships with combustion engines");
 
     private final int id;
 

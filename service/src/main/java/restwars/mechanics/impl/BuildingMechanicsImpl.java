@@ -127,7 +127,7 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
             return 0;
         }
 
-        return (level - 1) * 0.1;
+        return Math.min(1, (level - 1) * 0.1);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
             return 0;
         }
 
-        return (level - 1) * 0.1;
+        return Math.min(1, (level - 1) * 0.1);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
             return 0;
         }
 
-        return (level - 1) * 0.1;
+        return Math.min(1, (level - 1) * 0.1);
     }
 
     @Override

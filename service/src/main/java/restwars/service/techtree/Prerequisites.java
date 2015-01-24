@@ -71,6 +71,19 @@ public class Prerequisites {
         this.technologies = ImmutableList.copyOf(technologies);
     }
 
+    public Prerequisites(Prerequisites... prerequisites) {
+        List<Building> buildings = Lists.newArrayList();
+        List<Technology> technologies = Lists.newArrayList();
+
+        for (Prerequisites prerequisite : prerequisites) {
+            buildings.addAll(prerequisite.getBuildings());
+            technologies.addAll(prerequisite.getTechnologies());
+        }
+
+        this.buildings = ImmutableList.copyOf(buildings);
+        this.technologies = ImmutableList.copyOf(technologies);
+    }
+
     public List<Building> getBuildings() {
         return buildings;
     }
