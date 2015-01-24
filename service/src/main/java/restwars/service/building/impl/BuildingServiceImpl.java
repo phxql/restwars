@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.mechanics.BuildingMechanics;
+import restwars.mechanics.TechnologyMechanics;
 import restwars.service.building.*;
 import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
@@ -34,9 +35,10 @@ public class BuildingServiceImpl implements BuildingService {
     private final EventService eventService;
     private final TechnologyDAO technologyDAO;
     private final BuildingMechanics buildingMechanics;
+    private final TechnologyMechanics technologyMechanics;
 
     @Inject
-    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO, EventService eventService, TechnologyDAO technologyDAO, BuildingMechanics buildingMechanics) {
+    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO, EventService eventService, TechnologyDAO technologyDAO, BuildingMechanics buildingMechanics, TechnologyMechanics technologyMechanics) {
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.constructionSiteDAO = Preconditions.checkNotNull(constructionSiteDAO, "constructionSiteDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
@@ -45,6 +47,7 @@ public class BuildingServiceImpl implements BuildingService {
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
         this.buildingMechanics = Preconditions.checkNotNull(buildingMechanics, "buildingMechanics");
+        this.technologyMechanics = Preconditions.checkNotNull(technologyMechanics, "technologyMechanics");
     }
 
     @Override
@@ -213,7 +216,9 @@ public class BuildingServiceImpl implements BuildingService {
 
         // TODO: Gamplay - Balancing
         int technologyLevel = technologies.getLevel(TechnologyType.BUILDING_BUILD_COST_REDUCTION);
-        double costMultiplier = Math.max(1 - technologyLevel * 0.01, 0);
+        double buildCostReduction = technologyMechanics.calculateBuildCostReduction(technologyLevel);
+        // TODO: Gameplay - This reaches eventually 0, further updates to the technology are worthless and the buildings are for free, fix this!
+        double costMultiplier = Math.max(1 - buildCostReduction, 0);
 
         return new Resources(MathExt.floorLong(cost.getCrystals() * costMultiplier), MathExt.floorLong(cost.getGas() * costMultiplier), MathExt.floorLong(cost.getEnergy() * costMultiplier));
     }
