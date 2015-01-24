@@ -3,6 +3,7 @@ package restwars.service.resource.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.BuildingMechanics;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
@@ -23,12 +24,14 @@ public class ResourceServiceImpl implements ResourceService {
     private final BuildingService buildingService;
     private final PlanetService planetService;
     private final TechnologyDAO technologyDAO;
+    private final BuildingMechanics buildingMechanics;
 
     @Inject
-    public ResourceServiceImpl(BuildingService buildingService, PlanetService planetService, TechnologyDAO technologyDAO) {
+    public ResourceServiceImpl(BuildingService buildingService, PlanetService planetService, TechnologyDAO technologyDAO, BuildingMechanics buildingMechanics) {
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
+        this.buildingMechanics = Preconditions.checkNotNull(buildingMechanics, "buildingMechanics");
     }
 
     @Override
@@ -38,13 +41,23 @@ public class ResourceServiceImpl implements ResourceService {
 
         switch (type) {
             case CRYSTAL_MINE: {
-                return new Resources(level, 0, 0);
+                return new Resources(
+                        buildingMechanics.calculateCrystalsGathered(level),
+                        0, 0
+                );
             }
             case GAS_REFINERY: {
-                return new Resources(0, level, 0);
+                return new Resources(
+                        0,
+                        buildingMechanics.calculateGasGathered(level),
+                        0
+                );
             }
             case SOLAR_PANELS: {
-                return new Resources(0, 0, level * 10L);
+                return new Resources(
+                        0, 0,
+                        buildingMechanics.calculateEnergyGathered(level)
+                );
             }
             default:
                 return Resources.NONE;
