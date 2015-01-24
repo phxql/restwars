@@ -128,6 +128,7 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
 
     @Override
     public double calculateFleetSizeVariance(int level) {
-        return 1.0 - (level - 1) * 0.05;
+        // TODO: Gameplay - This reaches 0.0 on level 21, more levels aren't worth anything.
+        return Math.max(1.0 - (level - 1) * 0.05, 0.0);
     }
 }

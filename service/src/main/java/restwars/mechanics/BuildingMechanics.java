@@ -86,6 +86,8 @@ public interface BuildingMechanics {
     /**
      * Calculates the fleet size variance of a telescope with the given level.
      *
+     * Guaranteed to be >= 0.0.
+     *
      * @param level Level of the telescope.
      * @return Fleet size variance.
      */

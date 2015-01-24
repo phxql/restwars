@@ -29,6 +29,4 @@ public class BuildingMechanicsImplTest {
         assertThat(sut.calculateShipBuildTimeSpeedup(2), is(0.1));
         assertThat(sut.calculateShipBuildTimeSpeedup(3), is(0.2));
     }
-
-
 }
