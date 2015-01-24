@@ -3,6 +3,7 @@ package restwars.service.building.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.BuildingMechanics;
 import restwars.service.building.*;
 import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
@@ -32,9 +33,10 @@ public class BuildingServiceImpl implements BuildingService {
     private final ConstructionSiteDAO constructionSiteDAO;
     private final EventService eventService;
     private final TechnologyDAO technologyDAO;
+    private final BuildingMechanics buildingMechanics;
 
     @Inject
-    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO, EventService eventService, TechnologyDAO technologyDAO) {
+    public BuildingServiceImpl(UUIDFactory uuidFactory, BuildingDAO buildingDAO, RoundService roundService, ConstructionSiteDAO constructionSiteDAO, PlanetDAO planetDAO, EventService eventService, TechnologyDAO technologyDAO, BuildingMechanics buildingMechanics) {
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
         this.constructionSiteDAO = Preconditions.checkNotNull(constructionSiteDAO, "constructionSiteDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
@@ -42,6 +44,7 @@ public class BuildingServiceImpl implements BuildingService {
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
+        this.buildingMechanics = Preconditions.checkNotNull(buildingMechanics, "buildingMechanics");
     }
 
     @Override
@@ -187,37 +190,12 @@ public class BuildingServiceImpl implements BuildingService {
         Preconditions.checkNotNull(technologies, "technologies");
         Preconditions.checkNotNull(buildings, "buildings");
 
-        int buildTime;
-        switch (type) {
-            case COMMAND_CENTER:
-                buildTime = level;
-                break;
-            case CRYSTAL_MINE:
-                buildTime = level;
-                break;
-            case GAS_REFINERY:
-                buildTime = level;
-                break;
-            case RESEARCH_CENTER:
-                buildTime = level;
-                break;
-            case SHIPYARD:
-                buildTime = level;
-                break;
-            case SOLAR_PANELS:
-                buildTime = level;
-                break;
-            case TELESCOPE:
-                buildTime = level;
-                break;
-            default:
-                throw new AssertionError("Unknown building type " + type);
-        }
+        int buildTime = buildingMechanics.calculateBuildTime(type, level);
 
         int commandCenterLevel = buildings.getLevel(BuildingType.COMMAND_CENTER);
-        double timeMultiplier = Math.max(1 - commandCenterLevel * 0.01, 0);
+        double speedUp = buildingMechanics.calculateBuildingBuildTimeSpeedup(commandCenterLevel);
 
-        return Math.max(MathExt.floorLong(buildTime * timeMultiplier), 1);
+        return Math.max(MathExt.floorLong(buildTime * (1 - speedUp)), 1);
     }
 
     @Override
@@ -231,33 +209,9 @@ public class BuildingServiceImpl implements BuildingService {
         Preconditions.checkArgument(level > 0, "level must be > 0");
         Preconditions.checkNotNull(technologies, "technologies");
 
-        Resources cost;
-        switch (type) {
-            case COMMAND_CENTER:
-                cost = new Resources(level * 10L, level * 10L, level * 100L);
-                break;
-            case CRYSTAL_MINE:
-                cost = new Resources(level, level, level);
-                break;
-            case GAS_REFINERY:
-                cost = new Resources(level, level, level);
-                break;
-            case SOLAR_PANELS:
-                cost = new Resources(level, level, level);
-                break;
-            case RESEARCH_CENTER:
-                cost = new Resources(level, level, level);
-                break;
-            case SHIPYARD:
-                cost = new Resources(level, level, level);
-                break;
-            case TELESCOPE:
-                cost = new Resources(level, level, level);
-                break;
-            default:
-                throw new AssertionError("Unknown building type: " + type);
-        }
+        Resources cost = buildingMechanics.calculateBuildCost(type, level);
 
+        // TODO: Gamplay - Balancing
         int technologyLevel = technologies.getLevel(TechnologyType.BUILDING_BUILD_COST_REDUCTION);
         double costMultiplier = Math.max(1 - technologyLevel * 0.01, 0);
 

@@ -15,4 +15,11 @@ public class BuildingMechanicsImplTest {
         assertThat(sut.calculateFleetSizeVariance(2), is(0.95));
         assertThat(sut.calculateFleetSizeVariance(3), is(0.9));
     }
+
+    @Test
+    public void testCalculateBuildingBuildTimeSpeedup() throws Exception {
+        assertThat(sut.calculateBuildingBuildTimeSpeedup(1), is(0.0));
+        assertThat(sut.calculateBuildingBuildTimeSpeedup(2), is(0.1));
+        assertThat(sut.calculateBuildingBuildTimeSpeedup(3), is(0.2));
+    }
 }
