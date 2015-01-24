@@ -43,15 +43,13 @@ public class PrerequisitesTest {
 
     @Test
     public void testMultipleTechnologies() throws Exception {
-// TODO: Uncomment if there is more than one technology!
+        Prerequisites sut = new Prerequisites(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.COMBUSTION_ENGINE, 2), new Prerequisites.Technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 2)));
 
-//        Prerequisites sut = new Prerequisites(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2)));
-//
-//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2))), is(false));
-//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2))), is(false));
-//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 1), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 1))), is(false));
-//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 1), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2))), is(false));
-//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 1))), is(false));
-//        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.CRYSTAL_MINE_EFFICIENCY, 2), new Prerequisites.Technology(TechnologyType.GAS_REFINERY_EFFICIENCY, 2))), is(true));
+        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.COMBUSTION_ENGINE, 2))), is(false));
+        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 2))), is(false));
+        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.COMBUSTION_ENGINE, 1), new Prerequisites.Technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 1))), is(false));
+        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.COMBUSTION_ENGINE, 1), new Prerequisites.Technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 2))), is(false));
+        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.COMBUSTION_ENGINE, 2), new Prerequisites.Technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 1))), is(false));
+        assertThat(sut.fulfilled(Collections.emptyList(), Arrays.asList(new Prerequisites.Technology(TechnologyType.COMBUSTION_ENGINE, 2), new Prerequisites.Technology(TechnologyType.BUILDING_BUILD_COST_REDUCTION, 2))), is(true));
     }
 }

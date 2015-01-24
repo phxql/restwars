@@ -3,6 +3,7 @@ package restwars.service.telescope.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.BuildingMechanics;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
@@ -32,9 +33,10 @@ public class TelescopeServiceImpl implements TelescopeService {
     private final RoundService roundService;
     private final EventService eventService;
     private final RandomNumberGenerator randomNumberGenerator;
+    private final BuildingMechanics buildingMechanics;
 
     @Inject
-    public TelescopeServiceImpl(PlanetDAO planetDAO, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO, FlightDAO flightDAO, RoundService roundService, RandomNumberGenerator randomNumberGenerator, EventService eventService) {
+    public TelescopeServiceImpl(PlanetDAO planetDAO, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO, FlightDAO flightDAO, RoundService roundService, RandomNumberGenerator randomNumberGenerator, EventService eventService, BuildingMechanics buildingMechanics) {
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.detectedFlightDAO = Preconditions.checkNotNull(detectedFlightDAO, "detectedFlightDAO");
@@ -42,6 +44,7 @@ public class TelescopeServiceImpl implements TelescopeService {
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
         this.randomNumberGenerator = Preconditions.checkNotNull(randomNumberGenerator, "randomNumberGenerator");
+        this.buildingMechanics = Preconditions.checkNotNull(buildingMechanics, "buildingMechanics");
     }
 
     @Override
@@ -54,10 +57,11 @@ public class TelescopeServiceImpl implements TelescopeService {
         }
 
         int level = telescope.get().getLevel();
+        int scanRange = buildingMechanics.calculateScanRange(level);
 
         Location location = planet.getLocation();
-        int delta = level - 1;
-        return planetDAO.findInRange(location.getGalaxy(), location.getGalaxy(), location.getSolarSystem() - delta, location.getSolarSystem() + delta, 0, Integer.MAX_VALUE);
+
+        return planetDAO.findInRange(location.getGalaxy(), location.getGalaxy(), location.getSolarSystem() - scanRange, location.getSolarSystem() + scanRange, 0, Integer.MAX_VALUE);
     }
 
     @Override
@@ -80,7 +84,7 @@ public class TelescopeServiceImpl implements TelescopeService {
         for (Flight flight : flights) {
             Optional<Building> telescope = buildingDAO.findWithPlanetLocationAndType(flight.getDestination(), BuildingType.TELESCOPE);
             if (telescope.isPresent()) {
-                int range = MathExt.floorInt(calculateFlightDetectionRange(telescope.get().getLevel()) * (1.0 / flight.getSpeed()));
+                int range = MathExt.ceilInt(calculateFlightDetectionRange(telescope.get().getLevel()) * (1.0 / flight.getSpeed()));
 
                 if (currentRound + range >= flight.getArrivalInRound()) {
                     detectFlight(flight, telescope.get().getLevel());
@@ -101,7 +105,7 @@ public class TelescopeServiceImpl implements TelescopeService {
 
             long realFleetSize = flight.getShips().amount();
             long delta = MathExt.floorLong(realFleetSize * variance);
-            long approximatedFleetSize = randomNumberGenerator.nextLong(realFleetSize - delta, realFleetSize + delta);
+            long approximatedFleetSize = Math.max(0, randomNumberGenerator.nextLong(realFleetSize - delta, realFleetSize + delta));
 
             LOGGER.trace("Real fleet size {}, variance {}, delta {}, approximated fleet size {}", realFleetSize, variance, delta, approximatedFleetSize);
 
@@ -118,13 +122,15 @@ public class TelescopeServiceImpl implements TelescopeService {
 
     @Override
     public int calculateFlightDetectionRange(int telescopeLevel) {
-        Preconditions.checkArgument(telescopeLevel >= 0, "telescopeLevel must be >= 0");
+        Preconditions.checkArgument(telescopeLevel > 0, "telescopeLevel must be > 0");
 
-        return telescopeLevel;
+        return buildingMechanics.calculateFlightDetectionRange(telescopeLevel);
     }
 
     @Override
     public double calculateFleetSizeVariance(int telescopeLevel) {
-        return Math.max(0.0, 1.0 - (telescopeLevel / 10.0));
+        Preconditions.checkArgument(telescopeLevel > 0, "telescopeLevel must be > 0");
+
+        return buildingMechanics.calculateFleetSizeVariance(telescopeLevel);
     }
 }

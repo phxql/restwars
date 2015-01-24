@@ -1,7 +1,9 @@
 package restwars.rest.resources;
 
+import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import restwars.mechanics.ShipMechanics;
 import restwars.rest.mapper.ShipMapper;
 import restwars.restapi.dto.metadata.ShipMetadataResponse;
 import restwars.service.ship.ShipType;
@@ -19,13 +21,16 @@ import java.util.stream.Stream;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ShipMetadataSubResource {
+    private final ShipMechanics shipMechanics;
+
     @Inject
-    public ShipMetadataSubResource() {
+    public ShipMetadataSubResource(ShipMechanics shipMechanics) {
+        this.shipMechanics = Preconditions.checkNotNull(shipMechanics, "shipMechanics");
     }
 
     @GET
     @ApiOperation("Lists all ships")
     public List<ShipMetadataResponse> all() {
-        return Stream.of(ShipType.values()).map(ShipMapper::fromShipType).collect(Collectors.toList());
+        return Stream.of(ShipType.values()).map(s -> ShipMapper.fromShipType(s, shipMechanics)).collect(Collectors.toList());
     }
 }

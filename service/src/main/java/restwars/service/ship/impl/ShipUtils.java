@@ -1,5 +1,7 @@
 package restwars.service.ship.impl;
 
+import com.google.common.base.Preconditions;
+import restwars.mechanics.ShipMechanics;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.ship.Hangar;
 import restwars.service.ship.HangarDAO;
@@ -9,8 +11,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class ShipUtils {
-    public long calculateStorageCapacity(Ships ships) {
-        return ships.stream().mapToLong(s -> s.getType().getStorageCapacity()).sum();
+    public long calculateStorageCapacity(Ships ships, ShipMechanics shipMechanics) {
+        Preconditions.checkNotNull(ships, "ships");
+        Preconditions.checkNotNull(shipMechanics, "shipMechanics");
+
+        return ships.stream().mapToLong(s -> shipMechanics.getCargoSpace(s.getType())).sum();
     }
 
     /**
@@ -19,11 +24,12 @@ public class ShipUtils {
      * @param ships Ships.
      * @return Speed of the slowest ship.
      */
-    public double findSpeedOfSlowestShip(Ships ships) {
-        assert ships != null;
-        assert !ships.isEmpty();
+    public double findSpeedOfSlowestShip(Ships ships, ShipMechanics shipMechanics) {
+        Preconditions.checkNotNull(ships, "ships");
+        Preconditions.checkNotNull(shipMechanics, "shipMechanics");
 
-        return ships.asList().stream().mapToDouble(s -> s.getType().getSpeed()).min().getAsDouble();
+
+        return ships.asList().stream().mapToDouble(s -> shipMechanics.getFlightSpeed(s.getType())).min().getAsDouble();
     }
 
     public Hangar getOrCreateHangar(HangarDAO hangarDAO, UUIDFactory uuidFactory, UUID planetId, UUID playerId) {

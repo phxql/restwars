@@ -1,21 +1,18 @@
 package restwars.service.technology;
 
 import com.google.common.base.Preconditions;
-import restwars.service.techtree.Prerequisites;
 
 public enum TechnologyType {
-    BUILDING_BUILD_COST_REDUCTION(3, "Reduces the build cost of buildings", Prerequisites.NONE);
+    BUILDING_BUILD_COST_REDUCTION(0, "Reduces the build cost of buildings"),
+    COMBUSTION_ENGINE(1, "Reduces the flight cost for ships with combustion engines");
 
     private final int id;
 
     private final String description;
 
-    private final Prerequisites prerequisites;
-
-    TechnologyType(int id, String description, Prerequisites prerequisites) {
+    TechnologyType(int id, String description) {
         this.id = id;
         this.description = Preconditions.checkNotNull(description, "description");
-        this.prerequisites = Preconditions.checkNotNull(prerequisites, "prerequisites");
     }
 
     public int getId() {
@@ -24,10 +21,6 @@ public enum TechnologyType {
 
     public String getDescription() {
         return description;
-    }
-
-    public Prerequisites getPrerequisites() {
-        return prerequisites;
     }
 
     public static TechnologyType fromId(int id) {

@@ -3,6 +3,8 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.PlanetMechanics;
+import restwars.mechanics.ShipMechanics;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
@@ -12,9 +14,9 @@ import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
-import restwars.service.resource.Resources;
 import restwars.service.ship.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class ColonizeFlightHandler extends AbstractFlightHandler {
@@ -23,9 +25,11 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
 
     private final UniverseConfiguration universeConfiguration;
     private final BuildingDAO buildingDAO;
+    private final PlanetMechanics planetMechanics;
 
-    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventService eventService, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
+    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventService eventService, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO, PlanetMechanics planetMechanics, ShipMechanics shipMechanics) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
+        this.planetMechanics = Preconditions.checkNotNull(planetMechanics, "planetMechanics");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
     }
@@ -42,21 +46,19 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
         } else {
             LOGGER.debug("Player {} colonized new planet at {}", flight.getPlayerId(), flight.getDestination());
 
-            Planet newPlanet = new Planet(
-                    getUuidFactory().create(), flight.getDestination(), flight.getPlayerId(),
-                    // Store the remaining energy for the return flight and the cargo on the planet
-                    universeConfiguration.getStartingResources().plus(Resources.energy(flight.getEnergyNeeded() / 2)).plus(flight.getCargo())
-            );
+            Planet newPlanet = new Planet(getUuidFactory().create(), flight.getDestination(), flight.getPlayerId(), planetMechanics.getColonizedPlanetResources());
             getPlanetDAO().insert(newPlanet);
 
-            // Create a command center on the planet
-            Building commandCenter = new Building(getUuidFactory().create(), BuildingType.COMMAND_CENTER, 1, newPlanet.getId());
-            buildingDAO.insert(commandCenter);
+            // Create buildings on planet
+            for (Map.Entry<BuildingType, Integer> building : planetMechanics.getColonizedPlanetBuildings().entrySet()) {
+                Building entity = new Building(getUuidFactory().create(), building.getKey(), building.getValue(), newPlanet.getId());
+                buildingDAO.insert(entity);
+            }
 
             // Land the ships on the new planet
             Hangar hangar = getOrCreateHangar(newPlanet.getId(), flight.getPlayerId());
-            Hangar updatedHangar = hangar.withShips(flight.getShips().minus(ShipType.COLONY, 1));
-            getHangarDAO().update(updatedHangar);
+            hangar = hangar.withShips(flight.getShips().minus(ShipType.COLONY, 1));
+            getHangarDAO().update(hangar);
 
             getDetectedFlightDAO().delete(flight.getId());
             getFlightDAO().delete(flight);

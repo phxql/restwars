@@ -3,6 +3,7 @@ package restwars.service.planet.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.PlanetMechanics;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
@@ -16,6 +17,7 @@ import restwars.service.player.Player;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,14 +29,16 @@ public class PlanetServiceImpl implements PlanetService {
     private final LocationFactory locationFactory;
     private final UniverseConfiguration universeConfiguration;
     private final BuildingService buildingService;
+    private final PlanetMechanics planetMechanics;
 
     @Inject
-    public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO, LocationFactory locationFactory, UniverseConfiguration universeConfiguration, BuildingService buildingService) {
+    public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO, LocationFactory locationFactory, UniverseConfiguration universeConfiguration, BuildingService buildingService, PlanetMechanics planetMechanics) {
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
         this.locationFactory = Preconditions.checkNotNull(locationFactory, "locationFactory");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
+        this.planetMechanics = Preconditions.checkNotNull(planetMechanics, "planetMechanics");
     }
 
     @Override
@@ -43,14 +47,14 @@ public class PlanetServiceImpl implements PlanetService {
 
         UUID id = uuidFactory.create();
 
+        // TODO: Check if the planet is already colonized and raise exception when universe is full.
         Location location = locationFactory.random(universeConfiguration.getGalaxyCount(), universeConfiguration.getSolarSystemsPerGalaxy(), universeConfiguration.getPlanetsPerSolarSystem());
-        Planet planet = new Planet(id, location, owner.getId(), universeConfiguration.getStartingResources());
+        Planet planet = new Planet(id, location, owner.getId(), planetMechanics.getStarterPlanetResources());
         planetDAO.insert(planet);
 
-        buildingService.manifestBuilding(planet, BuildingType.COMMAND_CENTER, 1);
-        buildingService.manifestBuilding(planet, BuildingType.CRYSTAL_MINE, 1);
-        buildingService.manifestBuilding(planet, BuildingType.GAS_REFINERY, 1);
-        buildingService.manifestBuilding(planet, BuildingType.SOLAR_PANELS, 1);
+        for (Map.Entry<BuildingType, Integer> building : planetMechanics.getStarterPlanetBuildings().entrySet()) {
+            buildingService.manifestBuilding(planet, building.getKey(), building.getValue());
+        }
 
         LOGGER.debug("Created starter planet {}", planet);
 

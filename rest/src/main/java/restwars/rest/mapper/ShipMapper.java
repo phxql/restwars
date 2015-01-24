@@ -1,6 +1,7 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
+import restwars.mechanics.ShipMechanics;
 import restwars.restapi.dto.metadata.ShipMetadataResponse;
 import restwars.restapi.dto.ship.ShipRequest;
 import restwars.restapi.dto.ship.ShipResponse;
@@ -30,13 +31,14 @@ public final class ShipMapper {
         return ships.stream().map(ShipMapper::fromShip).collect(Collectors.toList());
     }
 
-    public static ShipMetadataResponse fromShipType(ShipType shipType) {
+    public static ShipMetadataResponse fromShipType(ShipType shipType, ShipMechanics shipMechanics) {
         Preconditions.checkNotNull(shipType, "shipType");
 
         return new ShipMetadataResponse(
-                shipType.name(), shipType.getBuildTime(), ResourcesMapper.fromResources(shipType.getBuildCost()),
-                shipType.getSpeed(), shipType.getAttackPoints(), shipType.getDefensePoints(), shipType.getStorageCapacity(),
-                shipType.getDescription(), PrerequisitesMapper.fromPrerequisites(shipType.getPrerequisites())
+                shipType.name(), shipMechanics.getBuildTime(shipType), ResourcesMapper.fromResources(shipMechanics.getBuildCost(shipType)),
+                shipMechanics.getFlightSpeed(shipType), shipMechanics.getAttackPoints(shipType), shipMechanics.getDefensePoints(shipType),
+                shipMechanics.getCargoSpace(shipType), shipType.getDescription(),
+                PrerequisitesMapper.fromPrerequisites(shipMechanics.getPrerequisites(shipType))
         );
     }
 

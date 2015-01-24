@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import restwars.mechanics.TechnologyMechanics;
 import restwars.rest.mapper.PrerequisitesMapper;
 import restwars.rest.mapper.ResourcesMapper;
 import restwars.restapi.dto.metadata.TechnologyMetadataResponse;
@@ -25,9 +26,11 @@ import java.util.stream.Stream;
 @Produces(MediaType.APPLICATION_JSON)
 public class TechnologyMetadataSubResource {
     private final TechnologyService technologyService;
+    private final TechnologyMechanics technologyMechanics;
 
     @Inject
-    public TechnologyMetadataSubResource(TechnologyService technologyService) {
+    public TechnologyMetadataSubResource(TechnologyService technologyService, TechnologyMechanics technologyMechanics) {
+        this.technologyMechanics = Preconditions.checkNotNull(technologyMechanics, "technologyMechanics");
         this.technologyService = Preconditions.checkNotNull(technologyService, "technologyService");
     }
 
@@ -40,7 +43,7 @@ public class TechnologyMetadataSubResource {
                 .map(t -> new TechnologyMetadataResponse(
                         t.name(), sanitizedLevel, technologyService.calculateResearchTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(technologyService.calculateResearchCost(t, sanitizedLevel)),
-                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(t.getPrerequisites())
+                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(technologyMechanics.getPrerequisites(t))
                 ))
                 .collect(Collectors.toList());
     }

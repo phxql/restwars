@@ -3,6 +3,8 @@ package restwars.service.technology.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.BuildingMechanics;
+import restwars.mechanics.TechnologyMechanics;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
 import restwars.service.building.Buildings;
@@ -32,9 +34,11 @@ public class TechnologyServiceImpl implements TechnologyService {
     private final ResearchDAO researchDAO;
     private final BuildingDAO buildingDAO;
     private final EventService eventService;
+    private final BuildingMechanics buildingMechanics;
+    private final TechnologyMechanics technologyMechanics;
 
     @Inject
-    public TechnologyServiceImpl(UUIDFactory uuidFactory, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO, BuildingDAO buildingDAO, EventService eventService) {
+    public TechnologyServiceImpl(UUIDFactory uuidFactory, TechnologyDAO technologyDAO, PlanetDAO planetDAO, RoundService roundService, ResearchDAO researchDAO, BuildingDAO buildingDAO, EventService eventService, BuildingMechanics buildingMechanics, TechnologyMechanics technologyMechanics) {
         this.researchDAO = Preconditions.checkNotNull(researchDAO, "researchDAO");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
@@ -42,6 +46,8 @@ public class TechnologyServiceImpl implements TechnologyService {
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
+        this.buildingMechanics = Preconditions.checkNotNull(buildingMechanics, "buildingMechanics");
+        this.technologyMechanics = Preconditions.checkNotNull(technologyMechanics, "technologyMechanics");
     }
 
     @Override
@@ -106,7 +112,7 @@ public class TechnologyServiceImpl implements TechnologyService {
         }
 
         // Check prerequisites
-        boolean prerequisitesFulfilled = technology.getPrerequisites().fulfilled(
+        boolean prerequisitesFulfilled = technologyMechanics.getPrerequisites(technology).fulfilled(
                 buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())).collect(Collectors.toList()),
                 technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel())).collect(Collectors.toList())
         );
@@ -151,19 +157,12 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkArgument(level > 0, "level must be > 0");
         Preconditions.checkNotNull(buildings, "buildings");
 
-        int researchTime;
-        switch (technology) {
-            case BUILDING_BUILD_COST_REDUCTION:
-                researchTime = level;
-                break;
-            default:
-                throw new AssertionError("Unknown technology: " + technology);
-        }
-
+        int researchTime = technologyMechanics.calculateResearchTime(technology, level);
         int researchCenterLevel = buildings.getLevel(BuildingType.RESEARCH_CENTER);
-        double timeMultiplier = Math.max(1 - researchCenterLevel * 0.01, 0);
+        // TODO: This reaches 0 at a certain level, all subsequent updates of a research center are worthless. Fix this.
+        double speedup = 1 - buildingMechanics.calculateResearchTimeSpeedup(researchCenterLevel);
 
-        return Math.max(MathExt.floorLong(researchTime * timeMultiplier), 1);
+        return Math.max(MathExt.floorLong(researchTime * speedup), 1);
     }
 
     @Override
@@ -176,11 +175,6 @@ public class TechnologyServiceImpl implements TechnologyService {
         Preconditions.checkNotNull(technology, "technology");
         Preconditions.checkArgument(level > 0, "level must be > 0");
 
-        switch (technology) {
-            case BUILDING_BUILD_COST_REDUCTION:
-                return new Resources(level, level, level);
-            default:
-                throw new AssertionError("Unknown technology: " + technology);
-        }
+        return technologyMechanics.calculateResearchCost(technology, level);
     }
 }
