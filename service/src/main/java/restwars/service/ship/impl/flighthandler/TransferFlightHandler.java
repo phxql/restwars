@@ -3,6 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.ShipMechanics;
 import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
@@ -16,8 +17,8 @@ public class TransferFlightHandler extends AbstractFlightHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransferFlightHandler.class);
 
-    public TransferFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService, DetectedFlightDAO detectedFlightDAO) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
+    public TransferFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService, DetectedFlightDAO detectedFlightDAO, ShipMechanics shipMechanics) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
     }
 
     @Override

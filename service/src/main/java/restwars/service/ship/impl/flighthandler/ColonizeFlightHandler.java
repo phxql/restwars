@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.mechanics.PlanetMechanics;
+import restwars.mechanics.ShipMechanics;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
@@ -26,8 +27,8 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
     private final BuildingDAO buildingDAO;
     private final PlanetMechanics planetMechanics;
 
-    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventService eventService, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO, PlanetMechanics planetMechanics) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
+    public ColonizeFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, UniverseConfiguration universeConfiguration, EventService eventService, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO, PlanetMechanics planetMechanics, ShipMechanics shipMechanics) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
         this.planetMechanics = Preconditions.checkNotNull(planetMechanics, "planetMechanics");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");

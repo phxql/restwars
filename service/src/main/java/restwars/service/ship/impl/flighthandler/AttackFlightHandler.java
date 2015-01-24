@@ -3,6 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.ShipMechanics;
 import restwars.service.event.EventService;
 import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.RoundService;
@@ -21,11 +22,11 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     private final FightCalculator fightCalculator;
     private final FightDAO fightDAO;
 
-    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO, EventService eventService, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO) {
-        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
+    public AttackFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, FightDAO fightDAO, EventService eventService, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO, ShipMechanics shipMechanics) {
+        super(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
 
         this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
-        this.fightCalculator = new FightCalculator(uuidFactory, randomNumberGenerator);
+        this.fightCalculator = new FightCalculator(uuidFactory, randomNumberGenerator, shipMechanics);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class AttackFlightHandler extends AbstractFlightHandler {
     }
 
     private Resources lootPlanet(Planet planet, Ships ships) {
-        long storageCapacity = getShipUtils().calculateStorageCapacity(ships);
+        long storageCapacity = getShipUtils().calculateStorageCapacity(ships, getShipMechanics());
 
         long lootCrystals = storageCapacity / 2;
         long lootGas = storageCapacity - lootCrystals;

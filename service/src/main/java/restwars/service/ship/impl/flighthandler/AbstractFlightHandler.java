@@ -3,6 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.ShipMechanics;
 import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
@@ -24,9 +25,11 @@ public abstract class AbstractFlightHandler {
     private final UUIDFactory uuidFactory;
     private final ShipUtils shipUtils;
     private final EventService eventService;
+    private final ShipMechanics shipMechanics;
     private final DetectedFlightDAO detectedFlightDAO;
 
-    public AbstractFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService, DetectedFlightDAO detectedFlightDAO) {
+    public AbstractFlightHandler(RoundService roundService, FlightDAO flightDAO, PlanetDAO planetDAO, HangarDAO hangarDAO, UUIDFactory uuidFactory, EventService eventService, DetectedFlightDAO detectedFlightDAO, ShipMechanics shipMechanics) {
+        this.shipMechanics = Preconditions.checkNotNull(shipMechanics, "shipMechanics");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
@@ -47,7 +50,7 @@ public abstract class AbstractFlightHandler {
         assert ships != null;
 
         long distance = flight.getStart().calculateDistance(flight.getDestination());
-        double speed = shipUtils.findSpeedOfSlowestShip(ships);
+        double speed = shipUtils.findSpeedOfSlowestShip(ships, shipMechanics);
         long started = roundService.getCurrentRound();
         long arrival = started + (long) Math.ceil(distance / (double) speed);
 
@@ -94,6 +97,10 @@ public abstract class AbstractFlightHandler {
 
     protected DetectedFlightDAO getDetectedFlightDAO() {
         return detectedFlightDAO;
+    }
+
+    protected ShipMechanics getShipMechanics() {
+        return shipMechanics;
     }
 
     public abstract void handle(Flight flight, long round);

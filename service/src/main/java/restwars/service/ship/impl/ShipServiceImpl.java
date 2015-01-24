@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.mechanics.BuildingMechanics;
 import restwars.mechanics.PlanetMechanics;
+import restwars.mechanics.ShipMechanics;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
@@ -48,6 +49,7 @@ public class ShipServiceImpl implements ShipService {
     private final EventService eventService;
     private final TechnologyDAO technologyDAO;
     private final BuildingMechanics buildingMechanics;
+    private final ShipMechanics shipMechanics;
 
     private final TransportFlightHandler transportFlightHandler;
     private final ColonizeFlightHandler colonizeFlightHandler;
@@ -65,7 +67,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO, PlanetMechanics planetMechanics, BuildingMechanics buildingMechanics) {
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, FlightDAO flightDAO, UniverseConfiguration universeConfiguration, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, RandomNumberGenerator randomNumberGenerator, DetectedFlightDAO detectedFlightDAO, PlanetMechanics planetMechanics, BuildingMechanics buildingMechanics, ShipMechanics shipMechanics) {
         Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         Preconditions.checkNotNull(randomNumberGenerator, "randomNumberGenerator");
         Preconditions.checkNotNull(planetMechanics, "planetMechanics");
@@ -80,14 +82,15 @@ public class ShipServiceImpl implements ShipService {
         this.buildingDAO = Preconditions.checkNotNull(buildingDAO, "buildingDAO");
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
         this.buildingMechanics = Preconditions.checkNotNull(buildingMechanics, "buildingMechanics");
+        this.shipMechanics = Preconditions.checkNotNull(shipMechanics, "shipMechanics");
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
         this.detectedFlightDAO = Preconditions.checkNotNull(detectedFlightDAO, "detectedFlightDAO");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
 
-        transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
-        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventService, buildingDAO, detectedFlightDAO, planetMechanics);
-        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventService, randomNumberGenerator, detectedFlightDAO);
-        transferFlightHandler = new TransferFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO);
+        transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
+        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventService, buildingDAO, detectedFlightDAO, planetMechanics, shipMechanics);
+        attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventService, randomNumberGenerator, detectedFlightDAO, shipMechanics);
+        transferFlightHandler = new TransferFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
         shipUtils = new ShipUtils();
     }
 
@@ -105,7 +108,7 @@ public class ShipServiceImpl implements ShipService {
         }
 
         // Check prerequisites
-        boolean prerequisitesFulfilled = type.getPrerequisites().fulfilled(
+        boolean prerequisitesFulfilled = shipMechanics.getPrerequisites(type).fulfilled(
                 buildings.stream().map(b -> new Prerequisites.Building(b.getType(), b.getLevel())).collect(Collectors.toList()),
                 technologies.stream().map(t -> new Prerequisites.Technology(t.getType(), t.getLevel())).collect(Collectors.toList())
         );
@@ -118,7 +121,7 @@ public class ShipServiceImpl implements ShipService {
             throw new BuildShipException(BuildShipException.Reason.NOT_ENOUGH_BUILD_QUEUES);
         }
 
-        Resources buildCost = type.getBuildCost();
+        Resources buildCost = shipMechanics.getBuildCost(type);
         if (!planet.getResources().isEnough(buildCost)) {
             throw new BuildShipException(BuildShipException.Reason.INSUFFICIENT_RESOURCES);
         }
@@ -128,7 +131,7 @@ public class ShipServiceImpl implements ShipService {
 
         int shipyardLevel = buildings.getLevel(BuildingType.SHIPYARD);
         double speedup = 1 - buildingMechanics.calculateShipBuildTimeSpeedup(shipyardLevel);
-        long buildTime = Math.max(MathExt.floorLong(type.getBuildTime() * speedup), 1);
+        long buildTime = Math.max(MathExt.floorLong(shipMechanics.getBuildTime(type) * speedup), 1);
 
         long currentRound = roundService.getCurrentRound();
         ShipInConstruction shipInConstruction = new ShipInConstruction(uuidFactory.create(), type, planet.getId(), player.getId(), currentRound, currentRound + buildTime);
@@ -292,7 +295,7 @@ public class ShipServiceImpl implements ShipService {
         double energyNeeded = 0;
         for (Ship ship : ships) {
             // This also contains the energy needed for the return flight
-            energyNeeded += ship.getType().getFlightCostModifier() * distance * ship.getAmount() * 2;
+            energyNeeded += shipMechanics.getFlightCostModifier(ship.getType()) * distance * ship.getAmount() * 2;
         }
         long totalEnergyNeeded = (long) Math.ceil(energyNeeded);
         // Check if planet has enough energy
@@ -309,7 +312,7 @@ public class ShipServiceImpl implements ShipService {
         }
 
         // Calculate arrival time
-        double speed = shipUtils.findSpeedOfSlowestShip(ships);
+        double speed = shipUtils.findSpeedOfSlowestShip(ships, shipMechanics);
         long started = roundService.getCurrentRound();
         long arrives = started + (long) Math.ceil(distance / (double) speed);
 
@@ -318,7 +321,7 @@ public class ShipServiceImpl implements ShipService {
 
         if (!cargo.isEmpty()) {
             // Check cargo space and resource availability
-            if (cargo.sum() > shipUtils.calculateStorageCapacity(ships)) {
+            if (cargo.sum() > shipUtils.calculateStorageCapacity(ships, shipMechanics)) {
                 throw new FlightException(FlightException.Reason.NOT_ENOUGH_CARGO_SPACE);
             }
             if (!start.getResources().isEnough(cargo)) {

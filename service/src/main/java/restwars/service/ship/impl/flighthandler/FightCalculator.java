@@ -3,6 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.mechanics.ShipMechanics;
 import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.resource.Resources;
@@ -20,8 +21,10 @@ public class FightCalculator {
 
     private final UUIDFactory uuidFactory;
     private final RandomNumberGenerator randomNumberGenerator;
+    private final ShipMechanics shipMechanics;
 
-    public FightCalculator(UUIDFactory uuidFactory, RandomNumberGenerator randomNumberGenerator) {
+    public FightCalculator(UUIDFactory uuidFactory, RandomNumberGenerator randomNumberGenerator, ShipMechanics shipMechanics) {
+        this.shipMechanics = Preconditions.checkNotNull(shipMechanics, "shipMechanics");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.randomNumberGenerator = Preconditions.checkNotNull(randomNumberGenerator, "randomNumberGenerator");
     }
@@ -46,7 +49,7 @@ public class FightCalculator {
      * @return Remaining defender ships.
      */
     private Ships fight(Ships attackingShips, Ships defendingShips) {
-        long attackerAttackPoints = attackingShips.stream().mapToLong(s -> s.getType().getAttackPoints() * s.getAmount()).sum();
+        long attackerAttackPoints = attackingShips.stream().mapToLong(s -> shipMechanics.getAttackPoints(s.getType()) * s.getAmount()).sum();
         Ships remainingDefendingShips = defendingShips;
 
         while (attackerAttackPoints > 0) {
@@ -60,13 +63,13 @@ public class FightCalculator {
             ShipType shipToDestroy = destroyableShips.get(randomNumberGenerator.nextInt(destroyableShips.size()));
             remainingDefendingShips = remainingDefendingShips.minus(shipToDestroy, 1);
 
-            attackerAttackPoints = attackerAttackPoints - shipToDestroy.getDefensePoints();
+            attackerAttackPoints = attackerAttackPoints - shipMechanics.getDefensePoints(shipToDestroy);
         }
 
         return remainingDefendingShips;
     }
 
     private List<ShipType> findDestroyableShips(Ships ships, long attackPoints) {
-        return ships.stream().map(Ship::getType).filter(s -> s.getDefensePoints() <= attackPoints).collect(Collectors.toList());
+        return ships.stream().map(Ship::getType).filter(s -> shipMechanics.getDefensePoints(s) <= attackPoints).collect(Collectors.toList());
     }
 }

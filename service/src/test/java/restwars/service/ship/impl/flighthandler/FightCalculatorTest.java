@@ -3,6 +3,7 @@ package restwars.service.ship.impl.flighthandler;
 import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import restwars.mechanics.impl.ShipMechanicsImpl;
 import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.ship.Fight;
@@ -32,7 +33,7 @@ public class FightCalculatorTest {
 
         RandomNumberGenerator randomNumberGenerator = mock(RandomNumberGenerator.class);
         when(randomNumberGenerator.nextInt(Matchers.anyInt())).thenReturn(0);
-        sut = new FightCalculator(uuidFactory, randomNumberGenerator);
+        sut = new FightCalculator(uuidFactory, randomNumberGenerator, new ShipMechanicsImpl());
     }
 
     @Test
