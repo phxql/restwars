@@ -51,7 +51,7 @@ public interface BuildingMechanics {
 
     /**
      * Calculates the building build time speedup for a command center with the given level.
-     *
+     * <p/>
      * If the build time speedup is for example 0.1, the building will be finished 10% faster.
      *
      * @param level Level of the command center.
@@ -76,6 +76,14 @@ public interface BuildingMechanics {
     double calculateShipBuildTimeSpeedup(int level);
 
     /**
+     * Calculates the scan range of a telescope with the given level.
+     *
+     * @param level Level of the telescope.
+     * @return Scan range in solar systems.
+     */
+    int calculateScanRange(int level);
+
+    /**
      * Calculates the flight detection range of a telescope with the given level.
      *
      * @param level Level of the telescope.
@@ -85,7 +93,7 @@ public interface BuildingMechanics {
 
     /**
      * Calculates the fleet size variance of a telescope with the given level.
-     *
+     * <p/>
      * Guaranteed to be >= 0.0.
      *
      * @param level Level of the telescope.

@@ -57,11 +57,11 @@ public class TelescopeServiceImpl implements TelescopeService {
         }
 
         int level = telescope.get().getLevel();
+        int scanRange = buildingMechanics.calculateScanRange(level);
 
         Location location = planet.getLocation();
-        int delta = level - 1;
-        // TODO: Gameplay - balance
-        return planetDAO.findInRange(location.getGalaxy(), location.getGalaxy(), location.getSolarSystem() - delta, location.getSolarSystem() + delta, 0, Integer.MAX_VALUE);
+
+        return planetDAO.findInRange(location.getGalaxy(), location.getGalaxy(), location.getSolarSystem() - scanRange, location.getSolarSystem() + scanRange, 0, Integer.MAX_VALUE);
     }
 
     @Override

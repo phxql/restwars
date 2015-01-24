@@ -152,6 +152,17 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
     }
 
     @Override
+    public int calculateScanRange(int level) {
+        Preconditions.checkArgument(level >= 0, "level must be >= 0");
+
+        if (level == 0) {
+            return 0;
+        }
+
+        return level - 1;
+    }
+
+    @Override
     public int calculateFlightDetectionRange(int level) {
         Preconditions.checkArgument(level >= 0, "level must be >= 0");
 
