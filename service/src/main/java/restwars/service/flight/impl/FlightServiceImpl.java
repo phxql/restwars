@@ -68,7 +68,7 @@ public class FlightServiceImpl implements FlightService {
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
-        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventService, buildingDAO, detectedFlightDAO, planetMechanics, shipMechanics);
+        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, buildingDAO, detectedFlightDAO, planetMechanics, shipMechanics);
         attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventService, randomNumberGenerator, detectedFlightDAO, shipMechanics);
         transferFlightHandler = new TransferFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
         shipUtils = new ShipUtils();
