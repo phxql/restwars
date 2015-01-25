@@ -24,7 +24,6 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.rest.configuration.RestwarsConfiguration;
-import restwars.rest.di.CompositionRoot;
 import restwars.rest.di.RestWarsModule;
 import restwars.rest.doc.ModelConverter;
 import restwars.rest.doc.SwaggerFilter;

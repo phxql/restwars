@@ -5,6 +5,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.dropwizard.db.ManagedDataSource;
 import restwars.mechanics.MechanicsModule;
+import restwars.rest.CompositionRoot;
 import restwars.service.UniverseConfiguration;
 import restwars.service.di.ServiceModule;
 import restwars.service.unitofwork.UnitOfWorkService;

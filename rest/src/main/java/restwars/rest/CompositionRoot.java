@@ -1,6 +1,5 @@
-package restwars.rest.di;
+package restwars.rest;
 
-import restwars.rest.Clock;
 import restwars.rest.authentication.PlayerAuthenticator;
 import restwars.rest.resources.*;
 import restwars.service.building.BuildingService;
