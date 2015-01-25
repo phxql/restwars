@@ -6,13 +6,13 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.model.building.Buildings;
+import restwars.model.planet.Planet;
+import restwars.model.player.Player;
 import restwars.rest.mapper.BuildingMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.building.BuildingResponse;
 import restwars.service.building.BuildingService;
-import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
-import restwars.service.player.Player;
 import restwars.util.Functional;
 
 import javax.inject.Inject;

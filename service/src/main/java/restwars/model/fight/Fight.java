@@ -1,9 +1,9 @@
-package restwars.service.fight;
+package restwars.model.fight;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import restwars.service.resource.Resources;
-import restwars.service.ship.Ships;
+import restwars.model.resource.Resources;
+import restwars.model.ship.Ships;
 
 import java.util.UUID;
 

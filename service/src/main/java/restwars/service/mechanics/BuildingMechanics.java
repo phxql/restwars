@@ -1,8 +1,8 @@
 package restwars.service.mechanics;
 
 import restwars.model.building.BuildingType;
-import restwars.service.resource.Resources;
-import restwars.service.techtree.Prerequisites;
+import restwars.model.resource.Resources;
+import restwars.model.techtree.Prerequisites;
 
 /**
  * Building mechanics.

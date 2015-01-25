@@ -2,9 +2,9 @@ package restwars.service.building;
 
 import restwars.model.building.BuildingType;
 import restwars.model.building.Buildings;
-import restwars.service.planet.Planet;
-import restwars.service.resource.Resources;
-import restwars.service.technology.Technologies;
+import restwars.model.planet.Planet;
+import restwars.model.resource.Resources;
+import restwars.model.technology.Technologies;
 
 import java.util.List;
 

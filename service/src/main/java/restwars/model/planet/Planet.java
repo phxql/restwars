@@ -1,9 +1,9 @@
-package restwars.service.planet;
+package restwars.model.planet;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import restwars.service.player.Player;
-import restwars.service.resource.Resources;
+import restwars.model.player.Player;
+import restwars.model.resource.Resources;
 
 import java.util.UUID;
 

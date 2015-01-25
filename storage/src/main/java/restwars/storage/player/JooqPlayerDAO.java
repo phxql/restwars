@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import org.jooq.Record;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.player.Player;
+import restwars.model.player.Player;
 import restwars.service.player.PlayerDAO;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;

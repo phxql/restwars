@@ -1,9 +1,9 @@
-package restwars.service.fight;
+package restwars.model.fight;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import restwars.service.planet.Planet;
-import restwars.service.player.Player;
+import restwars.model.planet.Planet;
+import restwars.model.player.Player;
 
 public class FightWithPlanetAndPlayer {
     private final Fight fight;

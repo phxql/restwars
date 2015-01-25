@@ -1,5 +1,8 @@
 package restwars.service.flight;
 
+import restwars.model.flight.DetectedFlight;
+import restwars.model.flight.DetectedFlightWithSender;
+
 import java.util.List;
 import java.util.UUID;
 

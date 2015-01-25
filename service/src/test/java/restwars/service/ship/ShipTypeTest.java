@@ -1,6 +1,7 @@
 package restwars.service.ship;
 
 import org.testng.annotations.Test;
+import restwars.model.ship.ShipType;
 
 import java.util.stream.Stream;
 

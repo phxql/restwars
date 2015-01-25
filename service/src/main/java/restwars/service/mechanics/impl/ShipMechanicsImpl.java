@@ -2,11 +2,11 @@ package restwars.service.mechanics.impl;
 
 import com.google.common.base.Preconditions;
 import restwars.model.building.BuildingType;
+import restwars.model.resource.Resources;
+import restwars.model.ship.ShipType;
+import restwars.model.technology.TechnologyType;
+import restwars.model.techtree.Prerequisites;
 import restwars.service.mechanics.ShipMechanics;
-import restwars.service.resource.Resources;
-import restwars.service.ship.ShipType;
-import restwars.service.technology.TechnologyType;
-import restwars.service.techtree.Prerequisites;
 
 public class ShipMechanicsImpl implements ShipMechanics {
     @Override

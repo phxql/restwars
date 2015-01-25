@@ -1,8 +1,8 @@
 package restwars.service.location.impl;
 
 import com.google.common.base.Preconditions;
+import restwars.model.planet.Location;
 import restwars.service.location.LocationFactory;
-import restwars.service.planet.Location;
 
 import java.util.Random;
 

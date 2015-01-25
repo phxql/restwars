@@ -1,12 +1,12 @@
 package restwars.storage.mapper;
 
 import org.jooq.Record;
-import restwars.service.flight.Flight;
-import restwars.service.flight.FlightDirection;
-import restwars.service.flight.FlightType;
-import restwars.service.planet.Location;
-import restwars.service.resource.Resources;
-import restwars.service.ship.Ships;
+import restwars.model.flight.Flight;
+import restwars.model.flight.FlightDirection;
+import restwars.model.flight.FlightType;
+import restwars.model.planet.Location;
+import restwars.model.resource.Resources;
+import restwars.model.ship.Ships;
 
 import java.util.UUID;
 

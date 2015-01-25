@@ -2,11 +2,11 @@ package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
 import restwars.model.building.BuildingType;
-import restwars.service.planet.Location;
-import restwars.service.planet.Planet;
+import restwars.model.planet.Location;
+import restwars.model.planet.Planet;
+import restwars.model.player.Player;
+import restwars.model.technology.TechnologyType;
 import restwars.service.planet.PlanetService;
-import restwars.service.player.Player;
-import restwars.service.technology.TechnologyType;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;

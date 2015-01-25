@@ -1,7 +1,7 @@
 package restwars.storage.mapper;
 
 import org.jooq.Record;
-import restwars.service.player.Player;
+import restwars.model.player.Player;
 
 import static restwars.storage.jooq.Tables.PLAYER;
 

@@ -1,4 +1,4 @@
-package restwars.service.flight;
+package restwars.model.flight;
 
 public enum FlightDirection {
     OUTWARD(0),

@@ -1,6 +1,7 @@
 package restwars.service.event;
 
 import org.testng.annotations.Test;
+import restwars.model.event.EventType;
 
 import java.util.stream.Stream;
 

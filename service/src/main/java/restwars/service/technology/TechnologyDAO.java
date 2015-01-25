@@ -1,5 +1,9 @@
 package restwars.service.technology;
 
+import restwars.model.technology.Technologies;
+import restwars.model.technology.Technology;
+import restwars.model.technology.TechnologyType;
+
 import java.util.Optional;
 import java.util.UUID;
 

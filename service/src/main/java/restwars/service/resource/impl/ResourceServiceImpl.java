@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 import restwars.model.building.Building;
 import restwars.model.building.BuildingType;
 import restwars.model.building.Buildings;
+import restwars.model.planet.Planet;
+import restwars.model.resource.Resources;
+import restwars.model.technology.Technologies;
 import restwars.service.building.BuildingService;
 import restwars.service.mechanics.BuildingMechanics;
-import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.resource.ResourceService;
-import restwars.service.resource.Resources;
-import restwars.service.technology.Technologies;
 import restwars.service.technology.TechnologyDAO;
 
 import javax.inject.Inject;

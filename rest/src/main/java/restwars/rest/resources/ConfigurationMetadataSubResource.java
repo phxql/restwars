@@ -3,9 +3,9 @@ package restwars.rest.resources;
 import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import restwars.model.UniverseConfiguration;
 import restwars.rest.mapper.ConfigurationMapper;
 import restwars.restapi.dto.metadata.ConfigurationMetadataResponse;
-import restwars.service.UniverseConfiguration;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;

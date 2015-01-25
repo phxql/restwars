@@ -5,7 +5,7 @@ import io.dropwizard.lifecycle.Managed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.UnrecoverableException;
-import restwars.service.UniverseConfiguration;
+import restwars.model.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.flight.FlightService;
 import restwars.service.infrastructure.RoundService;

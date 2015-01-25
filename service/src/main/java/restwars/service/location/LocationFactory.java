@@ -1,6 +1,6 @@
 package restwars.service.location;
 
-import restwars.service.planet.Location;
+import restwars.model.planet.Location;
 
 /**
  *

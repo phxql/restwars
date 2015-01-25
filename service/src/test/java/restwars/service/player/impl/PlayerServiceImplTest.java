@@ -3,9 +3,9 @@ package restwars.service.player.impl;
 import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import restwars.model.player.Player;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.PlanetService;
-import restwars.service.player.Player;
 import restwars.service.player.PlayerDAO;
 import restwars.service.security.PasswordService;
 

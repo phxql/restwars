@@ -1,6 +1,7 @@
 package restwars.service.fight;
 
-import restwars.service.player.Player;
+import restwars.model.fight.FightWithPlanetAndPlayer;
+import restwars.model.player.Player;
 
 import java.util.List;
 import java.util.Optional;

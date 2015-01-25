@@ -6,13 +6,13 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
+import restwars.model.flight.DetectedFlightWithSender;
+import restwars.model.flight.Flight;
+import restwars.model.player.Player;
 import restwars.rest.mapper.FlightMapper;
 import restwars.restapi.dto.ship.DetectedFlightResponse;
 import restwars.restapi.dto.ship.FlightResponse;
-import restwars.service.flight.DetectedFlightWithSender;
-import restwars.service.flight.Flight;
 import restwars.service.flight.FlightService;
-import restwars.service.player.Player;
 import restwars.service.telescope.TelescopeService;
 import restwars.util.Functional;
 

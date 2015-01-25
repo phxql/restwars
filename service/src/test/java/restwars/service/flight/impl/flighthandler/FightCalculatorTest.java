@@ -3,13 +3,13 @@ package restwars.service.flight.impl.flighthandler;
 import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import restwars.service.fight.Fight;
+import restwars.model.fight.Fight;
+import restwars.model.ship.Ship;
+import restwars.model.ship.ShipType;
+import restwars.model.ship.Ships;
 import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.mechanics.ShipMechanics;
-import restwars.service.ship.Ship;
-import restwars.service.ship.ShipType;
-import restwars.service.ship.Ships;
 
 import java.util.UUID;
 

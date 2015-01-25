@@ -2,9 +2,9 @@ package restwars.rest.resources;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import restwars.model.event.EventType;
 import restwars.rest.mapper.EventMapper;
 import restwars.restapi.dto.metadata.EventTypeMetadataResponse;
-import restwars.service.event.EventType;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;

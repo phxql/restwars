@@ -1,7 +1,9 @@
 package restwars.service.ship;
 
-import restwars.service.planet.Planet;
-import restwars.service.player.Player;
+import restwars.model.planet.Planet;
+import restwars.model.player.Player;
+import restwars.model.ship.ShipType;
+import restwars.model.ship.Ships;
 
 import java.util.List;
 

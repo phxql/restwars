@@ -1,4 +1,4 @@
-package restwars.service.technology;
+package restwars.model.technology;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ForwardingList;

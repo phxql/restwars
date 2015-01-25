@@ -1,7 +1,7 @@
-package restwars.service.planet;
+package restwars.model.planet;
 
 import com.google.common.base.Preconditions;
-import restwars.service.player.Player;
+import restwars.model.player.Player;
 
 public class PlanetWithOwner {
     private final Planet planet;

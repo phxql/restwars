@@ -1,8 +1,8 @@
 package restwars.service.mechanics.impl;
 
 import org.testng.annotations.Test;
-import restwars.service.resource.Resources;
-import restwars.service.technology.TechnologyType;
+import restwars.model.resource.Resources;
+import restwars.model.technology.TechnologyType;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

@@ -1,10 +1,12 @@
 package restwars.service.flight;
 
-import restwars.service.planet.Location;
-import restwars.service.planet.Planet;
-import restwars.service.player.Player;
-import restwars.service.resource.Resources;
-import restwars.service.ship.Ships;
+import restwars.model.flight.Flight;
+import restwars.model.flight.FlightType;
+import restwars.model.planet.Location;
+import restwars.model.planet.Planet;
+import restwars.model.player.Player;
+import restwars.model.resource.Resources;
+import restwars.model.ship.Ships;
 
 import java.util.List;
 

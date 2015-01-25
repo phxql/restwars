@@ -6,13 +6,13 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
+import restwars.model.planet.Planet;
+import restwars.model.player.Player;
 import restwars.rest.mapper.PlanetMapper;
 import restwars.restapi.dto.player.PlayerResponse;
 import restwars.restapi.dto.player.RegisterPlayerRequest;
-import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.CreatePlayerException;
-import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
 import restwars.util.Functional;
 

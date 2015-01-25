@@ -1,8 +1,8 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
+import restwars.model.technology.Technology;
 import restwars.restapi.dto.technology.TechnologyResponse;
-import restwars.service.technology.Technology;
 
 /**
  * Maps technology entities to DTOs and vice versa.

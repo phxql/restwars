@@ -1,5 +1,8 @@
 package restwars.service.fight;
 
+import restwars.model.fight.Fight;
+import restwars.model.fight.FightWithPlanetAndPlayer;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

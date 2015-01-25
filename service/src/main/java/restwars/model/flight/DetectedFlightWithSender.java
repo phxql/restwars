@@ -1,8 +1,8 @@
-package restwars.service.flight;
+package restwars.model.flight;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import restwars.service.player.Player;
+import restwars.model.player.Player;
 
 public class DetectedFlightWithSender {
     private final DetectedFlight detectedFlight;

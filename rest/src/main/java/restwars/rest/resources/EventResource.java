@@ -6,11 +6,11 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
+import restwars.model.player.Player;
 import restwars.rest.mapper.EventMapper;
 import restwars.restapi.dto.event.EventResponse;
 import restwars.service.event.EventService;
 import restwars.service.event.EventWithPlanet;
-import restwars.service.player.Player;
 import restwars.util.Functional;
 
 import javax.inject.Inject;

@@ -1,10 +1,10 @@
-package restwars.service.techtree;
+package restwars.model.techtree;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import restwars.model.building.BuildingType;
-import restwars.service.technology.TechnologyType;
+import restwars.model.technology.TechnologyType;
 
 import java.util.Collection;
 import java.util.Collections;

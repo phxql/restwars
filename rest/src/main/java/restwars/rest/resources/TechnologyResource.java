@@ -6,10 +6,10 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
+import restwars.model.player.Player;
+import restwars.model.technology.Technologies;
 import restwars.rest.mapper.TechnologyMapper;
 import restwars.restapi.dto.technology.TechnologyResponse;
-import restwars.service.player.Player;
-import restwars.service.technology.Technologies;
 import restwars.service.technology.TechnologyService;
 import restwars.util.Functional;
 

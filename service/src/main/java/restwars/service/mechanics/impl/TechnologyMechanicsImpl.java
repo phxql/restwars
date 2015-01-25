@@ -1,10 +1,10 @@
 package restwars.service.mechanics.impl;
 
 import com.google.common.base.Preconditions;
+import restwars.model.resource.Resources;
+import restwars.model.technology.TechnologyType;
+import restwars.model.techtree.Prerequisites;
 import restwars.service.mechanics.TechnologyMechanics;
-import restwars.service.resource.Resources;
-import restwars.service.technology.TechnologyType;
-import restwars.service.techtree.Prerequisites;
 
 public class TechnologyMechanicsImpl implements TechnologyMechanics {
     @Override

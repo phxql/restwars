@@ -1,12 +1,12 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
+import restwars.model.flight.DetectedFlightWithSender;
+import restwars.model.flight.Flight;
+import restwars.model.flight.FlightType;
 import restwars.restapi.dto.metadata.FlightTypeMetadataResponse;
 import restwars.restapi.dto.ship.DetectedFlightResponse;
 import restwars.restapi.dto.ship.FlightResponse;
-import restwars.service.flight.DetectedFlightWithSender;
-import restwars.service.flight.Flight;
-import restwars.service.flight.FlightType;
 import restwars.util.Functional;
 
 /**

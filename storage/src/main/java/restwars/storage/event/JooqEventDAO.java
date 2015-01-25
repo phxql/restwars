@@ -5,7 +5,7 @@ import org.jooq.Record;
 import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.event.Event;
+import restwars.model.event.Event;
 import restwars.service.event.EventDAO;
 import restwars.service.event.EventWithPlanet;
 import restwars.service.unitofwork.UnitOfWorkService;

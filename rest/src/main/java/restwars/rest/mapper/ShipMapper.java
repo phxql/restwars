@@ -1,13 +1,13 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
+import restwars.model.ship.Ship;
+import restwars.model.ship.ShipType;
+import restwars.model.ship.Ships;
 import restwars.restapi.dto.metadata.ShipMetadataResponse;
 import restwars.restapi.dto.ship.ShipRequest;
 import restwars.restapi.dto.ship.ShipResponse;
 import restwars.service.mechanics.ShipMechanics;
-import restwars.service.ship.Ship;
-import restwars.service.ship.ShipType;
-import restwars.service.ship.Ships;
 
 import java.util.List;
 import java.util.stream.Collectors;

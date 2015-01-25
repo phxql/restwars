@@ -7,14 +7,14 @@ import org.jooq.Result;
 import org.jooq.SelectOnConditionStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.fight.Fight;
+import restwars.model.fight.Fight;
+import restwars.model.fight.FightWithPlanetAndPlayer;
+import restwars.model.planet.Planet;
+import restwars.model.resource.Resources;
+import restwars.model.ship.Ship;
+import restwars.model.ship.ShipType;
+import restwars.model.ship.Ships;
 import restwars.service.fight.FightDAO;
-import restwars.service.fight.FightWithPlanetAndPlayer;
-import restwars.service.planet.Planet;
-import restwars.service.resource.Resources;
-import restwars.service.ship.Ship;
-import restwars.service.ship.ShipType;
-import restwars.service.ship.Ships;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
 import restwars.storage.jooq.tables.Player;
@@ -162,8 +162,8 @@ public class JooqFightDAO extends AbstractJooqDAO implements FightDAO {
                     new Resources(main.getValue(FIGHT.CRYSTALS_LOOTED), main.getValue(FIGHT.GAS_LOOTED), 0)
             );
             Planet planet = PlanetMapper.fromRecord(main);
-            restwars.service.player.Player attacker = PlayerMapper.fromRecord(main, ATTACKER_ALIAS);
-            restwars.service.player.Player defender = PlayerMapper.fromRecord(main, DEFENDER_ALIAS);
+            restwars.model.player.Player attacker = PlayerMapper.fromRecord(main, ATTACKER_ALIAS);
+            restwars.model.player.Player defender = PlayerMapper.fromRecord(main, DEFENDER_ALIAS);
 
             result.add(new FightWithPlanetAndPlayer(fight, planet, attacker, defender));
         }

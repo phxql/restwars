@@ -1,9 +1,9 @@
 package restwars.storage.mapper;
 
 import org.jooq.Record;
-import restwars.service.planet.Location;
-import restwars.service.planet.Planet;
-import restwars.service.resource.Resources;
+import restwars.model.planet.Location;
+import restwars.model.planet.Planet;
+import restwars.model.resource.Resources;
 
 import static restwars.storage.jooq.Tables.PLANET;
 

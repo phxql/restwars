@@ -1,9 +1,12 @@
 package restwars.service.technology;
 
 import restwars.model.building.Buildings;
-import restwars.service.planet.Planet;
-import restwars.service.player.Player;
-import restwars.service.resource.Resources;
+import restwars.model.planet.Planet;
+import restwars.model.player.Player;
+import restwars.model.resource.Resources;
+import restwars.model.technology.Technologies;
+import restwars.model.technology.Technology;
+import restwars.model.technology.TechnologyType;
 
 import java.util.List;
 import java.util.Optional;

@@ -23,13 +23,13 @@ import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.model.UniverseConfiguration;
+import restwars.model.resource.Resources;
 import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.RestWarsModule;
 import restwars.rest.doc.ModelConverter;
 import restwars.rest.doc.SwaggerFilter;
 import restwars.rest.integration.database.UnitOfWorkResourceMethodDispatchAdapter;
-import restwars.service.UniverseConfiguration;
-import restwars.service.resource.Resources;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;

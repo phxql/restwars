@@ -1,4 +1,4 @@
-package restwars.service.flight;
+package restwars.model.flight;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;

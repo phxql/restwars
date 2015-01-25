@@ -1,8 +1,8 @@
 package restwars.storage.mapper;
 
 import org.jooq.Record;
-import restwars.service.event.Event;
-import restwars.service.event.EventType;
+import restwars.model.event.Event;
+import restwars.model.event.EventType;
 
 import java.util.Optional;
 

@@ -3,7 +3,7 @@ package restwars.service.building;
 import restwars.model.building.Building;
 import restwars.model.building.BuildingType;
 import restwars.model.building.Buildings;
-import restwars.service.planet.Location;
+import restwars.model.planet.Location;
 
 import java.util.Optional;
 import java.util.UUID;

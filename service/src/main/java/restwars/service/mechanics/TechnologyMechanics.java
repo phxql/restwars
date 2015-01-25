@@ -1,8 +1,8 @@
 package restwars.service.mechanics;
 
-import restwars.service.resource.Resources;
-import restwars.service.technology.TechnologyType;
-import restwars.service.techtree.Prerequisites;
+import restwars.model.resource.Resources;
+import restwars.model.technology.TechnologyType;
+import restwars.model.techtree.Prerequisites;
 
 /**
  * Technology mechanics.

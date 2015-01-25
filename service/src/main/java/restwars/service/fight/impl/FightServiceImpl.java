@@ -1,10 +1,10 @@
 package restwars.service.fight.impl;
 
 import com.google.common.base.Preconditions;
+import restwars.model.fight.FightWithPlanetAndPlayer;
+import restwars.model.player.Player;
 import restwars.service.fight.FightDAO;
 import restwars.service.fight.FightService;
-import restwars.service.fight.FightWithPlanetAndPlayer;
-import restwars.service.player.Player;
 
 import javax.inject.Inject;
 import java.util.List;

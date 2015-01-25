@@ -1,7 +1,7 @@
-package restwars.service;
+package restwars.model;
 
 import com.google.common.base.Preconditions;
-import restwars.service.resource.Resources;
+import restwars.model.resource.Resources;
 
 public class UniverseConfiguration {
     private final int galaxyCount;

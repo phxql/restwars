@@ -1,18 +1,20 @@
-package restwars.service.flight;
+package restwars.model.ship;
 
 import com.google.common.base.Preconditions;
 
-public enum FlightType {
-    ATTACK(0, "Attack an enemy planet"),
-    COLONIZE(1, "Colonize an empty planet"),
-    TRANSPORT(2, "Transport resources to a friendly planet"),
-    TRANSFER(3, "Transfer ships to a friendly planet");
+public enum ShipType {
+    MOSQUITO(0, "Small and cheap fighter ship"),
+    COLONY(1, "Colonizes planets"),
+    PROBE(2, "Fast and cheap scout"),
+    MULE(3, "Freighter"),
+    DAGGER(4, "Very fast fighter ship"),
+    DAEDALUS(5, "Sophisticated fighter ship");
 
     private final int id;
 
     private final String description;
 
-    FlightType(int id, String description) {
+    ShipType(int id, String description) {
         this.id = id;
         this.description = Preconditions.checkNotNull(description, "description");
     }
@@ -25,8 +27,8 @@ public enum FlightType {
         return description;
     }
 
-    public static FlightType fromId(int id) {
-        for (FlightType type : FlightType.values()) {
+    public static ShipType fromId(int id) {
+        for (ShipType type : ShipType.values()) {
             if (type.getId() == id) {
                 return type;
             }

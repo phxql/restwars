@@ -1,8 +1,8 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
+import restwars.model.UniverseConfiguration;
 import restwars.restapi.dto.metadata.ConfigurationMetadataResponse;
-import restwars.service.UniverseConfiguration;
 
 /**
  * Maps configuration objects to DTOs and vice versa.

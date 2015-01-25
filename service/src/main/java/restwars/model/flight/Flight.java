@@ -1,10 +1,10 @@
-package restwars.service.flight;
+package restwars.model.flight;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import restwars.service.planet.Location;
-import restwars.service.resource.Resources;
-import restwars.service.ship.Ships;
+import restwars.model.planet.Location;
+import restwars.model.resource.Resources;
+import restwars.model.ship.Ships;
 
 import java.util.UUID;
 

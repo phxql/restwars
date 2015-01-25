@@ -1,6 +1,7 @@
 package restwars.service.technology;
 
 import org.testng.annotations.Test;
+import restwars.model.technology.TechnologyType;
 
 import java.util.stream.Stream;
 

@@ -2,9 +2,9 @@ package restwars.service.mechanics.impl;
 
 import com.google.common.base.Preconditions;
 import restwars.model.building.BuildingType;
+import restwars.model.resource.Resources;
+import restwars.model.techtree.Prerequisites;
 import restwars.service.mechanics.BuildingMechanics;
-import restwars.service.resource.Resources;
-import restwars.service.techtree.Prerequisites;
 import restwars.util.MathExt;
 
 public class BuildingMechanicsImpl implements BuildingMechanics {

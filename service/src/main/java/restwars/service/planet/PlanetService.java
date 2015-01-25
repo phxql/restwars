@@ -1,6 +1,8 @@
 package restwars.service.planet;
 
-import restwars.service.player.Player;
+import restwars.model.planet.Location;
+import restwars.model.planet.Planet;
+import restwars.model.player.Player;
 
 import java.util.List;
 import java.util.Optional;

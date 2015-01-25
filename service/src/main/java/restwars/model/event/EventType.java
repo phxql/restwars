@@ -1,4 +1,4 @@
-package restwars.service.event;
+package restwars.model.event;
 
 import com.google.common.base.Preconditions;
 

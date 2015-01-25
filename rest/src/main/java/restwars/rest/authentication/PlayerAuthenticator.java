@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
-import restwars.service.player.Player;
+import restwars.model.player.Player;
 import restwars.service.player.PlayerService;
 import restwars.service.security.PasswordException;
 import restwars.service.security.PasswordService;

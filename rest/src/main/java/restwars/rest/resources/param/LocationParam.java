@@ -1,12 +1,12 @@
 package restwars.rest.resources.param;
 
-import restwars.service.planet.Location;
+import restwars.model.planet.Location;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 /**
- * Param for JAXRS. Parses a string into a {@link restwars.service.planet.Location} object.
+ * Param for JAXRS. Parses a string into a {@link restwars.model.planet.Location} object.
  */
 public class LocationParam {
     private final Location location;

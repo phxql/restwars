@@ -1,8 +1,8 @@
 package restwars.service.mechanics;
 
-import restwars.service.resource.Resources;
-import restwars.service.ship.ShipType;
-import restwars.service.techtree.Prerequisites;
+import restwars.model.resource.Resources;
+import restwars.model.ship.ShipType;
+import restwars.model.techtree.Prerequisites;
 
 /**
  * Ship mechanics.

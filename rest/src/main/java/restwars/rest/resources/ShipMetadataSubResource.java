@@ -3,10 +3,10 @@ package restwars.rest.resources;
 import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import restwars.model.ship.ShipType;
 import restwars.rest.mapper.ShipMapper;
 import restwars.restapi.dto.metadata.ShipMetadataResponse;
 import restwars.service.mechanics.ShipMechanics;
-import restwars.service.ship.ShipType;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;

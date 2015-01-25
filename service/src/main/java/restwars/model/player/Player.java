@@ -1,4 +1,4 @@
-package restwars.service.player;
+package restwars.model.player;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;

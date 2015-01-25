@@ -1,9 +1,9 @@
 package restwars.service.telescope;
 
-import restwars.service.flight.DetectedFlightWithSender;
-import restwars.service.planet.Planet;
-import restwars.service.planet.PlanetWithOwner;
-import restwars.service.player.Player;
+import restwars.model.flight.DetectedFlightWithSender;
+import restwars.model.planet.Planet;
+import restwars.model.planet.PlanetWithOwner;
+import restwars.model.player.Player;
 
 import java.util.List;
 

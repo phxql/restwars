@@ -1,4 +1,4 @@
-package restwars.service.resource;
+package restwars.model.resource;
 
 import com.google.common.base.Objects;
 

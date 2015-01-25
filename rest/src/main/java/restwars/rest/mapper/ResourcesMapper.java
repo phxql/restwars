@@ -1,7 +1,7 @@
 package restwars.rest.mapper;
 
+import restwars.model.resource.Resources;
 import restwars.restapi.dto.ResourcesResponse;
-import restwars.service.resource.Resources;
 
 /**
  * Maps resources objects to DTOs and vice versa.

@@ -1,6 +1,8 @@
 package restwars.service.flight;
 
-import restwars.service.planet.Location;
+import restwars.model.flight.Flight;
+import restwars.model.flight.FlightType;
+import restwars.model.planet.Location;
 
 import java.util.List;
 import java.util.UUID;

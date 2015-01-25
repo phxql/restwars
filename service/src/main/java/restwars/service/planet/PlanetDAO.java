@@ -1,5 +1,9 @@
 package restwars.service.planet;
 
+import restwars.model.planet.Location;
+import restwars.model.planet.Planet;
+import restwars.model.planet.PlanetWithOwner;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

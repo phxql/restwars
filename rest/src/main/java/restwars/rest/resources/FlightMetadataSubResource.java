@@ -2,9 +2,9 @@ package restwars.rest.resources;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import restwars.model.flight.FlightType;
 import restwars.rest.mapper.FlightMapper;
 import restwars.restapi.dto.metadata.FlightTypeMetadataResponse;
-import restwars.service.flight.FlightType;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;

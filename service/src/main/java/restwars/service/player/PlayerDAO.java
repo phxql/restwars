@@ -1,5 +1,7 @@
 package restwars.service.player;
 
+import restwars.model.player.Player;
+
 import java.util.Optional;
 
 /**

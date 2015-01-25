@@ -5,13 +5,13 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
+import restwars.model.planet.Planet;
+import restwars.model.player.Player;
+import restwars.model.ship.Ship;
 import restwars.rest.mapper.ShipMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.ship.ShipResponse;
-import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
-import restwars.service.player.Player;
-import restwars.service.ship.Ship;
 import restwars.service.ship.ShipService;
 import restwars.util.Functional;
 
