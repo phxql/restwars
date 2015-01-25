@@ -68,7 +68,7 @@ public class FlightServiceImpl implements FlightService {
         this.eventService = Preconditions.checkNotNull(eventService, "eventService");
 
         transportFlightHandler = new TransportFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
-        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, universeConfiguration, eventService, buildingDAO, detectedFlightDAO, planetMechanics, shipMechanics);
+        colonizeFlightHandler = new ColonizeFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, buildingDAO, detectedFlightDAO, planetMechanics, shipMechanics);
         attackFlightHandler = new AttackFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, fightDAO, eventService, randomNumberGenerator, detectedFlightDAO, shipMechanics);
         transferFlightHandler = new TransferFlightHandler(roundService, flightDAO, planetDAO, hangarDAO, uuidFactory, eventService, detectedFlightDAO, shipMechanics);
         shipUtils = new ShipUtils();
@@ -94,7 +94,7 @@ public class FlightServiceImpl implements FlightService {
                     finishOutwardFlight(flight, round);
                     break;
                 case RETURN:
-                    finishReturnFlight(flight, round);
+                    finishReturnFlight(flight);
                     break;
                 default:
                     throw new AssertionError("Unknown flight direction value: " + flight.getDirection());
@@ -152,7 +152,7 @@ public class FlightServiceImpl implements FlightService {
         for (Ship ship : ships) {
             double shipModifier = shipMechanics.getFlightCostModifier(ship.getType());
             // TODO: Gameplay - This reaches eventually zero, fix this.
-            double technologyModifier = (1 - technologyMechanics.calculateCombustionFlightCostReduction(technologies.getLevel(TechnologyType.COMBUSTION_ENGINE)));
+            double technologyModifier = 1 - technologyMechanics.calculateCombustionFlightCostReduction(technologies.getLevel(TechnologyType.COMBUSTION_ENGINE));
 
             // This also contains the energy needed for the return flight
             energyNeeded += Math.max(1, shipModifier * distance * ship.getAmount() * technologyModifier * 2);
@@ -203,7 +203,7 @@ public class FlightServiceImpl implements FlightService {
         return flight;
     }
 
-    private void finishReturnFlight(Flight flight, long round) {
+    private void finishReturnFlight(Flight flight) {
         assert flight != null;
         LOGGER.debug("Finishing return flight {}", flight);
 

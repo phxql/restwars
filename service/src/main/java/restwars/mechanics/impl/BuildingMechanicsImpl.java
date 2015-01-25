@@ -189,15 +189,15 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
             case SOLAR_PANELS:
                 return Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
             case RESEARCH_CENTER:
-                Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
+                return Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
             case SHIPYARD:
-                Prerequisites.buildings(
+                return Prerequisites.buildings(
                         new Prerequisites.Building(BuildingType.COMMAND_CENTER, 1),
                         new Prerequisites.Building(BuildingType.RESEARCH_CENTER, 1),
                         new Prerequisites.Building(BuildingType.TELESCOPE, 1)
                 );
             case TELESCOPE:
-                Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
+                return Prerequisites.building(BuildingType.COMMAND_CENTER, 1);
             default:
                 throw new IllegalArgumentException("Unknown building type " + type);
         }
