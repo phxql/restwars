@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
-import restwars.service.telescope.PlanetWithOwner;
+import restwars.service.planet.PlanetWithOwner;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
 import restwars.storage.mapper.PlanetMapper;

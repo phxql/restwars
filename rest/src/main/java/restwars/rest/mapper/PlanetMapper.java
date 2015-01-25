@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import restwars.restapi.dto.planet.PlanetResponse;
 import restwars.restapi.dto.planet.PlanetScanResponse;
 import restwars.service.planet.Planet;
-import restwars.service.telescope.PlanetWithOwner;
+import restwars.service.planet.PlanetWithOwner;
 
 /**
  * Maps planet entities to DTOs and vice versa.

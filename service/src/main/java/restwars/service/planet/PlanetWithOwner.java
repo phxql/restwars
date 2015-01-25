@@ -1,7 +1,6 @@
-package restwars.service.telescope;
+package restwars.service.planet;
 
 import com.google.common.base.Preconditions;
-import restwars.service.planet.Planet;
 import restwars.service.player.Player;
 
 public class PlanetWithOwner {

@@ -1,7 +1,5 @@
 package restwars.service.planet;
 
-import restwars.service.telescope.PlanetWithOwner;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
