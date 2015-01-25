@@ -1,5 +1,6 @@
 package restwars.service.building;
 
+import restwars.service.Buildings;
 import restwars.service.planet.Location;
 
 import java.util.Optional;

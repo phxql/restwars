@@ -1,8 +1,10 @@
-package restwars.service.building;
+package restwars.service;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ForwardingList;
 import com.google.common.collect.ImmutableList;
+import restwars.service.building.Building;
+import restwars.service.building.BuildingType;
 
 import java.util.Collections;
 import java.util.List;

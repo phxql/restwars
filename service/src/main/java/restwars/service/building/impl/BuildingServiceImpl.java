@@ -3,6 +3,7 @@ package restwars.service.building.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.service.Buildings;
 import restwars.service.building.*;
 import restwars.service.event.EventService;
 import restwars.service.infrastructure.RoundService;

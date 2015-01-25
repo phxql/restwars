@@ -1,5 +1,6 @@
 package restwars.service.building;
 
+import restwars.service.Buildings;
 import restwars.service.planet.Planet;
 import restwars.service.resource.Resources;
 import restwars.service.technology.Technologies;
