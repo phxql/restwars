@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import restwars.UnrecoverableException;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
+import restwars.service.flight.FlightService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.resource.ResourceService;
 import restwars.service.ship.ShipService;
@@ -28,6 +29,7 @@ public class Clock implements Managed, Runnable {
     private final ResourceService resourceService;
     private final TechnologyService technologyService;
     private final ShipService shipService;
+    private final FlightService flightService;
     private final TelescopeService telescopeService;
     private final UniverseConfiguration universeConfiguration;
 
@@ -37,7 +39,8 @@ public class Clock implements Managed, Runnable {
     private ScheduledExecutorService scheduledExecutorService;
 
     @Inject
-    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService, TechnologyService technologyService, ShipService shipService, UnitOfWorkService unitOfWorkService, TelescopeService telescopeService) {
+    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService, TechnologyService technologyService, ShipService shipService, UnitOfWorkService unitOfWorkService, TelescopeService telescopeService, FlightService flightService) {
+        this.flightService = Preconditions.checkNotNull(flightService, "flightService");
         this.unitOfWorkService = Preconditions.checkNotNull(unitOfWorkService, "unitOfWorkService");
         this.shipService = Preconditions.checkNotNull(shipService, "shipService");
         this.technologyService = Preconditions.checkNotNull(technologyService, "technologyService");
@@ -75,7 +78,7 @@ public class Clock implements Managed, Runnable {
             technologyService.finishResearches();
             shipService.finishShipsInConstruction();
             resourceService.gatherResourcesOnAllPlanets();
-            shipService.finishFlights();
+            flightService.finishFlights();
             telescopeService.detectFlights();
 
             unitOfWorkService.commit();

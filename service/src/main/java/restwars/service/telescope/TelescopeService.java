@@ -1,8 +1,8 @@
 package restwars.service.telescope;
 
+import restwars.service.flight.DetectedFlightWithSender;
 import restwars.service.planet.Planet;
 import restwars.service.player.Player;
-import restwars.service.ship.DetectedFlightWithSender;
 
 import java.util.List;
 

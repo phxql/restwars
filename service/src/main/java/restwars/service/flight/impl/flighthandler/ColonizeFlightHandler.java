@@ -1,4 +1,4 @@
-package restwars.service.ship.impl.flighthandler;
+package restwars.service.flight.impl.flighthandler;
 
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
@@ -10,11 +10,16 @@ import restwars.service.building.Building;
 import restwars.service.building.BuildingDAO;
 import restwars.service.building.BuildingType;
 import restwars.service.event.EventService;
+import restwars.service.flight.DetectedFlightDAO;
+import restwars.service.flight.Flight;
+import restwars.service.flight.FlightDAO;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
-import restwars.service.ship.*;
+import restwars.service.ship.Hangar;
+import restwars.service.ship.HangarDAO;
+import restwars.service.ship.ShipType;
 
 import java.util.Map;
 import java.util.Optional;

@@ -1,13 +1,13 @@
-package restwars.service.ship.impl.flighthandler;
+package restwars.service.flight.impl.flighthandler;
 
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.mechanics.ShipMechanics;
+import restwars.service.fight.Fight;
 import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.resource.Resources;
-import restwars.service.ship.Fight;
 import restwars.service.ship.Ship;
 import restwars.service.ship.ShipType;
 import restwars.service.ship.Ships;

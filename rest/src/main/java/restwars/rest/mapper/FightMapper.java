@@ -2,7 +2,7 @@ package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
 import restwars.restapi.dto.ship.FightResponse;
-import restwars.service.ship.FightWithPlanetAndPlayer;
+import restwars.service.fight.FightWithPlanetAndPlayer;
 
 /**
  * Maps fight entities to DTOs and vice versa.

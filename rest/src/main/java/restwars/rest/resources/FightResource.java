@@ -9,9 +9,9 @@ import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.FightMapper;
 import restwars.rest.util.Helper;
 import restwars.restapi.dto.ship.FightResponse;
+import restwars.service.fight.FightService;
+import restwars.service.fight.FightWithPlanetAndPlayer;
 import restwars.service.player.Player;
-import restwars.service.ship.FightWithPlanetAndPlayer;
-import restwars.service.ship.ShipService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -30,11 +30,11 @@ import java.util.UUID;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class FightResource {
-    private final ShipService shipService;
+    private final FightService fightService;
 
     @Inject
-    public FightResource(ShipService shipService) {
-        this.shipService = Preconditions.checkNotNull(shipService, "shipService");
+    public FightResource(FightService fightService) {
+        this.fightService = Preconditions.checkNotNull(fightService, "fightService");
     }
 
     /**
@@ -54,7 +54,7 @@ public class FightResource {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(id, "id");
 
-        Optional<FightWithPlanetAndPlayer> fight = shipService.findFight(id);
+        Optional<FightWithPlanetAndPlayer> fight = fightService.findFight(id);
         if (!fight.isPresent()) {
             throw new FightNotFoundWebException();
         }
@@ -84,7 +84,7 @@ public class FightResource {
         Preconditions.checkNotNull(player, "player");
         round = Math.max(1, round);
 
-        List<FightWithPlanetAndPlayer> fights = shipService.findFightsWithPlayerSinceRound(player, round);
+        List<FightWithPlanetAndPlayer> fights = fightService.findFightsWithPlayerSinceRound(player, round);
         return Helper.mapToList(fights, FightMapper::fromFight);
     }
 }

@@ -1,4 +1,4 @@
-package restwars.service.ship;
+package restwars.service.flight;
 
 import restwars.service.planet.Location;
 

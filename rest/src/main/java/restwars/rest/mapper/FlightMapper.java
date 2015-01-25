@@ -5,9 +5,9 @@ import restwars.rest.util.Helper;
 import restwars.restapi.dto.metadata.FlightTypeMetadataResponse;
 import restwars.restapi.dto.ship.DetectedFlightResponse;
 import restwars.restapi.dto.ship.FlightResponse;
-import restwars.service.ship.DetectedFlightWithSender;
-import restwars.service.ship.Flight;
-import restwars.service.ship.FlightType;
+import restwars.service.flight.DetectedFlightWithSender;
+import restwars.service.flight.Flight;
+import restwars.service.flight.FlightType;
 
 /**
  * Maps flight entities to DTOs and vice versa.

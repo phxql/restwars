@@ -1,12 +1,12 @@
-package restwars.service.ship.impl.flighthandler;
+package restwars.service.flight.impl.flighthandler;
 
 import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import restwars.mechanics.ShipMechanics;
+import restwars.service.fight.Fight;
 import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.UUIDFactory;
-import restwars.service.ship.Fight;
 import restwars.service.ship.Ship;
 import restwars.service.ship.ShipType;
 import restwars.service.ship.Ships;

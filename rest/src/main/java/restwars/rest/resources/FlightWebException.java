@@ -1,6 +1,6 @@
 package restwars.rest.resources;
 
-import restwars.service.ship.FlightException;
+import restwars.service.flight.FlightException;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
