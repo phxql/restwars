@@ -42,13 +42,6 @@ public class ShipServiceImpl implements ShipService {
 
     private final ShipUtils shipUtils;
 
-    @Override
-    public List<ShipInConstruction> findShipsInConstructionOnPlanet(Planet planet) {
-        Preconditions.checkNotNull(planet, "planet");
-
-        return shipInConstructionDAO.findWithPlanetId(planet.getId());
-    }
-
     @Inject
     public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, BuildingDAO buildingDAO, EventService eventService, TechnologyDAO technologyDAO, BuildingMechanics buildingMechanics, ShipMechanics shipMechanics) {
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
@@ -63,6 +56,13 @@ public class ShipServiceImpl implements ShipService {
         this.technologyDAO = Preconditions.checkNotNull(technologyDAO, "technologyDAO");
 
         shipUtils = new ShipUtils();
+    }
+
+    @Override
+    public List<ShipInConstruction> findShipsInConstructionOnPlanet(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        return shipInConstructionDAO.findWithPlanetId(planet.getId());
     }
 
     @Override
