@@ -1,4 +1,4 @@
-package restwars.service;
+package restwars.service.di;
 
 import dagger.Module;
 import dagger.Provides;
