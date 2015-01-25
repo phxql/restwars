@@ -152,7 +152,7 @@ public class FlightServiceImpl implements FlightService {
         for (Ship ship : ships) {
             double shipModifier = shipMechanics.getFlightCostModifier(ship.getType());
             // TODO: Gameplay - This reaches eventually zero, fix this.
-            double technologyModifier = (1 - technologyMechanics.calculateCombustionFlightCostReduction(technologies.getLevel(TechnologyType.COMBUSTION_ENGINE)));
+            double technologyModifier = 1 - technologyMechanics.calculateCombustionFlightCostReduction(technologies.getLevel(TechnologyType.COMBUSTION_ENGINE));
 
             // This also contains the energy needed for the return flight
             energyNeeded += Math.max(1, shipModifier * distance * ship.getAmount() * technologyModifier * 2);
