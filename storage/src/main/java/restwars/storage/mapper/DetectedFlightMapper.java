@@ -1,7 +1,7 @@
 package restwars.storage.mapper;
 
 import org.jooq.Record;
-import restwars.service.ship.DetectedFlight;
+import restwars.service.flight.DetectedFlight;
 
 import static restwars.storage.jooq.Tables.DETECTED_FLIGHT;
 

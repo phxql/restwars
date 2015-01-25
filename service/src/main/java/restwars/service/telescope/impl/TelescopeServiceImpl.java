@@ -15,7 +15,6 @@ import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.Player;
-import restwars.service.ship.DetectedFlight;
 import restwars.service.telescope.PlanetWithOwner;
 import restwars.service.telescope.ScanException;
 import restwars.service.telescope.TelescopeService;

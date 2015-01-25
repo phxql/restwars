@@ -1,7 +1,5 @@
 package restwars.service.flight;
 
-import restwars.service.ship.DetectedFlight;
-
 import java.util.List;
 import java.util.UUID;
 

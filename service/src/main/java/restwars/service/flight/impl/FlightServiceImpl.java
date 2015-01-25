@@ -9,6 +9,7 @@ import restwars.mechanics.TechnologyMechanics;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingDAO;
 import restwars.service.event.EventService;
+import restwars.service.fight.FightDAO;
 import restwars.service.flight.*;
 import restwars.service.flight.impl.flighthandler.AttackFlightHandler;
 import restwars.service.flight.impl.flighthandler.ColonizeFlightHandler;

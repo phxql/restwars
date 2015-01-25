@@ -24,7 +24,6 @@ import restwars.util.MathExt;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ShipServiceImpl implements ShipService {
@@ -36,7 +35,6 @@ public class ShipServiceImpl implements ShipService {
     private final PlanetDAO planetDAO;
     private final RoundService roundService;
     private final BuildingDAO buildingDAO;
-    private final FightDAO fightDAO;
     private final EventService eventService;
     private final TechnologyDAO technologyDAO;
     private final BuildingMechanics buildingMechanics;
@@ -52,8 +50,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Inject
-    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, BuildingDAO buildingDAO, EventService eventService, FightDAO fightDAO, TechnologyDAO technologyDAO, BuildingMechanics buildingMechanics, ShipMechanics shipMechanics) {
-        this.fightDAO = Preconditions.checkNotNull(fightDAO, "fightDAO");
+    public ShipServiceImpl(HangarDAO hangarDAO, ShipInConstructionDAO shipInConstructionDAO, PlanetDAO planetDAO, UUIDFactory uuidFactory, RoundService roundService, BuildingDAO buildingDAO, EventService eventService, TechnologyDAO technologyDAO, BuildingMechanics buildingMechanics, ShipMechanics shipMechanics) {
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.uuidFactory = Preconditions.checkNotNull(uuidFactory, "uuidFactory");
         this.planetDAO = Preconditions.checkNotNull(planetDAO, "planetDAO");
@@ -136,18 +133,6 @@ public class ShipServiceImpl implements ShipService {
 
         Hangar updatedHangar = hangar.withShips(hangar.getShips().plus(ships));
         hangarDAO.update(updatedHangar);
-    }
-
-    @Override
-    public Optional<FightWithPlanetAndPlayer> findFight(UUID id) {
-        return fightDAO.findWithId(id);
-    }
-
-    @Override
-    public List<FightWithPlanetAndPlayer> findFightsWithPlayerSinceRound(Player player, long round) {
-        Preconditions.checkNotNull(player, "player");
-
-        return fightDAO.findFightsWithPlayerSinceRound(player.getId(), round);
     }
 
     @Override

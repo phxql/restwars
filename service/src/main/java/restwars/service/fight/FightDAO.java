@@ -1,4 +1,4 @@
-package restwars.service.ship;
+package restwars.service.fight;
 
 import java.util.List;
 import java.util.Optional;
