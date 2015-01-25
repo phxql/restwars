@@ -8,7 +8,6 @@ import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.FlightMapper;
 import restwars.rest.mapper.ShipMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.ship.CreateFlightRequest;
 import restwars.restapi.dto.ship.FlightResponse;
 import restwars.service.flight.Flight;
@@ -19,6 +18,7 @@ import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -59,10 +59,10 @@ public class FlightSubResource {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Flight> flights = flightService.findFlightsStartedFromPlanet(planet);
 
-        return Helper.mapToList(flights, FlightMapper::fromFlight);
+        return Functional.mapToList(flights, FlightMapper::fromFlight);
     }
 
     /**
@@ -88,7 +88,7 @@ public class FlightSubResource {
         Preconditions.checkNotNull(destination, "destination");
         Preconditions.checkNotNull(data, "data");
 
-        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, start.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, start.getValue(), player);
         try {
             Flight flight = flightService.sendShipsToPlanet(
                     player, planet, destination.getValue(), ShipMapper.fromShips(data.getShips()), FlightType.valueOf(data.getType()),

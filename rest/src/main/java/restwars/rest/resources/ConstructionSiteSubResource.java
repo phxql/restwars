@@ -7,7 +7,6 @@ import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.ConstructionSiteMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.building.ConstructionSiteResponse;
 import restwars.restapi.dto.building.CreateBuildingRequest;
 import restwars.service.building.BuildingException;
@@ -17,6 +16,7 @@ import restwars.service.building.ConstructionSite;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -55,10 +55,10 @@ public class ConstructionSiteSubResource {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<ConstructionSite> constructionSites = buildingService.findConstructionSitesOnPlanet(planet);
 
-        return Helper.mapToList(constructionSites, ConstructionSiteMapper::fromConstructionSite);
+        return Functional.mapToList(constructionSites, ConstructionSiteMapper::fromConstructionSite);
     }
 
     /**
@@ -80,8 +80,8 @@ public class ConstructionSiteSubResource {
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(data, "data");
 
-        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
-        BuildingType type = Helper.parseBuildingType(data.getType());
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        BuildingType type = ResourceHelper.parseBuildingType(data.getType());
 
         try {
             ConstructionSite constructionSite = buildingService.constructOrUpgradeBuilding(planet, type);

@@ -7,13 +7,13 @@ import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.ShipMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.ship.ShipResponse;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.ship.Ship;
 import restwars.service.ship.ShipService;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -45,9 +45,9 @@ public class ShipSubResource {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Ship> ships = shipService.findShipsOnPlanet(planet).asList();
 
-        return Helper.mapToList(ships, ShipMapper::fromShip);
+        return Functional.mapToList(ships, ShipMapper::fromShip);
     }
 }

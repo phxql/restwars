@@ -7,7 +7,6 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.FlightMapper;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.ship.DetectedFlightResponse;
 import restwars.restapi.dto.ship.FlightResponse;
 import restwars.service.flight.DetectedFlightWithSender;
@@ -15,6 +14,7 @@ import restwars.service.flight.Flight;
 import restwars.service.flight.FlightService;
 import restwars.service.player.Player;
 import restwars.service.telescope.TelescopeService;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -57,7 +57,7 @@ public class FlightResource {
 
         List<Flight> flights = flightService.findFlightsForPlayer(player);
 
-        return Helper.mapToList(flights, FlightMapper::fromFlight);
+        return Functional.mapToList(flights, FlightMapper::fromFlight);
     }
 
     /**
@@ -74,6 +74,6 @@ public class FlightResource {
 
         List<DetectedFlightWithSender> incomingFlights = telescopeService.findDetectedFlights(player);
 
-        return Helper.mapToList(incomingFlights, FlightMapper::fromDetectedFlight);
+        return Functional.mapToList(incomingFlights, FlightMapper::fromDetectedFlight);
     }
 }

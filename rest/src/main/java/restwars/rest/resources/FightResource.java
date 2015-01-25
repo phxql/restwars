@@ -7,11 +7,11 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.FightMapper;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.ship.FightResponse;
 import restwars.service.fight.FightService;
 import restwars.service.fight.FightWithPlanetAndPlayer;
 import restwars.service.player.Player;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -85,6 +85,6 @@ public class FightResource {
         round = Math.max(1, round);
 
         List<FightWithPlanetAndPlayer> fights = fightService.findFightsWithPlayerSinceRound(player, round);
-        return Helper.mapToList(fights, FightMapper::fromFight);
+        return Functional.mapToList(fights, FightMapper::fromFight);
     }
 }

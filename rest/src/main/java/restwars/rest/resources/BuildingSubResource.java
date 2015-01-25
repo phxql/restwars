@@ -7,13 +7,13 @@ import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.BuildingMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.building.BuildingResponse;
 import restwars.service.building.BuildingService;
 import restwars.service.building.Buildings;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -55,9 +55,9 @@ public class BuildingSubResource {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         Buildings buildings = buildingService.findBuildingsOnPlanet(planet);
 
-        return Helper.mapToList(buildings, BuildingMapper::fromBuilding);
+        return Functional.mapToList(buildings, BuildingMapper::fromBuilding);
     }
 }

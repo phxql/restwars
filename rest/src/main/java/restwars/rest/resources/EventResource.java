@@ -7,11 +7,11 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.EventMapper;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.event.EventResponse;
 import restwars.service.event.EventService;
 import restwars.service.event.EventWithPlanet;
 import restwars.service.player.Player;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -52,7 +52,7 @@ public class EventResource {
         round = Math.max(1, round);
 
         List<EventWithPlanet> events = eventService.findSince(player.getId(), round);
-        return Helper.mapToList(events, EventMapper::fromEvent);
+        return Functional.mapToList(events, EventMapper::fromEvent);
     }
 
 }

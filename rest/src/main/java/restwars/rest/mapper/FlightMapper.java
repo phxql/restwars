@@ -1,13 +1,13 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.metadata.FlightTypeMetadataResponse;
 import restwars.restapi.dto.ship.DetectedFlightResponse;
 import restwars.restapi.dto.ship.FlightResponse;
 import restwars.service.flight.DetectedFlightWithSender;
 import restwars.service.flight.Flight;
 import restwars.service.flight.FlightType;
+import restwars.util.Functional;
 
 /**
  * Maps flight entities to DTOs and vice versa.
@@ -22,7 +22,7 @@ public final class FlightMapper {
         return new FlightResponse(
                 flight.getStart().toString(),
                 flight.getDestination().toString(), flight.getStartedInRound(), flight.getArrivalInRound(),
-                Helper.mapToList(flight.getShips().asList(), ShipMapper::fromShip), flight.getType().toString(),
+                Functional.mapToList(flight.getShips().asList(), ShipMapper::fromShip), flight.getType().toString(),
                 flight.getDirection().toString(), ResourcesMapper.fromResources(flight.getCargo())
         );
     }

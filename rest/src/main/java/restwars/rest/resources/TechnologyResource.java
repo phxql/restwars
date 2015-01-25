@@ -7,11 +7,11 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.TechnologyMapper;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.technology.TechnologyResponse;
 import restwars.service.player.Player;
 import restwars.service.technology.Technologies;
 import restwars.service.technology.TechnologyService;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -43,6 +43,6 @@ public class TechnologyResource {
         Preconditions.checkNotNull(player, "player");
 
         Technologies technologies = technologyService.findAllForPlayer(player);
-        return Helper.mapToList(technologies, TechnologyMapper::fromTechnology);
+        return Functional.mapToList(technologies, TechnologyMapper::fromTechnology);
     }
 }

@@ -7,7 +7,6 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.PlanetMapper;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.player.PlayerResponse;
 import restwars.restapi.dto.player.RegisterPlayerRequest;
 import restwars.service.planet.Planet;
@@ -15,6 +14,7 @@ import restwars.service.planet.PlanetService;
 import restwars.service.player.CreatePlayerException;
 import restwars.service.player.Player;
 import restwars.service.player.PlayerService;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -49,7 +49,7 @@ public class PlayerResource {
     public PlayerResponse me(@Auth @ApiParam(access = "internal") Player player) {
         List<Planet> planets = planetService.findWithOwner(player);
 
-        return new PlayerResponse(player.getUsername(), Helper.mapToList(planets, PlanetMapper::fromPlanet));
+        return new PlayerResponse(player.getUsername(), Functional.mapToList(planets, PlanetMapper::fromPlanet));
     }
 
     @POST

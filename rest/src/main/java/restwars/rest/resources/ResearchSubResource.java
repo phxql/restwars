@@ -7,7 +7,6 @@ import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.ResearchMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.technology.ResearchRequest;
 import restwars.restapi.dto.technology.ResearchResponse;
 import restwars.service.planet.Planet;
@@ -17,6 +16,7 @@ import restwars.service.technology.Research;
 import restwars.service.technology.ResearchException;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.TechnologyType;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -46,10 +46,10 @@ public class ResearchSubResource {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Research> researches = technologyService.findResearchesOnPlanet(planet);
 
-        return Helper.mapToList(researches, ResearchMapper::fromResearch);
+        return Functional.mapToList(researches, ResearchMapper::fromResearch);
     }
 
     @POST
@@ -63,9 +63,9 @@ public class ResearchSubResource {
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(data, "data");
 
-        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
 
-        TechnologyType type = Helper.parseTechnologyType(data.getType());
+        TechnologyType type = ResourceHelper.parseTechnologyType(data.getType());
         try {
             Research research = technologyService.researchTechnology(player, planet, type);
             return ResearchMapper.fromResearch(research);

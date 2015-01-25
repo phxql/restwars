@@ -7,13 +7,13 @@ import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.rest.mapper.PlanetMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.rest.util.Helper;
 import restwars.restapi.dto.planet.PlanetScanResponse;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.telescope.ScanException;
 import restwars.service.telescope.TelescopeService;
+import restwars.util.Functional;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -43,9 +43,9 @@ public class TelescopeSubResource {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         try {
-            return Helper.mapToList(telescopeService.scan(planet), PlanetMapper::fromPlanetWithOwner);
+            return Functional.mapToList(telescopeService.scan(planet), PlanetMapper::fromPlanetWithOwner);
         } catch (ScanException e) {
             throw new ScanWebException(e.getReason());
         }
