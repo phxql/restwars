@@ -94,7 +94,7 @@ public class FlightServiceImpl implements FlightService {
                     finishOutwardFlight(flight, round);
                     break;
                 case RETURN:
-                    finishReturnFlight(flight, round);
+                    finishReturnFlight(flight);
                     break;
                 default:
                     throw new AssertionError("Unknown flight direction value: " + flight.getDirection());
@@ -203,7 +203,7 @@ public class FlightServiceImpl implements FlightService {
         return flight;
     }
 
-    private void finishReturnFlight(Flight flight, long round) {
+    private void finishReturnFlight(Flight flight) {
         assert flight != null;
         LOGGER.debug("Finishing return flight {}", flight);
 
