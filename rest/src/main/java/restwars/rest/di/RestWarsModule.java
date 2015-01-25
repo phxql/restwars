@@ -8,7 +8,7 @@ import restwars.mechanics.MechanicsModule;
 import restwars.service.UniverseConfiguration;
 import restwars.service.di.ServiceModule;
 import restwars.service.unitofwork.UnitOfWorkService;
-import restwars.storage.JooqDAOModule;
+import restwars.storage.di.JooqDAOModule;
 import restwars.storage.jooq.JooqUnitOfWorkService;
 
 import javax.inject.Named;
