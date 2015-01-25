@@ -64,7 +64,7 @@ public class PlayerServiceImpl implements PlayerService {
         } catch (CreateStartPlanetException e) {
             switch (e.getReason()) {
                 case UNIVERSE_FULL:
-                    throw new CreatePlayerException(CreatePlayerException.Reason.UNIVERSE_FULL);
+                    throw new CreatePlayerException(CreatePlayerException.Reason.UNIVERSE_FULL, e);
                 default:
                     throw new AssertionError("Unknown reason: " + e.getReason());
             }

@@ -15,6 +15,11 @@ public class CreatePlayerException extends ServiceException {
         this.reason = reason;
     }
 
+    public CreatePlayerException(Reason reason, Throwable cause) {
+        super(cause);
+        this.reason = reason;
+    }
+
     public Reason getReason() {
         return reason;
     }
