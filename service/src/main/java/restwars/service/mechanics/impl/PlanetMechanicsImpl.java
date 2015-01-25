@@ -1,8 +1,8 @@
-package restwars.mechanics.impl;
+package restwars.service.mechanics.impl;
 
 import com.google.common.collect.Maps;
-import restwars.mechanics.PlanetMechanics;
 import restwars.service.building.BuildingType;
+import restwars.service.mechanics.PlanetMechanics;
 import restwars.service.resource.Resources;
 
 import java.util.Map;

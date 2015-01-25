@@ -4,10 +4,10 @@ import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import restwars.mechanics.TechnologyMechanics;
 import restwars.rest.mapper.PrerequisitesMapper;
 import restwars.rest.mapper.ResourcesMapper;
 import restwars.restapi.dto.metadata.TechnologyMetadataResponse;
+import restwars.service.mechanics.TechnologyMechanics;
 import restwars.service.technology.TechnologyService;
 import restwars.service.technology.TechnologyType;
 

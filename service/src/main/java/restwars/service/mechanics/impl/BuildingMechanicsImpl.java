@@ -1,8 +1,8 @@
-package restwars.mechanics.impl;
+package restwars.service.mechanics.impl;
 
 import com.google.common.base.Preconditions;
-import restwars.mechanics.BuildingMechanics;
 import restwars.service.building.BuildingType;
+import restwars.service.mechanics.BuildingMechanics;
 import restwars.service.resource.Resources;
 import restwars.service.techtree.Prerequisites;
 import restwars.util.MathExt;

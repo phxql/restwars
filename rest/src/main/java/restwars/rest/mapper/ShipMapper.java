@@ -1,10 +1,10 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
-import restwars.mechanics.ShipMechanics;
 import restwars.restapi.dto.metadata.ShipMetadataResponse;
 import restwars.restapi.dto.ship.ShipRequest;
 import restwars.restapi.dto.ship.ShipResponse;
+import restwars.service.mechanics.ShipMechanics;
 import restwars.service.ship.Ship;
 import restwars.service.ship.ShipType;
 import restwars.service.ship.Ships;

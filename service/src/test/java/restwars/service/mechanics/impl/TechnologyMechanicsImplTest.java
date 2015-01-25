@@ -1,4 +1,4 @@
-package restwars.mechanics.impl;
+package restwars.service.mechanics.impl;
 
 import org.testng.annotations.Test;
 import restwars.service.resource.Resources;

@@ -1,4 +1,4 @@
-package restwars.mechanics;
+package restwars.service.mechanics;
 
 import restwars.service.building.BuildingType;
 import restwars.service.resource.Resources;

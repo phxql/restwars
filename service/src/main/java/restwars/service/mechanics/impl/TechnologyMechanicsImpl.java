@@ -1,7 +1,7 @@
-package restwars.mechanics.impl;
+package restwars.service.mechanics.impl;
 
 import com.google.common.base.Preconditions;
-import restwars.mechanics.TechnologyMechanics;
+import restwars.service.mechanics.TechnologyMechanics;
 import restwars.service.resource.Resources;
 import restwars.service.technology.TechnologyType;
 import restwars.service.techtree.Prerequisites;

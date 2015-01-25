@@ -3,12 +3,12 @@ package restwars.service.planet.impl;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.mechanics.PlanetMechanics;
 import restwars.service.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.building.BuildingType;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.location.LocationFactory;
+import restwars.service.mechanics.PlanetMechanics;
 import restwars.service.planet.*;
 import restwars.service.player.Player;
 

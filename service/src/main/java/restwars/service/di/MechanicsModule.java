@@ -1,11 +1,15 @@
-package restwars.mechanics;
+package restwars.service.di;
 
 import dagger.Module;
 import dagger.Provides;
-import restwars.mechanics.impl.BuildingMechanicsImpl;
-import restwars.mechanics.impl.PlanetMechanicsImpl;
-import restwars.mechanics.impl.ShipMechanicsImpl;
-import restwars.mechanics.impl.TechnologyMechanicsImpl;
+import restwars.service.mechanics.BuildingMechanics;
+import restwars.service.mechanics.PlanetMechanics;
+import restwars.service.mechanics.ShipMechanics;
+import restwars.service.mechanics.TechnologyMechanics;
+import restwars.service.mechanics.impl.BuildingMechanicsImpl;
+import restwars.service.mechanics.impl.PlanetMechanicsImpl;
+import restwars.service.mechanics.impl.ShipMechanicsImpl;
+import restwars.service.mechanics.impl.TechnologyMechanicsImpl;
 
 /**
  * Dagger module which provides the mechanics.

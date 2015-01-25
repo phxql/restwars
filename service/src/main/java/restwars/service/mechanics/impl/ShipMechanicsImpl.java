@@ -1,8 +1,8 @@
-package restwars.mechanics.impl;
+package restwars.service.mechanics.impl;
 
 import com.google.common.base.Preconditions;
-import restwars.mechanics.ShipMechanics;
 import restwars.service.building.BuildingType;
+import restwars.service.mechanics.ShipMechanics;
 import restwars.service.resource.Resources;
 import restwars.service.ship.ShipType;
 import restwars.service.technology.TechnologyType;
