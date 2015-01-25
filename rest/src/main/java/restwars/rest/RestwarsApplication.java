@@ -94,15 +94,15 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
     }
 
     private void registerSwagger(Environment environment, RestwarsConfiguration configuration) {
+        SwaggerConfig swagger = ConfigFactory.config();
+        swagger.setApiVersion("1.0.0");
+        swagger.setBasePath(configuration.getPublicUrl());
+
         environment.jersey().register(new ApiListingResourceJSON());
         environment.jersey().register(new ResourceListingProvider());
         environment.jersey().register(new ApiDeclarationProvider());
         ScannerFactory.setScanner(new DefaultJaxrsScanner());
         ClassReaders.setReader(new DefaultJaxrsApiReader());
-
-        SwaggerConfig config = ConfigFactory.config();
-        config.setApiVersion("1.0.0");
-        config.setBasePath(configuration.getPublicUrl());
 
         FilterFactory.setFilter(new SwaggerFilter());
         ModelConverter.register();
