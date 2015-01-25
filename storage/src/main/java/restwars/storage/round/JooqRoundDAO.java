@@ -14,6 +14,11 @@ import static restwars.storage.jooq.Tables.ROUND;
 public class JooqRoundDAO extends AbstractJooqDAO implements RoundDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JooqRoundDAO.class);
 
+    /**
+     * Initial round.
+     */
+    private static final long INITIAL_ROUND = 1L;
+
     @Inject
     public JooqRoundDAO(UnitOfWorkService unitOfWorkService) {
         super(unitOfWorkService);
