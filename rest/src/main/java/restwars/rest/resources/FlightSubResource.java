@@ -11,14 +11,14 @@ import restwars.rest.resources.param.LocationParam;
 import restwars.rest.util.Helper;
 import restwars.restapi.dto.ship.CreateFlightRequest;
 import restwars.restapi.dto.ship.FlightResponse;
+import restwars.service.flight.Flight;
+import restwars.service.flight.FlightException;
+import restwars.service.flight.FlightService;
+import restwars.service.flight.FlightType;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.Player;
 import restwars.service.resource.Resources;
-import restwars.service.ship.Flight;
-import restwars.service.ship.FlightException;
-import restwars.service.ship.FlightType;
-import restwars.service.ship.ShipService;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -33,13 +33,13 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class FlightSubResource {
-    private final ShipService shipService;
+    private final FlightService flightService;
     private final PlanetService planetService;
 
     @Inject
-    public FlightSubResource(ShipService shipService, PlanetService planetService) {
+    public FlightSubResource(PlanetService planetService, FlightService flightService) {
+        this.flightService = Preconditions.checkNotNull(flightService, "flightService");
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
-        this.shipService = Preconditions.checkNotNull(shipService, "shipService");
     }
 
     /**
@@ -60,7 +60,7 @@ public class FlightSubResource {
         Preconditions.checkNotNull(location, "location");
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
-        List<Flight> flights = shipService.findFlightsStartedFromPlanet(planet);
+        List<Flight> flights = flightService.findFlightsStartedFromPlanet(planet);
 
         return Helper.mapToList(flights, FlightMapper::fromFlight);
     }
@@ -90,7 +90,7 @@ public class FlightSubResource {
 
         Planet planet = Helper.findPlanetWithLocationAndOwner(planetService, start.getValue(), player);
         try {
-            Flight flight = shipService.sendShipsToPlanet(
+            Flight flight = flightService.sendShipsToPlanet(
                     player, planet, destination.getValue(), ShipMapper.fromShips(data.getShips()), FlightType.valueOf(data.getType()),
                     new Resources(data.getCargoCrystals(), data.getCargoGas(), 0)
             );

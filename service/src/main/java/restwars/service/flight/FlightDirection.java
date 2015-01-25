@@ -1,4 +1,4 @@
-package restwars.service.ship;
+package restwars.service.flight;
 
 public enum FlightDirection {
     OUTWARD(0),

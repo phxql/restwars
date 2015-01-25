@@ -1,4 +1,4 @@
-package restwars.service.ship.impl.flighthandler;
+package restwars.service.flight.impl.flighthandler;
 
 import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;

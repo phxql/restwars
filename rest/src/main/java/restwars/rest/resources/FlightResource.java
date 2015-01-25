@@ -10,10 +10,10 @@ import restwars.rest.mapper.FlightMapper;
 import restwars.rest.util.Helper;
 import restwars.restapi.dto.ship.DetectedFlightResponse;
 import restwars.restapi.dto.ship.FlightResponse;
+import restwars.service.flight.DetectedFlightWithSender;
+import restwars.service.flight.Flight;
+import restwars.service.flight.FlightService;
 import restwars.service.player.Player;
-import restwars.service.ship.DetectedFlightWithSender;
-import restwars.service.ship.Flight;
-import restwars.service.ship.ShipService;
 import restwars.service.telescope.TelescopeService;
 
 import javax.inject.Inject;
@@ -34,13 +34,13 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class FlightResource {
-    private final ShipService shipService;
+    private final FlightService flightService;
     private final TelescopeService telescopeService;
 
     @Inject
-    public FlightResource(ShipService shipService, TelescopeService telescopeService) {
+    public FlightResource(TelescopeService telescopeService, FlightService flightService) {
+        this.flightService = Preconditions.checkNotNull(flightService, "flightService");
         this.telescopeService = Preconditions.checkNotNull(telescopeService, "telescopeService");
-        this.shipService = Preconditions.checkNotNull(shipService, "shipService");
     }
 
     /**
@@ -55,7 +55,7 @@ public class FlightResource {
     public List<FlightResponse> ownFlights(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
 
-        List<Flight> flights = shipService.findFlightsForPlayer(player);
+        List<Flight> flights = flightService.findFlightsForPlayer(player);
 
         return Helper.mapToList(flights, FlightMapper::fromFlight);
     }

@@ -1,4 +1,4 @@
-package restwars.service.ship.impl.flighthandler;
+package restwars.service.flight.impl.flighthandler;
 
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;

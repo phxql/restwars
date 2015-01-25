@@ -1,9 +1,7 @@
 package restwars.service.ship;
 
-import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.player.Player;
-import restwars.service.resource.Resources;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,27 +40,6 @@ public interface ShipService {
     Ships findShipsOnPlanet(Planet planet);
 
     /**
-     * Sends the given ships from the given start planet to the given destination planet.
-     *
-     * @param player      Player.
-     * @param start       Start planet.
-     * @param destination Destination planet.
-     * @param ships       Ships.
-     * @param flightType  Flight type.
-     * @param cargo       Cargo. Only available for transport and colonize flights.
-     * @return Flight.
-     */
-    Flight sendShipsToPlanet(Player player, Planet start, Location destination, Ships ships, FlightType flightType, Resources cargo) throws FlightException;
-
-    /**
-     * Finds all flights for a given player.
-     *
-     * @param player Player.
-     * @return Player.
-     */
-    List<Flight> findFlightsForPlayer(Player player);
-
-    /**
      * Finds all fights where the given player is either the attacker or the defender which happend since the given round.
      *
      * @param player Player.
@@ -70,19 +47,6 @@ public interface ShipService {
      * @return Fights.
      */
     List<FightWithPlanetAndPlayer> findFightsWithPlayerSinceRound(Player player, long round);
-
-    /**
-     * Find all flights which were started from a given planet.
-     *
-     * @param planet Planet.
-     * @return Flights.
-     */
-    List<Flight> findFlightsStartedFromPlanet(Planet planet);
-
-    /**
-     * Finishes all flights which are done in the current round.
-     */
-    void finishFlights();
 
     /**
      * Manifests the given ships on the given planet.

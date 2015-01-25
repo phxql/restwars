@@ -6,6 +6,8 @@ import restwars.service.building.BuildingService;
 import restwars.service.building.impl.BuildingServiceImpl;
 import restwars.service.event.EventService;
 import restwars.service.event.impl.EventServiceImpl;
+import restwars.service.flight.FlightService;
+import restwars.service.flight.impl.FlightServiceImpl;
 import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
@@ -86,6 +88,11 @@ public class ServiceModule {
     @Provides
     EventService providesEventService(EventServiceImpl eventService) {
         return eventService;
+    }
+
+    @Provides
+    FlightService providesFlightService(FlightServiceImpl flightService) {
+        return flightService;
     }
 
     @Provides

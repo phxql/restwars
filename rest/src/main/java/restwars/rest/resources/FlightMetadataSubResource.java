@@ -4,7 +4,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import restwars.rest.mapper.FlightMapper;
 import restwars.restapi.dto.metadata.FlightTypeMetadataResponse;
-import restwars.service.ship.FlightType;
+import restwars.service.flight.FlightType;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
