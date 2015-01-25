@@ -1,6 +1,6 @@
 package restwars.service.resource;
 
-import restwars.service.building.BuildingType;
+import restwars.model.building.BuildingType;
 import restwars.service.planet.Planet;
 import restwars.service.technology.Technologies;
 

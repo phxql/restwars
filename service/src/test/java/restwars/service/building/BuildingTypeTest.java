@@ -1,6 +1,7 @@
 package restwars.service.building;
 
 import org.testng.annotations.Test;
+import restwars.model.building.BuildingType;
 
 import java.util.stream.Stream;
 

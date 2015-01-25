@@ -1,6 +1,8 @@
 package restwars.service.building;
 
-import restwars.service.Buildings;
+import restwars.model.building.Building;
+import restwars.model.building.BuildingType;
+import restwars.model.building.Buildings;
 import restwars.service.planet.Location;
 
 import java.util.Optional;

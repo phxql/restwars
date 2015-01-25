@@ -1,7 +1,7 @@
 package restwars.service.techtree;
 
 import org.testng.annotations.Test;
-import restwars.service.building.BuildingType;
+import restwars.model.building.BuildingType;
 import restwars.service.technology.TechnologyType;
 
 import java.util.Arrays;

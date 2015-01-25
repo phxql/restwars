@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restwars.service.building.BuildingType;
+import restwars.model.building.BuildingType;
 import restwars.service.building.ConstructionSite;
 import restwars.service.building.ConstructionSiteDAO;
 import restwars.service.unitofwork.UnitOfWorkService;

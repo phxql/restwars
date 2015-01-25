@@ -1,8 +1,8 @@
 package restwars.storage.mapper;
 
 import org.jooq.Record;
-import restwars.service.building.Building;
-import restwars.service.building.BuildingType;
+import restwars.model.building.Building;
+import restwars.model.building.BuildingType;
 
 import static restwars.storage.jooq.Tables.BUILDING;
 

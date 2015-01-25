@@ -1,7 +1,7 @@
 package restwars.rest.resources;
 
 import com.google.common.base.Preconditions;
-import restwars.service.building.BuildingType;
+import restwars.model.building.BuildingType;
 import restwars.service.planet.Location;
 import restwars.service.planet.Planet;
 import restwars.service.planet.PlanetService;

@@ -1,4 +1,4 @@
-package restwars.service.building;
+package restwars.model.building;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;

@@ -4,11 +4,11 @@ import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import restwars.model.building.BuildingType;
 import restwars.rest.mapper.PrerequisitesMapper;
 import restwars.rest.mapper.ResourcesMapper;
 import restwars.restapi.dto.metadata.BuildingMetadataResponse;
 import restwars.service.building.BuildingService;
-import restwars.service.building.BuildingType;
 import restwars.service.mechanics.BuildingMechanics;
 
 import javax.inject.Inject;

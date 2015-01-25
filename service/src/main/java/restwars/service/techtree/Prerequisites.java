@@ -3,7 +3,7 @@ package restwars.service.techtree;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import restwars.service.building.BuildingType;
+import restwars.model.building.BuildingType;
 import restwars.service.technology.TechnologyType;
 
 import java.util.Collection;
