@@ -59,10 +59,6 @@ public class Resources implements Serializable {
         return crystals + gas + energy;
     }
 
-    public static Resources energy(long energy) {
-        return new Resources(0, 0, energy);
-    }
-
     @Override
     public String toString() {
         return Objects.toStringHelper(this)

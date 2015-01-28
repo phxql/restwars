@@ -187,7 +187,7 @@ public class FlightServiceImpl implements FlightService {
         long arrives = started + MathExt.ceilLong(distance / speed);
 
         // Decrease energy on start planet
-        start = start.withResources(start.getResources().minus(Resources.energy(totalEnergyNeeded)));
+        start = start.withResources(start.getResources().minus(new Resources(0, 0, totalEnergyNeeded)));
 
         if (!cargo.isEmpty()) {
             // Check cargo space and resource availability
