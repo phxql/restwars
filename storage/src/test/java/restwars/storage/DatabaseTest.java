@@ -13,15 +13,30 @@ import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.JooqUnitOfWork;
 import restwars.storage.scenario.Scenario;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Base class for every database test.
+ */
 public abstract class DatabaseTest {
+    /**
+     * JDBC URL to the test database.
+     */
     private static final String JDBC_URL = "jdbc:h2:mem:test";
-    public static final String MIGRATION_FILE = "migrations.xml";
 
+    /**
+     * Migration file.
+     */
+    private static final String MIGRATION_FILE = "migrations.xml";
+
+    /**
+     * Handle to the database.
+     */
     private Handle handle;
+    /**
+     * Unit of work service.
+     */
     private UnitOfWorkService unitOfWorkService;
 
     @BeforeMethod
@@ -53,6 +68,11 @@ public abstract class DatabaseTest {
         };
     }
 
+    /**
+     * Returns the scenario used for the test.
+     *
+     * @return Scenario used for the test.
+     */
     protected abstract Scenario getScenario();
 
     private void createSchema() throws LiquibaseException {
@@ -65,11 +85,23 @@ public abstract class DatabaseTest {
         handle.close();
     }
 
+    /**
+     * Returns the unit of work service.
+     *
+     * @return Unit of work service.
+     */
     protected UnitOfWorkService getUnitOfWorkService() {
         return unitOfWorkService;
     }
 
-    protected List<Map<String, Object>> select(String sql, Object... params) throws SQLException {
+    /**
+     * Executes an SQL and returns the result set.
+     *
+     * @param sql    SQL to execute.
+     * @param params Parameters to the SQL.
+     * @return Result set.
+     */
+    protected List<Map<String, Object>> select(String sql, Object... params) {
         return handle.select(sql, params);
     }
 }

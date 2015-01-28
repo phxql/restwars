@@ -12,6 +12,9 @@ import java.util.List;
  * Executes multiple scenarios.
  */
 public class MultipleScenarios implements Scenario {
+    /**
+     * Logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(MultipleScenarios.class);
     /**
      * Scenarios.
