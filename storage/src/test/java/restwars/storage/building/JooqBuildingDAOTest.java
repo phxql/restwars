@@ -86,31 +86,36 @@ public class JooqBuildingDAOTest extends DatabaseTest {
         assertThat(building.isPresent(), is(false));
     }
 
+    private void verifyRow(Map<String, Object> row, Building building) {
+        assertThat(row.get("id"), is(building.getId()));
+        assertThat(row.get("type"), is(building.getType().getId()));
+        assertThat(row.get("level"), is(building.getLevel()));
+        assertThat(row.get("planet_id"), is(building.getPlanetId()));
+    }
+
     @Test
     public void testUpdate() throws Exception {
         Building building = BasicScenario.Player1.Planet1.COMMAND_CENTER;
-        Building updatedBuilding = new Building(building.getId(), building.getType(), 2, BasicScenario.Player1.Planet1.COMMAND_CENTER.getPlanetId());
+        Building updatedBuilding = new Building(building.getId(), BuildingType.RESEARCH_CENTER, 2, BasicScenario.Player1.Planet1.COMMAND_CENTER.getPlanetId());
 
         sut.update(updatedBuilding);
 
         List<Map<String, Object>> resultSet = select("SELECT * FROM building WHERE id = ?", building.getId());
 
         assertThat(resultSet, hasSize(1));
-        assertThat(resultSet.get(0).get("level"), is(2));
+        verifyRow(resultSet.get(0), updatedBuilding);
     }
 
     @Test
     public void testInsert() throws Exception {
         UUID id = UUID.fromString("2e43f380-a6c9-11e4-bcd8-0800200c9a66");
 
-        sut.insert(new Building(id, BuildingType.GAS_REFINERY, 1, BasicScenario.Player1.Planet1.PLANET.getId()));
+        Building building = new Building(id, BuildingType.GAS_REFINERY, 1, BasicScenario.Player1.Planet1.PLANET.getId());
+        sut.insert(building);
 
         List<Map<String, Object>> resultSet = select("SELECT * FROM building WHERE id = ?", id);
 
         assertThat(resultSet, hasSize(1));
-        assertThat(resultSet.get(0).get("id"), is(id));
-        assertThat(resultSet.get(0).get("type"), is(BuildingType.GAS_REFINERY.getId()));
-        assertThat(resultSet.get(0).get("level"), is(1));
-        assertThat(resultSet.get(0).get("planet_id"), is(BasicScenario.Player1.Planet1.PLANET.getId()));
+        verifyRow(resultSet.get(0), building);
     }
 }
