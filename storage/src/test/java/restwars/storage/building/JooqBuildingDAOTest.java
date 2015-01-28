@@ -10,6 +10,7 @@ import restwars.storage.DatabaseTest;
 import restwars.storage.scenario.BasicScenario;
 import restwars.storage.scenario.Scenario;
 
+import java.sql.ResultSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -82,5 +83,33 @@ public class JooqBuildingDAOTest extends DatabaseTest {
         // Planet doesn't exist
         Optional<Building> building = sut.findWithPlanetIdAndType(UUID.fromString("a1a7c2d7-0fea-41a0-b521-6c1c42b7189e"), BuildingType.COMMAND_CENTER);
         assertThat(building.isPresent(), is(false));
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+        Building building = BasicScenario.Player1.Planet1.COMMAND_CENTER;
+        Building updatedBuilding = new Building(building.getId(), building.getType(), 2, BasicScenario.Player1.Planet1.COMMAND_CENTER.getPlanetId());
+
+        sut.update(updatedBuilding);
+
+        ResultSet resultSet = select("SELECT * FROM building WHERE id = '%s'", building.getId());
+
+        assertThat(resultSet.next(), is(true));
+        assertThat(resultSet.getInt("level"), is(2));
+    }
+
+    @Test
+    public void testInsert() throws Exception {
+        UUID id = UUID.fromString("2e43f380-a6c9-11e4-bcd8-0800200c9a66");
+
+        sut.insert(new Building(id, BuildingType.GAS_REFINERY, 1, BasicScenario.Player1.Planet1.PLANET.getId()));
+
+        ResultSet resultSet = select("SELECT * FROM building WHERE id = '%s'", id);
+
+        assertThat(resultSet.next(), is(true));
+        assertThat(resultSet.getObject("id"), is(id));
+        assertThat(resultSet.getInt("type"), is(BuildingType.GAS_REFINERY.getId()));
+        assertThat(resultSet.getInt("level"), is(1));
+        assertThat(resultSet.getObject("planet_id"), is(BasicScenario.Player1.Planet1.PLANET.getId()));
     }
 }

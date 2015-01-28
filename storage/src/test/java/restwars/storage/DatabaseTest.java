@@ -11,8 +11,7 @@ import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.JooqUnitOfWork;
 import restwars.storage.scenario.Scenario;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
 
 public abstract class DatabaseTest {
     private static final String JDBC_URL = "jdbc:h2:mem:test";
@@ -64,5 +63,10 @@ public abstract class DatabaseTest {
 
     protected UnitOfWorkService getUnitOfWorkService() {
         return unitOfWorkService;
+    }
+
+    protected ResultSet select(String sql, Object... params) throws SQLException {
+        Statement statement = connection.createStatement();
+        return statement.executeQuery(String.format(sql, params));
     }
 }
