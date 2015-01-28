@@ -67,4 +67,22 @@ public class Resources implements Serializable {
                 .add("energy", energy)
                 .toString();
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Resources that = (Resources) o;
+
+        return Objects.equal(this.crystals, that.crystals) &&
+                Objects.equal(this.gas, that.gas) &&
+                Objects.equal(this.energy, that.energy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(crystals, gas, energy);
+    }
 }
