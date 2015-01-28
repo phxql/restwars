@@ -30,7 +30,7 @@ public class JooqBuildingDAOTest extends DatabaseTest {
 
     @Override
     protected Scenario getScenario() {
-        return new BasicScenario();
+        return BasicScenario.getInstance();
     }
 
     @Test
