@@ -28,7 +28,7 @@ public abstract class DatabaseTest {
     public void setUp() throws Exception {
         handle = DBI.open(JDBC_URL);
         createSchema();
-        getScenario().create(handle.getConnection());
+        getScenario().create(handle);
 
         UnitOfWork unitOfWork = new JooqUnitOfWork(handle.getConnection());
 
