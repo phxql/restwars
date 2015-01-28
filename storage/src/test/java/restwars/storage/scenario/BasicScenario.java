@@ -72,7 +72,7 @@ public class BasicScenario implements Scenario {
         configuration.setDefaultEncoding("UTF-8");
     }
 
-    public static Scenario getInstance() {
+    public static BasicScenario create() {
         return INSTANCE;
     }
 
