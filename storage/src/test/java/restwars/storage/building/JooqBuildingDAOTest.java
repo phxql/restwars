@@ -10,7 +10,8 @@ import restwars.storage.DatabaseTest;
 import restwars.storage.scenario.BasicScenario;
 import restwars.storage.scenario.Scenario;
 
-import java.sql.ResultSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -92,10 +93,10 @@ public class JooqBuildingDAOTest extends DatabaseTest {
 
         sut.update(updatedBuilding);
 
-        ResultSet resultSet = select("SELECT * FROM building WHERE id = '%s'", building.getId());
+        List<Map<String, Object>> resultSet = select("SELECT * FROM building WHERE id = ?", building.getId());
 
-        assertThat(resultSet.next(), is(true));
-        assertThat(resultSet.getInt("level"), is(2));
+        assertThat(resultSet, hasSize(1));
+        assertThat(resultSet.get(0).get("level"), is(2));
     }
 
     @Test
@@ -104,12 +105,12 @@ public class JooqBuildingDAOTest extends DatabaseTest {
 
         sut.insert(new Building(id, BuildingType.GAS_REFINERY, 1, BasicScenario.Player1.Planet1.PLANET.getId()));
 
-        ResultSet resultSet = select("SELECT * FROM building WHERE id = '%s'", id);
+        List<Map<String, Object>> resultSet = select("SELECT * FROM building WHERE id = ?", id);
 
-        assertThat(resultSet.next(), is(true));
-        assertThat(resultSet.getObject("id"), is(id));
-        assertThat(resultSet.getInt("type"), is(BuildingType.GAS_REFINERY.getId()));
-        assertThat(resultSet.getInt("level"), is(1));
-        assertThat(resultSet.getObject("planet_id"), is(BasicScenario.Player1.Planet1.PLANET.getId()));
+        assertThat(resultSet, hasSize(1));
+        assertThat(resultSet.get(0).get("id"), is(id));
+        assertThat(resultSet.get(0).get("type"), is(BuildingType.GAS_REFINERY.getId()));
+        assertThat(resultSet.get(0).get("level"), is(1));
+        assertThat(resultSet.get(0).get("planet_id"), is(BasicScenario.Player1.Planet1.PLANET.getId()));
     }
 }

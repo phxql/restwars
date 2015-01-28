@@ -20,6 +20,7 @@
         <freemarker.version>2.3.21</freemarker.version>
 
         <database.url>jdbc:h2:${project.build.directory}/build</database.url>
+        <jdbi.version>2.58</jdbi.version>
     </properties>
 
     <dependencies>
@@ -65,6 +66,13 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>${freemarker.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi</artifactId>
+            <version>${jdbi.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
