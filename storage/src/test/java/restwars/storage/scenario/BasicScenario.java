@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Model> {
+    public static final long CURRENT_ROUND = 10;
+
     public static class Player1 {
 
         public static final Player PLAYER = new Player(UUID.fromString("60f19086-8daa-4c02-ac41-35f7e2727d99"), "player1", "player1");
@@ -30,10 +32,13 @@ public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Mode
     }
 
     public static class Model {
+        private final long currentRound;
         private final List<Planet> planets;
         private final List<Player> players;
         private final List<Building> buildings;
-        public Model(List<Planet> planets, List<Player> players, List<Building> buildings) {
+
+        public Model(long currentRound, List<Planet> planets, List<Player> players, List<Building> buildings) {
+            this.currentRound = currentRound;
             this.planets = planets;
             this.players = players;
             this.buildings = buildings;
@@ -51,6 +56,9 @@ public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Mode
             return buildings;
         }
 
+        public long getCurrentRound() {
+            return currentRound;
+        }
     }
 
     private static final BasicScenario INSTANCE = new BasicScenario();
@@ -68,7 +76,7 @@ public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Mode
                 Player1.Planet2.COMMAND_CENTER, Player1.Planet2.CRYSTAL_MINE
         );
 
-        return new Model(planets, players, buildings);
+        return new Model(CURRENT_ROUND, planets, players, buildings);
     }
 
     @Override

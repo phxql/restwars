@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="events" type="restwars.model.event.Event[]" -->
+<#-- @ftlvariable name="" type="restwars.storage.scenario.EventScenario.Model" -->
 
 <#list events as event>
 INSERT INTO event VALUES (

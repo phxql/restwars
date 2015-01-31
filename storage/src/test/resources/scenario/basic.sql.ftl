@@ -1,6 +1,4 @@
-<#-- @ftlvariable name="players" type="restwars.model.player.Player[]" -->
-<#-- @ftlvariable name="planets" type="restwars.model.planet.Planet[]" -->
-<#-- @ftlvariable name="buildings" type="restwars.model.building.Building[]" -->
+<#-- @ftlvariable name="" type="restwars.storage.scenario.BasicScenario.Model" -->
 
 <#list players as player>
 INSERT INTO player VALUES (
@@ -20,3 +18,4 @@ INSERT INTO building VALUES(
 );
 </#list>
 
+INSERT INTO round VALUES (${currentRound});
