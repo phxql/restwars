@@ -13,3 +13,9 @@ ${flight.type.id}, ${flight.direction.id}, ${flight.cargo.crystals}, ${flight.ca
     );
     </#list>
 </#list>
+
+<#list detectedFlights as detectedFlight>
+INSERT INTO detected_flight VALUES(
+'${detectedFlight.flightId}', '${detectedFlight.playerId}', ${detectedFlight.approximatedFleetSize}
+);
+</#list>

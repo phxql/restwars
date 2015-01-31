@@ -21,8 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class JooqFlightDAOTest extends DatabaseTest {
     private JooqFlightDAO sut;
@@ -49,22 +48,20 @@ public class JooqFlightDAOTest extends DatabaseTest {
 
         List<Map<String, Object>> flightShipsRows = select("SELECT * FROM flight_ships WHERE flight_id = ?", flight.getId());
         assertThat(flightShipsRows, hasSize(2));
-        verifyFlightShipsRow(flightShipsRows.get(0), flight.getShips().asList().get(0));
-        verifyFlightShipsRow(flightShipsRows.get(1), flight.getShips().asList().get(1));
+        verifyFlightShipsRows(flightShipsRows, flight.getShips());
     }
 
     @Test
     public void testFindWithPlayerId() throws Exception {
-        Flight expected = FlightScenario.Player1.FLIGHT;
-        List<Flight> flights = sut.findWithPlayerId(expected.getPlayerId());
+        List<Flight> flights = sut.findWithPlayerId(BasicScenario.Player1.PLAYER.getId());
 
-        assertThat(flights, hasSize(1));
-        assertThat(flights.get(0), is(expected));
+        assertThat(flights, hasSize(2));
+        assertThat(flights, containsInAnyOrder(FlightScenario.Player1.FLIGHT_1, FlightScenario.Player1.FLIGHT_2));
     }
 
     @Test
     public void testFindWithArrival() throws Exception {
-        Flight expected = FlightScenario.Player1.FLIGHT;
+        Flight expected = FlightScenario.Player1.FLIGHT_1;
         List<Flight> flights = sut.findWithArrival(expected.getArrivalInRound());
 
         assertThat(flights, hasSize(1));
@@ -80,7 +77,7 @@ public class JooqFlightDAOTest extends DatabaseTest {
 
     @Test
     public void testUpdate() throws Exception {
-        Flight flight = FlightScenario.Player1.FLIGHT;
+        Flight flight = FlightScenario.Player1.FLIGHT_1;
         Flight updatedFlight = new Flight(flight.getId(), new Location(4, 4, 4), new Location(5, 5, 5), 12, 15,
                 new Ships(new Ship(ShipType.DAEDALUS, 7), new Ship(ShipType.MULE, 2)), 12, FlightType.TRANSPORT,
                 BasicScenario.Player2.PLAYER.getId(), FlightDirection.RETURN, new Resources(12, 24, 0), 3.5, true);
@@ -93,13 +90,12 @@ public class JooqFlightDAOTest extends DatabaseTest {
 
         List<Map<String, Object>> flightShipsRows = select("SELECT * FROM flight_ships WHERE flight_id = ?", updatedFlight.getId());
         assertThat(flightShipsRows, hasSize(2));
-        verifyFlightShipsRow(flightShipsRows.get(0), updatedFlight.getShips().asList().get(0));
-        verifyFlightShipsRow(flightShipsRows.get(1), updatedFlight.getShips().asList().get(1));
+        verifyFlightShipsRows(flightShipsRows, updatedFlight.getShips());
     }
 
     @Test
     public void testDelete() throws Exception {
-        Flight flight = FlightScenario.Player1.FLIGHT;
+        Flight flight = FlightScenario.Player1.FLIGHT_2;
         sut.delete(flight);
 
         List<Map<String, Object>> flightRows = select("SELECT * FROM flight WHERE id = ?", flight.getId());
@@ -111,7 +107,7 @@ public class JooqFlightDAOTest extends DatabaseTest {
 
     @Test
     public void testFindWithTypeAndDetected() throws Exception {
-        Flight expected = FlightScenario.Player1.FLIGHT;
+        Flight expected = FlightScenario.Player1.FLIGHT_1;
         List<Flight> flights = sut.findWithTypeAndDetected(expected.getType(), expected.isDetected());
 
         assertThat(flights, hasSize(1));
@@ -127,11 +123,10 @@ public class JooqFlightDAOTest extends DatabaseTest {
 
     @Test
     public void testFindWithStart() throws Exception {
-        Flight expected = FlightScenario.Player1.FLIGHT;
-        List<Flight> flights = sut.findWithStart(expected.getStart());
+        List<Flight> flights = sut.findWithStart(BasicScenario.Player1.Planet1.PLANET.getLocation());
 
-        assertThat(flights, hasSize(1));
-        assertThat(flights.get(0), is(expected));
+        assertThat(flights, hasSize(2));
+        assertThat(flights, containsInAnyOrder(FlightScenario.Player1.FLIGHT_1, FlightScenario.Player1.FLIGHT_2));
     }
 
     @Test
@@ -149,9 +144,13 @@ public class JooqFlightDAOTest extends DatabaseTest {
         );
     }
 
-    private void verifyFlightShipsRow(Map<String, Object> row, Ship ship) {
-        assertThat(row.get("amount"), is(ship.getAmount()));
-        assertThat(row.get("type"), is(ship.getType().getId()));
+    private void verifyFlightShipsRows(List<Map<String, Object>> rows, Ships ships) {
+        for (Map<String, Object> row : rows) {
+            int type = (int) row.get("type");
+            int amount = (int) row.get("amount");
+
+            assertThat(ships.asList().stream().anyMatch(s -> s.getType().getId() == type && s.getAmount() == amount), is(true));
+        }
     }
 
     private void verifyFlightRow(Map<String, Object> row, Flight flight) {

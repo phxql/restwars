@@ -41,4 +41,21 @@ public class DetectedFlight {
                 .add("approximatedFleetSize", approximatedFleetSize)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DetectedFlight that = (DetectedFlight) o;
+
+        return Objects.equal(this.flightId, that.flightId) &&
+                Objects.equal(this.playerId, that.playerId) &&
+                Objects.equal(this.approximatedFleetSize, that.approximatedFleetSize);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(flightId, playerId, approximatedFleetSize);
+    }
 }
