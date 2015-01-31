@@ -1,5 +1,6 @@
 package restwars.model.ship;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -133,5 +134,21 @@ public class Ships implements Iterable<Ship> {
     @Override
     public String toString() {
         return ships.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ships that = (Ships) o;
+
+        return com.google.common.base.Objects.equal(this.EMPTY, that.EMPTY) &&
+                Objects.equal(this.ships, that.ships);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(EMPTY, ships);
     }
 }

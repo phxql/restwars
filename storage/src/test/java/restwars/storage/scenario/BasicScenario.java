@@ -6,6 +6,10 @@ import restwars.model.planet.Location;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.model.resource.Resources;
+import restwars.model.ship.Hangar;
+import restwars.model.ship.Ship;
+import restwars.model.ship.ShipType;
+import restwars.model.ship.Ships;
 import restwars.model.technology.Technology;
 import restwars.model.technology.TechnologyType;
 
@@ -22,6 +26,7 @@ public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Mode
             public static final Planet PLANET = new Planet(UUID.fromString("ab8657a1-f418-420a-a44a-ab5adeb7f4f1"), new Location(1, 2, 3), PLAYER.getId(), new Resources(100, 200, 300));
             public static final Building COMMAND_CENTER = new Building(UUID.fromString("701a4465-eefb-4db7-8054-5a54c6ee182e"), BuildingType.COMMAND_CENTER, 1, PLANET.getId());
             public static final Building SHIPYARD = new Building(UUID.fromString("f7a42fbe-0abc-43d3-b78e-96ca52960d54"), BuildingType.SHIPYARD, 2, PLANET.getId());
+            public static final Hangar HANGAR = new Hangar(UUID.fromString("f092a0c0-a995-11e4-bcd8-0800200c9a66"), PLANET.getId(), PLAYER.getId(), new Ships(new Ship(ShipType.MOSQUITO, 5), new Ship(ShipType.COLONY, 1)));
         }
 
         public static class Planet2 {
@@ -46,13 +51,15 @@ public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Mode
         private final List<Player> players;
         private final List<Building> buildings;
         private final List<Technology> technologies;
+        private final List<Hangar> hangars;
 
-        public Model(long currentRound, List<Planet> planets, List<Player> players, List<Building> buildings, List<Technology> technologies) {
+        public Model(long currentRound, List<Planet> planets, List<Player> players, List<Building> buildings, List<Technology> technologies, List<Hangar> hangars) {
             this.currentRound = currentRound;
             this.planets = planets;
             this.players = players;
             this.buildings = buildings;
             this.technologies = technologies;
+            this.hangars = hangars;
         }
 
         public List<Planet> getPlanets() {
@@ -69,6 +76,10 @@ public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Mode
 
         public List<Technology> getTechnologies() {
             return technologies;
+        }
+
+        public List<Hangar> getHangars() {
+            return hangars;
         }
 
         public long getCurrentRound() {
@@ -98,7 +109,11 @@ public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Mode
                 Player1.TECHNOLOGY_1, Player1.TECHNOLOGY_2,
                 Player2.TECHNOLOGY_1
         );
-        return new Model(CURRENT_ROUND, planets, players, buildings, technologies);
+        List<Hangar> hangars = Arrays.asList(
+                Player1.Planet1.HANGAR
+        );
+
+        return new Model(CURRENT_ROUND, planets, players, buildings, technologies, hangars);
     }
 
     @Override

@@ -24,4 +24,15 @@ INSERT INTO technology VALUES (
 );
 </#list>
 
+<#list hangars as hangar>
+INSERT INTO hangar VALUES (
+'${hangar.id}', '${hangar.planetId}', '${hangar.playerId}'
+);
+    <#list hangar.ships.asList() as ship>
+    INSERT INTO hangar_ships VALUES (
+    '${hangar.id}', ${ship.type.id}, ${ship.amount}
+    );
+    </#list>
+</#list>
+
 INSERT INTO round VALUES (${currentRound});

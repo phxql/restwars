@@ -52,4 +52,22 @@ public class Hangar {
                 .add("ships", ships)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Hangar that = (Hangar) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.planetId, that.planetId) &&
+                Objects.equal(this.playerId, that.playerId) &&
+                Objects.equal(this.ships, that.ships);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, planetId, playerId, ships);
+    }
 }
