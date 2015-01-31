@@ -3,7 +3,7 @@ package restwars.storage.building;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import restwars.model.building.BuildingType;
-import restwars.service.building.ConstructionSite;
+import restwars.model.building.ConstructionSite;
 import restwars.storage.DatabaseTest;
 import restwars.storage.scenario.BasicScenario;
 import restwars.storage.scenario.ConstructionSiteScenario;

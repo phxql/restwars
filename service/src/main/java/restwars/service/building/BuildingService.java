@@ -2,6 +2,7 @@ package restwars.service.building;
 
 import restwars.model.building.BuildingType;
 import restwars.model.building.Buildings;
+import restwars.model.building.ConstructionSite;
 import restwars.model.planet.Planet;
 import restwars.model.resource.Resources;
 import restwars.model.technology.Technologies;

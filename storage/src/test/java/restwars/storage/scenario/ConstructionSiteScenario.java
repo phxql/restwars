@@ -1,7 +1,7 @@
 package restwars.storage.scenario;
 
 import restwars.model.building.BuildingType;
-import restwars.service.building.ConstructionSite;
+import restwars.model.building.ConstructionSite;
 
 import java.util.Arrays;
 import java.util.List;

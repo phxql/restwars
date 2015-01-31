@@ -1,8 +1,8 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
+import restwars.model.building.ConstructionSite;
 import restwars.restapi.dto.building.ConstructionSiteResponse;
-import restwars.service.building.ConstructionSite;
 
 /**
  * Maps construction site entities to DTOs and vice versa.
