@@ -1,4 +1,4 @@
-package restwars.storage.scenario;
+package restwars.storage.scenario.impl;
 
 import restwars.model.building.Building;
 import restwars.model.building.BuildingType;
@@ -12,6 +12,7 @@ import restwars.model.ship.ShipType;
 import restwars.model.ship.Ships;
 import restwars.model.technology.Technology;
 import restwars.model.technology.TechnologyType;
+import restwars.storage.scenario.AbstractFreemarkerScenario;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +42,10 @@ public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Mode
 
     public static class Player2 {
         public static final Player PLAYER = new Player(UUID.fromString("da0bace0-a97a-11e4-bcd8-0800200c9a66"), "player2", "player2");
+
+        public static class Planet1 {
+            public static final Planet PLANET = new Planet(UUID.fromString("807d6730-a999-11e4-bcd8-0800200c9a66"), new Location(4, 4, 4), PLAYER.getId(), new Resources(100, 200, 300));
+        }
 
         public static Technology TECHNOLOGY_1 = new Technology(UUID.fromString("65e1b5c0-a97b-11e4-bcd8-0800200c9a66"), TechnologyType.BUILDING_BUILD_COST_REDUCTION, 2, PLAYER.getId());
     }

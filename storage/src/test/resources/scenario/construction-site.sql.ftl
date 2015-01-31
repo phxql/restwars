@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="" type="restwars.storage.scenario.ConstructionSiteScenario.Model" -->
+<#-- @ftlvariable name="" type="restwars.storage.scenario.impl.ConstructionSiteScenario.Model" -->
 
 <#list constructionSites as constructionSite>
 INSERT INTO construction_site VALUES (

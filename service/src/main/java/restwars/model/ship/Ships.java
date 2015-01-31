@@ -143,12 +143,11 @@ public class Ships implements Iterable<Ship> {
 
         Ships that = (Ships) o;
 
-        return com.google.common.base.Objects.equal(this.EMPTY, that.EMPTY) &&
-                Objects.equal(this.ships, that.ships);
+        return Objects.equal(this.ships, that.ships);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(EMPTY, ships);
+        return Objects.hashCode(ships);
     }
 }

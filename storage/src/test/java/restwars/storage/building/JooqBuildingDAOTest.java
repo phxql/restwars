@@ -7,8 +7,8 @@ import restwars.model.building.BuildingType;
 import restwars.model.building.Buildings;
 import restwars.model.planet.Location;
 import restwars.storage.DatabaseTest;
-import restwars.storage.scenario.BasicScenario;
 import restwars.storage.scenario.Scenario;
+import restwars.storage.scenario.impl.BasicScenario;
 
 import java.util.List;
 import java.util.Map;

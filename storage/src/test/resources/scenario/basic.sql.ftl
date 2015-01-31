@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="" type="restwars.storage.scenario.BasicScenario.Model" -->
+<#-- @ftlvariable name="" type="restwars.storage.scenario.impl.BasicScenario.Model" -->
 
 <#list players as player>
 INSERT INTO player VALUES (

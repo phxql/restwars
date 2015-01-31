@@ -7,8 +7,8 @@ import restwars.model.planet.Planet;
 import restwars.model.planet.PlanetWithOwner;
 import restwars.model.resource.Resources;
 import restwars.storage.DatabaseTest;
-import restwars.storage.scenario.BasicScenario;
 import restwars.storage.scenario.Scenario;
+import restwars.storage.scenario.impl.BasicScenario;
 
 import java.util.List;
 import java.util.Map;

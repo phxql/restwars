@@ -5,10 +5,10 @@ import org.testng.annotations.Test;
 import restwars.model.technology.Research;
 import restwars.model.technology.TechnologyType;
 import restwars.storage.DatabaseTest;
-import restwars.storage.scenario.BasicScenario;
 import restwars.storage.scenario.MultipleScenarios;
-import restwars.storage.scenario.ResearchScenario;
 import restwars.storage.scenario.Scenario;
+import restwars.storage.scenario.impl.BasicScenario;
+import restwars.storage.scenario.impl.ResearchScenario;
 
 import java.util.List;
 import java.util.Map;

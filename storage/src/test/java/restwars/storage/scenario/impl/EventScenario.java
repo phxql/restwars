@@ -1,7 +1,8 @@
-package restwars.storage.scenario;
+package restwars.storage.scenario.impl;
 
 import restwars.model.event.Event;
 import restwars.model.event.EventType;
+import restwars.storage.scenario.AbstractFreemarkerScenario;
 
 import java.util.Arrays;
 import java.util.List;

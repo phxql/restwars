@@ -5,10 +5,10 @@ import org.testng.annotations.Test;
 import restwars.model.building.BuildingType;
 import restwars.model.building.ConstructionSite;
 import restwars.storage.DatabaseTest;
-import restwars.storage.scenario.BasicScenario;
-import restwars.storage.scenario.ConstructionSiteScenario;
 import restwars.storage.scenario.MultipleScenarios;
 import restwars.storage.scenario.Scenario;
+import restwars.storage.scenario.impl.BasicScenario;
+import restwars.storage.scenario.impl.ConstructionSiteScenario;
 
 import java.util.List;
 import java.util.Map;

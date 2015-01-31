@@ -6,10 +6,10 @@ import restwars.model.event.Event;
 import restwars.model.event.EventType;
 import restwars.service.event.EventWithPlanet;
 import restwars.storage.DatabaseTest;
-import restwars.storage.scenario.BasicScenario;
-import restwars.storage.scenario.EventScenario;
 import restwars.storage.scenario.MultipleScenarios;
 import restwars.storage.scenario.Scenario;
+import restwars.storage.scenario.impl.BasicScenario;
+import restwars.storage.scenario.impl.EventScenario;
 
 import java.util.List;
 import java.util.Map;

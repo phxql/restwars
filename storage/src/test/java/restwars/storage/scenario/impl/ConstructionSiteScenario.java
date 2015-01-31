@@ -1,7 +1,8 @@
-package restwars.storage.scenario;
+package restwars.storage.scenario.impl;
 
 import restwars.model.building.BuildingType;
 import restwars.model.building.ConstructionSite;
+import restwars.storage.scenario.AbstractFreemarkerScenario;
 
 import java.util.Arrays;
 import java.util.List;

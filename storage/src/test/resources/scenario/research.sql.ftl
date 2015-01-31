@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="" type="restwars.storage.scenario.ResearchScenario.Model" -->
+<#-- @ftlvariable name="" type="restwars.storage.scenario.impl.ResearchScenario.Model" -->
 
 <#list researches as research>
 INSERT INTO research VALUES (

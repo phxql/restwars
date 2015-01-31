@@ -1,7 +1,8 @@
-package restwars.storage.scenario;
+package restwars.storage.scenario.impl;
 
 import restwars.model.technology.Research;
 import restwars.model.technology.TechnologyType;
+import restwars.storage.scenario.AbstractFreemarkerScenario;
 
 import java.util.Arrays;
 import java.util.List;

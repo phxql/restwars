@@ -6,8 +6,8 @@ import restwars.model.technology.Technologies;
 import restwars.model.technology.Technology;
 import restwars.model.technology.TechnologyType;
 import restwars.storage.DatabaseTest;
-import restwars.storage.scenario.BasicScenario;
 import restwars.storage.scenario.Scenario;
+import restwars.storage.scenario.impl.BasicScenario;
 
 import java.util.List;
 import java.util.Map;
