@@ -8,6 +8,7 @@ import restwars.model.building.Buildings;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.model.resource.Resources;
+import restwars.model.ship.Hangar;
 import restwars.model.ship.ShipType;
 import restwars.model.ship.Ships;
 import restwars.model.technology.Technologies;

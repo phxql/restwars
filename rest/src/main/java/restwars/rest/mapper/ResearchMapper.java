@@ -1,8 +1,8 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
+import restwars.model.technology.Research;
 import restwars.restapi.dto.technology.ResearchResponse;
-import restwars.service.technology.Research;
 
 /**
  * Maps research entities to DTOs and vice versa.

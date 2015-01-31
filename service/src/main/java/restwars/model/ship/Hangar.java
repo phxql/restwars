@@ -1,8 +1,7 @@
-package restwars.service.ship;
+package restwars.model.ship;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import restwars.model.ship.Ships;
 
 import java.util.UUID;
 
