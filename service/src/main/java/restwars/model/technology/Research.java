@@ -75,4 +75,26 @@ public class Research {
                 .add("playerId", playerId)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Research that = (Research) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.type, that.type) &&
+                Objects.equal(this.level, that.level) &&
+                Objects.equal(this.started, that.started) &&
+                Objects.equal(this.done, that.done) &&
+                Objects.equal(this.planetId, that.planetId) &&
+                Objects.equal(this.playerId, that.playerId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, type, level, started, done, planetId,
+                playerId);
+    }
 }
