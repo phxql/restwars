@@ -32,6 +32,16 @@ public class JooqRoundDAOTest extends DatabaseTest {
     }
 
     @Test
+    public void testGetRound2() throws Exception {
+        // Clear database
+        execute("DELETE FROM round");
+
+        long round = sut.getRound();
+
+        assertThat(round, is(1L));
+    }
+
+    @Test
     public void testUpdateRound() throws Exception {
         sut.updateRound(20);
 

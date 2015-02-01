@@ -95,13 +95,23 @@ public abstract class DatabaseTest {
     }
 
     /**
-     * Executes an SQL and returns the result set.
+     * Executes a SQL statement and returns the result set.
      *
-     * @param sql    SQL to execute.
+     * @param sql    SQL statement to execute.
      * @param params Parameters to the SQL.
      * @return Result set.
      */
     protected List<Map<String, Object>> select(String sql, Object... params) {
         return handle.select(sql, params);
+    }
+
+    /**
+     * Executes a SQL statement.
+     *
+     * @param sql    SQL statement to execute.
+     * @param params Parameters to the SQL.
+     */
+    protected void execute(String sql, Object... params) {
+        handle.execute(sql, params);
     }
 }
