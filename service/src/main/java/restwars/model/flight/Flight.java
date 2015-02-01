@@ -138,4 +138,33 @@ public class Flight {
                 .add("detected", detected)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Flight that = (Flight) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.playerId, that.playerId) &&
+                Objects.equal(this.start, that.start) &&
+                Objects.equal(this.destination, that.destination) &&
+                Objects.equal(this.startedInRound, that.startedInRound) &&
+                Objects.equal(this.arrivalInRound, that.arrivalInRound) &&
+                Objects.equal(this.ships, that.ships) &&
+                Objects.equal(this.energyNeeded, that.energyNeeded) &&
+                Objects.equal(this.type, that.type) &&
+                Objects.equal(this.direction, that.direction) &&
+                Objects.equal(this.cargo, that.cargo) &&
+                Objects.equal(this.speed, that.speed) &&
+                Objects.equal(this.detected, that.detected);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, playerId, start, destination, startedInRound, arrivalInRound,
+                ships, energyNeeded, type, direction, cargo,
+                speed, detected);
+    }
 }

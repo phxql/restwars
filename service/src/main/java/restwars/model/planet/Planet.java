@@ -69,4 +69,22 @@ public class Planet {
                 .add("resources", resources)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Planet that = (Planet) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.location, that.location) &&
+                Objects.equal(this.ownerId, that.ownerId) &&
+                Objects.equal(this.resources, that.resources);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, location, ownerId, resources);
+    }
 }

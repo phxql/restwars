@@ -38,4 +38,21 @@ public class DetectedFlightWithSender {
                 .add("sender", sender)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DetectedFlightWithSender that = (DetectedFlightWithSender) o;
+
+        return Objects.equal(this.detectedFlight, that.detectedFlight) &&
+                Objects.equal(this.flight, that.flight) &&
+                Objects.equal(this.sender, that.sender);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(detectedFlight, flight, sender);
+    }
 }

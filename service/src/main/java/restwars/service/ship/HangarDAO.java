@@ -1,5 +1,7 @@
 package restwars.service.ship;
 
+import restwars.model.ship.Hangar;
+
 import java.util.Optional;
 import java.util.UUID;
 

@@ -52,4 +52,22 @@ public class Building {
                 .add("planetId", planetId)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Building that = (Building) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.type, that.type) &&
+                Objects.equal(this.level, that.level) &&
+                Objects.equal(this.planetId, that.planetId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, type, level, planetId);
+    }
 }

@@ -1,10 +1,10 @@
 package restwars.service.ship.impl;
 
 import com.google.common.base.Preconditions;
+import restwars.model.ship.Hangar;
 import restwars.model.ship.Ships;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.mechanics.ShipMechanics;
-import restwars.service.ship.Hangar;
 import restwars.service.ship.HangarDAO;
 
 import java.util.Optional;

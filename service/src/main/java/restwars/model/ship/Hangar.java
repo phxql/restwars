@@ -1,8 +1,7 @@
-package restwars.service.ship;
+package restwars.model.ship;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import restwars.model.ship.Ships;
 
 import java.util.UUID;
 
@@ -52,5 +51,23 @@ public class Hangar {
                 .add("playerId", playerId)
                 .add("ships", ships)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Hangar that = (Hangar) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.planetId, that.planetId) &&
+                Objects.equal(this.playerId, that.playerId) &&
+                Objects.equal(this.ships, that.ships);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, planetId, playerId, ships);
     }
 }

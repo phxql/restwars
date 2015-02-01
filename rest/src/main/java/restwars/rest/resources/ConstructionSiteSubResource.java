@@ -6,6 +6,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.model.building.BuildingType;
+import restwars.model.building.ConstructionSite;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.rest.mapper.ConstructionSiteMapper;
@@ -14,7 +15,6 @@ import restwars.restapi.dto.building.ConstructionSiteResponse;
 import restwars.restapi.dto.building.CreateBuildingRequest;
 import restwars.service.building.BuildingException;
 import restwars.service.building.BuildingService;
-import restwars.service.building.ConstructionSite;
 import restwars.service.planet.PlanetService;
 import restwars.util.Functional;
 

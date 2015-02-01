@@ -11,6 +11,7 @@ import restwars.model.planet.Location;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.model.resource.Resources;
+import restwars.model.ship.Hangar;
 import restwars.model.ship.Ship;
 import restwars.model.ship.ShipType;
 import restwars.model.ship.Ships;
@@ -34,7 +35,6 @@ import restwars.service.mechanics.PlanetMechanics;
 import restwars.service.mechanics.ShipMechanics;
 import restwars.service.mechanics.TechnologyMechanics;
 import restwars.service.planet.PlanetDAO;
-import restwars.service.ship.Hangar;
 import restwars.service.ship.HangarDAO;
 import restwars.service.ship.impl.ShipUtils;
 import restwars.service.technology.TechnologyDAO;
@@ -187,7 +187,7 @@ public class FlightServiceImpl implements FlightService {
         long arrives = started + MathExt.ceilLong(distance / speed);
 
         // Decrease energy on start planet
-        start = start.withResources(start.getResources().minus(Resources.energy(totalEnergyNeeded)));
+        start = start.withResources(start.getResources().minus(new Resources(0, 0, totalEnergyNeeded)));
 
         if (!cargo.isEmpty()) {
             // Check cargo space and resource availability

@@ -7,6 +7,7 @@ import restwars.model.building.Building;
 import restwars.model.building.BuildingType;
 import restwars.model.flight.Flight;
 import restwars.model.planet.Planet;
+import restwars.model.ship.Hangar;
 import restwars.model.ship.ShipType;
 import restwars.service.building.BuildingDAO;
 import restwars.service.event.EventService;
@@ -17,7 +18,6 @@ import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.mechanics.PlanetMechanics;
 import restwars.service.mechanics.ShipMechanics;
 import restwars.service.planet.PlanetDAO;
-import restwars.service.ship.Hangar;
 import restwars.service.ship.HangarDAO;
 
 import java.util.Map;

@@ -59,10 +59,6 @@ public class Resources implements Serializable {
         return crystals + gas + energy;
     }
 
-    public static Resources energy(long energy) {
-        return new Resources(0, 0, energy);
-    }
-
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -70,5 +66,23 @@ public class Resources implements Serializable {
                 .add("gas", gas)
                 .add("energy", energy)
                 .toString();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Resources that = (Resources) o;
+
+        return Objects.equal(this.crystals, that.crystals) &&
+                Objects.equal(this.gas, that.gas) &&
+                Objects.equal(this.energy, that.energy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(crystals, gas, energy);
     }
 }

@@ -102,4 +102,29 @@ public class Fight {
                 .add("loot", loot)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Fight that = (Fight) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.attackerId, that.attackerId) &&
+                Objects.equal(this.defenderId, that.defenderId) &&
+                Objects.equal(this.planetId, that.planetId) &&
+                Objects.equal(this.attackingShips, that.attackingShips) &&
+                Objects.equal(this.defendingShips, that.defendingShips) &&
+                Objects.equal(this.remainingAttackerShips, that.remainingAttackerShips) &&
+                Objects.equal(this.remainingDefenderShips, that.remainingDefenderShips) &&
+                Objects.equal(this.round, that.round) &&
+                Objects.equal(this.loot, that.loot);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, attackerId, defenderId, planetId, attackingShips, defendingShips,
+                remainingAttackerShips, remainingDefenderShips, round, loot);
+    }
 }

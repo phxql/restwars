@@ -1,5 +1,6 @@
 package restwars.service.technology;
 
+import restwars.model.technology.Research;
 import restwars.model.technology.TechnologyType;
 
 import java.util.List;

@@ -43,4 +43,22 @@ public class FightWithPlanetAndPlayer {
                 .add("defender", defender)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FightWithPlanetAndPlayer that = (FightWithPlanetAndPlayer) o;
+
+        return Objects.equal(this.fight, that.fight) &&
+                Objects.equal(this.planet, that.planet) &&
+                Objects.equal(this.attacker, that.attacker) &&
+                Objects.equal(this.defender, that.defender);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(fight, planet, attacker, defender);
+    }
 }

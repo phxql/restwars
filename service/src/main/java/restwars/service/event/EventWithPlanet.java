@@ -28,4 +28,20 @@ public class EventWithPlanet {
                 .add("planet", planet)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EventWithPlanet that = (EventWithPlanet) o;
+
+        return Objects.equal(this.event, that.event) &&
+                Objects.equal(this.planet, that.planet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(event, planet);
+    }
 }

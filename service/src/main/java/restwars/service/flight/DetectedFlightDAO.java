@@ -19,6 +19,8 @@ public interface DetectedFlightDAO {
 
     /**
      * Finds detected flights with the given player id.
+     * <p/>
+     * The returned flight contains no ships.
      *
      * @param playerId Player id.
      * @return Detected flights.

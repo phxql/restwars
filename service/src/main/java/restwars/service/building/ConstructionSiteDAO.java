@@ -1,5 +1,7 @@
 package restwars.service.building;
 
+import restwars.model.building.ConstructionSite;
+
 import java.util.List;
 import java.util.UUID;
 

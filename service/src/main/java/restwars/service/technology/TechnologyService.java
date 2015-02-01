@@ -4,6 +4,7 @@ import restwars.model.building.Buildings;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.model.resource.Resources;
+import restwars.model.technology.Research;
 import restwars.model.technology.Technologies;
 import restwars.model.technology.Technology;
 import restwars.model.technology.TechnologyType;

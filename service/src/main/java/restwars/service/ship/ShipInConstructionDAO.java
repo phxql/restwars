@@ -1,5 +1,7 @@
 package restwars.service.ship;
 
+import restwars.model.ship.ShipInConstruction;
+
 import java.util.List;
 import java.util.UUID;
 
