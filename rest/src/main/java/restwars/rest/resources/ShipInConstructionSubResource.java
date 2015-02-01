@@ -7,6 +7,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
+import restwars.model.ship.ShipInConstruction;
 import restwars.model.ship.ShipType;
 import restwars.rest.mapper.ShipInConstructionMapper;
 import restwars.rest.resources.param.LocationParam;
@@ -14,7 +15,6 @@ import restwars.restapi.dto.ship.BuildShipRequest;
 import restwars.restapi.dto.ship.ShipInConstructionResponse;
 import restwars.service.planet.PlanetService;
 import restwars.service.ship.BuildShipException;
-import restwars.service.ship.ShipInConstruction;
 import restwars.service.ship.ShipService;
 import restwars.util.Functional;
 

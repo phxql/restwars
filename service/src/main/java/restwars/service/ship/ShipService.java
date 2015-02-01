@@ -2,6 +2,7 @@ package restwars.service.ship;
 
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
+import restwars.model.ship.ShipInConstruction;
 import restwars.model.ship.ShipType;
 import restwars.model.ship.Ships;
 

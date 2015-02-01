@@ -1,8 +1,8 @@
 package restwars.rest.mapper;
 
 import com.google.common.base.Preconditions;
+import restwars.model.ship.ShipInConstruction;
 import restwars.restapi.dto.ship.ShipInConstructionResponse;
-import restwars.service.ship.ShipInConstruction;
 
 /**
  * Maps ship in construction entities to DTOs and vice versa.

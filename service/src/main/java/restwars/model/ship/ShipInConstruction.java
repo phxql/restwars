@@ -1,8 +1,7 @@
-package restwars.service.ship;
+package restwars.model.ship;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import restwars.model.ship.ShipType;
 
 import java.util.UUID;
 
@@ -65,5 +64,25 @@ public class ShipInConstruction {
                 .add("started", started)
                 .add("done", done)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ShipInConstruction that = (ShipInConstruction) o;
+
+        return Objects.equal(this.id, that.id) &&
+                Objects.equal(this.type, that.type) &&
+                Objects.equal(this.planetId, that.planetId) &&
+                Objects.equal(this.playerId, that.playerId) &&
+                Objects.equal(this.started, that.started) &&
+                Objects.equal(this.done, that.done);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, type, planetId, playerId, started, done);
     }
 }
