@@ -64,9 +64,10 @@ public class JooqPlanetDAOTest extends DatabaseTest {
     public void testFindAll() throws Exception {
         List<Planet> planets = sut.findAll();
 
-        assertThat(planets, hasSize(2));
+        assertThat(planets, hasSize(3));
         assertThat(planets.get(0), is(BasicScenario.Player1.Planet1.PLANET));
         assertThat(planets.get(1), is(BasicScenario.Player1.Planet2.PLANET));
+        assertThat(planets.get(2), is(BasicScenario.Player2.Planet1.PLANET));
     }
 
     @Test
@@ -112,9 +113,10 @@ public class JooqPlanetDAOTest extends DatabaseTest {
         // This should find all planets
         List<PlanetWithOwner> planets = sut.findInRange(1, 10, 1, 10, 1, 10);
 
-        assertThat(planets, hasSize(2));
+        assertThat(planets, hasSize(3));
         assertThat(planets.get(0), is(new PlanetWithOwner(BasicScenario.Player1.Planet1.PLANET, BasicScenario.Player1.PLAYER)));
         assertThat(planets.get(1), is(new PlanetWithOwner(BasicScenario.Player1.Planet2.PLANET, BasicScenario.Player1.PLAYER)));
+        assertThat(planets.get(2), is(new PlanetWithOwner(BasicScenario.Player2.Planet1.PLANET, BasicScenario.Player2.PLAYER)));
     }
 
     private void verifyRow(Map<String, Object> row, Planet planet) {
