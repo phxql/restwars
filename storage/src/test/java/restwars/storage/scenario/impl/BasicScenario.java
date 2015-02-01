@@ -104,7 +104,7 @@ public class BasicScenario extends AbstractFreemarkerScenario<BasicScenario.Mode
                 Player1.PLAYER, Player2.PLAYER
         );
         List<Planet> planets = Arrays.asList(
-                Player1.Planet1.PLANET, Player1.Planet2.PLANET
+                Player1.Planet1.PLANET, Player1.Planet2.PLANET, Player2.Planet1.PLANET
         );
         List<Building> buildings = Arrays.asList(
                 Player1.Planet1.COMMAND_CENTER, Player1.Planet1.SHIPYARD,
