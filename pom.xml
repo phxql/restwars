@@ -100,6 +100,16 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+            <!-- Coverage analysis -->
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <repoToken>li56oRAn6aikiayn0lMdte0D9sQTOJdal</repoToken>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
