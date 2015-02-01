@@ -51,6 +51,14 @@ public class JooqTechnologyDAOTest extends DatabaseTest {
     }
 
     @Test
+    public void testFindWithPlayerId2() throws Exception {
+        // Player with this id doesn't exist
+        Optional<Technology> technology = sut.findWithPlayerId(UUID.randomUUID(), BasicScenario.Player1.TECHNOLOGY_1.getType());
+
+        assertThat(technology.isPresent(), is(false));
+    }
+
+    @Test
     public void testUpdate() throws Exception {
         Technology updatedTechnology = new Technology(BasicScenario.Player1.TECHNOLOGY_1.getId(), TechnologyType.COMBUSTION_ENGINE, 5, BasicScenario.Player2.PLAYER.getId());
 

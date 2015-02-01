@@ -40,6 +40,14 @@ public class JooqHangarDAOTest extends DatabaseTest {
     }
 
     @Test
+    public void testFindWithPlanetId2() throws Exception {
+        // Hangar with this planet id doesn't exist
+        Optional<Hangar> hangar = sut.findWithPlanetId(UUID.randomUUID());
+
+        assertThat(hangar.isPresent(), is(false));
+    }
+
+    @Test
     public void testUpdate() throws Exception {
         Hangar hangar = BasicScenario.Player1.Planet1.HANGAR;
         Hangar updatedHangar = new Hangar(hangar.getId(), hangar.getPlanetId(), hangar.getPlayerId(), Ships.EMPTY);

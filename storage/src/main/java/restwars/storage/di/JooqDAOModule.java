@@ -19,6 +19,8 @@ import restwars.storage.building.JooqBuildingDAO;
 import restwars.storage.building.JooqConstructionSiteDAO;
 import restwars.storage.event.JooqEventDAO;
 import restwars.storage.fight.JooqFightDAO;
+import restwars.storage.jooq.JooqUnitOfWorkFactory;
+import restwars.storage.jooq.impl.JooqUnitOfWorkFactoryImpl;
 import restwars.storage.planet.JooqPlanetDAO;
 import restwars.storage.player.JooqPlayerDAO;
 import restwars.storage.round.JooqRoundDAO;
@@ -33,6 +35,11 @@ import javax.inject.Singleton;
 
 @Module(library = true, complete = false)
 public class JooqDAOModule {
+    @Provides
+    JooqUnitOfWorkFactory providesJooqUnitOfWorkFactory() {
+        return new JooqUnitOfWorkFactoryImpl();
+    }
+
     @Provides
     PlayerDAO providesPlayerDAO(JooqPlayerDAO jooqPlayerDAO) {
         return jooqPlayerDAO;

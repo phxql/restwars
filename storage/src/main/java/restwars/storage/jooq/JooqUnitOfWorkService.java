@@ -8,13 +8,24 @@ import restwars.service.unitofwork.UnitOfWorkService;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Manages jOOQ unit of works.
+ */
 public class JooqUnitOfWorkService implements UnitOfWorkService {
-    private final ManagedDataSource managedDataSource;
-
     private static final ThreadLocal<UnitOfWork> CURRENT_UNIT_OF_WORK = new ThreadLocal<>();
 
-    public JooqUnitOfWorkService(ManagedDataSource managedDataSource) {
+    private final ManagedDataSource managedDataSource;
+    private final JooqUnitOfWorkFactory jooqUnitOfWorkFactory;
+
+    /**
+     * Constructor.
+     *
+     * @param managedDataSource     Data source.
+     * @param jooqUnitOfWorkFactory Factory for unit of works.
+     */
+    public JooqUnitOfWorkService(ManagedDataSource managedDataSource, JooqUnitOfWorkFactory jooqUnitOfWorkFactory) {
         this.managedDataSource = managedDataSource;
+        this.jooqUnitOfWorkFactory = jooqUnitOfWorkFactory;
     }
 
     @Override
@@ -32,7 +43,7 @@ public class JooqUnitOfWorkService implements UnitOfWorkService {
         try {
             Connection connection = managedDataSource.getConnection();
             connection.setAutoCommit(false);
-            JooqUnitOfWork unitOfWork = new JooqUnitOfWork(connection);
+            UnitOfWork unitOfWork = jooqUnitOfWorkFactory.create(connection);
 
             CURRENT_UNIT_OF_WORK.set(unitOfWork);
 

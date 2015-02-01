@@ -7,10 +7,18 @@ import restwars.service.unitofwork.UnitOfWork;
 
 import java.sql.Connection;
 
+/**
+ * jOOQ unit of work implementation.
+ */
 public class JooqUnitOfWork implements UnitOfWork {
     private final Connection connection;
     private final DSLContext dslContext;
 
+    /**
+     * Constructor.
+     *
+     * @param connection JDBC connection.
+     */
     public JooqUnitOfWork(Connection connection) {
         this.connection = Preconditions.checkNotNull(connection, "connection");
         this.dslContext = DSL.using(connection);

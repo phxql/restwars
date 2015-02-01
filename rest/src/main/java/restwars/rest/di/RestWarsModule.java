@@ -10,6 +10,7 @@ import restwars.service.di.MechanicsModule;
 import restwars.service.di.ServiceModule;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.di.JooqDAOModule;
+import restwars.storage.jooq.JooqUnitOfWorkFactory;
 import restwars.storage.jooq.JooqUnitOfWorkService;
 
 import javax.inject.Named;
@@ -32,8 +33,8 @@ public class RestWarsModule {
     }
 
     @Provides
-    UnitOfWorkService providesUnitOfWorkService() {
-        return new JooqUnitOfWorkService(managedDataSource);
+    UnitOfWorkService providesUnitOfWorkService(JooqUnitOfWorkFactory jooqUnitOfWorkFactory) {
+        return new JooqUnitOfWorkService(managedDataSource, jooqUnitOfWorkFactory);
     }
 
     @Provides
