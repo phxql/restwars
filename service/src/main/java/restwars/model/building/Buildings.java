@@ -12,6 +12,12 @@ public class Buildings extends ForwardingList<Building> {
 
     private final ImmutableList<Building> buildings;
 
+    public Buildings(Building... buildings) {
+        Preconditions.checkNotNull(buildings, "buildings");
+
+        this.buildings = ImmutableList.copyOf(buildings);
+    }
+
     public Buildings(Iterable<Building> buildings) {
         Preconditions.checkNotNull(buildings, "buildings");
 
