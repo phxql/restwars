@@ -8,6 +8,8 @@ import restwars.model.building.Buildings;
 import restwars.model.building.ConstructionSite;
 import restwars.model.resource.Resources;
 import restwars.model.technology.Technologies;
+import restwars.model.technology.Technology;
+import restwars.model.technology.TechnologyType;
 import restwars.model.techtree.Prerequisites;
 import restwars.service.Data;
 import restwars.service.building.BuildingDAO;
@@ -238,16 +240,32 @@ public class BuildingServiceImplTest {
 
     @Test
     public void testCalculateBuildTime() throws Exception {
+        Building commandCenter = new Building(UUID.randomUUID(), BuildingType.COMMAND_CENTER, 10, Data.Player1.Planet1.PLANET.getId());
 
+        when(buildingMechanics.calculateBuildTime(BuildingType.RESEARCH_CENTER, 5)).thenReturn(100);
+        when(buildingMechanics.calculateBuildingBuildTimeSpeedup(10)).thenReturn(0.5);
+        long buildTime = sut.calculateBuildTime(BuildingType.RESEARCH_CENTER, 5, Technologies.NONE, new Buildings(commandCenter));
+
+        assertThat(buildTime, is(50L));
     }
 
     @Test
     public void testCalculateBuildTimeWithoutBonuses() throws Exception {
+        when(buildingMechanics.calculateBuildTime(BuildingType.RESEARCH_CENTER, 5)).thenReturn(100);
+        long buildTime = sut.calculateBuildTimeWithoutBonuses(BuildingType.RESEARCH_CENTER, 5);
 
+        assertThat(buildTime, is(100L));
     }
 
     @Test
     public void testCalculateBuildCost() throws Exception {
+        when(buildingMechanics.calculateBuildCost(BuildingType.RESEARCH_CENTER, 5)).thenReturn(new Resources(100, 200, 300));
+        when(technologyMechanics.calculateBuildCostReduction(10)).thenReturn(0.5);
 
+        Technology technology = new Technology(UUID.randomUUID(), TechnologyType.BUILDING_BUILD_COST_REDUCTION, 10, Data.Player1.PLAYER.getId());
+
+        Resources buildCost = sut.calculateBuildCost(BuildingType.RESEARCH_CENTER, 5, new Technologies(technology));
+
+        assertThat(buildCost, is(new Resources(50, 100, 150)));
     }
 }

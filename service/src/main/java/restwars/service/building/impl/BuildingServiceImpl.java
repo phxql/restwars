@@ -205,6 +205,7 @@ public class BuildingServiceImpl implements BuildingService {
         int commandCenterLevel = buildings.getLevel(BuildingType.COMMAND_CENTER);
         double speedUp = buildingMechanics.calculateBuildingBuildTimeSpeedup(commandCenterLevel);
 
+        // TODO: Gameplay - This reaches eventually 0, further updates to the command center are worthless and the buildings are done in one round, fix this!
         return Math.max(MathExt.floorLong(buildTime * (1 - speedUp)), 1);
     }
 

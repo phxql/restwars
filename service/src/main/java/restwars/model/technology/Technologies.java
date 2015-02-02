@@ -12,8 +12,13 @@ public class Technologies extends ForwardingList<Technology> {
 
     private final ImmutableList<Technology> technologies;
 
+    public Technologies(Technology... technologies) {
+        Preconditions.checkNotNull(technologies, "technologies");
+        this.technologies = ImmutableList.copyOf(technologies);
+    }
+
     public Technologies(Iterable<Technology> technologies) {
-        Preconditions.checkNotNull(technologies);
+        Preconditions.checkNotNull(technologies, "technologies");
         this.technologies = ImmutableList.copyOf(technologies);
     }
 
