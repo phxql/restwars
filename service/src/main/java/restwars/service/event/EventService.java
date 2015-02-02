@@ -1,6 +1,7 @@
 package restwars.service.event;
 
 import restwars.model.event.Event;
+import restwars.model.event.EventWithPlanet;
 
 import java.util.List;
 import java.util.UUID;

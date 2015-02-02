@@ -3,10 +3,10 @@ package restwars.rest.mapper;
 import com.google.common.base.Preconditions;
 import restwars.model.event.Event;
 import restwars.model.event.EventType;
+import restwars.model.event.EventWithPlanet;
 import restwars.model.planet.Planet;
 import restwars.restapi.dto.event.EventResponse;
 import restwars.restapi.dto.metadata.EventTypeMetadataResponse;
-import restwars.service.event.EventWithPlanet;
 
 import java.util.UUID;
 

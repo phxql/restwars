@@ -1,7 +1,6 @@
-package restwars.service.event;
+package restwars.model.event;
 
 import com.google.common.base.Objects;
-import restwars.model.event.Event;
 import restwars.model.planet.Planet;
 
 public class EventWithPlanet {

@@ -4,7 +4,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import restwars.model.event.Event;
 import restwars.model.event.EventType;
-import restwars.service.event.EventWithPlanet;
+import restwars.model.event.EventWithPlanet;
 import restwars.storage.DatabaseTest;
 import restwars.storage.scenario.MultipleScenarios;
 import restwars.storage.scenario.Scenario;
