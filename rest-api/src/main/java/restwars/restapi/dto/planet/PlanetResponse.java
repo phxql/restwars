@@ -69,4 +69,22 @@ public class PlanetResponse {
                 .add("energy", energy)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlanetResponse that = (PlanetResponse) o;
+
+        return Objects.equal(this.location, that.location) &&
+                Objects.equal(this.crystal, that.crystal) &&
+                Objects.equal(this.gas, that.gas) &&
+                Objects.equal(this.energy, that.energy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(location, crystal, gas, energy);
+    }
 }
