@@ -28,8 +28,8 @@
 
 ### Get the webservice documentation
 * Start the RESTwars server
-* Download the [latest release from Swagger UI](https://github.com/swagger-api/swagger-ui/releases/latest)
+* `git clone https://github.com/phxql/swagger-ui.git`
 * `cd` into `dist` folder from Swagger UI and open the file `index.html` in your browser
-* Enter `http://localhost:8080/api-docs` in the textfield on the top, then click on the "Explore" button
-  * The webservice endpoints which are protected with basic auth aren't usable yet with the Swagger UI, see https://github.com/swagger-api/swagger-ui/issues/764
+* Enter your username and your password in the textfields on the top, then click on the "Explore" button
+
 
