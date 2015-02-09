@@ -10,9 +10,11 @@ import restwars.service.fight.FightService;
 import restwars.service.fight.impl.FightServiceImpl;
 import restwars.service.flight.FlightService;
 import restwars.service.flight.impl.FlightServiceImpl;
+import restwars.service.infrastructure.DateTimeProvider;
 import restwars.service.infrastructure.RandomNumberGenerator;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
+import restwars.service.infrastructure.impl.CurrentDateTimeProvider;
 import restwars.service.infrastructure.impl.RandomNumberGeneratorImpl;
 import restwars.service.infrastructure.impl.RoundServiceImpl;
 import restwars.service.infrastructure.impl.UUIDFactoryImpl;
@@ -78,6 +80,7 @@ public class ServiceModule {
     }
 
     @Provides
+    @Singleton
     RoundService providesRoundService(RoundServiceImpl roundService) {
         return roundService;
     }
@@ -112,5 +115,10 @@ public class ServiceModule {
     @Singleton
     RandomNumberGenerator providesRandomNumberGenerator(RandomNumberGeneratorImpl randomNumberGenerator) {
         return randomNumberGenerator;
+    }
+
+    @Provides
+    DateTimeProvider providesDateTimeProvider() {
+        return new CurrentDateTimeProvider();
     }
 }

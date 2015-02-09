@@ -1,5 +1,6 @@
 package restwars.rest;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.cache.CacheBuilderSpec;
 import com.wordnik.swagger.config.ConfigFactory;
 import com.wordnik.swagger.config.FilterFactory;
@@ -60,6 +61,9 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
     @Override
     public void run(RestwarsConfiguration configuration, Environment environment) throws Exception {
+        // Write datetimes as ISO8601
+        environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+
         // Start connection pool
         ManagedDataSource dataSource = configuration.getDatabase().build(environment.metrics(), "datasource");
         environment.lifecycle().manage(dataSource);

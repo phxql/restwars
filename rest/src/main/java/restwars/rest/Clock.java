@@ -54,8 +54,8 @@ public class Clock implements Managed, Runnable {
     @Override
     public void start() throws Exception {
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(); // TODO: Code smell - IoC
-        // TODO: Decision - Maybe change this to .scheduleWithFixedRate. Maybe this could lead to multithreading issues?
-        scheduledExecutorService.scheduleWithFixedDelay(this, universeConfiguration.getRoundTimeInSeconds(), universeConfiguration.getRoundTimeInSeconds(), TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(this, universeConfiguration.getRoundTimeInSeconds(), universeConfiguration.getRoundTimeInSeconds(), TimeUnit.SECONDS);
+        roundService.initialize();
     }
 
     @Override

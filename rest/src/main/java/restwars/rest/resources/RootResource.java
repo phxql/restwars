@@ -28,6 +28,6 @@ public class RootResource {
     @GET
     @ApiOperation("Gets general information")
     public GeneralInformationResponse getGeneralInformation() {
-        return new GeneralInformationResponse(roundService.getCurrentRound());
+        return new GeneralInformationResponse(roundService.getCurrentRound(), roundService.getCurrentRoundStarted());
     }
 }
