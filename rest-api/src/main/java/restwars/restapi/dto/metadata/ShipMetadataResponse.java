@@ -53,56 +53,52 @@ public class ShipMetadataResponse {
         return type;
     }
 
-    public long getBuildTime() {
-        return buildTime;
-    }
-
-    public ResourcesResponse getBuildCost() {
-        return buildCost;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public int getAttackPoints() {
-        return attackPoints;
-    }
-
-    public int getDefensePoints() {
-        return defensePoints;
-    }
-
-    public long getStorageCapacity() {
-        return storageCapacity;
-    }
-
     public void setType(String type) {
         this.type = type;
+    }
+
+    public long getBuildTime() {
+        return buildTime;
     }
 
     public void setBuildTime(long buildTime) {
         this.buildTime = buildTime;
     }
 
+    public ResourcesResponse getBuildCost() {
+        return buildCost;
+    }
+
     public void setBuildCost(ResourcesResponse buildCost) {
         this.buildCost = buildCost;
     }
 
-    public void setSpeed(int speed) {
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public int getAttackPoints() {
+        return attackPoints;
     }
 
     public void setAttackPoints(int attackPoints) {
         this.attackPoints = attackPoints;
     }
 
+    public int getDefensePoints() {
+        return defensePoints;
+    }
+
     public void setDefensePoints(int defensePoints) {
         this.defensePoints = defensePoints;
+    }
+
+    public long getStorageCapacity() {
+        return storageCapacity;
     }
 
     public void setStorageCapacity(long storageCapacity) {
