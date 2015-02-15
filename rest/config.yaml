@@ -32,3 +32,14 @@ logging:
     loggers:
         "io.dropwizard.jersey.DropwizardResourceConfig": INFO
         "restwars": TRACE
+    appenders:
+      - type: console
+        threshold: ALL
+        timeZone: UTC
+      - type: file
+        currentLogFilename: /tmp/restwars-error.log
+        threshold: ERROR
+        archive: true
+        archivedLogFilenamePattern: /tmp/restwars-error-%d.log
+        archivedFileCount: 5
+        timeZone: UTC
