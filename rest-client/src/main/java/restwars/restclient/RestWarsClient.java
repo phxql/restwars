@@ -1,5 +1,8 @@
 package restwars.restclient;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import restwars.restapi.*;
@@ -29,9 +32,21 @@ public class RestWarsClient {
 
     public RestWarsClient(String url) {
         client = ClientBuilder.newClient();
+        enableJodaTime();
+
         this.url = url;
 
         createProxies(url);
+    }
+
+    private void enableJodaTime() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JodaModule());
+
+        JacksonJaxbJsonProvider jacksonProvider = new JacksonJaxbJsonProvider();
+        jacksonProvider.setMapper(objectMapper);
+
+        client.register(jacksonProvider);
     }
 
     public void setCredentials(String username, String password) {

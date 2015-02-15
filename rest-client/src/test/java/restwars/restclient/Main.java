@@ -17,6 +17,8 @@ public class Main {
             System.out.println();
             System.out.print("Current round: ");
             System.out.println(client.getRootResource().generalInformation().getRound());
+            System.out.print("Current round started: ");
+            System.out.println(client.getRootResource().generalInformation().getRoundStarted());
 
             System.out.println();
             System.out.println("Events");
