@@ -48,7 +48,7 @@ public class ColonizeFlightHandler extends AbstractFlightHandler {
         } else {
             LOGGER.debug("Player {} colonized new planet at {}", flight.getPlayerId(), flight.getDestination());
 
-            Planet newPlanet = new Planet(getUuidFactory().create(), flight.getDestination(), flight.getPlayerId(), planetMechanics.getColonizedPlanetResources());
+            Planet newPlanet = new Planet(getUuidFactory().create(), flight.getDestination(), flight.getPlayerId(), planetMechanics.getColonizedPlanetResources().plus(flight.getCargo()));
             getPlanetDAO().insert(newPlanet);
 
             // Create buildings on planet
