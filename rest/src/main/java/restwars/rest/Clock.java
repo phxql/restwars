@@ -55,7 +55,10 @@ public class Clock implements Managed, Runnable {
     public void start() throws Exception {
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(); // TODO: Code smell - IoC
         scheduledExecutorService.scheduleAtFixedRate(this, universeConfiguration.getRoundTimeInSeconds(), universeConfiguration.getRoundTimeInSeconds(), TimeUnit.SECONDS);
+
+        unitOfWorkService.start();
         roundService.initialize();
+        unitOfWorkService.commit();
     }
 
     @Override
