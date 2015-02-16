@@ -138,9 +138,10 @@ public class TechnologyServiceImpl implements TechnologyService {
         }
 
         Optional<Technology> existingTechnology = technologyDAO.findWithPlayerId(player.getId(), technology);
-        int level = existingTechnology.map(Technology::getLevel).orElse(1);
+        int existingLevel = existingTechnology.map(Technology::getLevel).orElse(0);
+        int levelToResearch = existingLevel + 1;
 
-        Resources researchCost = calculateResearchCost(technology, level);
+        Resources researchCost = calculateResearchCost(technology, levelToResearch);
         if (!planet.getResources().isEnough(researchCost)) {
             throw new ResearchException(ResearchException.Reason.INSUFFICIENT_RESOURCES);
         }
@@ -148,9 +149,9 @@ public class TechnologyServiceImpl implements TechnologyService {
         Planet updatedPlanet = planet.withResources(planet.getResources().minus(researchCost));
         planetDAO.update(updatedPlanet);
 
-        long researchTime = calculateResearchTime(technology, level, buildings);
+        long researchTime = calculateResearchTime(technology, levelToResearch, buildings);
         long currentRound = roundService.getCurrentRound();
-        Research research = new Research(uuidFactory.create(), technology, level, currentRound, currentRound + researchTime, updatedPlanet.getId(), player.getId());
+        Research research = new Research(uuidFactory.create(), technology, levelToResearch, currentRound, currentRound + researchTime, updatedPlanet.getId(), player.getId());
 
         LOGGER.debug("Creating research {} on planet {}", research, updatedPlanet);
         researchDAO.insert(research);
