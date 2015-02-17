@@ -18,6 +18,7 @@ import restwars.service.unitofwork.UnitOfWorkService;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +37,7 @@ public class Clock implements Managed, Runnable {
 
     private final LockService lockService;
     private final UnitOfWorkService unitOfWorkService;
+    private Optional<Runnable> nextRoundCallback = Optional.empty();
 
     @Nullable
     private ScheduledExecutorService scheduledExecutorService;
@@ -73,6 +75,10 @@ public class Clock implements Managed, Runnable {
         }
     }
 
+    public void setNextRoundCallback(Runnable nextRoundCallback) {
+        this.nextRoundCallback = Optional.of(nextRoundCallback);
+    }
+
     @Override
     public void run() {
         lockService.beforeClock();
@@ -90,6 +96,10 @@ public class Clock implements Managed, Runnable {
                 telescopeService.detectFlights();
 
                 unitOfWorkService.commit();
+
+                if (nextRoundCallback.isPresent()) {
+                    nextRoundCallback.get().run();
+                }
             } catch (Exception e) {
                 unitOfWorkService.abort();
                 LOGGER.error("Clock thread crashed with exception", e);

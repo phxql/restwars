@@ -18,9 +18,13 @@ import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
+import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.atmosphere.cpr.ApplicationConfig;
+import org.atmosphere.cpr.AtmosphereServlet;
+import org.atmosphere.cpr.MetaBroadcaster;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +35,11 @@ import restwars.rest.di.RestWarsModule;
 import restwars.rest.doc.ModelConverter;
 import restwars.rest.doc.SwaggerFilter;
 import restwars.rest.integration.database.UnitOfWorkResourceMethodDispatchAdapter;
+import restwars.rest.websocket.WebsocketResource;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
+import javax.servlet.ServletRegistration;
 import java.util.EnumSet;
 
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
@@ -89,12 +95,45 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         environment.jersey().register(compositionRoot.getFlightResource());
         environment.jersey().register(compositionRoot.getMetadataResource());
 
-        environment.lifecycle().manage(compositionRoot.getClock());
-
         // Initialize swagger documentation
         registerSwagger(environment, configuration);
 
         registerCorsFilter(environment);
+
+        Clock clock = compositionRoot.getClock();
+        registerAtmosphere(environment, clock);
+
+        environment.lifecycle().manage(clock);
+    }
+
+    private void registerAtmosphere(Environment environment, Clock clock) {
+        AtmosphereServlet atmosphereServlet = new AtmosphereServlet();
+        atmosphereServlet.framework().addInitParameter(ApplicationConfig.ANNOTATION_PACKAGE, WebsocketResource.class.getPackage().getName());
+        atmosphereServlet.framework().addInitParameter(ApplicationConfig.WEBSOCKET_SUPPORT, "true");
+
+        ServletRegistration.Dynamic servlet = environment.servlets().addServlet("atmosphere", atmosphereServlet);
+        servlet.addMapping("/websocket/*");
+
+        MetaBroadcaster broadcaster = atmosphereServlet.framework().metaBroadcaster();
+
+        environment.lifecycle().manage(new Managed() {
+            @Override
+            public void start() throws Exception {
+                clock.setNextRoundCallback(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                broadcaster.broadcastTo("/*", "NEXT ROUND!");
+                            }
+                        }
+                );
+            }
+
+            @Override
+            public void stop() throws Exception {
+
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -121,6 +160,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
     private void registerCorsFilter(Environment environment) {
         FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+
         filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS");
         filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
         filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
