@@ -5,13 +5,16 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import restwars.model.building.BuildingType;
+import restwars.model.resource.Resources;
 import restwars.rest.mapper.PrerequisitesMapper;
 import restwars.rest.mapper.ResourcesMapper;
+import restwars.restapi.dto.ResourcesResponse;
 import restwars.restapi.dto.metadata.BuildingMetadataResponse;
 import restwars.service.building.BuildingService;
 import restwars.service.mechanics.BuildingMechanics;
 import restwars.service.resource.ResourceService;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -56,8 +59,47 @@ public class BuildingMetadataSubResource {
                         t.name(), sanitizedLevel, buildingService.calculateBuildTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(t, sanitizedLevel)),
                         t.getDescription(), PrerequisitesMapper.fromPrerequisites(buildingMechanics.getPrerequisites(t)),
-                        ResourcesMapper.fromResources(resourceService.calculateGatheredResourcesWithoutBonus(t, level))
+                        getResourcesPerRound(t, level), getBuildingBuildTimeSpeedUp(t, level),
+                        getResearchTimeSpeedup(t, level), getShipBuildTimeSpeedUp(t, level)
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Nullable
+    private ResourcesResponse getResourcesPerRound(BuildingType type, int level) {
+        Resources resources = resourceService.calculateGatheredResourcesWithoutBonus(type, level);
+
+        if (resources.isEmpty()) {
+            return null;
+        }
+
+        return ResourcesMapper.fromResources(resources);
+    }
+
+    @Nullable
+    private Double getShipBuildTimeSpeedUp(BuildingType type, int level) {
+        if (type != BuildingType.SHIPYARD) {
+            return null;
+        }
+
+        return buildingMechanics.calculateShipBuildTimeSpeedup(level) * 100;
+    }
+
+    @Nullable
+    private Double getResearchTimeSpeedup(BuildingType type, int level) {
+        if (type != BuildingType.RESEARCH_CENTER) {
+            return null;
+        }
+
+        return buildingMechanics.calculateResearchTimeSpeedup(level) * 100;
+    }
+
+    @Nullable
+    private Double getBuildingBuildTimeSpeedUp(BuildingType type, int level) {
+        if (type != BuildingType.COMMAND_CENTER) {
+            return null;
+        }
+
+        return buildingMechanics.calculateBuildingBuildTimeSpeedup(level) * 100;
     }
 }

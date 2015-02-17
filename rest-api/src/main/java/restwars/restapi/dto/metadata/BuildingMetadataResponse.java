@@ -1,9 +1,12 @@
 package restwars.restapi.dto.metadata;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import restwars.restapi.dto.ResourcesResponse;
+
+import javax.annotation.Nullable;
 
 @ApiModel(description = "Building metadata")
 public class BuildingMetadataResponse {
@@ -25,13 +28,30 @@ public class BuildingMetadataResponse {
     @ApiModelProperty(value = "Prerequisites", required = true)
     private PrerequisitesResponse prerequisites;
 
-    @ApiModelProperty(value = "Resources gathered per round", required = true)
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @ApiModelProperty(value = "Resources gathered per round", required = false)
     private ResourcesResponse resourcesPerRound;
+
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @ApiModelProperty(value = "Building build time speedup in percent", required = false)
+    private Double buildingBuildTimeSpeedUp;
+
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @ApiModelProperty(value = "Research time speedup in percent", required = false)
+    private Double researchTimeSpeedUp;
+
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @ApiModelProperty(value = "Ship build time speedup in percent", required = false)
+    private Double shipBuildTimeSpeedUp;
 
     public BuildingMetadataResponse() {
     }
 
-    public BuildingMetadataResponse(String type, int level, long buildTime, ResourcesResponse buildCost, String description, PrerequisitesResponse prerequisites, ResourcesResponse resourcesPerRound) {
+    public BuildingMetadataResponse(String type, int level, long buildTime, ResourcesResponse buildCost, String description, PrerequisitesResponse prerequisites, ResourcesResponse resourcesPerRound, Double buildingBuildTimeSpeedUp, Double researchTimeSpeedUp, Double shipBuildTimeSpeedUp) {
         this.type = type;
         this.level = level;
         this.buildTime = buildTime;
@@ -39,6 +59,9 @@ public class BuildingMetadataResponse {
         this.description = description;
         this.prerequisites = prerequisites;
         this.resourcesPerRound = resourcesPerRound;
+        this.buildingBuildTimeSpeedUp = buildingBuildTimeSpeedUp;
+        this.researchTimeSpeedUp = researchTimeSpeedUp;
+        this.shipBuildTimeSpeedUp = shipBuildTimeSpeedUp;
     }
 
     public String getType() {
@@ -89,12 +112,40 @@ public class BuildingMetadataResponse {
         this.prerequisites = prerequisites;
     }
 
+    @Nullable
     public ResourcesResponse getResourcesPerRound() {
         return resourcesPerRound;
     }
 
-    public void setResourcesPerRound(ResourcesResponse resourcesPerRound) {
+    public void setResourcesPerRound(@Nullable ResourcesResponse resourcesPerRound) {
         this.resourcesPerRound = resourcesPerRound;
+    }
+
+    @Nullable
+    public Double getBuildingBuildTimeSpeedUp() {
+        return buildingBuildTimeSpeedUp;
+    }
+
+    public void setBuildingBuildTimeSpeedUp(@Nullable Double buildingBuildTimeSpeedUp) {
+        this.buildingBuildTimeSpeedUp = buildingBuildTimeSpeedUp;
+    }
+
+    @Nullable
+    public Double getResearchTimeSpeedUp() {
+        return researchTimeSpeedUp;
+    }
+
+    public void setResearchTimeSpeedUp(@Nullable Double researchTimeSpeedUp) {
+        this.researchTimeSpeedUp = researchTimeSpeedUp;
+    }
+
+    @Nullable
+    public Double getShipBuildTimeSpeedUp() {
+        return shipBuildTimeSpeedUp;
+    }
+
+    public void setShipBuildTimeSpeedUp(@Nullable Double shipBuildTimeSpeedUp) {
+        this.shipBuildTimeSpeedUp = shipBuildTimeSpeedUp;
     }
 
     @Override
@@ -107,6 +158,9 @@ public class BuildingMetadataResponse {
                 .add("description", description)
                 .add("prerequisites", prerequisites)
                 .add("resourcesPerRound", resourcesPerRound)
+                .add("buildingBuildTimeSpeedUp", buildingBuildTimeSpeedUp)
+                .add("researchTimeSpeedUp", researchTimeSpeedUp)
+                .add("shipBuildTimeSpeedUp", shipBuildTimeSpeedUp)
                 .toString();
     }
 }
