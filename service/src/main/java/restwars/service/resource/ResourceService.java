@@ -26,8 +26,17 @@ public interface ResourceService {
      *
      * @param type  Building type.
      * @param level Level.
-     * @param technologies
+     * @param technologies Technologies.
      * @return Gathered resources in one round.
      */
     Resources calculateGatheredResources(BuildingType type, int level, Technologies technologies);
+
+    /**
+     * Calculates the resources which are gathered from the given building type with the given level in one round without applying bonus.
+     *
+     * @param type  Building type.
+     * @param level Level.
+     * @return Gathered resources in one round.
+     */
+    Resources calculateGatheredResourcesWithoutBonus(BuildingType type, int level);
 }

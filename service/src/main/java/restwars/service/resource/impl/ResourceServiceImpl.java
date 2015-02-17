@@ -35,6 +35,11 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
+    public Resources calculateGatheredResourcesWithoutBonus(BuildingType type, int level) {
+        return calculateGatheredResources(type, level, Technologies.NONE);
+    }
+
+    @Override
     public Resources calculateGatheredResources(BuildingType type, int level, Technologies technologies) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");
