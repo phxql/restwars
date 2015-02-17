@@ -5,12 +5,14 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import restwars.model.building.BuildingType;
+import restwars.model.resource.Resources;
 import restwars.rest.mapper.PrerequisitesMapper;
 import restwars.rest.mapper.ResourcesMapper;
 import restwars.restapi.dto.metadata.BuildingMetadataResponse;
 import restwars.service.building.BuildingService;
 import restwars.service.mechanics.BuildingMechanics;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -52,8 +54,23 @@ public class BuildingMetadataSubResource {
                 .map(t -> new BuildingMetadataResponse(
                         t.name(), sanitizedLevel, buildingService.calculateBuildTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(t, sanitizedLevel)),
-                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(buildingMechanics.getPrerequisites(t))
+                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(buildingMechanics.getPrerequisites(t)),
+                        ResourcesMapper.fromResources(getResourcesPerRound(t, level))
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Nullable
+    private Resources getResourcesPerRound(BuildingType type, int level) {
+        switch (type) {
+            case CRYSTAL_MINE:
+                return new Resources(buildingMechanics.calculateCrystalsGathered(level), 0, 0);
+            case GAS_REFINERY:
+                return new Resources(0, buildingMechanics.calculateGasGathered(level), 0);
+            case SOLAR_PANELS:
+                return new Resources(0, 0, buildingMechanics.calculateEnergyGathered(level));
+            default:
+                return Resources.NONE;
+        }
     }
 }

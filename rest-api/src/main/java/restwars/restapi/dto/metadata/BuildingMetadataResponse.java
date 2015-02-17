@@ -25,16 +25,20 @@ public class BuildingMetadataResponse {
     @ApiModelProperty(value = "Prerequisites", required = true)
     private PrerequisitesResponse prerequisites;
 
+    @ApiModelProperty(value = "Resources gathered per round", required = true)
+    private ResourcesResponse resourcesPerRound;
+
     public BuildingMetadataResponse() {
     }
 
-    public BuildingMetadataResponse(String type, int level, long buildTime, ResourcesResponse buildCost, String description, PrerequisitesResponse prerequisites) {
+    public BuildingMetadataResponse(String type, int level, long buildTime, ResourcesResponse buildCost, String description, PrerequisitesResponse prerequisites, ResourcesResponse resourcesPerRound) {
         this.type = type;
         this.level = level;
         this.buildTime = buildTime;
         this.buildCost = buildCost;
         this.description = description;
         this.prerequisites = prerequisites;
+        this.resourcesPerRound = resourcesPerRound;
     }
 
     public String getType() {
@@ -85,6 +89,14 @@ public class BuildingMetadataResponse {
         this.prerequisites = prerequisites;
     }
 
+    public ResourcesResponse getResourcesPerRound() {
+        return resourcesPerRound;
+    }
+
+    public void setResourcesPerRound(ResourcesResponse resourcesPerRound) {
+        this.resourcesPerRound = resourcesPerRound;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -94,6 +106,7 @@ public class BuildingMetadataResponse {
                 .add("buildCost", buildCost)
                 .add("description", description)
                 .add("prerequisites", prerequisites)
+                .add("resourcesPerRound", resourcesPerRound)
                 .toString();
     }
 }
