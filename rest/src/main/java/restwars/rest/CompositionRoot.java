@@ -1,12 +1,8 @@
 package restwars.rest;
 
 import restwars.rest.authentication.PlayerAuthenticator;
+import restwars.rest.integration.locking.LockingFilter;
 import restwars.rest.resources.*;
-import restwars.service.building.BuildingService;
-import restwars.service.planet.PlanetService;
-import restwars.service.player.PlayerService;
-import restwars.service.ship.ShipService;
-import restwars.service.technology.TechnologyService;
 import restwars.service.unitofwork.UnitOfWorkService;
 
 import javax.inject.Inject;
@@ -15,13 +11,6 @@ import javax.inject.Inject;
  * Composition root of the dependency injection.
  */
 public class CompositionRoot {
-    private final PlayerService playerService;
-    private final PlanetService planetService;
-    private final BuildingService buildingService;
-    private final TechnologyService technologyService;
-    private final ShipService shipService;
-
-    private final BuildingSubResource buildingSubResource;
     private final SystemResource systemResource;
     private final PlayerResource playerResource;
     private final TechnologyResource technologyResource;
@@ -34,17 +23,11 @@ public class CompositionRoot {
 
     private final PlayerAuthenticator playerAuthenticator;
     private final Clock clock;
-
+    private final LockingFilter lockingFilter;
     private final UnitOfWorkService unitOfWorkService;
 
     @Inject
-    public CompositionRoot(PlayerService playerService, PlanetService planetService, BuildingService buildingService, TechnologyService technologyService, ShipService shipService, BuildingSubResource buildingSubResource, SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, RootResource rootResource, FlightResource flightResource, PlayerAuthenticator playerAuthenticator, Clock clock, UnitOfWorkService unitOfWorkService) {
-        this.playerService = playerService;
-        this.planetService = planetService;
-        this.buildingService = buildingService;
-        this.technologyService = technologyService;
-        this.shipService = shipService;
-        this.buildingSubResource = buildingSubResource;
+    public CompositionRoot(SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, RootResource rootResource, FlightResource flightResource, PlayerAuthenticator playerAuthenticator, Clock clock, LockingFilter lockingFilter, UnitOfWorkService unitOfWorkService) {
         this.systemResource = systemResource;
         this.playerResource = playerResource;
         this.technologyResource = technologyResource;
@@ -56,15 +39,8 @@ public class CompositionRoot {
         this.flightResource = flightResource;
         this.playerAuthenticator = playerAuthenticator;
         this.clock = clock;
+        this.lockingFilter = lockingFilter;
         this.unitOfWorkService = unitOfWorkService;
-    }
-
-    public BuildingService getBuildingService() {
-        return buildingService;
-    }
-
-    public BuildingSubResource getBuildingSubResource() {
-        return buildingSubResource;
     }
 
     public SystemResource getSystemResource() {
@@ -91,26 +67,6 @@ public class CompositionRoot {
         return clock;
     }
 
-    public PlayerService getPlayerService() {
-        return playerService;
-    }
-
-    public PlanetService getPlanetService() {
-        return planetService;
-    }
-
-    public TechnologyService getTechnologyService() {
-        return technologyService;
-    }
-
-    public ShipService getShipService() {
-        return shipService;
-    }
-
-    public UnitOfWorkService getUnitOfWorkService() {
-        return unitOfWorkService;
-    }
-
     public MetadataResource getMetadataResource() {
         return metadataResource;
     }
@@ -129,5 +85,13 @@ public class CompositionRoot {
 
     public FlightResource getFlightResource() {
         return flightResource;
+    }
+
+    public LockingFilter getLockingFilter() {
+        return lockingFilter;
+    }
+
+    public UnitOfWorkService getUnitOfWorkService() {
+        return unitOfWorkService;
     }
 }

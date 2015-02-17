@@ -8,6 +8,7 @@ import restwars.UnrecoverableException;
 import restwars.model.UniverseConfiguration;
 import restwars.service.building.BuildingService;
 import restwars.service.flight.FlightService;
+import restwars.service.infrastructure.LockService;
 import restwars.service.infrastructure.RoundService;
 import restwars.service.resource.ResourceService;
 import restwars.service.ship.ShipService;
@@ -33,13 +34,15 @@ public class Clock implements Managed, Runnable {
     private final TelescopeService telescopeService;
     private final UniverseConfiguration universeConfiguration;
 
+    private final LockService lockService;
     private final UnitOfWorkService unitOfWorkService;
 
     @Nullable
     private ScheduledExecutorService scheduledExecutorService;
 
     @Inject
-    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService, TechnologyService technologyService, ShipService shipService, UnitOfWorkService unitOfWorkService, TelescopeService telescopeService, FlightService flightService) {
+    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService, TechnologyService technologyService, ShipService shipService, UnitOfWorkService unitOfWorkService, TelescopeService telescopeService, FlightService flightService, LockService lockService) {
+        this.lockService = Preconditions.checkNotNull(lockService, "lockService");
         this.flightService = Preconditions.checkNotNull(flightService, "flightService");
         this.unitOfWorkService = Preconditions.checkNotNull(unitOfWorkService, "unitOfWorkService");
         this.shipService = Preconditions.checkNotNull(shipService, "shipService");
@@ -72,23 +75,28 @@ public class Clock implements Managed, Runnable {
 
     @Override
     public void run() {
-        unitOfWorkService.start();
+        lockService.beforeClock();
         try {
-            long round = roundService.nextRound();
-            LOGGER.info("Starting round {}", round);
+            unitOfWorkService.start();
+            try {
+                long round = roundService.nextRound();
+                LOGGER.info("Starting round {}", round);
 
-            buildingService.finishConstructionSites();
-            technologyService.finishResearches();
-            shipService.finishShipsInConstruction();
-            resourceService.gatherResourcesOnAllPlanets();
-            flightService.finishFlights();
-            telescopeService.detectFlights();
+                buildingService.finishConstructionSites();
+                technologyService.finishResearches();
+                shipService.finishShipsInConstruction();
+                resourceService.gatherResourcesOnAllPlanets();
+                flightService.finishFlights();
+                telescopeService.detectFlights();
 
-            unitOfWorkService.commit();
-        } catch (Exception e) {
-            unitOfWorkService.abort();
-            LOGGER.error("Clock thread crashed with exception", e);
-            throw new UnrecoverableException("Exception", e);
+                unitOfWorkService.commit();
+            } catch (Exception e) {
+                unitOfWorkService.abort();
+                LOGGER.error("Clock thread crashed with exception", e);
+                throw new UnrecoverableException("Exception", e);
+            }
+        } finally {
+            lockService.afterClock();
         }
     }
 }

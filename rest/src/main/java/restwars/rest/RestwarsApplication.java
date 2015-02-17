@@ -76,7 +76,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource, configuration.getPasswordIterations()));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
 
-        environment.jersey().register(new UnitOfWorkResourceMethodDispatchAdapter(compositionRoot.getUnitOfWorkService()));
+        registerJerseyHooks(environment, compositionRoot);
 
         environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(environment.metrics(), compositionRoot.getPlayerAuthenticator(), CacheBuilderSpec.parse(configuration.getPasswordCache())), REALM));
         environment.jersey().register(compositionRoot.getRootResource());
@@ -95,6 +95,12 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         registerSwagger(environment, configuration);
 
         registerCorsFilter(environment);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void registerJerseyHooks(Environment environment, CompositionRoot compositionRoot) {
+        environment.jersey().getResourceConfig().getResourceFilterFactories().add(compositionRoot.getLockingFilter());
+        environment.jersey().register(new UnitOfWorkResourceMethodDispatchAdapter(compositionRoot.getUnitOfWorkService()));
     }
 
     private void registerSwagger(Environment environment, RestwarsConfiguration configuration) {
