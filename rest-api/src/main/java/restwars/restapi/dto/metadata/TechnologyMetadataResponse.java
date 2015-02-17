@@ -1,9 +1,12 @@
 package restwars.restapi.dto.metadata;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import restwars.restapi.dto.ResourcesResponse;
+
+import javax.annotation.Nullable;
 
 @ApiModel(description = "Technology metadata")
 public class TechnologyMetadataResponse {
@@ -25,16 +28,28 @@ public class TechnologyMetadataResponse {
     @ApiModelProperty(value = "Prerequisites", required = true)
     private PrerequisitesResponse prerequisites;
 
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @ApiModelProperty(value = "Build cost reduction in percent", required = false)
+    private Double buildCostReduction;
+
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @ApiModelProperty(value = "Flight cost reduction in percent", required = false)
+    private Double flightCostReduction;
+
     public TechnologyMetadataResponse() {
     }
 
-    public TechnologyMetadataResponse(String type, int level, long researchTime, ResourcesResponse researchCost, String description, PrerequisitesResponse prerequisites) {
+    public TechnologyMetadataResponse(String type, int level, long researchTime, ResourcesResponse researchCost, String description, PrerequisitesResponse prerequisites, Double buildCostReduction, Double flightCostReduction) {
         this.type = type;
         this.level = level;
         this.researchTime = researchTime;
         this.researchCost = researchCost;
         this.description = description;
         this.prerequisites = prerequisites;
+        this.buildCostReduction = buildCostReduction;
+        this.flightCostReduction = flightCostReduction;
     }
 
     public String getDescription() {
@@ -85,6 +100,24 @@ public class TechnologyMetadataResponse {
         this.prerequisites = prerequisites;
     }
 
+    @Nullable
+    public Double getFlightCostReduction() {
+        return flightCostReduction;
+    }
+
+    public void setFlightCostReduction(@Nullable Double flightCostReduction) {
+        this.flightCostReduction = flightCostReduction;
+    }
+
+    @Nullable
+    public Double getBuildCostReduction() {
+        return buildCostReduction;
+    }
+
+    public void setBuildCostReduction(@Nullable Double buildCostReduction) {
+        this.buildCostReduction = buildCostReduction;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -94,6 +127,8 @@ public class TechnologyMetadataResponse {
                 .add("researchCost", researchCost)
                 .add("description", description)
                 .add("prerequisites", prerequisites)
+                .add("buildCostReduction", buildCostReduction)
+                .add("flightCostReduction", flightCostReduction)
                 .toString();
     }
 }

@@ -11,6 +11,7 @@ import restwars.restapi.dto.metadata.TechnologyMetadataResponse;
 import restwars.service.mechanics.TechnologyMechanics;
 import restwars.service.technology.TechnologyService;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -43,8 +44,27 @@ public class TechnologyMetadataSubResource {
                 .map(t -> new TechnologyMetadataResponse(
                         t.name(), sanitizedLevel, technologyService.calculateResearchTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(technologyService.calculateResearchCost(t, sanitizedLevel)),
-                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(technologyMechanics.getPrerequisites(t))
+                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(technologyMechanics.getPrerequisites(t)),
+                        getBuildCostReduction(t, level), getFlightCostReduction(t, level)
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Nullable
+    private Double getFlightCostReduction(TechnologyType type, int level) {
+        if (type != TechnologyType.COMBUSTION_ENGINE) {
+            return null;
+        }
+
+        return technologyMechanics.calculateCombustionFlightCostReduction(level) * 100;
+    }
+
+    @Nullable
+    private Double getBuildCostReduction(TechnologyType type, int level) {
+        if (type != TechnologyType.BUILDING_BUILD_COST_REDUCTION) {
+            return null;
+        }
+
+        return technologyMechanics.calculateBuildCostReduction(level) * 100;
     }
 }
