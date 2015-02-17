@@ -22,6 +22,14 @@ public interface ResourceService {
     void gatherResources(Planet planet);
 
     /**
+     * Calculates the gathered resources per round for a given planet.
+     *
+     * @param planet Planet.
+     * @return Gathered resources per round.
+     */
+    Resources calculateGatheredResourcesOnPlanet(Planet planet);
+
+    /**
      * Calculates the resources which are gathered from the given building type with the given level in one round.
      *
      * @param type  Building type.

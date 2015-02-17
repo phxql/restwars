@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import restwars.Data;
-import restwars.restapi.dto.planet.PlanetResponse;
+import restwars.restapi.dto.planet.PlanetListResponse;
 import restwars.restapi.dto.player.PlayerResponse;
 import restwars.restapi.dto.player.RegisterPlayerRequest;
 import restwars.service.planet.PlanetService;
@@ -66,8 +66,8 @@ public class PlayerResourceTest extends AbstractResourceTest {
         PlayerResponse response = request(resources, URL).get(PlayerResponse.class);
 
         assertThat(response.getUsername(), is("username"));
-        List<PlanetResponse> planets = response.getPlanets();
+        List<PlanetListResponse> planets = response.getPlanets();
         assertThat(planets, hasSize(1));
-        assertThat(planets.get(0), is(new PlanetResponse("1.1.1", 100, 200, 300)));
+        assertThat(planets.get(0), is(new PlanetListResponse("1.1.1", 100, 200, 300)));
     }
 }

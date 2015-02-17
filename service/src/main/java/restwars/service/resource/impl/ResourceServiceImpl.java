@@ -78,10 +78,8 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public void gatherResources(Planet planet) {
+    public Resources calculateGatheredResourcesOnPlanet(Planet planet) {
         Preconditions.checkNotNull(planet, "planet");
-
-        LOGGER.debug("Planet has {}", planet.getResources());
 
         Resources totalGathered = Resources.NONE;
 
@@ -92,7 +90,17 @@ public class ResourceServiceImpl implements ResourceService {
             totalGathered = totalGathered.plus(gatheredResources);
         }
 
-        Planet updatedPlanet = planet.withResources(planet.getResources().plus(totalGathered));
+        return totalGathered;
+    }
+
+    @Override
+    public void gatherResources(Planet planet) {
+        Preconditions.checkNotNull(planet, "planet");
+
+        LOGGER.debug("Planet has {}", planet.getResources());
+
+        Resources gatheredResources = calculateGatheredResourcesOnPlanet(planet);
+        Planet updatedPlanet = planet.withResources(planet.getResources().plus(gatheredResources));
         planetService.update(updatedPlanet);
 
         LOGGER.debug("Planet has now {}", updatedPlanet.getResources());

@@ -8,10 +8,13 @@ import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
+import restwars.model.resource.Resources;
 import restwars.rest.mapper.PlanetMapper;
 import restwars.rest.resources.param.LocationParam;
+import restwars.restapi.dto.planet.PlanetListResponse;
 import restwars.restapi.dto.planet.PlanetResponse;
 import restwars.service.planet.PlanetService;
+import restwars.service.resource.ResourceService;
 import restwars.util.Functional;
 
 import javax.inject.Inject;
@@ -34,9 +37,11 @@ public class PlanetResource {
     private final ShipSubResource shipSubResource;
     private final FlightSubResource flightSubResource;
     private final TelescopeSubResource telescopeSubResource;
+    private final ResourceService resourceService;
 
     @Inject
-    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource, FlightSubResource flightSubResource, TelescopeSubResource telescopeSubResource) {
+    public PlanetResource(PlanetService planetService, BuildingSubResource buildingSubResource, ConstructionSiteSubResource constructionSiteSubResource, ResearchSubResource researchSubResource, ShipInConstructionSubResource shipInConstructionSubResource, ShipSubResource shipSubResource, FlightSubResource flightSubResource, TelescopeSubResource telescopeSubResource, ResourceService resourceService) {
+        this.resourceService = Preconditions.checkNotNull(resourceService, "resourceService");
         this.telescopeSubResource = Preconditions.checkNotNull(telescopeSubResource, "telescopeSubResource");
         this.flightSubResource = Preconditions.checkNotNull(flightSubResource, "flightSubResource");
         this.shipSubResource = Preconditions.checkNotNull(shipSubResource, "shipSubResource");
@@ -49,7 +54,7 @@ public class PlanetResource {
 
     @GET
     @ApiOperation("Lists all planets for the current player")
-    public List<PlanetResponse> index(@Auth @ApiParam(access = "internal") Player player) {
+    public List<PlanetListResponse> index(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
         List<Planet> planets = planetService.findWithOwner(player);
 
@@ -68,7 +73,9 @@ public class PlanetResource {
 
         Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
 
-        return PlanetMapper.fromPlanet(planet);
+        Resources gatheredResources = resourceService.calculateGatheredResourcesOnPlanet(planet);
+
+        return PlanetMapper.fromPlanet(planet, gatheredResources);
     }
 
     @Path("/{location}/building")
