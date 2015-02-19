@@ -24,6 +24,18 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Clock implements Managed, Runnable {
+    /**
+     * Callback for the next round handler.
+     */
+    public static interface NextRoundCallback {
+        /**
+         * Is called when the next round has been started.
+         *
+         * @param round Round, which has been started.
+         */
+        void onNextRound(long round);
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Clock.class);
 
     private final BuildingService buildingService;
@@ -37,7 +49,7 @@ public class Clock implements Managed, Runnable {
 
     private final LockService lockService;
     private final UnitOfWorkService unitOfWorkService;
-    private Optional<Runnable> nextRoundCallback = Optional.empty();
+    private Optional<NextRoundCallback> nextRoundCallback = Optional.empty();
 
     @Nullable
     private ScheduledExecutorService scheduledExecutorService;
@@ -75,17 +87,18 @@ public class Clock implements Managed, Runnable {
         }
     }
 
-    public void setNextRoundCallback(Runnable nextRoundCallback) {
+    public void setNextRoundCallback(NextRoundCallback nextRoundCallback) {
         this.nextRoundCallback = Optional.of(nextRoundCallback);
     }
 
     @Override
     public void run() {
+        long round = -1;
         lockService.beforeClock();
         try {
             unitOfWorkService.start();
             try {
-                long round = roundService.nextRound();
+                round = roundService.nextRound();
                 LOGGER.info("Starting round {}", round);
 
                 buildingService.finishConstructionSites();
@@ -96,10 +109,6 @@ public class Clock implements Managed, Runnable {
                 telescopeService.detectFlights();
 
                 unitOfWorkService.commit();
-
-                if (nextRoundCallback.isPresent()) {
-                    nextRoundCallback.get().run();
-                }
             } catch (Exception e) {
                 unitOfWorkService.abort();
                 LOGGER.error("Clock thread crashed with exception", e);
@@ -107,6 +116,10 @@ public class Clock implements Managed, Runnable {
             }
         } finally {
             lockService.afterClock();
+        }
+
+        if (nextRoundCallback.isPresent()) {
+            nextRoundCallback.get().onNextRound(round);
         }
     }
 }
