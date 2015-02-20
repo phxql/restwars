@@ -49,7 +49,6 @@ public class WebSocketHandler implements AtmosphereHandler {
 
     @Override
     public void destroy() {
-        System.out.println("destroy");
     }
 
     private static class Round {
