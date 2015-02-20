@@ -8,7 +8,7 @@ import org.atmosphere.cpr.*;
 import java.io.IOException;
 
 @AtmosphereHandlerService
-public class WebSocketHandler implements AtmosphereHandler {
+public class WebSocketHandler2 implements AtmosphereHandler {
     /**
      * Name of the round broadcaster.
      */

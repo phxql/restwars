@@ -34,7 +34,7 @@ import restwars.rest.di.RestWarsModule;
 import restwars.rest.doc.ModelConverter;
 import restwars.rest.doc.SwaggerFilter;
 import restwars.rest.integration.database.UnitOfWorkResourceMethodDispatchAdapter;
-import restwars.rest.websocket.WebSocketHandler;
+import restwars.rest.websocket.WebSocketHandler2;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -108,14 +108,14 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
     private void registerAtmosphere(Environment environment, Clock clock) {
         AtmosphereServlet servlet = new AtmosphereServlet();
-        servlet.framework().addInitParameter(ApplicationConfig.ANNOTATION_PACKAGE, WebSocketHandler.class.getPackage().getName());
+        servlet.framework().addInitParameter(ApplicationConfig.ANNOTATION_PACKAGE, WebSocketHandler2.class.getPackage().getName());
         servlet.framework().addInitParameter(ApplicationConfig.WEBSOCKET_SUPPORT, "true");
 
         ServletRegistration.Dynamic registration = environment.servlets().addServlet("atmosphere", servlet);
         registration.addMapping(WEBSOCKET_SERVLET_MAPPING);
 
         BroadcasterFactory broadcasterFactory = servlet.framework().getBroadcasterFactory();
-        clock.setNextRoundCallback(round -> WebSocketHandler.broadcastRound(broadcasterFactory, round));
+        clock.setNextRoundCallback(round -> WebSocketHandler2.broadcastRound(broadcasterFactory, round));
     }
 
     @SuppressWarnings("unchecked")
