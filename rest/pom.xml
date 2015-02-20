@@ -15,6 +15,7 @@
     <properties>
         <dropwizard.version>0.7.1</dropwizard.version>
         <swagger.version>1.3.12</swagger.version>
+        <atmosphere.version>2.2.5</atmosphere.version>
     </properties>
 
     <dependencies>
@@ -58,6 +59,18 @@
             <groupId>com.wordnik</groupId>
             <artifactId>swagger-jaxrs_2.10</artifactId>
             <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-runtime</artifactId>
+            <version>${atmosphere.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>9.0.7.v20131107</version>
         </dependency>
 
         <dependency>
