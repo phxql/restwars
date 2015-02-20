@@ -53,7 +53,6 @@ public class WebSocketHandler implements AtmosphereHandler {
     }
 
     private static class Round {
-
         private final long round;
 
         public Round(long round) {

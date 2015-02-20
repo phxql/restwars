@@ -13,6 +13,9 @@
     websocket.onmessage = function (event) {
         console.log("Message from websocket: " + event.data);
     };
+    websocket.onclose = function (event) {
+        console.log("Websocket closed");
+    };
 </script>
 </body>
 </html>
