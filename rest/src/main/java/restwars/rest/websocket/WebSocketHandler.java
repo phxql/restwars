@@ -25,7 +25,7 @@ public class WebSocketHandler implements AtmosphereHandler {
     }
 
     private boolean isBroadcast(AtmosphereResourceEvent event) {
-        return event.getMessage() != null;
+        return event.getMessage() != null && !event.isCancelled() && !event.isClosedByClient() && !event.isClosedByApplication();
     }
 
     @Override
