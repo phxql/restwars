@@ -63,7 +63,7 @@
 
         <dependency>
             <groupId>org.atmosphere</groupId>
-            <artifactId>atmosphere-jersey</artifactId>
+            <artifactId>atmosphere-runtime</artifactId>
             <version>${atmosphere.version}</version>
         </dependency>
 
