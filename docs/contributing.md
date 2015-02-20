@@ -1,4 +1,4 @@
-# Hacking
+# Contributing
 ## Prerequisites:
 * Java 8
 * Maven
@@ -18,18 +18,3 @@
 * Run `java -jar rest-*.jar server config.yaml`
 * The server is now starting up, you can see the provided endpoints in the console log
 * The server is running on `http://localhost:8080`
-
-## Hacking a bot
-### Getting started
-* Check the metadata endpoint. This will give you information about buildings, ships and technologies.
-* Take a look at the webservice documentation. See below for details on how to get the documentation.
-* Now start up your brain and your development tools and write a bot to rule them all!
-  * If you want to create a bot which runs on the JVM, check [this](https://github.com/phxql/restwars/tree/master/rest-client) out.
-
-### Get the webservice documentation
-* Start the RESTwars server
-* `git clone https://github.com/phxql/swagger-ui.git`
-* `cd` into `dist` folder from Swagger UI and open the file `index.html` in your browser
-* Enter your username and your password in the textfields on the top, then click on the "Explore" button
-
-
