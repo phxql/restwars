@@ -94,7 +94,7 @@ public class JooqPlanetDAOTest extends DatabaseTest {
         List<PlanetWithOwner> planets = sut.findInRange(location.getGalaxy(), location.getGalaxy(), location.getSolarSystem(), location.getSolarSystem(), location.getPlanet(), location.getPlanet());
 
         assertThat(planets, hasSize(1));
-        assertThat(planets.get(0), is(new PlanetWithOwner(BasicScenario.Player1.Planet1.PLANET, BasicScenario.Player1.PLAYER)));
+        assertThat(planets.get(0), is(new PlanetWithOwner(BasicScenario.Player1.Planet1.PLANET.getLocation(), Optional.of(BasicScenario.Player1.Planet1.PLANET), Optional.of(BasicScenario.Player1.PLAYER))));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class JooqPlanetDAOTest extends DatabaseTest {
         List<PlanetWithOwner> planets = sut.findInRange(location.getGalaxy(), location.getGalaxy(), location.getSolarSystem(), location.getSolarSystem(), location.getPlanet(), location.getPlanet());
 
         assertThat(planets, hasSize(1));
-        assertThat(planets.get(0), is(new PlanetWithOwner(BasicScenario.Player1.Planet2.PLANET, BasicScenario.Player1.PLAYER)));
+        assertThat(planets.get(0), is(new PlanetWithOwner(BasicScenario.Player1.Planet2.PLANET.getLocation(), Optional.of(BasicScenario.Player1.Planet2.PLANET), Optional.of(BasicScenario.Player1.PLAYER))));
     }
 
     @Test
@@ -114,9 +114,10 @@ public class JooqPlanetDAOTest extends DatabaseTest {
         List<PlanetWithOwner> planets = sut.findInRange(1, 10, 1, 10, 1, 10);
 
         assertThat(planets, hasSize(3));
-        assertThat(planets.get(0), is(new PlanetWithOwner(BasicScenario.Player1.Planet1.PLANET, BasicScenario.Player1.PLAYER)));
-        assertThat(planets.get(1), is(new PlanetWithOwner(BasicScenario.Player1.Planet2.PLANET, BasicScenario.Player1.PLAYER)));
-        assertThat(planets.get(2), is(new PlanetWithOwner(BasicScenario.Player2.Planet1.PLANET, BasicScenario.Player2.PLAYER)));
+
+        assertThat(planets.get(0), is(new PlanetWithOwner(BasicScenario.Player1.Planet1.PLANET.getLocation(), Optional.of(BasicScenario.Player1.Planet1.PLANET), Optional.of(BasicScenario.Player1.PLAYER))));
+        assertThat(planets.get(1), is(new PlanetWithOwner(BasicScenario.Player1.Planet2.PLANET.getLocation(), Optional.of(BasicScenario.Player1.Planet2.PLANET), Optional.of(BasicScenario.Player1.PLAYER))));
+        assertThat(planets.get(2), is(new PlanetWithOwner(BasicScenario.Player2.Planet1.PLANET.getLocation(), Optional.of(BasicScenario.Player2.Planet1.PLANET), Optional.of(BasicScenario.Player2.PLAYER))));
     }
 
     private void verifyRow(Map<String, Object> row, Planet planet) {

@@ -3,6 +3,7 @@ package restwars.rest.mapper;
 import com.google.common.base.Preconditions;
 import restwars.model.planet.Planet;
 import restwars.model.planet.PlanetWithOwner;
+import restwars.model.player.Player;
 import restwars.model.resource.Resources;
 import restwars.restapi.dto.planet.PlanetResponse;
 import restwars.restapi.dto.planet.PlanetScanResponse;
@@ -34,7 +35,7 @@ public final class PlanetMapper {
     }
 
     public static PlanetScanResponse fromPlanetWithOwner(PlanetWithOwner planetWithOwner) {
-        return new PlanetScanResponse(planetWithOwner.getPlanet().getLocation().toString(), planetWithOwner.getOwner().getUsername());
+        return new PlanetScanResponse(planetWithOwner.getLocation().toString(), planetWithOwner.getOwner().map(Player::getUsername).orElse(null));
     }
 
 }

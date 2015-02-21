@@ -9,7 +9,7 @@ public class PlanetScanResponse {
     @ApiModelProperty(value = "Location", required = true)
     private String location;
 
-    @ApiModelProperty(value = "Owner", required = true)
+    @ApiModelProperty(value = "Owner", required = false)
     private String owner;
 
     public PlanetScanResponse() {
@@ -35,7 +35,6 @@ public class PlanetScanResponse {
     public void setOwner(String owner) {
         this.owner = owner;
     }
-
 
     @Override
     public String toString() {

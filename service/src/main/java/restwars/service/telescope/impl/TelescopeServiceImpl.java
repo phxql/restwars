@@ -1,8 +1,11 @@
 package restwars.service.telescope.impl;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.model.UniverseConfiguration;
 import restwars.model.building.Building;
 import restwars.model.building.BuildingType;
 import restwars.model.flight.DetectedFlight;
@@ -27,6 +30,7 @@ import restwars.util.MathExt;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class TelescopeServiceImpl implements TelescopeService {
@@ -39,9 +43,11 @@ public class TelescopeServiceImpl implements TelescopeService {
     private final EventService eventService;
     private final RandomNumberGenerator randomNumberGenerator;
     private final BuildingMechanics buildingMechanics;
+    private final UniverseConfiguration universeConfiguration;
 
     @Inject
-    public TelescopeServiceImpl(PlanetDAO planetDAO, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO, FlightDAO flightDAO, RoundService roundService, RandomNumberGenerator randomNumberGenerator, EventService eventService, BuildingMechanics buildingMechanics) {
+    public TelescopeServiceImpl(PlanetDAO planetDAO, BuildingDAO buildingDAO, DetectedFlightDAO detectedFlightDAO, FlightDAO flightDAO, RoundService roundService, RandomNumberGenerator randomNumberGenerator, EventService eventService, BuildingMechanics buildingMechanics, UniverseConfiguration universeConfiguration) {
+        this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
         this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.flightDAO = Preconditions.checkNotNull(flightDAO, "flightDAO");
         this.detectedFlightDAO = Preconditions.checkNotNull(detectedFlightDAO, "detectedFlightDAO");
@@ -66,7 +72,26 @@ public class TelescopeServiceImpl implements TelescopeService {
 
         Location location = planet.getLocation();
 
-        return planetDAO.findInRange(location.getGalaxy(), location.getGalaxy(), location.getSolarSystem() - scanRange, location.getSolarSystem() + scanRange, 0, Integer.MAX_VALUE);
+        int galaxyMin = location.getGalaxy();
+        int galaxyMax = location.getGalaxy();
+        int solarSystemMin = Math.max(location.getSolarSystem() - scanRange, 1);
+        int solarSystemMax = Math.min(location.getSolarSystem() + scanRange, universeConfiguration.getSolarSystemsPerGalaxy());
+        int planetMin = 1;
+        int planetMax = universeConfiguration.getPlanetsPerSolarSystem();
+
+        Map<Location, PlanetWithOwner> foundPlanets = Maps.uniqueIndex(planetDAO.findInRange(galaxyMin, galaxyMax, solarSystemMin, solarSystemMax, planetMin, planetMax), PlanetWithOwner::getLocation);
+
+        List<PlanetWithOwner> result = Lists.newArrayList();
+        for (int g = galaxyMin; g <= galaxyMax; g++) {
+            for (int s = solarSystemMin; s <= solarSystemMax; s++) {
+                for (int p = planetMin; p <= planetMax; p++) {
+                    Location currentLocation = new Location(g, s, p);
+
+                    result.add(foundPlanets.getOrDefault(currentLocation, new PlanetWithOwner(currentLocation, Optional.<Planet>empty(), Optional.<Player>empty())));
+                }
+            }
+        }
+        return result;
     }
 
     @Override

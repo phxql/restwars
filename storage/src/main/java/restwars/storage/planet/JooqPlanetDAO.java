@@ -127,6 +127,9 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
                 .and(PLANET.LOCATION_PLANET.between(planetMin, planetMax))
                 .fetch();
 
-        return result.stream().map(r -> new PlanetWithOwner(PlanetMapper.fromRecord(r), PlayerMapper.fromRecord(r))).collect(Collectors.toList());
+        return result.stream().map(r -> {
+            Planet planet = PlanetMapper.fromRecord(r);
+            return new PlanetWithOwner(planet.getLocation(), Optional.of(planet), Optional.of(PlayerMapper.fromRecord(r)));
+        }).collect(Collectors.toList());
     }
 }
