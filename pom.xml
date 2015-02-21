@@ -6,7 +6,7 @@
 
     <groupId>restwars</groupId>
     <artifactId>parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${restwars.version}</version>
     <packaging>pom</packaging>
 
     <name>RESTwars - Parent</name>
@@ -20,6 +20,7 @@
     </modules>
 
     <properties>
+        <restwars.version>0.1.0</restwars.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <guava.version>17.0</guava.version>

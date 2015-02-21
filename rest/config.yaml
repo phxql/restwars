@@ -17,7 +17,7 @@ solarSystems: 3
 planets: 3
 
 # Round time in seconds
-roundTime: 5
+roundTime: 10
 
 # Database configuration
 database:

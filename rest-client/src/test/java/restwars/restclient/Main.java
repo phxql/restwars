@@ -1,9 +1,9 @@
 package restwars.restclient;
 
 import restwars.restapi.dto.planet.PlanetResponse;
+import restwars.restapi.dto.planet.PlanetsResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -28,8 +28,8 @@ public class Main {
             System.out.println("Fights");
             System.out.println(client.getFightResource().ownFights(1));
 
-            List<PlanetResponse> planets = client.getPlanetResource().allPlanets();
-            for (PlanetResponse planet : planets) {
+            PlanetsResponse planets = client.getPlanetResource().allPlanets();
+            for (PlanetResponse planet : planets.getData()) {
                 System.out.println();
                 System.out.println("Planet " + planet);
 
