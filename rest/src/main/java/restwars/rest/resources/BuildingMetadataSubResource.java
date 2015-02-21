@@ -17,10 +17,7 @@ import restwars.service.resource.ResourceService;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,19 +47,46 @@ public class BuildingMetadataSubResource {
      * @return Metadata for all buildings.
      */
     @GET
-    @ApiOperation("Lists all buildings")
+    @ApiOperation("Lists metadata for all buildings")
     public BuildingsMetadataResponse all(@QueryParam("level") @ApiParam(value = "Building level", defaultValue = "1") int level) {
         int sanitizedLevel = Math.max(level, 1);
 
         return new BuildingsMetadataResponse(Stream.of(BuildingType.values())
-                .map(t -> new BuildingMetadataResponse(
-                        t.name(), sanitizedLevel, buildingService.calculateBuildTimeWithoutBonuses(t, sanitizedLevel),
-                        ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(t, sanitizedLevel)),
-                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(buildingMechanics.getPrerequisites(t)),
-                        getResourcesPerRound(t, sanitizedLevel), getBuildingBuildTimeSpeedUp(t, sanitizedLevel),
-                        getResearchTimeSpeedup(t, sanitizedLevel), getShipBuildTimeSpeedUp(t, sanitizedLevel)
-                ))
-                .collect(Collectors.toList()));
+                .map(t -> getMetadata(t, sanitizedLevel)).collect(Collectors.toList()));
+    }
+
+    /**
+     * Lists metadata for the building with the given type.
+     *
+     * @param type  Building type.
+     * @param level Building level for which the resource cost and build time should be returned.
+     * @return Metadata for the building.
+     */
+    @GET
+    @Path("/{type}")
+    @ApiOperation("Lists metadata for a building")
+    public BuildingMetadataResponse one(
+            @PathParam("type") @ApiParam(value = "Building type") String type,
+            @QueryParam("level") @ApiParam(value = "Building level", defaultValue = "1") int level) {
+        int sanitizedLevel = Math.max(level, 1);
+
+        try {
+            BuildingType buildingType = BuildingType.valueOf(type);
+
+            return getMetadata(buildingType, sanitizedLevel);
+        } catch (IllegalArgumentException e) {
+            throw new BuildingTypeNotFoundWebException();
+        }
+    }
+
+    private BuildingMetadataResponse getMetadata(BuildingType type, int level) {
+        return new BuildingMetadataResponse(
+                type.name(), level, buildingService.calculateBuildTimeWithoutBonuses(type, level),
+                ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(type, level)),
+                type.getDescription(), PrerequisitesMapper.fromPrerequisites(buildingMechanics.getPrerequisites(type)),
+                getResourcesPerRound(type, level), getBuildingBuildTimeSpeedUp(type, level),
+                getResearchTimeSpeedup(type, level), getShipBuildTimeSpeedUp(type, level)
+        );
     }
 
     @Nullable

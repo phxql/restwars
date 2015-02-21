@@ -1,6 +1,9 @@
 # Change log
 
 ## [Unreleased] - [unreleased]
+### Added:
+- Webservice: Added endpoint to get building metadata for a given building type at `/v1/metadata/building/{type}`.
+
 ### Fixed:
 - Webservice: Fixed a bug where the building metadata and technology metadata endpoint responded with 500 Server Error when passing a level smaller than 1.
 
