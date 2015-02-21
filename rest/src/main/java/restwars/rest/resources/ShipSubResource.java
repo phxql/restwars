@@ -10,7 +10,7 @@ import restwars.model.player.Player;
 import restwars.model.ship.Ship;
 import restwars.rest.mapper.ShipMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.restapi.dto.ship.ShipResponse;
+import restwars.restapi.dto.ship.ShipsResponse;
 import restwars.service.planet.PlanetService;
 import restwars.service.ship.ShipService;
 import restwars.util.Functional;
@@ -38,7 +38,7 @@ public class ShipSubResource {
 
     @GET
     @ApiOperation("Lists all ships on the planet")
-    public List<ShipResponse> getShips(
+    public ShipsResponse getShips(
             @Auth @ApiParam(access = "internal") Player player,
             @PathParam("location") @ApiParam("Planet location") LocationParam location
     ) {
@@ -48,6 +48,6 @@ public class ShipSubResource {
         Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Ship> ships = shipService.findShipsOnPlanet(planet).asList();
 
-        return Functional.mapToList(ships, ShipMapper::fromShip);
+        return new ShipsResponse(Functional.mapToList(ships, ShipMapper::fromShip));
     }
 }

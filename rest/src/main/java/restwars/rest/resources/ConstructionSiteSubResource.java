@@ -12,6 +12,7 @@ import restwars.model.player.Player;
 import restwars.rest.mapper.ConstructionSiteMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.building.ConstructionSiteResponse;
+import restwars.restapi.dto.building.ConstructionSitesResponse;
 import restwars.restapi.dto.building.CreateBuildingRequest;
 import restwars.service.building.BuildingException;
 import restwars.service.building.BuildingService;
@@ -49,7 +50,7 @@ public class ConstructionSiteSubResource {
      */
     @GET
     @ApiOperation(value = "Get all construction sites on a planet")
-    public List<ConstructionSiteResponse> getConstructionSites(
+    public ConstructionSitesResponse getConstructionSites(
             @Auth @ApiParam(access = "internal") Player player,
             @PathParam("location") @ApiParam("Planet location") LocationParam location) {
         Preconditions.checkNotNull(player, "player");
@@ -58,7 +59,7 @@ public class ConstructionSiteSubResource {
         Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<ConstructionSite> constructionSites = buildingService.findConstructionSitesOnPlanet(planet);
 
-        return Functional.mapToList(constructionSites, ConstructionSiteMapper::fromConstructionSite);
+        return new ConstructionSitesResponse(Functional.mapToList(constructionSites, ConstructionSiteMapper::fromConstructionSite));
     }
 
     /**

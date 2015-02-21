@@ -13,6 +13,7 @@ import restwars.rest.mapper.ResearchMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.technology.ResearchRequest;
 import restwars.restapi.dto.technology.ResearchResponse;
+import restwars.restapi.dto.technology.ResearchesResponse;
 import restwars.service.planet.PlanetService;
 import restwars.service.technology.ResearchException;
 import restwars.service.technology.TechnologyService;
@@ -39,7 +40,7 @@ public class ResearchSubResource {
 
     @GET
     @ApiOperation("Lists all running researches on a planet")
-    public List<ResearchResponse> getResearch(
+    public ResearchesResponse getResearch(
             @Auth @ApiParam(access = "internal") Player player,
             @PathParam("location") @ApiParam("Planet location") LocationParam location
     ) {
@@ -49,7 +50,7 @@ public class ResearchSubResource {
         Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Research> researches = technologyService.findResearchesOnPlanet(planet);
 
-        return Functional.mapToList(researches, ResearchMapper::fromResearch);
+        return new ResearchesResponse(Functional.mapToList(researches, ResearchMapper::fromResearch));
     }
 
     @POST

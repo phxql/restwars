@@ -4,7 +4,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import restwars.model.event.EventType;
 import restwars.rest.mapper.EventMapper;
-import restwars.restapi.dto.metadata.EventTypeMetadataResponse;
+import restwars.restapi.dto.metadata.EventTypesMetadataResponse;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -12,7 +12,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,7 +34,7 @@ public class EventMetadataSubResource {
     @GET
     @Path("/type")
     @ApiOperation("Lists all event types")
-    public List<EventTypeMetadataResponse> flightTypes() {
-        return Stream.of(EventType.values()).map(EventMapper::fromEventType).collect(Collectors.toList());
+    public EventTypesMetadataResponse flightTypes() {
+        return new EventTypesMetadataResponse(Stream.of(EventType.values()).map(EventMapper::fromEventType).collect(Collectors.toList()));
     }
 }

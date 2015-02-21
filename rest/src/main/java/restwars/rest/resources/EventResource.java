@@ -9,7 +9,7 @@ import io.dropwizard.auth.Auth;
 import restwars.model.event.EventWithPlanet;
 import restwars.model.player.Player;
 import restwars.rest.mapper.EventMapper;
-import restwars.restapi.dto.event.EventResponse;
+import restwars.restapi.dto.event.EventsResponse;
 import restwars.service.event.EventService;
 import restwars.util.Functional;
 
@@ -44,7 +44,7 @@ public class EventResource {
      */
     @GET
     @ApiOperation("Lists all events since a round")
-    public List<EventResponse> getEvents(
+    public EventsResponse getEvents(
             @Auth @ApiParam(access = "internal") Player player,
             @QueryParam("since") @ApiParam(value = "Round (inclusive)", defaultValue = "1") long round
     ) {
@@ -52,7 +52,7 @@ public class EventResource {
         round = Math.max(1, round);
 
         List<EventWithPlanet> events = eventService.findSince(player.getId(), round);
-        return Functional.mapToList(events, EventMapper::fromEvent);
+        return new EventsResponse(Functional.mapToList(events, EventMapper::fromEvent));
     }
 
 }

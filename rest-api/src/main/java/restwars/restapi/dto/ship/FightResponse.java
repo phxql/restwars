@@ -7,7 +7,7 @@ import restwars.restapi.dto.ResourcesResponse;
 
 import java.util.List;
 
-@ApiModel(description = "An fight")
+@ApiModel(description = "A fight")
 public class FightResponse {
     @ApiModelProperty(value = "Id", required = true)
     private String id;

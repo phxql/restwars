@@ -10,6 +10,7 @@ import restwars.rest.mapper.PrerequisitesMapper;
 import restwars.rest.mapper.ResourcesMapper;
 import restwars.restapi.dto.ResourcesResponse;
 import restwars.restapi.dto.metadata.BuildingMetadataResponse;
+import restwars.restapi.dto.metadata.BuildingsMetadataResponse;
 import restwars.service.building.BuildingService;
 import restwars.service.mechanics.BuildingMechanics;
 import restwars.service.resource.ResourceService;
@@ -21,7 +22,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,10 +51,10 @@ public class BuildingMetadataSubResource {
      */
     @GET
     @ApiOperation("Lists all buildings")
-    public List<BuildingMetadataResponse> all(@QueryParam("level") @ApiParam(value = "Building level", defaultValue = "1") int level) {
+    public BuildingsMetadataResponse all(@QueryParam("level") @ApiParam(value = "Building level", defaultValue = "1") int level) {
         int sanitizedLevel = Math.max(level, 1);
 
-        return Stream.of(BuildingType.values())
+        return new BuildingsMetadataResponse(Stream.of(BuildingType.values())
                 .map(t -> new BuildingMetadataResponse(
                         t.name(), sanitizedLevel, buildingService.calculateBuildTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(t, sanitizedLevel)),
@@ -62,7 +62,7 @@ public class BuildingMetadataSubResource {
                         getResourcesPerRound(t, level), getBuildingBuildTimeSpeedUp(t, level),
                         getResearchTimeSpeedup(t, level), getShipBuildTimeSpeedUp(t, level)
                 ))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     @Nullable

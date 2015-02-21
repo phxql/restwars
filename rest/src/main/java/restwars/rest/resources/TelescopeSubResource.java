@@ -9,7 +9,7 @@ import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.rest.mapper.PlanetMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.restapi.dto.planet.PlanetScanResponse;
+import restwars.restapi.dto.planet.PlanetScansResponse;
 import restwars.service.planet.PlanetService;
 import restwars.service.telescope.ScanException;
 import restwars.service.telescope.TelescopeService;
@@ -18,7 +18,6 @@ import restwars.util.Functional;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 @Api(value = "/{location}/telescope", hidden = true)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -36,7 +35,7 @@ public class TelescopeSubResource {
     @GET
     @Path("/scan")
     @ApiOperation("Lists all planets in vicinity")
-    public List<PlanetScanResponse> scan(
+    public PlanetScansResponse scan(
             @Auth @ApiParam(access = "internal") Player player,
             @PathParam("location") @ApiParam("Planet location") LocationParam location
     ) {
@@ -45,7 +44,9 @@ public class TelescopeSubResource {
 
         Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         try {
-            return Functional.mapToList(telescopeService.scan(planet), PlanetMapper::fromPlanetWithOwner);
+            return new PlanetScansResponse(
+                    Functional.mapToList(telescopeService.scan(planet), PlanetMapper::fromPlanetWithOwner)
+            );
         } catch (ScanException e) {
             throw new ScanWebException(e.getReason());
         }

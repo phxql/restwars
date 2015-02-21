@@ -10,7 +10,7 @@ import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.rest.mapper.BuildingMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.restapi.dto.building.BuildingResponse;
+import restwars.restapi.dto.building.BuildingsResponse;
 import restwars.service.building.BuildingService;
 import restwars.service.planet.PlanetService;
 import restwars.util.Functional;
@@ -21,7 +21,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 /**
  * Subresource for buildings on a planet.
@@ -48,7 +47,7 @@ public class BuildingSubResource {
      */
     @GET
     @ApiOperation(value = "Get all buildings on a planet")
-    public List<BuildingResponse> getBuildings(
+    public BuildingsResponse getBuildings(
             @Auth @ApiParam(access = "internal") Player player,
             @PathParam("location") @ApiParam("Planet location") LocationParam location
     ) {
@@ -58,6 +57,6 @@ public class BuildingSubResource {
         Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         Buildings buildings = buildingService.findBuildingsOnPlanet(planet);
 
-        return Functional.mapToList(buildings, BuildingMapper::fromBuilding);
+        return new BuildingsResponse(Functional.mapToList(buildings, BuildingMapper::fromBuilding));
     }
 }

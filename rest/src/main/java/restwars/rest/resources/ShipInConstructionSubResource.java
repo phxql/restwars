@@ -13,6 +13,7 @@ import restwars.rest.mapper.ShipInConstructionMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.ship.BuildShipRequest;
 import restwars.restapi.dto.ship.ShipInConstructionResponse;
+import restwars.restapi.dto.ship.ShipsInConstructionResponse;
 import restwars.service.planet.PlanetService;
 import restwars.service.ship.BuildShipException;
 import restwars.service.ship.ShipService;
@@ -39,7 +40,7 @@ public class ShipInConstructionSubResource {
 
     @GET
     @ApiOperation("Lists all ships in construction on the planet")
-    public List<ShipInConstructionResponse> getShipsInConstruction(
+    public ShipsInConstructionResponse getShipsInConstruction(
             @Auth @ApiParam(access = "internal") Player player,
             @PathParam("location") @ApiParam("Planet location") LocationParam location
     ) {
@@ -49,7 +50,9 @@ public class ShipInConstructionSubResource {
         Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
 
         List<ShipInConstruction> shipsInConstruction = shipService.findShipsInConstructionOnPlanet(planet);
-        return Functional.mapToList(shipsInConstruction, ShipInConstructionMapper::fromShipInConstruction);
+        return new ShipsInConstructionResponse(
+                Functional.mapToList(shipsInConstruction, ShipInConstructionMapper::fromShipInConstruction)
+        );
     }
 
     @POST

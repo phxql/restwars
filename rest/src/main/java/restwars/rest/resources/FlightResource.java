@@ -10,8 +10,8 @@ import restwars.model.flight.DetectedFlightWithSender;
 import restwars.model.flight.Flight;
 import restwars.model.player.Player;
 import restwars.rest.mapper.FlightMapper;
-import restwars.restapi.dto.ship.DetectedFlightResponse;
-import restwars.restapi.dto.ship.FlightResponse;
+import restwars.restapi.dto.ship.DetectedFlightsResponse;
+import restwars.restapi.dto.ship.FlightsResponse;
 import restwars.service.flight.FlightService;
 import restwars.service.telescope.TelescopeService;
 import restwars.util.Functional;
@@ -52,12 +52,12 @@ public class FlightResource {
     @GET
     @Path("/own")
     @ApiOperation("Lists all own flights")
-    public List<FlightResponse> ownFlights(@Auth @ApiParam(access = "internal") Player player) {
+    public FlightsResponse ownFlights(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
 
         List<Flight> flights = flightService.findFlightsForPlayer(player);
 
-        return Functional.mapToList(flights, FlightMapper::fromFlight);
+        return new FlightsResponse(Functional.mapToList(flights, FlightMapper::fromFlight));
     }
 
     /**
@@ -69,11 +69,13 @@ public class FlightResource {
     @GET
     @Path("/incoming")
     @ApiOperation("Lists all incoming flights")
-    public List<DetectedFlightResponse> incomingFlights(@Auth @ApiParam(access = "internal") Player player) {
+    public DetectedFlightsResponse incomingFlights(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
 
         List<DetectedFlightWithSender> incomingFlights = telescopeService.findDetectedFlights(player);
 
-        return Functional.mapToList(incomingFlights, FlightMapper::fromDetectedFlight);
+        return new DetectedFlightsResponse(
+                Functional.mapToList(incomingFlights, FlightMapper::fromDetectedFlight)
+        );
     }
 }

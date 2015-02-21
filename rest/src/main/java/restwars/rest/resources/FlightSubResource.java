@@ -15,6 +15,7 @@ import restwars.rest.mapper.ShipMapper;
 import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.ship.CreateFlightRequest;
 import restwars.restapi.dto.ship.FlightResponse;
+import restwars.restapi.dto.ship.FlightsResponse;
 import restwars.service.flight.FlightException;
 import restwars.service.flight.FlightService;
 import restwars.service.planet.PlanetService;
@@ -52,7 +53,7 @@ public class FlightSubResource {
     @GET
     @Path("/own")
     @ApiOperation("Lists own flights from or to this planet")
-    public List<FlightResponse> getOwnFlights(
+    public FlightsResponse getOwnFlights(
             @Auth @ApiParam(access = "internal") Player player,
             @PathParam("location") @ApiParam("Planet location") LocationParam location
     ) {
@@ -62,7 +63,7 @@ public class FlightSubResource {
         Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
         List<Flight> flights = flightService.findFlightsStartedFromPlanet(planet);
 
-        return Functional.mapToList(flights, FlightMapper::fromFlight);
+        return new FlightsResponse(Functional.mapToList(flights, FlightMapper::fromFlight));
     }
 
     /**

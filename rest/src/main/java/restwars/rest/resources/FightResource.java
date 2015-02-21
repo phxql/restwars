@@ -10,6 +10,7 @@ import restwars.model.fight.FightWithPlanetAndPlayer;
 import restwars.model.player.Player;
 import restwars.rest.mapper.FightMapper;
 import restwars.restapi.dto.ship.FightResponse;
+import restwars.restapi.dto.ship.FightsResponse;
 import restwars.service.fight.FightService;
 import restwars.util.Functional;
 
@@ -77,7 +78,7 @@ public class FightResource {
     @GET
     @Path("/own")
     @ApiOperation("Lists all own fights since a round")
-    public List<FightResponse> ownFights(
+    public FightsResponse ownFights(
             @Auth @ApiParam(access = "internal") Player player,
             @QueryParam("since") @ApiParam(value = "Round (inclusive)", defaultValue = "1") long round
     ) {
@@ -85,6 +86,6 @@ public class FightResource {
         round = Math.max(1, round);
 
         List<FightWithPlanetAndPlayer> fights = fightService.findFightsWithPlayerSinceRound(player, round);
-        return Functional.mapToList(fights, FightMapper::fromFight);
+        return new FightsResponse(Functional.mapToList(fights, FightMapper::fromFight));
     }
 }

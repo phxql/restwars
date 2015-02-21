@@ -1,7 +1,7 @@
 package restwars.restapi;
 
-import restwars.restapi.dto.planet.PlanetListResponse;
 import restwars.restapi.dto.planet.PlanetResponse;
+import restwars.restapi.dto.planet.PlanetWithResourcesResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,9 +12,9 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public interface PlanetResource {
     @GET
-    List<PlanetListResponse> allPlanets();
+    List<PlanetResponse> allPlanets();
 
     @GET
     @Path("/{location}")
-    PlanetResponse getPlanet(@PathParam("location") String location);
+    PlanetWithResourcesResponse getPlanet(@PathParam("location") String location);
 }

@@ -11,8 +11,8 @@ import restwars.model.player.Player;
 import restwars.model.resource.Resources;
 import restwars.rest.mapper.PlanetMapper;
 import restwars.rest.resources.param.LocationParam;
-import restwars.restapi.dto.planet.PlanetListResponse;
-import restwars.restapi.dto.planet.PlanetResponse;
+import restwars.restapi.dto.planet.PlanetWithResourcesResponse;
+import restwars.restapi.dto.planet.PlanetsResponse;
 import restwars.service.planet.PlanetService;
 import restwars.service.resource.ResourceService;
 import restwars.util.Functional;
@@ -54,17 +54,17 @@ public class PlanetResource {
 
     @GET
     @ApiOperation("Lists all planets for the current player")
-    public List<PlanetListResponse> index(@Auth @ApiParam(access = "internal") Player player) {
+    public PlanetsResponse index(@Auth @ApiParam(access = "internal") Player player) {
         Preconditions.checkNotNull(player, "player");
         List<Planet> planets = planetService.findWithOwner(player);
 
-        return Functional.mapToList(planets, PlanetMapper::fromPlanet);
+        return new PlanetsResponse(Functional.mapToList(planets, PlanetMapper::fromPlanet));
     }
 
     @GET
     @Path("/{location}")
     @ApiOperation("Returns the planet at the given location")
-    public PlanetResponse getPlanet(
+    public PlanetWithResourcesResponse getPlanet(
             @Auth @ApiParam(access = "internal") Player player,
             @PathParam("location") @ApiParam(value = "Planet location", required = true) LocationParam location
     ) {
