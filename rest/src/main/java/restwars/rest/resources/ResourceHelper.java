@@ -26,12 +26,12 @@ public final class ResourceHelper {
      * @throws restwars.rest.resources.PlanetNotFoundWebException If the planet wasn't found.
      * @throws restwars.rest.resources.NotYourPlanetWebException  If the planet was found, but isn't owned from the given player.
      */
-    public static Planet findPlanetWithLocationAndOwner(PlanetService planetService, Location location, Player owner) {
+    public static Planet findPlanetWithLocationAndOwner(PlanetService planetService, String location, Player owner) {
         Preconditions.checkNotNull(planetService, "planetService");
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(owner, "owner");
 
-        Optional<Planet> maybePlanet = planetService.findWithLocation(location);
+        Optional<Planet> maybePlanet = planetService.findWithLocation(Location.parse(location));
         Planet planet = maybePlanet.orElseThrow(PlanetNotFoundWebException::new);
         if (!planet.isOwnedFrom(owner)) {
             throw new NotYourPlanetWebException();

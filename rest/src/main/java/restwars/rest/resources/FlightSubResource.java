@@ -7,12 +7,12 @@ import com.wordnik.swagger.annotations.ApiParam;
 import io.dropwizard.auth.Auth;
 import restwars.model.flight.Flight;
 import restwars.model.flight.FlightType;
+import restwars.model.planet.Location;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.model.resource.Resources;
 import restwars.rest.mapper.FlightMapper;
 import restwars.rest.mapper.ShipMapper;
-import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.ship.CreateFlightRequest;
 import restwars.restapi.dto.ship.FlightResponse;
 import restwars.restapi.dto.ship.FlightsResponse;
@@ -55,12 +55,12 @@ public class FlightSubResource {
     @ApiOperation("Lists own flights from or to this planet")
     public FlightsResponse getOwnFlights(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Planet location") LocationParam location
+            @PathParam("location") @ApiParam("Planet location") String location
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
         List<Flight> flights = flightService.findFlightsStartedFromPlanet(planet);
 
         return new FlightsResponse(Functional.mapToList(flights, FlightMapper::fromFlight));
@@ -80,8 +80,8 @@ public class FlightSubResource {
     @ApiOperation("Creates a flight")
     public FlightResponse createFlight(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Start planet") LocationParam start,
-            @PathParam("destination") @ApiParam("Destination planet") LocationParam destination,
+            @PathParam("location") @ApiParam("Start planet") String start,
+            @PathParam("destination") @ApiParam("Destination planet") String destination,
             @Valid CreateFlightRequest data
     ) {
         Preconditions.checkNotNull(player, "player");
@@ -89,10 +89,10 @@ public class FlightSubResource {
         Preconditions.checkNotNull(destination, "destination");
         Preconditions.checkNotNull(data, "data");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, start.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, start, player);
         try {
             Flight flight = flightService.sendShipsToPlanet(
-                    player, planet, destination.getValue(), ShipMapper.fromShips(data.getShips()), FlightType.valueOf(data.getType()),
+                    player, planet, Location.parse(destination), ShipMapper.fromShips(data.getShips()), FlightType.valueOf(data.getType()),
                     new Resources(data.getCargoCrystals(), data.getCargoGas(), 0)
             );
 

@@ -31,7 +31,6 @@ import restwars.model.UniverseConfiguration;
 import restwars.model.resource.Resources;
 import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.RestWarsModule;
-import restwars.rest.doc.ModelConverter;
 import restwars.rest.doc.SwaggerFilter;
 import restwars.rest.integration.database.UnitOfWorkResourceMethodDispatchAdapter;
 import restwars.rest.websocket.WebSocketHandler;
@@ -136,7 +135,6 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         ClassReaders.setReader(new DefaultJaxrsApiReader());
 
         FilterFactory.setFilter(new SwaggerFilter());
-        ModelConverter.register();
     }
 
     private void registerCorsFilter(Environment environment) {

@@ -10,7 +10,6 @@ import restwars.model.player.Player;
 import restwars.model.technology.Research;
 import restwars.model.technology.TechnologyType;
 import restwars.rest.mapper.ResearchMapper;
-import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.technology.ResearchRequest;
 import restwars.restapi.dto.technology.ResearchResponse;
 import restwars.restapi.dto.technology.ResearchesResponse;
@@ -42,12 +41,12 @@ public class ResearchSubResource {
     @ApiOperation("Lists all running researches on a planet")
     public ResearchesResponse getResearch(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Planet location") LocationParam location
+            @PathParam("location") @ApiParam("Planet location") String location
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
         List<Research> researches = technologyService.findResearchesOnPlanet(planet);
 
         return new ResearchesResponse(Functional.mapToList(researches, ResearchMapper::fromResearch));
@@ -57,14 +56,14 @@ public class ResearchSubResource {
     @ApiOperation("Researches a new technology")
     public ResearchResponse research(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Planet location") LocationParam location,
+            @PathParam("location") @ApiParam("Planet location") String location,
             @Valid ResearchRequest data
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(data, "data");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
 
         TechnologyType type = ResourceHelper.parseTechnologyType(data.getType());
         try {

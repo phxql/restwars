@@ -9,7 +9,6 @@ import restwars.model.building.Buildings;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.rest.mapper.BuildingMapper;
-import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.building.BuildingsResponse;
 import restwars.service.building.BuildingService;
 import restwars.service.planet.PlanetService;
@@ -49,12 +48,12 @@ public class BuildingSubResource {
     @ApiOperation(value = "Get all buildings on a planet")
     public BuildingsResponse getBuildings(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Planet location") LocationParam location
+            @PathParam("location") @ApiParam("Planet location") String location
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
         Buildings buildings = buildingService.findBuildingsOnPlanet(planet);
 
         return new BuildingsResponse(Functional.mapToList(buildings, BuildingMapper::fromBuilding));

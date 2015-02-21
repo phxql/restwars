@@ -10,7 +10,6 @@ import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.model.resource.Resources;
 import restwars.rest.mapper.PlanetMapper;
-import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.planet.PlanetWithResourcesResponse;
 import restwars.restapi.dto.planet.PlanetsResponse;
 import restwars.service.planet.PlanetService;
@@ -66,12 +65,12 @@ public class PlanetResource {
     @ApiOperation("Returns the planet at the given location")
     public PlanetWithResourcesResponse getPlanet(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam(value = "Planet location", required = true) LocationParam location
+            @PathParam("location") @ApiParam(value = "Planet location", required = true) String location
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
 
         Resources gatheredResources = resourceService.calculateGatheredResourcesOnPlanet(planet);
 

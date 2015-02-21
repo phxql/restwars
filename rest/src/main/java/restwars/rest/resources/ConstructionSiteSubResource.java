@@ -10,7 +10,6 @@ import restwars.model.building.ConstructionSite;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.rest.mapper.ConstructionSiteMapper;
-import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.building.ConstructionSiteResponse;
 import restwars.restapi.dto.building.ConstructionSitesResponse;
 import restwars.restapi.dto.building.CreateBuildingRequest;
@@ -52,11 +51,11 @@ public class ConstructionSiteSubResource {
     @ApiOperation(value = "Get all construction sites on a planet")
     public ConstructionSitesResponse getConstructionSites(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Planet location") LocationParam location) {
+            @PathParam("location") @ApiParam("Planet location") String location) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
         List<ConstructionSite> constructionSites = buildingService.findConstructionSitesOnPlanet(planet);
 
         return new ConstructionSitesResponse(Functional.mapToList(constructionSites, ConstructionSiteMapper::fromConstructionSite));
@@ -74,14 +73,14 @@ public class ConstructionSiteSubResource {
     @ApiOperation("Creates a new construction site")
     public ConstructionSiteResponse build(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Planet location") LocationParam location,
+            @PathParam("location") @ApiParam("Planet location") String location,
             @Valid CreateBuildingRequest data
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(data, "data");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
         BuildingType type = ResourceHelper.parseBuildingType(data.getType());
 
         try {

@@ -10,7 +10,6 @@ import restwars.model.player.Player;
 import restwars.model.ship.ShipInConstruction;
 import restwars.model.ship.ShipType;
 import restwars.rest.mapper.ShipInConstructionMapper;
-import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.ship.BuildShipRequest;
 import restwars.restapi.dto.ship.ShipInConstructionResponse;
 import restwars.restapi.dto.ship.ShipsInConstructionResponse;
@@ -42,12 +41,12 @@ public class ShipInConstructionSubResource {
     @ApiOperation("Lists all ships in construction on the planet")
     public ShipsInConstructionResponse getShipsInConstruction(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Planet location") LocationParam location
+            @PathParam("location") @ApiParam("Planet location") String location
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
 
         List<ShipInConstruction> shipsInConstruction = shipService.findShipsInConstructionOnPlanet(planet);
         return new ShipsInConstructionResponse(
@@ -59,14 +58,14 @@ public class ShipInConstructionSubResource {
     @ApiOperation("Builds a ship")
     public ShipInConstructionResponse buildShip(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Planet location") LocationParam location,
+            @PathParam("location") @ApiParam("Planet location") String location,
             @Valid BuildShipRequest data
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(data, "data");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
 
         try {
             ShipInConstruction shipInConstruction = shipService.buildShip(player, planet, ShipType.valueOf(data.getType()));

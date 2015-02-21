@@ -2,6 +2,7 @@
 
 ## [Unreleased] - [unreleased]
 ### Changed
+- Jersey: Replaced LocationParam with String.
 - Build: Only include scope runtime when building JAR with all dependencies.
 - Build: JAR with all dependencies is now built on package phase instead of install phase.
 

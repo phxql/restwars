@@ -8,7 +8,6 @@ import io.dropwizard.auth.Auth;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.rest.mapper.PlanetMapper;
-import restwars.rest.resources.param.LocationParam;
 import restwars.restapi.dto.planet.PlanetScansResponse;
 import restwars.service.planet.PlanetService;
 import restwars.service.telescope.ScanException;
@@ -37,12 +36,12 @@ public class TelescopeSubResource {
     @ApiOperation("Lists all planets in vicinity")
     public PlanetScansResponse scan(
             @Auth @ApiParam(access = "internal") Player player,
-            @PathParam("location") @ApiParam("Planet location") LocationParam location
+            @PathParam("location") @ApiParam("Planet location") String location
     ) {
         Preconditions.checkNotNull(player, "player");
         Preconditions.checkNotNull(location, "location");
 
-        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location.getValue(), player);
+        Planet planet = ResourceHelper.findPlanetWithLocationAndOwner(planetService, location, player);
         try {
             return new PlanetScansResponse(
                     Functional.mapToList(telescopeService.scan(planet), PlanetMapper::fromPlanetWithOwner)
