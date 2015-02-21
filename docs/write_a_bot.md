@@ -7,3 +7,6 @@
 
 ## Debugging your bot
 There is a project called [RESTwars UI](https://github.com/phxql/restwars-ui) which provides a minimalistic UI for RESTwars.
+
+## Error reporting
+If an error pops up in the RESTwars server, please check the log file at `/tmp/restwars-error.log` and [submit a bug report](https://github.com/phxql/restwars/issues/new).
