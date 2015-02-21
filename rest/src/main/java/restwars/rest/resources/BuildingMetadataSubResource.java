@@ -59,8 +59,8 @@ public class BuildingMetadataSubResource {
                         t.name(), sanitizedLevel, buildingService.calculateBuildTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(buildingService.calculateBuildCostWithoutBonuses(t, sanitizedLevel)),
                         t.getDescription(), PrerequisitesMapper.fromPrerequisites(buildingMechanics.getPrerequisites(t)),
-                        getResourcesPerRound(t, level), getBuildingBuildTimeSpeedUp(t, level),
-                        getResearchTimeSpeedup(t, level), getShipBuildTimeSpeedUp(t, level)
+                        getResourcesPerRound(t, sanitizedLevel), getBuildingBuildTimeSpeedUp(t, sanitizedLevel),
+                        getResearchTimeSpeedup(t, sanitizedLevel), getShipBuildTimeSpeedUp(t, sanitizedLevel)
                 ))
                 .collect(Collectors.toList()));
     }

@@ -45,7 +45,7 @@ public class TechnologyMetadataSubResource {
                         t.name(), sanitizedLevel, technologyService.calculateResearchTimeWithoutBonuses(t, sanitizedLevel),
                         ResourcesMapper.fromResources(technologyService.calculateResearchCost(t, sanitizedLevel)),
                         t.getDescription(), PrerequisitesMapper.fromPrerequisites(technologyMechanics.getPrerequisites(t)),
-                        getBuildCostReduction(t, level), getFlightCostReduction(t, level)
+                        getBuildCostReduction(t, sanitizedLevel), getFlightCostReduction(t, sanitizedLevel)
                 ))
                 .collect(Collectors.toList()));
     }
