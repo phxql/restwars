@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.atmosphere.config.service.AtmosphereHandlerService;
 import org.atmosphere.cpr.*;
+import org.eclipse.jetty.http.HttpStatus;
 
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
 @AtmosphereHandlerService
@@ -18,9 +20,18 @@ public class WebSocketHandler implements AtmosphereHandler {
 
     @Override
     public void onRequest(AtmosphereResource atmosphereResource) throws IOException {
+        AtmosphereRequest request = atmosphereResource.getRequest();
+        if (!request.getPathInfo().equals("/round")) {
+            atmosphereResource.getResponse().setStatus(HttpStatus.NOT_FOUND_404);
+            atmosphereResource.write("Websocket endpoint not found");
+            atmosphereResource.close();
+            return;
+        }
+
         BroadcasterFactory broadcasterFactory = atmosphereResource.getAtmosphereConfig().getBroadcasterFactory();
         Broadcaster broadcaster = getBroadcaster(broadcasterFactory);
         atmosphereResource.setBroadcaster(broadcaster);
+        atmosphereResource.getResponse().setContentType(MediaType.APPLICATION_JSON);
         atmosphereResource.suspend();
     }
 
