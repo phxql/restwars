@@ -75,7 +75,8 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         UniverseConfiguration universeConfiguration = new UniverseConfiguration(
                 configuration.getGalaxies(), configuration.getSolarSystems(), configuration.getPlanets(),
-                new Resources(1000L, 200L, 200L), configuration.getRoundTime()
+                new Resources(1000L, 200L, 200L), configuration.getRoundTime(),
+                configuration.isSpeedUpEverything()
         );
 
         ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource, configuration.getPasswordIterations()));
