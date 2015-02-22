@@ -18,6 +18,14 @@ public interface BuildingMechanics {
     Resources calculateBuildCost(BuildingType type, int level);
 
     /**
+     * Calculates the resources gather rate for a command center with the given level.
+     *
+     * @param level Level. Must be > 0.
+     * @return Resources gathered per round.
+     */
+    Resources calculateCommandCenterResourcesGathered(int level);
+
+    /**
      * Calculates the build time for the given building and level.
      *
      * @param type  Building.
@@ -52,7 +60,7 @@ public interface BuildingMechanics {
 
     /**
      * Calculates the building build time speedup for a command center with the given level.
-     * <p/>
+     * <p>
      * If the build time speedup is for example 0.1, the building will be finished 10% faster.
      *
      * @param level Level of the command center.
@@ -94,7 +102,7 @@ public interface BuildingMechanics {
 
     /**
      * Calculates the fleet size variance of a telescope with the given level.
-     * <p/>
+     * <p>
      * Guaranteed to be >= 0.0.
      *
      * @param level Level of the telescope.

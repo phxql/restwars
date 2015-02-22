@@ -9,6 +9,11 @@ import restwars.util.MathExt;
 
 public class BuildingMechanicsImpl implements BuildingMechanics {
     @Override
+    public Resources calculateCommandCenterResourcesGathered(int level) {
+        return new Resources(2, 1, 8);
+    }
+
+    @Override
     public Resources calculateBuildCost(BuildingType type, int level) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");

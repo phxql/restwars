@@ -45,6 +45,8 @@ public class ResourceServiceImpl implements ResourceService {
         Preconditions.checkArgument(level > 0, "level must be > 0");
 
         switch (type) {
+            case COMMAND_CENTER:
+                return buildingMechanics.calculateCommandCenterResourcesGathered(level);
             case CRYSTAL_MINE: {
                 return new Resources(
                         buildingMechanics.calculateCrystalsGathered(level),
