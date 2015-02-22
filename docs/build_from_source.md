@@ -6,7 +6,7 @@
 
 ## Build
 ```
-git clone git@github.com:phxql/restwars.git
+git clone https://github.com/phxql/restwars.git
 cd restwars/
 mvn clean package -P dist
 ```
