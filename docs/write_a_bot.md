@@ -6,6 +6,9 @@
 * Now start up your brain and your development tools and write a bot to rule them all!
   * If you want to create a bot which runs on the JVM, check [this](https://github.com/phxql/restwars/tree/master/rest-client) out.
 
+## Don't waste your time waiting for buildings / ships / technologies
+There is a configuration option called `speedUpEverything`. Set it to `true` to speed up everything.
+
 ## Debugging your bot
 There is a project called [RESTwars UI](https://github.com/phxql/restwars-ui) which provides a minimalistic UI for RESTwars.
 
