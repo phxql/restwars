@@ -64,6 +64,11 @@ public class RestwarsConfiguration extends Configuration {
     @Min(1)
     private int roundTime;
 
+    /**
+     * If true, everything will be finished in one round.
+     */
+    private boolean speedUpEverything = false;
+
     public DataSourceFactory getDatabase() {
         return database;
     }
@@ -130,5 +135,13 @@ public class RestwarsConfiguration extends Configuration {
 
     public void setPasswordCache(String passwordCache) {
         this.passwordCache = passwordCache;
+    }
+
+    public boolean isSpeedUpEverything() {
+        return speedUpEverything;
+    }
+
+    public void setSpeedUpEverything(boolean speedUpEverything) {
+        this.speedUpEverything = speedUpEverything;
     }
 }
