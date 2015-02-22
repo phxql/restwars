@@ -3,6 +3,7 @@ An online game (like the good old browsergames) which can be played via a REST i
 
 [![Build Status](https://travis-ci.org/phxql/restwars.svg?branch=master)](https://travis-ci.org/phxql/restwars)
 
+* [Build RESTwars from source and get it running](https://github.com/phxql/restwars/blob/master/docs/build_from_source.md)
 * [Contributing](https://github.com/phxql/restwars/blob/master/docs/contributing.md)
 * [Webservice documentation](https://github.com/phxql/restwars/blob/master/docs/webservice.md)
 * [Write a bot](https://github.com/phxql/restwars/blob/master/docs/write_a_bot.md)
