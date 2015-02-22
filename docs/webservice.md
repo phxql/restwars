@@ -1,6 +1,6 @@
 # Webservice
 ## Get the webservice documentation
-* Start the RESTwars server
+* [Start the RESTwars server](https://github.com/phxql/restwars/blob/master/docs/build_from_source.md)
 * `git clone https://github.com/phxql/swagger-ui.git`
 * `cd` into `dist` folder from Swagger UI and open the file `index.html` in your browser
 * Enter your username and your password in the textfields on the top, then click on the "Explore" button
