@@ -9,8 +9,9 @@ public class UniverseConfiguration {
     private final int planetsPerSolarSystem;
     private final Resources startingResources;
     private final int roundTimeInSeconds;
+    private final boolean speedUpEverything;
 
-    public UniverseConfiguration(int galaxyCount, int solarSystemsPerGalaxy, int planetsPerSolarSystem, Resources startingResources, int roundTimeInSeconds) {
+    public UniverseConfiguration(int galaxyCount, int solarSystemsPerGalaxy, int planetsPerSolarSystem, Resources startingResources, int roundTimeInSeconds, boolean speedUpEverything) {
         Preconditions.checkNotNull(startingResources, "startingResources");
         Preconditions.checkArgument(startingResources.getCrystals() >= 0, "Starting crystals must be >= 0");
         Preconditions.checkArgument(startingResources.getGas() >= 0, "Starting gas must be >= 0");
@@ -25,6 +26,7 @@ public class UniverseConfiguration {
         this.planetsPerSolarSystem = planetsPerSolarSystem;
         this.roundTimeInSeconds = roundTimeInSeconds;
         this.startingResources = startingResources;
+        this.speedUpEverything = speedUpEverything;
     }
 
     public int getGalaxyCount() {
@@ -45,5 +47,9 @@ public class UniverseConfiguration {
 
     public int getRoundTimeInSeconds() {
         return roundTimeInSeconds;
+    }
+
+    public boolean isSpeedUpEverything() {
+        return speedUpEverything;
     }
 }

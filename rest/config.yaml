@@ -19,7 +19,7 @@ planets: 3
 # Round time in seconds
 roundTime: 10
 
-# If true, everything will be finished in one round
+# If true, everything will be finished in one round, prerequisites are disabled and every build / research costs zero resources
 speedUpEverything: false
 
 # Database configuration

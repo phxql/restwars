@@ -2,14 +2,12 @@ package restwars.service.di;
 
 import dagger.Module;
 import dagger.Provides;
+import restwars.model.UniverseConfiguration;
 import restwars.service.mechanics.BuildingMechanics;
 import restwars.service.mechanics.PlanetMechanics;
 import restwars.service.mechanics.ShipMechanics;
 import restwars.service.mechanics.TechnologyMechanics;
-import restwars.service.mechanics.impl.BuildingMechanicsImpl;
-import restwars.service.mechanics.impl.PlanetMechanicsImpl;
-import restwars.service.mechanics.impl.ShipMechanicsImpl;
-import restwars.service.mechanics.impl.TechnologyMechanicsImpl;
+import restwars.service.mechanics.impl.*;
 
 /**
  * Dagger module which provides the mechanics.
@@ -22,17 +20,35 @@ public class MechanicsModule {
     }
 
     @Provides
-    BuildingMechanics provideBuildingMechanics() {
-        return new BuildingMechanicsImpl();
+    BuildingMechanics provideBuildingMechanics(UniverseConfiguration universeConfiguration) {
+        BuildingMechanicsImpl mechanics = new BuildingMechanicsImpl();
+
+        if (universeConfiguration.isSpeedUpEverything()) {
+            return new SpeedUpBuildingMechanicsImpl(mechanics);
+        }
+
+        return mechanics;
     }
 
     @Provides
-    ShipMechanics provideShipMechanics() {
-        return new ShipMechanicsImpl();
+    ShipMechanics provideShipMechanics(UniverseConfiguration universeConfiguration) {
+        ShipMechanicsImpl mechanics = new ShipMechanicsImpl();
+
+        if (universeConfiguration.isSpeedUpEverything()) {
+            return new SpeedUpShipMechanics(mechanics);
+        }
+
+        return mechanics;
     }
 
     @Provides
-    TechnologyMechanics providesTechnologyMechanics() {
-        return new TechnologyMechanicsImpl();
+    TechnologyMechanics providesTechnologyMechanics(UniverseConfiguration universeConfiguration) {
+        TechnologyMechanicsImpl mechanics = new TechnologyMechanicsImpl();
+
+        if (universeConfiguration.isSpeedUpEverything()) {
+            return new SpeedUpTechnologyMechanicsImpl(mechanics);
+        }
+
+        return mechanics;
     }
 }
