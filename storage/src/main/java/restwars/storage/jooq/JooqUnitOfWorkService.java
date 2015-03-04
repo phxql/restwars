@@ -81,6 +81,11 @@ public class JooqUnitOfWorkService implements UnitOfWorkService {
         }
     }
 
+    @Override
+    public boolean hasCurrent() {
+        return CURRENT_UNIT_OF_WORK.get() != null;
+    }
+
     private JooqUnitOfWork getCurrentJooq() {
         return (JooqUnitOfWork) getCurrent();
     }

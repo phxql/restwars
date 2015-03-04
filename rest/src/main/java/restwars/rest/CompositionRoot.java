@@ -1,7 +1,8 @@
 package restwars.rest;
 
 import restwars.rest.authentication.PlayerAuthenticator;
-import restwars.rest.integration.locking.LockingFilter;
+import restwars.rest.integration.database.UnitOfWorkListener;
+import restwars.rest.integration.locking.LockingListener;
 import restwars.rest.resources.*;
 import restwars.service.unitofwork.UnitOfWorkService;
 
@@ -23,11 +24,12 @@ public class CompositionRoot {
 
     private final PlayerAuthenticator playerAuthenticator;
     private final Clock clock;
-    private final LockingFilter lockingFilter;
+    private final LockingListener lockingListener;
+    private final UnitOfWorkListener unitOfWorkListener;
     private final UnitOfWorkService unitOfWorkService;
 
     @Inject
-    public CompositionRoot(SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, RootResource rootResource, FlightResource flightResource, PlayerAuthenticator playerAuthenticator, Clock clock, LockingFilter lockingFilter, UnitOfWorkService unitOfWorkService) {
+    public CompositionRoot(SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, RootResource rootResource, FlightResource flightResource, PlayerAuthenticator playerAuthenticator, Clock clock, LockingListener lockingListener, UnitOfWorkListener unitOfWorkListener, UnitOfWorkService unitOfWorkService) {
         this.systemResource = systemResource;
         this.playerResource = playerResource;
         this.technologyResource = technologyResource;
@@ -39,7 +41,8 @@ public class CompositionRoot {
         this.flightResource = flightResource;
         this.playerAuthenticator = playerAuthenticator;
         this.clock = clock;
-        this.lockingFilter = lockingFilter;
+        this.lockingListener = lockingListener;
+        this.unitOfWorkListener = unitOfWorkListener;
         this.unitOfWorkService = unitOfWorkService;
     }
 
@@ -87,11 +90,15 @@ public class CompositionRoot {
         return flightResource;
     }
 
-    public LockingFilter getLockingFilter() {
-        return lockingFilter;
+    public LockingListener getLockingListener() {
+        return lockingListener;
     }
 
     public UnitOfWorkService getUnitOfWorkService() {
         return unitOfWorkService;
+    }
+
+    public UnitOfWorkListener getUnitOfWorkListener() {
+        return unitOfWorkListener;
     }
 }

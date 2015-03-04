@@ -65,6 +65,11 @@ public abstract class DatabaseTest {
             @Override
             public void abort() {
             }
+
+            @Override
+            public boolean hasCurrent() {
+                return true;
+            }
         };
     }
 

@@ -14,8 +14,9 @@ import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader;
 import com.wordnik.swagger.reader.ClassReaders;
 import dagger.ObjectGraph;
 import io.dropwizard.Application;
+import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.CachingAuthenticator;
-import io.dropwizard.auth.basic.BasicAuthProvider;
+import io.dropwizard.auth.basic.BasicAuthFactory;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.migrations.MigrationsBundle;
@@ -28,11 +29,11 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.model.UniverseConfiguration;
+import restwars.model.player.Player;
 import restwars.model.resource.Resources;
 import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.RestWarsModule;
 import restwars.rest.doc.SwaggerFilter;
-import restwars.rest.integration.database.UnitOfWorkResourceMethodDispatchAdapter;
 import restwars.rest.websocket.WebSocketHandler;
 
 import javax.servlet.DispatcherType;
@@ -84,7 +85,7 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
         registerJerseyHooks(environment, compositionRoot);
 
-        environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(environment.metrics(), compositionRoot.getPlayerAuthenticator(), CacheBuilderSpec.parse(configuration.getPasswordCache())), REALM));
+        environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(new CachingAuthenticator<>(environment.metrics(), compositionRoot.getPlayerAuthenticator(), CacheBuilderSpec.parse(configuration.getPasswordCache())), REALM, Player.class)));
         environment.jersey().register(compositionRoot.getRootResource());
         environment.jersey().register(compositionRoot.getSystemResource());
         environment.jersey().register(compositionRoot.getPlayerResource());
@@ -120,8 +121,8 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
 
     @SuppressWarnings("unchecked")
     private void registerJerseyHooks(Environment environment, CompositionRoot compositionRoot) {
-        environment.jersey().getResourceConfig().getResourceFilterFactories().add(compositionRoot.getLockingFilter());
-        environment.jersey().register(new UnitOfWorkResourceMethodDispatchAdapter(compositionRoot.getUnitOfWorkService()));
+        environment.jersey().register(compositionRoot.getUnitOfWorkListener());
+        environment.jersey().register(compositionRoot.getLockingListener());
     }
 
     private void registerSwagger(Environment environment, RestwarsConfiguration configuration) {

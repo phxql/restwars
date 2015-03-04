@@ -34,4 +34,11 @@ public interface UnitOfWorkService {
      * is gone after this method call.
      */
     void abort();
+
+    /**
+     * Returns true if the current unit of work is present.
+     *
+     * @return True if the current unit of work is present, false otherwise.
+     */
+    boolean hasCurrent();
 }
