@@ -6,7 +6,7 @@
 </head>
 <body>
 <script>
-    var websocket = new WebSocket("ws://localhost:8080/websocket/round");
+    var websocket = new WebSocket("ws://localhost:8080/v1/websocket/round");
     websocket.onopen = function (event) {
         console.log("Websocket connected");
     };

@@ -41,7 +41,7 @@ import java.util.EnumSet;
 public class RestwarsApplication extends Application<RestwarsConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RestwarsApplication.class);
     private static final String REALM = "RESTwars";
-    private static final String WEBSOCKET_SERVLET_MAPPING = "/websocket/*";
+    private static final String WEBSOCKET_SERVLET_MAPPING = "/v1/websocket/*";
 
     public static void main(String[] args) throws Exception {
         try {
