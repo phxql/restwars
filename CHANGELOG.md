@@ -20,6 +20,7 @@
 - Build: JAR with all dependencies is now built on package phase instead of install phase.
 - Webservice: Moved the websocket round endpoint from `/websocket/round` to `/v1/websocket/round`.
 - Webservice: List all prerequisites for ships and technologies, even the implicit ones.
+- Webservice: Events are now ordered descending by round
 
 ## [0.1.0] - 2015-02-21
 ### Fixed
