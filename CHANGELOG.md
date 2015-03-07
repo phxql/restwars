@@ -6,7 +6,8 @@
 - Configuration: Added the config option `speedUpEverything`. When set to `true`, every building / research / ship takes 1 round to complete, needs no resources and all prerequisites are disabled.
 - Webservice: Added query parameter `max` to limit the maximum number of events which are returned from `/v1/event`.
 - JVM client: Added long-polling websocket method to get the round.
-- Added endpoint to fetch metadata for ship type `/v1/metadata/ship/{type}`
+- Added endpoint to fetch metadata for single ship type, `/v1/metadata/ship/{type}`
+- Added endpoint to fetch metadata for single technology type, `/v1/metadata/technology/{type}`
 
 ### Fixed:
 - Webservice: Fixed a bug where the building metadata and technology metadata endpoint responded with 500 Server Error when passing a level smaller than 1.

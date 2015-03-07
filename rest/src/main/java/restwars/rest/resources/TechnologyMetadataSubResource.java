@@ -14,10 +14,7 @@ import restwars.service.technology.TechnologyService;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,19 +32,48 @@ public class TechnologyMetadataSubResource {
         this.technologyService = Preconditions.checkNotNull(technologyService, "technologyService");
     }
 
+    /**
+     * Lists metadata for the technology with the given type.
+     *
+     * @param type  Technology type.
+     * @param level Technology level for which the metadata should be returned.
+     * @return Metadata for the technology.
+     */
     @GET
-    @ApiOperation("Lists all technologies")
+    @Path("/{type}")
+    @ApiOperation("Lists metadata for a technology")
+    public TechnologyMetadataResponse one(
+            @PathParam("type") @ApiParam(value = "Technology type") String type,
+            @QueryParam("level") @ApiParam(value = "Technology level", defaultValue = "1") int level
+    ) {
+        int sanitizedLevel = Math.max(level, 1);
+
+        try {
+            TechnologyType technologyType = TechnologyType.valueOf(type);
+
+            return getMetadata(technologyType, sanitizedLevel);
+        } catch (IllegalArgumentException e) {
+            throw new TechnologyTypeNotFoundWebException();
+        }
+    }
+
+    @GET
+    @ApiOperation("Lists metadata for all technologies")
     public TechnologiesMetadataResponse all(@QueryParam("level") @ApiParam(value = "Building level", defaultValue = "1") int level) {
         int sanitizedLevel = Math.max(level, 1);
 
         return new TechnologiesMetadataResponse(Stream.of(TechnologyType.values())
-                .map(t -> new TechnologyMetadataResponse(
-                        t.name(), sanitizedLevel, technologyService.calculateResearchTimeWithoutBonuses(t, sanitizedLevel),
-                        ResourcesMapper.fromResources(technologyService.calculateResearchCost(t, sanitizedLevel)),
-                        t.getDescription(), PrerequisitesMapper.fromPrerequisites(technologyMechanics.getPrerequisites(t)),
-                        getBuildCostReduction(t, sanitizedLevel), getFlightCostReduction(t, sanitizedLevel)
-                ))
+                .map(t -> getMetadata(t, sanitizedLevel))
                 .collect(Collectors.toList()));
+    }
+
+    private TechnologyMetadataResponse getMetadata(TechnologyType t, int sanitizedLevel) {
+        return new TechnologyMetadataResponse(
+                t.name(), sanitizedLevel, technologyService.calculateResearchTimeWithoutBonuses(t, sanitizedLevel),
+                ResourcesMapper.fromResources(technologyService.calculateResearchCost(t, sanitizedLevel)),
+                t.getDescription(), PrerequisitesMapper.fromPrerequisites(technologyMechanics.getPrerequisites(t)),
+                getBuildCostReduction(t, sanitizedLevel), getFlightCostReduction(t, sanitizedLevel)
+        );
     }
 
     @Nullable
