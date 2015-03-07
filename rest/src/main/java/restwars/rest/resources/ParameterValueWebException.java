@@ -26,6 +26,6 @@ public class ParameterValueWebException extends WebApplicationException {
      * @param reason Reason.
      */
     public ParameterValueWebException(String reason) {
-        super(Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
+        super(Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
     }
 }
