@@ -53,7 +53,7 @@ public class ShipMetadataSubResource {
     @ApiOperation("Lists metadata all ships")
     public ShipsMetadataResponse all() {
         return new ShipsMetadataResponse(
-                Stream.of(ShipType.values()).map(s -> getMetadata(s)).collect(Collectors.toList())
+                Stream.of(ShipType.values()).map(this::getMetadata).collect(Collectors.toList())
         );
     }
 
