@@ -3,7 +3,7 @@ package restwars.storage.event;
 import com.google.common.base.Preconditions;
 import org.jooq.Record;
 import org.jooq.Result;
-import org.jooq.SelectConditionStep;
+import org.jooq.SelectSeekStep1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.model.event.Event;
@@ -62,17 +62,18 @@ public class JooqEventDAO extends AbstractJooqDAO implements EventDAO {
         LOGGER.debug("Finding all events for player {} since round {}, maximum {}", playerId, round, max);
 
         Result<Record> result = getFindSinceSql(playerId, round)
-                .maxRows(max)
+                .limit(max)
                 .fetch();
 
         return result.stream().map(r -> new EventWithPlanet(EventMapper.fromRecord(r), PlanetMapper.fromRecord(r))).collect(Collectors.toList());
     }
 
-    private SelectConditionStep<Record> getFindSinceSql(UUID playerId, long round) {
+    private SelectSeekStep1<Record, Long> getFindSinceSql(UUID playerId, long round) {
         return context()
                 .select().from(EVENT)
                 .join(PLANET).on(PLANET.ID.eq(EVENT.PLANET_ID))
                 .where(EVENT.PLAYER_ID.eq(playerId))
-                .and(EVENT.ROUND.greaterOrEqual(round));
+                .and(EVENT.ROUND.greaterOrEqual(round))
+                .orderBy(EVENT.ROUND.desc());
     }
 }
