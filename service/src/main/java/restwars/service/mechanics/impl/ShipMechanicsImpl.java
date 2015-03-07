@@ -169,9 +169,12 @@ public class ShipMechanicsImpl implements ShipMechanics {
 
         switch (type) {
             case MOSQUITO:
-                return Prerequisites.NONE;
+                return Prerequisites.building(BuildingType.SHIPYARD, 1);
             case DAGGER:
-                return Prerequisites.technology(TechnologyType.COMBUSTION_ENGINE, 2);
+                return new Prerequisites(
+                        Prerequisites.building(BuildingType.SHIPYARD, 1),
+                        Prerequisites.technology(TechnologyType.COMBUSTION_ENGINE, 2)
+                );
             case DAEDALUS:
                 return new Prerequisites(
                         Prerequisites.building(BuildingType.SHIPYARD, 2),
@@ -183,9 +186,12 @@ public class ShipMechanicsImpl implements ShipMechanics {
                         Prerequisites.technology(TechnologyType.COMBUSTION_ENGINE, 1)
                 );
             case PROBE:
-                return Prerequisites.NONE;
+                return Prerequisites.building(BuildingType.SHIPYARD, 1);
             case MULE:
-                return Prerequisites.technology(TechnologyType.COMBUSTION_ENGINE, 1);
+                return new Prerequisites(
+                        Prerequisites.building(BuildingType.SHIPYARD, 1),
+                        Prerequisites.technology(TechnologyType.COMBUSTION_ENGINE, 1)
+                );
             default:
                 throw new IllegalArgumentException("Unknown ship " + type);
         }

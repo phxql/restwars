@@ -17,6 +17,7 @@
 - Build: Only include scope runtime when building JAR with all dependencies. This reduces the size of the assembly.
 - Build: JAR with all dependencies is now built on package phase instead of install phase.
 - Webservice: Moved the websocket round endpoint from `/websocket/round` to `/v1/websocket/round`.
+- Webservice: List all prerequisites for ships and technologies, even the implicit ones.
 
 ## [0.1.0] - 2015-02-21
 ### Fixed

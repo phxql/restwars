@@ -1,6 +1,7 @@
 package restwars.service.mechanics.impl;
 
 import com.google.common.base.Preconditions;
+import restwars.model.building.BuildingType;
 import restwars.model.resource.Resources;
 import restwars.model.technology.TechnologyType;
 import restwars.model.techtree.Prerequisites;
@@ -51,9 +52,9 @@ public class TechnologyMechanicsImpl implements TechnologyMechanics {
 
         switch (type) {
             case BUILDING_BUILD_COST_REDUCTION:
-                return Prerequisites.NONE;
+                return Prerequisites.building(BuildingType.RESEARCH_CENTER, 1);
             case COMBUSTION_ENGINE:
-                return Prerequisites.NONE;
+                return Prerequisites.building(BuildingType.RESEARCH_CENTER, 1);
             default:
                 throw new IllegalArgumentException("Invalid technology: " + type);
         }
