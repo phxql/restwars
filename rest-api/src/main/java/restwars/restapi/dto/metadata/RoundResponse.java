@@ -5,6 +5,9 @@ import com.google.common.base.Objects;
 public class RoundResponse {
     private long round;
 
+    public RoundResponse() {
+    }
+
     public RoundResponse(long round) {
         this.round = round;
     }
