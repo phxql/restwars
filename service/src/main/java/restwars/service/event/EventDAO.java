@@ -22,4 +22,14 @@ public interface EventDAO {
      * @return All events which have occurred since the given round.
      */
     List<EventWithPlanet> findSince(UUID playerId, long round);
+
+    /**
+     * Finds all events for a player which have occurred since the given round. Returns a given maximum number of events.
+     *
+     * @param playerId Id of the player.
+     * @param round    Round (inclusive).
+     * @param max      Maximum number of events.
+     * @return All events which have occurred since the given round.
+     */
+    List<EventWithPlanet> findSinceMax(UUID playerId, long round, int max);
 }

@@ -4,6 +4,7 @@
 ### Added:
 - Webservice: Added endpoint to get building metadata for a given building type at `/v1/metadata/building/{type}`.
 - Configuration: Added the config option `speedUpEverything`. When set to `true`, every building / research / ship takes 1 round to complete, needs no resources and all prerequisites are disabled.
+- Webservice: Added query parameter `max` to limit the maximum number of events which are returned from `/v1/event`.
 
 ### Fixed:
 - Webservice: Fixed a bug where the building metadata and technology metadata endpoint responded with 500 Server Error when passing a level smaller than 1.

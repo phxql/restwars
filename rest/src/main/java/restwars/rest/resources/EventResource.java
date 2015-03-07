@@ -40,18 +40,30 @@ public class EventResource {
      *
      * @param player Player.
      * @param round  Round, inclusive.
+     * @param max    Maximum number of events. Must be at least 1.
      * @return All events since the given round.
      */
     @GET
     @ApiOperation("Lists all events since a round")
     public EventsResponse getEvents(
             @Auth @ApiParam(access = "internal") Player player,
-            @QueryParam("since") @ApiParam(value = "Round (inclusive)", defaultValue = "1") long round
+            @QueryParam("since") @ApiParam(value = "Round (inclusive)") @DefaultValue("1") long round,
+            @QueryParam("max") @ApiParam(value = "Maximum number of events") Integer max
     ) {
         Preconditions.checkNotNull(player, "player");
         round = Math.max(1, round);
 
-        List<EventWithPlanet> events = eventService.findSince(player.getId(), round);
+        List<EventWithPlanet> events;
+        if (max == null) {
+            events = eventService.findSince(player.getId(), round);
+        } else {
+            if (max < 1) {
+                throw new ParameterValueWebException("max must be at least 1");
+            }
+
+            events = eventService.findSinceMax(player.getId(), round, max);
+        }
+
         return new EventsResponse(Functional.mapToList(events, EventMapper::fromEvent));
     }
 

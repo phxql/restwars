@@ -3,6 +3,7 @@ package restwars.storage.event;
 import com.google.common.base.Preconditions;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.jooq.SelectConditionStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.model.event.Event;
@@ -47,13 +48,31 @@ public class JooqEventDAO extends AbstractJooqDAO implements EventDAO {
 
         LOGGER.debug("Finding all events for player {} since round {}", playerId, round);
 
-        Result<Record> result = context()
-                .select().from(EVENT)
-                .join(PLANET).on(PLANET.ID.eq(EVENT.PLANET_ID))
-                .where(EVENT.PLAYER_ID.eq(playerId))
-                .and(EVENT.ROUND.greaterOrEqual(round))
+        Result<Record> result = getFindSinceSql(playerId, round)
                 .fetch();
 
         return result.stream().map(r -> new EventWithPlanet(EventMapper.fromRecord(r), PlanetMapper.fromRecord(r))).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventWithPlanet> findSinceMax(UUID playerId, long round, int max) {
+        Preconditions.checkNotNull(playerId, "playerId");
+        Preconditions.checkArgument(max >= 0, "max must be >= 0");
+
+        LOGGER.debug("Finding all events for player {} since round {}, maximum {}", playerId, round, max);
+
+        Result<Record> result = getFindSinceSql(playerId, round)
+                .limit(max)
+                .fetch();
+
+        return result.stream().map(r -> new EventWithPlanet(EventMapper.fromRecord(r), PlanetMapper.fromRecord(r))).collect(Collectors.toList());
+    }
+
+    private SelectConditionStep<Record> getFindSinceSql(UUID playerId, long round) {
+        return context()
+                .select().from(EVENT)
+                .join(PLANET).on(PLANET.ID.eq(EVENT.PLANET_ID))
+                .where(EVENT.PLAYER_ID.eq(playerId))
+                .and(EVENT.ROUND.greaterOrEqual(round));
     }
 }

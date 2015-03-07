@@ -30,6 +30,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<EventWithPlanet> findSinceMax(UUID playerId, long round, int max) {
+        Preconditions.checkNotNull(playerId, "playerId");
+        Preconditions.checkArgument(max >= 0, "max must be >= 0");
+        LOGGER.debug("Finding events for player {} since round {}, maximum {}", playerId, round, max);
+
+        return eventDAO.findSinceMax(playerId, round, max);
+    }
+
+    @Override
     public List<EventWithPlanet> findSince(UUID playerId, long round) {
         Preconditions.checkNotNull(playerId, "playerId");
         LOGGER.debug("Finding events for player {} since round {}", playerId, round);
