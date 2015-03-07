@@ -4,10 +4,10 @@
 ### Added:
 - Webservice: Added endpoint to get building metadata for a given building type at `/v1/metadata/building/{type}`.
 - Configuration: Added the config option `speedUpEverything`. When set to `true`, every building / research / ship takes 1 round to complete, needs no resources and all prerequisites are disabled.
-- Webservice: Fixed a bug where a newly registered player didn't get access (#84)
 
 ### Fixed:
 - Webservice: Fixed a bug where the building metadata and technology metadata endpoint responded with 500 Server Error when passing a level smaller than 1.
+- Webservice: Fixed a bug where a newly registered player didn't get access (#84)
 
 ### Changed
 - Gameplay: The command center now harvests a minimal amount of resources to prevent "disabling" of planets.
