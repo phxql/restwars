@@ -29,6 +29,7 @@ public class RestWarsClient {
     private EventResource eventResource;
     private FightResource fightResource;
     private RootResource rootResource;
+    private WebsocketResource websocketResource;
 
     public RestWarsClient(String url) {
         client = ClientBuilder.newClient();
@@ -74,6 +75,7 @@ public class RestWarsClient {
         eventResource = WebResourceFactory.newResource(EventResource.class, target);
         fightResource = WebResourceFactory.newResource(FightResource.class, target);
         rootResource = WebResourceFactory.newResource(RootResource.class, target);
+        websocketResource = WebResourceFactory.newResource(WebsocketResource.class, target);
     }
 
     public PlayerResource getPlayerResource() {
@@ -134,5 +136,9 @@ public class RestWarsClient {
 
     public RootResource getRootResource() {
         return rootResource;
+    }
+
+    public WebsocketResource getWebsocketResource() {
+        return websocketResource;
     }
 }

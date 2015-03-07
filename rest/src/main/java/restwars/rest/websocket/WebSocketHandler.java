@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.atmosphere.config.service.AtmosphereHandlerService;
 import org.atmosphere.cpr.*;
 import org.eclipse.jetty.http.HttpStatus;
+import restwars.restapi.dto.metadata.RoundResponse;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -62,21 +63,8 @@ public class WebSocketHandler implements AtmosphereHandler {
     public void destroy() {
     }
 
-    private static class Round {
-        private final long round;
-
-        public Round(long round) {
-            this.round = round;
-        }
-
-        public long getRound() {
-            return round;
-        }
-
-    }
-
     public static void broadcastRound(BroadcasterFactory broadcasterFactory, long round) {
-        Round message = new Round(round);
+        RoundResponse message = new RoundResponse(round);
         String json;
         try {
             json = OBJECT_MAPPER.writeValueAsString(message);
