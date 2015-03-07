@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import restwars.Data;
+import restwars.rest.integration.authentication.PlayerAuthenticationCache;
 import restwars.restapi.dto.planet.PlanetResponse;
 import restwars.restapi.dto.player.PlayerResponse;
 import restwars.restapi.dto.player.RegisterPlayerRequest;
@@ -26,10 +27,11 @@ public class PlayerResourceTest extends AbstractResourceTest {
     public static final String URL = "/v1/player";
     private static PlayerService playerService = mock(PlayerService.class);
     private static PlanetService planetService = mock(PlanetService.class);
+    private static PlayerAuthenticationCache playerAuthenticationCache = mock(PlayerAuthenticationCache.class);
 
     @ClassRule
     public static final ResourceTestRule resources = createRule()
-            .addResource(new PlayerResource(playerService, planetService))
+            .addResource(new PlayerResource(playerService, planetService, playerAuthenticationCache))
             .build();
 
     @BeforeClass
@@ -40,6 +42,8 @@ public class PlayerResourceTest extends AbstractResourceTest {
     @Before
     public void setUp() throws Exception {
         reset(playerService);
+        reset(planetService);
+        reset(playerAuthenticationCache);
     }
 
     @Test

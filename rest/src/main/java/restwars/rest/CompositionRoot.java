@@ -1,6 +1,7 @@
 package restwars.rest;
 
-import restwars.rest.authentication.PlayerAuthenticator;
+import io.dropwizard.auth.basic.BasicAuthProvider;
+import restwars.model.player.Player;
 import restwars.rest.integration.locking.LockingFilter;
 import restwars.rest.resources.*;
 import restwars.service.unitofwork.UnitOfWorkService;
@@ -21,13 +22,13 @@ public class CompositionRoot {
     private final RootResource rootResource;
     private final FlightResource flightResource;
 
-    private final PlayerAuthenticator playerAuthenticator;
     private final Clock clock;
     private final LockingFilter lockingFilter;
     private final UnitOfWorkService unitOfWorkService;
+    private final BasicAuthProvider<Player> basicAuthProvider;
 
     @Inject
-    public CompositionRoot(SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, RootResource rootResource, FlightResource flightResource, PlayerAuthenticator playerAuthenticator, Clock clock, LockingFilter lockingFilter, UnitOfWorkService unitOfWorkService) {
+    public CompositionRoot(SystemResource systemResource, PlayerResource playerResource, TechnologyResource technologyResource, PlanetResource planetResource, MetadataResource metadataResource, EventResource eventResource, FightResource fightResource, RootResource rootResource, FlightResource flightResource, Clock clock, LockingFilter lockingFilter, UnitOfWorkService unitOfWorkService, BasicAuthProvider<Player> basicAuthProvider) {
         this.systemResource = systemResource;
         this.playerResource = playerResource;
         this.technologyResource = technologyResource;
@@ -37,10 +38,10 @@ public class CompositionRoot {
         this.fightResource = fightResource;
         this.rootResource = rootResource;
         this.flightResource = flightResource;
-        this.playerAuthenticator = playerAuthenticator;
         this.clock = clock;
         this.lockingFilter = lockingFilter;
         this.unitOfWorkService = unitOfWorkService;
+        this.basicAuthProvider = basicAuthProvider;
     }
 
     public SystemResource getSystemResource() {
@@ -57,10 +58,6 @@ public class CompositionRoot {
 
     public PlanetResource getPlanetResource() {
         return planetResource;
-    }
-
-    public PlayerAuthenticator getPlayerAuthenticator() {
-        return playerAuthenticator;
     }
 
     public Clock getClock() {
@@ -93,5 +90,9 @@ public class CompositionRoot {
 
     public UnitOfWorkService getUnitOfWorkService() {
         return unitOfWorkService;
+    }
+
+    public BasicAuthProvider<Player> getBasicAuthProvider() {
+        return basicAuthProvider;
     }
 }

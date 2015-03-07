@@ -14,8 +14,6 @@ import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader;
 import com.wordnik.swagger.reader.ClassReaders;
 import dagger.ObjectGraph;
 import io.dropwizard.Application;
-import io.dropwizard.auth.CachingAuthenticator;
-import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.migrations.MigrationsBundle;
@@ -79,12 +77,12 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
                 configuration.isSpeedUpEverything()
         );
 
-        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource, configuration.getPasswordIterations()));
+        ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource, configuration.getPasswordIterations(), CacheBuilderSpec.parse(configuration.getPasswordCache()), environment.metrics(), REALM));
         CompositionRoot compositionRoot = objectGraph.get(CompositionRoot.class);
 
         registerJerseyHooks(environment, compositionRoot);
 
-        environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(environment.metrics(), compositionRoot.getPlayerAuthenticator(), CacheBuilderSpec.parse(configuration.getPasswordCache())), REALM));
+        environment.jersey().register(compositionRoot.getBasicAuthProvider());
         environment.jersey().register(compositionRoot.getRootResource());
         environment.jersey().register(compositionRoot.getSystemResource());
         environment.jersey().register(compositionRoot.getPlayerResource());

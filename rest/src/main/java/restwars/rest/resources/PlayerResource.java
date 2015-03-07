@@ -8,6 +8,7 @@ import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
+import restwars.rest.integration.authentication.PlayerAuthenticationCache;
 import restwars.rest.mapper.PlanetMapper;
 import restwars.restapi.dto.player.PlayerResponse;
 import restwars.restapi.dto.player.RegisterPlayerRequest;
@@ -32,12 +33,14 @@ import java.util.List;
 public class PlayerResource {
     private final PlayerService playerService;
     private final PlanetService planetService;
+    private final PlayerAuthenticationCache playerAuthenticationCache;
 
     @Context
     private UriInfo uriInfo;
 
     @Inject
-    public PlayerResource(PlayerService playerService, PlanetService planetService) {
+    public PlayerResource(PlayerService playerService, PlanetService planetService, PlayerAuthenticationCache playerAuthenticationCache) {
+        this.playerAuthenticationCache = Preconditions.checkNotNull(playerAuthenticationCache, "playerAuthenticationCache");
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.playerService = Preconditions.checkNotNull(playerService, "playerService");
     }
@@ -59,6 +62,7 @@ public class PlayerResource {
 
         try {
             playerService.createPlayer(registration.getUsername(), registration.getPassword());
+            playerAuthenticationCache.invalidate(registration.getUsername(), registration.getPassword());
 
             return Response.created(uriInfo.getAbsolutePathBuilder().path("/").build()).build();
         } catch (CreatePlayerException e) {
