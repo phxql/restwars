@@ -8,19 +8,19 @@ passwordIterations: 25000
 passwordCache: maximumSize=10000,expireAfterWrite=20m
 
 # Number of galaxies
-galaxies: 3
+galaxies: 10
 
 # Number of solar systems in a galaxy
-solarSystems: 3
+solarSystems: 10
 
 # Number of planets in a solar system
-planets: 3
+planets: 10
 
 # Round time in seconds
 roundTime: 10
 
 # If true, everything will be finished in one round, prerequisites are disabled and every build / research costs zero resources
-speedUpEverything: true
+speedUpEverything: false
 
 # Database configuration
 database:
