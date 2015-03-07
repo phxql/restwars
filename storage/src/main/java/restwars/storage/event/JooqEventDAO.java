@@ -62,7 +62,7 @@ public class JooqEventDAO extends AbstractJooqDAO implements EventDAO {
         LOGGER.debug("Finding all events for player {} since round {}, maximum {}", playerId, round, max);
 
         Result<Record> result = getFindSinceSql(playerId, round)
-                .limit(max)
+                .maxRows(max)
                 .fetch();
 
         return result.stream().map(r -> new EventWithPlanet(EventMapper.fromRecord(r), PlanetMapper.fromRecord(r))).collect(Collectors.toList());
