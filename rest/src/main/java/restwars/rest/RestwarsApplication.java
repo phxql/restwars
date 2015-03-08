@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.model.UniverseConfiguration;
 import restwars.model.resource.Resources;
+import restwars.rest.configuration.DebugOptions;
 import restwars.rest.configuration.RestwarsConfiguration;
 import restwars.rest.di.RestWarsModule;
 import restwars.rest.doc.SwaggerFilter;
@@ -71,10 +72,14 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
         ManagedDataSource dataSource = configuration.getDatabase().build(environment.metrics(), "datasource");
         environment.lifecycle().manage(dataSource);
 
+        DebugOptions debugOptions = configuration.getDebugOptions();
         UniverseConfiguration universeConfiguration = new UniverseConfiguration(
                 configuration.getGalaxies(), configuration.getSolarSystems(), configuration.getPlanets(),
                 new Resources(1000L, 200L, 200L), configuration.getRoundTime(),
-                configuration.isSpeedUpEverything()
+                debugOptions.isSpeedUpFlights(), debugOptions.isSpeedUpResearches(), debugOptions.isSpeedUpBuildingConstructions(),
+                debugOptions.isSpeedUpShipConstructions(), debugOptions.isFreeShips(), debugOptions.isFreeResearches(),
+                debugOptions.isFreeBuildings(), debugOptions.isFreeFlights(), debugOptions.isNoBuildingPrerequisites(),
+                debugOptions.isNoShipPrerequisites(), debugOptions.isNoResearchPrerequisites()
         );
 
         ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource, configuration.getPasswordIterations(), CacheBuilderSpec.parse(configuration.getPasswordCache()), environment.metrics(), REALM));

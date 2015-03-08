@@ -23,8 +23,8 @@ public class MechanicsModule {
     BuildingMechanics provideBuildingMechanics(UniverseConfiguration universeConfiguration) {
         BuildingMechanicsImpl mechanics = new BuildingMechanicsImpl();
 
-        if (universeConfiguration.isSpeedUpEverything()) {
-            return new SpeedUpBuildingMechanicsImpl(mechanics);
+        if (universeConfiguration.isDebugOptionEnabled()) {
+            return new DebugBuildingMechanicsImpl(universeConfiguration, mechanics);
         }
 
         return mechanics;
@@ -34,8 +34,8 @@ public class MechanicsModule {
     ShipMechanics provideShipMechanics(UniverseConfiguration universeConfiguration) {
         ShipMechanicsImpl mechanics = new ShipMechanicsImpl();
 
-        if (universeConfiguration.isSpeedUpEverything()) {
-            return new SpeedUpShipMechanics(mechanics);
+        if (universeConfiguration.isDebugOptionEnabled()) {
+            return new DebugShipMechanics(universeConfiguration, mechanics);
         }
 
         return mechanics;
@@ -45,8 +45,8 @@ public class MechanicsModule {
     TechnologyMechanics providesTechnologyMechanics(UniverseConfiguration universeConfiguration) {
         TechnologyMechanicsImpl mechanics = new TechnologyMechanicsImpl();
 
-        if (universeConfiguration.isSpeedUpEverything()) {
-            return new SpeedUpTechnologyMechanicsImpl(mechanics);
+        if (universeConfiguration.isDebugOptionEnabled()) {
+            return new DebugTechnologyMechanicsImpl(universeConfiguration, mechanics);
         }
 
         return mechanics;

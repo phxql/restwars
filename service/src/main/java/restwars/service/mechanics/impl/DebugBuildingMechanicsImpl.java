@@ -1,21 +1,31 @@
 package restwars.service.mechanics.impl;
 
 import com.google.common.base.Preconditions;
+import restwars.model.UniverseConfiguration;
 import restwars.model.building.BuildingType;
 import restwars.model.resource.Resources;
 import restwars.model.techtree.Prerequisites;
 import restwars.service.mechanics.BuildingMechanics;
 
-public class SpeedUpBuildingMechanicsImpl implements BuildingMechanics {
+/**
+ * Debug mechanics for buildings. Overrides some mechanics when enabled in universe configuration.
+ */
+public class DebugBuildingMechanicsImpl implements BuildingMechanics {
     private final BuildingMechanics delegate;
+    private final UniverseConfiguration universeConfiguration;
 
-    public SpeedUpBuildingMechanicsImpl(BuildingMechanics delegate) {
+    public DebugBuildingMechanicsImpl(UniverseConfiguration universeConfiguration, BuildingMechanics delegate) {
         this.delegate = Preconditions.checkNotNull(delegate, "delegate");
+        this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
     }
 
     @Override
     public Resources calculateBuildCost(BuildingType type, int level) {
-        return Resources.NONE;
+        if (universeConfiguration.isFreeBuildings()) {
+            return Resources.NONE;
+        } else {
+            return delegate.calculateBuildCost(type, level);
+        }
     }
 
     @Override
@@ -25,7 +35,11 @@ public class SpeedUpBuildingMechanicsImpl implements BuildingMechanics {
 
     @Override
     public int calculateBuildTime(BuildingType type, int level) {
-        return 1;
+        if (universeConfiguration.isSpeedUpBuildingConstructions()) {
+            return 1;
+        } else {
+            return delegate.calculateBuildTime(type, level);
+        }
     }
 
     @Override
@@ -75,6 +89,10 @@ public class SpeedUpBuildingMechanicsImpl implements BuildingMechanics {
 
     @Override
     public Prerequisites getPrerequisites(BuildingType type) {
-        return Prerequisites.NONE;
+        if (universeConfiguration.isNoBuildingPrerequisites()) {
+            return Prerequisites.NONE;
+        } else {
+            return delegate.getPrerequisites(type);
+        }
     }
 }

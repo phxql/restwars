@@ -10,6 +10,7 @@
 - Added endpoint to fetch metadata for single technology type, `/v1/metadata/technology/{type}`
 - Added endpoints to fetch building metadata for a level range, `/v1/metadata/building/range` and `/v1/metadata/building/{type}/range`
 - Added endpoints to fetch technology metadata for a level range, `/v1/metadata/technology/range` and `/v1/metadata/technology/{type}/range`
+- Added new debug configuration options which allow fine tuning debug mechanics like free ships, instant flights and more.
 
 ### Fixed:
 - Webservice: Fixed a bug where the building metadata and technology metadata endpoint responded with 500 Server Error when passing a level smaller than 1.
@@ -23,6 +24,9 @@
 - Webservice: Moved the websocket round endpoint from `/websocket/round` to `/v1/websocket/round`.
 - Webservice: List all prerequisites for ships and technologies, even the implicit ones.
 - Webservice: Events are now ordered descending by round
+
+### Removed
+- Removed configuration option `speedUpEverything`. Take a look at the new debug configuration options.
 
 ## [0.1.0] - 2015-02-21
 ### Fixed

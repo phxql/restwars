@@ -65,9 +65,10 @@ public class RestwarsConfiguration extends Configuration {
     private int roundTime;
 
     /**
-     * If true, everything will be finished in one round.
+     * Debug options.
      */
-    private boolean speedUpEverything = false;
+    @JsonProperty("debug")
+    private DebugOptions debugOptions = new DebugOptions();
 
     public DataSourceFactory getDatabase() {
         return database;
@@ -137,11 +138,11 @@ public class RestwarsConfiguration extends Configuration {
         this.passwordCache = passwordCache;
     }
 
-    public boolean isSpeedUpEverything() {
-        return speedUpEverything;
+    public DebugOptions getDebugOptions() {
+        return debugOptions;
     }
 
-    public void setSpeedUpEverything(boolean speedUpEverything) {
-        this.speedUpEverything = speedUpEverything;
+    public void setDebugOptions(DebugOptions debugOptions) {
+        this.debugOptions = debugOptions;
     }
 }

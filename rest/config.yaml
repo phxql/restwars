@@ -19,8 +19,30 @@ planets: 10
 # Round time in seconds
 roundTime: 10
 
-# If true, everything will be finished in one round, prerequisites are disabled and every build / research costs zero resources
-speedUpEverything: false
+# Debug options
+debug:
+    # If true all flights take 1 round to reach destination
+    speedUpFlights: false
+    # If true all researches take 1 round to complete
+    speedUpResearches: false
+    # If true all buildings take 1 round to complete
+    speedUpBuildingConstructions: false
+    # If true all ships take 1 round to complete
+    speedUpShipConstructions: false
+    # If true, all ships are for free
+    freeShips: false
+    # If true, all researches are for free
+    freeResearches: false
+    # If true, all buildings are for free
+    freeBuildings: false
+    # If true, all flights are for free
+    freeFlights: false
+    # If true, buildings have no prerequisites
+    noBuildingPrerequisites: false
+    # If true, ships have no prerequisites
+    noShipPrerequisites: false
+    # If true, researches have no prerequisites
+    noResearchPrerequisites: false
 
 # Database configuration
 database:
