@@ -1,5 +1,6 @@
 package restwars.restclient;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
@@ -42,6 +43,7 @@ public class RestWarsClient {
 
     private void enableJodaTime() {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.registerModule(new JodaModule());
 
         JacksonJaxbJsonProvider jacksonProvider = new JacksonJaxbJsonProvider();

@@ -16,6 +16,7 @@
 ### Fixed:
 - Webservice: Fixed a bug where the building metadata and technology metadata endpoint responded with 500 Server Error when passing a level smaller than 1.
 - Webservice: Fixed a bug where a newly registered player didn't get access (#84).
+- JVM client: Ignore unknown properties when parsing JSON.
 
 ### Changed
 - Gameplay: The command center now harvests a minimal amount of resources to prevent "disabling" of planets.
