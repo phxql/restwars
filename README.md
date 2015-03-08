@@ -8,6 +8,8 @@ An online game (like the good old browsergames) which can be played via a REST i
 * [Webservice documentation](https://github.com/phxql/restwars/blob/master/docs/webservice.md)
 * [Write a bot](https://github.com/phxql/restwars/blob/master/docs/write_a_bot.md)
 
+* [Changelog](https://github.com/phxql/restwars/blob/master/CHANGELOG.md)
+
 ## Universe
 The game takes place in a universe. The universe consists of galaxies which consists of solar systems which consists of planets.
 
