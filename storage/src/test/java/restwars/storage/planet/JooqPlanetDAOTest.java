@@ -134,7 +134,7 @@ public class JooqPlanetDAOTest extends DatabaseTest {
 
     @Test
     public void testInsert() throws Exception {
-        Planet planet = new Planet(UUID.fromString("fd8694f8-c898-4ad4-80b6-a78780e63672"), new Location(11, 11, 11), BasicScenario.Player1.PLAYER.getId(), new Resources(1, 2, 3));
+        Planet planet = new Planet(UUID.fromString("fd8694f8-c898-4ad4-80b6-a78780e63672"), new Location(11, 11, 11), BasicScenario.Player1.PLAYER.getId(), new Resources(1, 2, 3), 1);
         sut.insert(planet);
 
         List<Map<String, Object>> resultSet = select("SELECT * FROM planet WHERE id = ?", planet.getId());
@@ -145,7 +145,7 @@ public class JooqPlanetDAOTest extends DatabaseTest {
 
     @Test
     public void testUpdate() throws Exception {
-        Planet planet = new Planet(BasicScenario.Player1.Planet1.PLANET.getId(), new Location(11, 11, 11), BasicScenario.Player1.PLAYER.getId(), new Resources(4, 8, 15));
+        Planet planet = new Planet(BasicScenario.Player1.Planet1.PLANET.getId(), new Location(11, 11, 11), BasicScenario.Player1.PLAYER.getId(), new Resources(4, 8, 15), 1);
         sut.update(planet);
 
         List<Map<String, Object>> resultSet = select("SELECT * FROM planet WHERE id = ?", planet.getId());

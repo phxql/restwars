@@ -72,6 +72,6 @@ public class PlayerResourceTest extends AbstractResourceTest {
         assertThat(response.getUsername(), is("username"));
         List<PlanetResponse> planets = response.getPlanets();
         assertThat(planets, hasSize(1));
-        assertThat(planets.get(0), is(new PlanetResponse("1.1.1", 100, 200, 300)));
+        assertThat(planets.get(0), is(new PlanetResponse("1.1.1", 100, 200, 300, 1)));
     }
 }

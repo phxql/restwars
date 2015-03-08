@@ -40,6 +40,9 @@
             <column name="energy" type="long">
                 <constraints nullable="false"/>
             </column>
+            <column name="colonized_in_round" type="long">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <addUniqueConstraint tableName="planet" columnNames="location_galaxy, location_solar_system, location_planet"/>
 

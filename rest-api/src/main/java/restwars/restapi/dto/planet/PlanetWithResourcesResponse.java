@@ -19,17 +19,22 @@ public class PlanetWithResourcesResponse {
     @ApiModelProperty(value = "Amount of energy", required = true)
     private long energy;
 
+    @ApiModelProperty(value = "Colonized in round", required = true)
+    private long colonizedInRound;
+
     @ApiModelProperty(value = "Resources gathered per round", required = true)
     private ResourcesResponse resourcesPerRound;
 
     public PlanetWithResourcesResponse() {
     }
 
-    public PlanetWithResourcesResponse(String location, long crystal, long gas, long energy, ResourcesResponse resourcesPerRound) {
+    public PlanetWithResourcesResponse(String location, long crystal, long gas, long energy, long colonizedInRound, ResourcesResponse resourcesPerRound) {
+
         this.location = location;
         this.crystal = crystal;
         this.gas = gas;
         this.energy = energy;
+        this.colonizedInRound = colonizedInRound;
         this.resourcesPerRound = resourcesPerRound;
     }
 
@@ -73,6 +78,14 @@ public class PlanetWithResourcesResponse {
         this.resourcesPerRound = resourcesPerRound;
     }
 
+    public long getColonizedInRound() {
+        return colonizedInRound;
+    }
+
+    public void setColonizedInRound(long colonizedInRound) {
+        this.colonizedInRound = colonizedInRound;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -80,6 +93,7 @@ public class PlanetWithResourcesResponse {
                 .add("crystal", crystal)
                 .add("gas", gas)
                 .add("energy", energy)
+                .add("colonizedInRound", colonizedInRound)
                 .add("resourcesPerRound", resourcesPerRound)
                 .toString();
     }
@@ -95,11 +109,12 @@ public class PlanetWithResourcesResponse {
                 Objects.equal(this.crystal, that.crystal) &&
                 Objects.equal(this.gas, that.gas) &&
                 Objects.equal(this.energy, that.energy) &&
+                Objects.equal(this.colonizedInRound, that.colonizedInRound) &&
                 Objects.equal(this.resourcesPerRound, that.resourcesPerRound);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(location, crystal, gas, energy, resourcesPerRound);
+        return Objects.hashCode(location, crystal, gas, energy, colonizedInRound, resourcesPerRound);
     }
 }

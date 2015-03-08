@@ -9,6 +9,7 @@ import restwars.model.planet.Location;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
 import restwars.service.building.BuildingService;
+import restwars.service.infrastructure.RoundService;
 import restwars.service.infrastructure.UUIDFactory;
 import restwars.service.location.LocationFactory;
 import restwars.service.mechanics.PlanetMechanics;
@@ -31,11 +32,13 @@ public class PlanetServiceImpl implements PlanetService {
     private final UniverseConfiguration universeConfiguration;
     private final BuildingService buildingService;
     private final PlanetMechanics planetMechanics;
+    private final RoundService roundService;
 
     private static final int MAX_STARTER_TRIES = 1000;
 
     @Inject
-    public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO, LocationFactory locationFactory, UniverseConfiguration universeConfiguration, BuildingService buildingService, PlanetMechanics planetMechanics) {
+    public PlanetServiceImpl(UUIDFactory uuidFactory, PlanetDAO planetDAO, LocationFactory locationFactory, UniverseConfiguration universeConfiguration, BuildingService buildingService, PlanetMechanics planetMechanics, RoundService roundService) {
+        this.roundService = Preconditions.checkNotNull(roundService, "roundService");
         this.buildingService = Preconditions.checkNotNull(buildingService, "buildingService");
         this.locationFactory = Preconditions.checkNotNull(locationFactory, "locationFactory");
         this.universeConfiguration = Preconditions.checkNotNull(universeConfiguration, "universeConfiguration");
@@ -60,8 +63,10 @@ public class PlanetServiceImpl implements PlanetService {
             throw new CreateStartPlanetException(CreateStartPlanetException.Reason.UNIVERSE_FULL);
         }
 
+        long currentRound = roundService.getCurrentRound();
+
         UUID id = uuidFactory.create();
-        Planet planet = new Planet(id, location, owner.getId(), planetMechanics.getStarterPlanetResources());
+        Planet planet = new Planet(id, location, owner.getId(), planetMechanics.getStarterPlanetResources(), currentRound);
         planetDAO.insert(planet);
 
         for (Map.Entry<BuildingType, Integer> building : planetMechanics.getStarterPlanetBuildings().entrySet()) {

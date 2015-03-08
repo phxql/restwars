@@ -20,7 +20,8 @@ public final class PlanetMapper {
         Preconditions.checkNotNull(planet, "planet");
 
         return new PlanetResponse(
-                planet.getLocation().toString(), planet.getResources().getCrystals(), planet.getResources().getGas(), planet.getResources().getEnergy()
+                planet.getLocation().toString(), planet.getResources().getCrystals(), planet.getResources().getGas(),
+                planet.getResources().getEnergy(), planet.getColonizedInRound()
         );
     }
 
@@ -30,7 +31,7 @@ public final class PlanetMapper {
 
         return new PlanetWithResourcesResponse(
                 planet.getLocation().toString(), planet.getResources().getCrystals(), planet.getResources().getGas(), planet.getResources().getEnergy(),
-                ResourcesMapper.fromResources(resourcesPerRound)
+                planet.getColonizedInRound(), ResourcesMapper.fromResources(resourcesPerRound)
         );
     }
 

@@ -39,11 +39,11 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
 
         context().insertInto(
                 PLANET, PLANET.ID, PLANET.LOCATION_GALAXY, PLANET.LOCATION_SOLAR_SYSTEM, PLANET.LOCATION_PLANET,
-                PLANET.OWNER_ID, PLANET.CRYSTALS, PLANET.GAS, PLANET.ENERGY
+                PLANET.OWNER_ID, PLANET.CRYSTALS, PLANET.GAS, PLANET.ENERGY, PLANET.COLONIZED_IN_ROUND
         ).values(
                 planet.getId(), planet.getLocation().getGalaxy(), planet.getLocation().getSolarSystem(),
                 planet.getLocation().getPlanet(), planet.getOwnerId(), planet.getResources().getCrystals(),
-                planet.getResources().getGas(), planet.getResources().getEnergy()
+                planet.getResources().getGas(), planet.getResources().getEnergy(), planet.getColonizedInRound()
         ).execute();
     }
 
@@ -53,7 +53,7 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
 
         LOGGER.debug("Finding planet with owner id {}", ownerId);
 
-        Result<Record> result = context().select().from(PLANET).where(PLANET.OWNER_ID.eq(ownerId)).fetch();
+        Result<Record> result = context().select().from(PLANET).where(PLANET.OWNER_ID.eq(ownerId)).orderBy(PLANET.COLONIZED_IN_ROUND).fetch();
         return result.stream().map(PlanetMapper::fromRecord).collect(Collectors.toList());
     }
 
@@ -90,6 +90,7 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
                 .set(PLANET.CRYSTALS, planet.getResources().getCrystals())
                 .set(PLANET.GAS, planet.getResources().getGas())
                 .set(PLANET.ENERGY, planet.getResources().getEnergy())
+                .set(PLANET.COLONIZED_IN_ROUND, planet.getColonizedInRound())
                 .where(PLANET.ID.eq(planet.getId()))
                 .execute();
 
@@ -99,7 +100,7 @@ public class JooqPlanetDAO extends AbstractJooqDAO implements PlanetDAO {
     public List<Planet> findAll() {
         LOGGER.debug("Finding all planets");
 
-        return context().select().from(PLANET).fetch().stream().map(PlanetMapper::fromRecord).collect(Collectors.toList());
+        return context().select().from(PLANET).orderBy(PLANET.COLONIZED_IN_ROUND).fetch().stream().map(PlanetMapper::fromRecord).collect(Collectors.toList());
     }
 
     @Override

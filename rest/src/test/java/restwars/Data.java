@@ -15,7 +15,7 @@ public final class Data {
         public static final Player PLAYER = new Player(UUID.randomUUID(), "username", "password");
 
         public static final class Planet1 {
-            public static final Planet PLANET = new Planet(UUID.randomUUID(), new Location(1, 1, 1), PLAYER.getId(), new Resources(100, 200, 300));
+            public static final Planet PLANET = new Planet(UUID.randomUUID(), new Location(1, 1, 1), PLAYER.getId(), new Resources(100, 200, 300), 1);
         }
     }
 }

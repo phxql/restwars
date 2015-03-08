@@ -16,12 +16,16 @@ public class Planet {
 
     private final Resources resources;
 
-    public Planet(UUID id, Location location, UUID ownerId, Resources resources) {
+    private final long colonizedInRound;
+
+    public Planet(UUID id, Location location, UUID ownerId, Resources resources, long colonizedInRound) {
         Preconditions.checkNotNull(resources, "resources");
         Preconditions.checkArgument(resources.getCrystals() >= 0, "crystals must be >= 0");
         Preconditions.checkArgument(resources.getGas() >= 0, "gas must be >= 0");
         Preconditions.checkArgument(resources.getCrystals() >= 0, "energy must be >= 0");
+        Preconditions.checkArgument(colonizedInRound > 0, "colonizedInRound must be > 0");
 
+        this.colonizedInRound = colonizedInRound;
         this.resources = resources;
         this.id = Preconditions.checkNotNull(id, "id");
         this.location = Preconditions.checkNotNull(location, "location");
@@ -45,7 +49,7 @@ public class Planet {
     }
 
     public Planet withResources(Resources resources) {
-        return new Planet(id, location, ownerId, resources);
+        return new Planet(id, location, ownerId, resources, colonizedInRound);
     }
 
     public boolean isOwnedFrom(Player player) {
@@ -54,10 +58,8 @@ public class Planet {
         return ownerId.equals(player.getId());
     }
 
-    public Planet withOwnerId(UUID ownerId) {
-        Preconditions.checkNotNull(ownerId, "ownerId");
-
-        return new Planet(id, location, ownerId, resources);
+    public long getColonizedInRound() {
+        return colonizedInRound;
     }
 
     @Override
@@ -67,6 +69,7 @@ public class Planet {
                 .add("location", location)
                 .add("ownerId", ownerId)
                 .add("resources", resources)
+                .add("colonizedInRound", colonizedInRound)
                 .toString();
     }
 
@@ -80,11 +83,12 @@ public class Planet {
         return Objects.equal(this.id, that.id) &&
                 Objects.equal(this.location, that.location) &&
                 Objects.equal(this.ownerId, that.ownerId) &&
-                Objects.equal(this.resources, that.resources);
+                Objects.equal(this.resources, that.resources) &&
+                Objects.equal(this.colonizedInRound, that.colonizedInRound);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, location, ownerId, resources);
+        return Objects.hashCode(id, location, ownerId, resources, colonizedInRound);
     }
 }

@@ -18,14 +18,18 @@ public class PlanetResponse {
     @ApiModelProperty(value = "Amount of energy", required = true)
     private long energy;
 
+    @ApiModelProperty(value = "Colonized in round", required = true)
+    private long colonizedInRound;
+
     public PlanetResponse() {
     }
 
-    public PlanetResponse(String location, long crystal, long gas, long energy) {
+    public PlanetResponse(String location, long crystal, long gas, long energy, long colonizedInRound) {
         this.location = location;
         this.crystal = crystal;
         this.gas = gas;
         this.energy = energy;
+        this.colonizedInRound = colonizedInRound;
     }
 
     public String getLocation() {
@@ -60,6 +64,14 @@ public class PlanetResponse {
         this.energy = energy;
     }
 
+    public long getColonizedInRound() {
+        return colonizedInRound;
+    }
+
+    public void setColonizedInRound(long colonizedInRound) {
+        this.colonizedInRound = colonizedInRound;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -67,6 +79,7 @@ public class PlanetResponse {
                 .add("crystal", crystal)
                 .add("gas", gas)
                 .add("energy", energy)
+                .add("colonizedInRound", colonizedInRound)
                 .toString();
     }
 
@@ -80,11 +93,12 @@ public class PlanetResponse {
         return Objects.equal(this.location, that.location) &&
                 Objects.equal(this.crystal, that.crystal) &&
                 Objects.equal(this.gas, that.gas) &&
-                Objects.equal(this.energy, that.energy);
+                Objects.equal(this.energy, that.energy) &&
+                Objects.equal(this.colonizedInRound, that.colonizedInRound);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(location, crystal, gas, energy);
+        return Objects.hashCode(location, crystal, gas, energy, colonizedInRound);
     }
 }

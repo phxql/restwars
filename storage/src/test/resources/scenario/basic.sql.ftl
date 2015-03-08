@@ -8,7 +8,7 @@ INSERT INTO player VALUES (
 
 <#list planets as planet>
 INSERT INTO planet VALUES (
-'${planet.id}', ${planet.location.galaxy}, ${planet.location.solarSystem}, ${planet.location.planet}, '${planet.ownerId}', ${planet.resources.crystals}, ${planet.resources.gas}, ${planet.resources.energy}
+'${planet.id}', ${planet.location.galaxy}, ${planet.location.solarSystem}, ${planet.location.planet}, '${planet.ownerId}', ${planet.resources.crystals}, ${planet.resources.gas}, ${planet.resources.energy}, ${planet.colonizedInRound}
 );
 </#list>
 

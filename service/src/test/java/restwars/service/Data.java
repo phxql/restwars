@@ -18,7 +18,7 @@ public final class Data {
         public static final Player PLAYER = new Player(UUID.fromString("68d6ded1-4e03-43c8-883c-46faa17eee48"), "player1", "player1");
 
         public static class Planet1 {
-            public static final Planet PLANET = new Planet(UUID.fromString("63cbb2f1-ceb1-4347-b8e0-4b11bbc5d44e"), new Location(1, 2, 3), PLAYER.getId(), new Resources(10, 20, 30));
+            public static final Planet PLANET = new Planet(UUID.fromString("63cbb2f1-ceb1-4347-b8e0-4b11bbc5d44e"), new Location(1, 2, 3), PLAYER.getId(), new Resources(10, 20, 30), 1);
 
             public static final Building COMMAND_CENTER = new Building(UUID.fromString("20e91b69-ae0f-4054-9a9f-0076de37b1d9"), BuildingType.COMMAND_CENTER, 1, PLANET.getId());
 
