@@ -15,8 +15,16 @@ public interface MetadataResource {
     BuildingsMetadataResponse allBuildings(@QueryParam("level") int level);
 
     @GET
+    @Path("/building/range")
+    BuildingsMetadataResponse allBuildings(@QueryParam("levelFrom") int levelFrom, @QueryParam("levelTo") int levelTo);
+
+    @GET
     @Path("/building/{type}")
     BuildingMetadataResponse building(@PathParam("type") String type, @QueryParam("level") int level);
+
+    @GET
+    @Path("/building/{type}/range")
+    BuildingsMetadataResponse building(@PathParam("type") String type, @QueryParam("levelFrom") int levelFrom, @QueryParam("levelTo") int levelTo);
 
     @GET
     @Path("/ship/{type}")
