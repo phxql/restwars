@@ -16,7 +16,9 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Api(value = "/technology", hidden = true)
@@ -44,7 +46,7 @@ public class TechnologyMetadataSubResource {
     @ApiOperation("Lists metadata for a technology")
     public TechnologyMetadataResponse one(
             @PathParam("type") @ApiParam(value = "Technology type") String type,
-            @QueryParam("level") @ApiParam(value = "Technology level", defaultValue = "1") int level
+            @QueryParam("level") @ApiParam(value = "Technology level") @DefaultValue("1") int level
     ) {
         int sanitizedLevel = Math.max(level, 1);
 
@@ -58,6 +60,35 @@ public class TechnologyMetadataSubResource {
     }
 
     @GET
+    @Path("/{type}/range")
+    @ApiOperation("Lists metadata for a technology within a level range")
+    public TechnologiesMetadataResponse oneRange(
+            @PathParam("type") @ApiParam(value = "Technology type") String type,
+            @QueryParam("levelFrom") @ApiParam(value = "Start of building level range (inclusive)") int levelFrom,
+            @QueryParam("levelTo") @ApiParam(value = "End of building level range (inclusive)") int levelTo
+    ) {
+        int sanitizedLevelFrom = Math.max(levelFrom, 1);
+        int sanitizedLevelTo = Math.max(levelTo, 1);
+
+        if (sanitizedLevelTo < sanitizedLevelFrom) {
+            throw new ParameterValueWebException("levelTo must be >= levelFrom");
+        }
+
+        TechnologyType technologyType;
+        try {
+            technologyType = TechnologyType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new TechnologyTypeNotFoundWebException();
+        }
+
+        List<TechnologyMetadataResponse> result = IntStream.range(sanitizedLevelFrom, sanitizedLevelTo + 1).
+                mapToObj(level -> getMetadata(technologyType, level))
+                .collect(Collectors.toList());
+
+        return new TechnologiesMetadataResponse(result);
+    }
+
+    @GET
     @ApiOperation("Lists metadata for all technologies")
     public TechnologiesMetadataResponse all(@QueryParam("level") @ApiParam(value = "Building level", defaultValue = "1") int level) {
         int sanitizedLevel = Math.max(level, 1);
@@ -65,6 +96,27 @@ public class TechnologyMetadataSubResource {
         return new TechnologiesMetadataResponse(Stream.of(TechnologyType.values())
                 .map(t -> getMetadata(t, sanitizedLevel))
                 .collect(Collectors.toList()));
+    }
+
+    @GET
+    @Path("/range")
+    @ApiOperation("Lists metadata for all technologies with a level range")
+    public TechnologiesMetadataResponse allRange(
+            @QueryParam("levelFrom") @ApiParam(value = "Start of building level range (inclusive)") int levelFrom,
+            @QueryParam("levelTo") @ApiParam(value = "End of building level range (inclusive)") int levelTo
+    ) {
+        int sanitizedLevelFrom = Math.max(levelFrom, 1);
+        int sanitizedLevelTo = Math.max(levelTo, 1);
+
+        if (sanitizedLevelTo < sanitizedLevelFrom) {
+            throw new ParameterValueWebException("levelTo must be >= levelFrom");
+        }
+
+        List<TechnologyMetadataResponse> result = IntStream.range(sanitizedLevelFrom, sanitizedLevelTo + 1).
+                boxed().flatMap(level -> Stream.of(TechnologyType.values()).map(t -> getMetadata(t, level)))
+                .collect(Collectors.toList());
+
+        return new TechnologiesMetadataResponse(result);
     }
 
     private TechnologyMetadataResponse getMetadata(TechnologyType t, int sanitizedLevel) {

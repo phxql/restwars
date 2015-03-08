@@ -8,7 +8,8 @@
 - JVM client: Added long-polling websocket method to get the round.
 - Added endpoint to fetch metadata for single ship type, `/v1/metadata/ship/{type}`
 - Added endpoint to fetch metadata for single technology type, `/v1/metadata/technology/{type}`
-- Added endpoints to fetch building metadata for a level range. `/v1/metadata/building/range` and `/v1/metadata/building/{type}/range`
+- Added endpoints to fetch building metadata for a level range, `/v1/metadata/building/range` and `/v1/metadata/building/{type}/range`
+- Added endpoints to fetch technology metadata for a level range, `/v1/metadata/technology/range` and `/v1/metadata/technology/{type}/range`
 
 ### Fixed:
 - Webservice: Fixed a bug where the building metadata and technology metadata endpoint responded with 500 Server Error when passing a level smaller than 1.

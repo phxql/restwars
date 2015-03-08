@@ -39,8 +39,16 @@ public interface MetadataResource {
     TechnologiesMetadataResponse allTechnologies(@QueryParam("level") int level);
 
     @GET
+    @Path("/technology/range")
+    TechnologiesMetadataResponse allTechnologies(@QueryParam("levelFrom") int levelFrom, @QueryParam("levelTo") int levelTo);
+
+    @GET
     @Path("/technology/{type}")
     BuildingMetadataResponse technology(@PathParam("type") String type, @QueryParam("level") int level);
+
+    @GET
+    @Path("/technology/{type}/range")
+    BuildingMetadataResponse technology(@PathParam("type") String type, @QueryParam("levelFrom") int levelFrom, @QueryParam("levelTo") int levelTo);
 
     @GET
     @Path("/flight/type")
