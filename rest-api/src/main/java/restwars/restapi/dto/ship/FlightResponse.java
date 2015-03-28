@@ -33,10 +33,13 @@ public class FlightResponse {
     @ApiModelProperty(value = "Cargo", required = true)
     private ResourcesResponse cargo;
 
+    @ApiModelProperty(value = "Energy cost", required = true)
+    private long flightCost;
+
     public FlightResponse() {
     }
 
-    public FlightResponse(String start, String destination, long startedInRound, long arrivalInRound, List<ShipResponse> ships, String type, String direction, ResourcesResponse cargo) {
+    public FlightResponse(String start, String destination, long startedInRound, long arrivalInRound, List<ShipResponse> ships, String type, String direction, ResourcesResponse cargo, long flightCost) {
         this.start = start;
         this.destination = destination;
         this.startedInRound = startedInRound;
@@ -45,6 +48,15 @@ public class FlightResponse {
         this.type = type;
         this.direction = direction;
         this.cargo = cargo;
+        this.flightCost = flightCost;
+    }
+
+    public long getFlightCost() {
+        return flightCost;
+    }
+
+    public void setFlightCost(long flightCost) {
+        this.flightCost = flightCost;
     }
 
     public String getDestination() {
@@ -122,6 +134,7 @@ public class FlightResponse {
                 .add("type", type)
                 .add("direction", direction)
                 .add("cargo", cargo)
+                .add("flightCost", flightCost)
                 .toString();
     }
 }
