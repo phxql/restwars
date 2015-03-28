@@ -1,5 +1,6 @@
 package restwars.storage.scenario.impl;
 
+import restwars.model.resource.Resources;
 import restwars.model.technology.Research;
 import restwars.model.technology.TechnologyType;
 import restwars.storage.scenario.AbstractFreemarkerScenario;
@@ -13,8 +14,8 @@ public class ResearchScenario extends AbstractFreemarkerScenario<ResearchScenari
         public static class Planet1 {
             public static Research RESEARCH = new Research(
                     UUID.fromString("c5068b50-a991-11e4-bcd8-0800200c9a66"), TechnologyType.BUILDING_BUILD_COST_REDUCTION, 5,
-                    1, 2, BasicScenario.Player1.Planet1.PLANET.getId(), BasicScenario.Player1.PLAYER.getId()
-            );
+                    1, 2, BasicScenario.Player1.Planet1.PLANET.getId(), BasicScenario.Player1.PLAYER.getId(),
+                    new Resources(1, 2, 3));
         }
 
     }

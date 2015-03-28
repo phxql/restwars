@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.model.resource.Resources;
 import restwars.model.ship.ShipInConstruction;
 import restwars.model.ship.ShipType;
 import restwars.service.ship.ShipInConstructionDAO;
@@ -34,11 +35,14 @@ public class JooqShipInConstructionDAO extends AbstractJooqDAO implements ShipIn
                 .insertInto(
                         SHIP_IN_CONSTRUCTION, SHIP_IN_CONSTRUCTION.ID, SHIP_IN_CONSTRUCTION.TYPE,
                         SHIP_IN_CONSTRUCTION.PLANET_ID, SHIP_IN_CONSTRUCTION.PLAYER_ID, SHIP_IN_CONSTRUCTION.STARTED,
-                        SHIP_IN_CONSTRUCTION.DONE
+                        SHIP_IN_CONSTRUCTION.DONE, SHIP_IN_CONSTRUCTION.BUILD_COST_CRYSTALS,
+                        SHIP_IN_CONSTRUCTION.BUILD_COST_GAS, SHIP_IN_CONSTRUCTION.BUILD_COST_ENERGY
                 )
                 .values(
                         shipInConstruction.getId(), shipInConstruction.getType().getId(), shipInConstruction.getPlanetId(),
-                        shipInConstruction.getPlayerId(), shipInConstruction.getStarted(), shipInConstruction.getDone()
+                        shipInConstruction.getPlayerId(), shipInConstruction.getStarted(), shipInConstruction.getDone(),
+                        shipInConstruction.getBuildCost().getCrystals(), shipInConstruction.getBuildCost().getGas(),
+                        shipInConstruction.getBuildCost().getEnergy()
                 )
                 .execute();
     }
@@ -66,7 +70,8 @@ public class JooqShipInConstructionDAO extends AbstractJooqDAO implements ShipIn
 
         return new ShipInConstruction(
                 record.getId(), ShipType.fromId(record.getType()), record.getPlanetId(), record.getPlayerId(),
-                record.getStarted(), record.getDone()
+                record.getStarted(), record.getDone(),
+                new Resources(record.getBuildCostCrystals(), record.getBuildCostGas(), record.getBuildCostEnergy())
         );
     }
 

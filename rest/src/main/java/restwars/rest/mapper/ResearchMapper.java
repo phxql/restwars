@@ -14,6 +14,9 @@ public final class ResearchMapper {
     public static ResearchResponse fromResearch(Research research) {
         Preconditions.checkNotNull(research, "research");
 
-        return new ResearchResponse(research.getType().toString(), research.getLevel(), research.getStarted(), research.getDone());
+        return new ResearchResponse(
+                research.getType().toString(), research.getLevel(), research.getStarted(), research.getDone(),
+                ResourcesMapper.fromResources(research.getResearchCost())
+        );
     }
 }

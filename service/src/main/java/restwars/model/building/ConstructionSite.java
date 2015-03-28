@@ -2,6 +2,7 @@ package restwars.model.building;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import restwars.model.resource.Resources;
 
 import java.util.UUID;
 
@@ -20,7 +21,9 @@ public class ConstructionSite {
 
     private final long done;
 
-    public ConstructionSite(UUID id, BuildingType type, int level, UUID planetId, UUID playerId, long started, long done) {
+    private final Resources buildCost;
+
+    public ConstructionSite(UUID id, BuildingType type, int level, UUID planetId, UUID playerId, long started, long done, Resources buildCost) {
         Preconditions.checkArgument(level > 0, "level must be > 0");
         Preconditions.checkArgument(started > 0, "started must be > 0");
         Preconditions.checkArgument(done > 0, "done must be > 0");
@@ -33,6 +36,7 @@ public class ConstructionSite {
         this.planetId = Preconditions.checkNotNull(planetId, "planetId");
         this.started = started;
         this.done = done;
+        this.buildCost = Preconditions.checkNotNull(buildCost, "buildCost");
     }
 
     public UUID getId() {
@@ -63,6 +67,10 @@ public class ConstructionSite {
         return playerId;
     }
 
+    public Resources getBuildCost() {
+        return buildCost;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,13 +84,14 @@ public class ConstructionSite {
                 Objects.equal(this.planetId, that.planetId) &&
                 Objects.equal(this.playerId, that.playerId) &&
                 Objects.equal(this.started, that.started) &&
-                Objects.equal(this.done, that.done);
+                Objects.equal(this.done, that.done) &&
+                Objects.equal(this.buildCost, that.buildCost);
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(id, type, level, planetId, playerId, started,
-                done);
+                done, buildCost);
     }
 
     @Override
@@ -95,6 +104,7 @@ public class ConstructionSite {
                 .add("playerId", playerId)
                 .add("started", started)
                 .add("done", done)
+                .add("buildCost", buildCost)
                 .toString();
     }
 }

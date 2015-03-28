@@ -2,6 +2,7 @@ package restwars.storage.technology;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import restwars.model.resource.Resources;
 import restwars.model.technology.Research;
 import restwars.model.technology.TechnologyType;
 import restwars.storage.DatabaseTest;
@@ -32,8 +33,8 @@ public class JooqResearchDAOTest extends DatabaseTest {
     @Test
     public void testInsert() throws Exception {
         Research research = new Research(UUID.fromString("8fe81af0-a992-11e4-bcd8-0800200c9a66"), TechnologyType.COMBUSTION_ENGINE, 1, 1, 2,
-                BasicScenario.Player1.Planet2.PLANET.getId(), BasicScenario.Player1.PLAYER.getId()
-        );
+                BasicScenario.Player1.Planet2.PLANET.getId(), BasicScenario.Player1.PLAYER.getId(),
+                new Resources(1, 2, 3));
 
         sut.insert(research);
 
@@ -50,6 +51,9 @@ public class JooqResearchDAOTest extends DatabaseTest {
         assertThat(row.get("planet_id"), is(research.getPlanetId()));
         assertThat(row.get("player_id"), is(research.getPlayerId()));
         assertThat(row.get("started"), is(research.getStarted()));
+        assertThat(row.get("research_cost_crystals"), is(research.getResearchCost().getCrystals()));
+        assertThat(row.get("research_cost_gas"), is(research.getResearchCost().getGas()));
+        assertThat(row.get("research_cost_energy"), is(research.getResearchCost().getEnergy()));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package restwars.storage.scenario.impl;
 
+import restwars.model.resource.Resources;
 import restwars.model.ship.ShipInConstruction;
 import restwars.model.ship.ShipType;
 import restwars.storage.scenario.AbstractFreemarkerScenario;
@@ -12,7 +13,7 @@ public class ShipInConstructionScenario extends AbstractFreemarkerScenario<ShipI
     public static class Player1 {
         public static class Planet1 {
             public final static ShipInConstruction SHIP_IN_CONSTRUCTION = new ShipInConstruction(UUID.fromString("3ef77dd7-3a4c-425e-9789-35cc7837c12f"),
-                    ShipType.MOSQUITO, BasicScenario.Player1.Planet1.PLANET.getId(), BasicScenario.Player1.PLAYER.getId(), 1, 2);
+                    ShipType.MOSQUITO, BasicScenario.Player1.Planet1.PLANET.getId(), BasicScenario.Player1.PLAYER.getId(), 1, 2, new Resources(1, 2, 3));
         }
     }
 

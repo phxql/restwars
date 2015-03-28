@@ -84,6 +84,15 @@
             <column name="done" type="long">
                 <constraints nullable="false"/>
             </column>
+            <column name="build_cost_crystals" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="build_cost_gas" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="build_cost_energy" type="long">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <addUniqueConstraint tableName="construction_site" columnNames="planet_id, type"/>
 
@@ -107,6 +116,15 @@
                 <constraints nullable="false"/>
             </column>
             <column name="done" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="research_cost_crystals" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="research_cost_gas" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="research_cost_energy" type="long">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -145,6 +163,15 @@
                 <constraints nullable="false"/>
             </column>
             <column name="done" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="build_cost_crystals" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="build_cost_gas" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="build_cost_energy" type="long">
                 <constraints nullable="false"/>
             </column>
         </createTable>
