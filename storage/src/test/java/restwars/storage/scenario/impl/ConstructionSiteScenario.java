@@ -2,6 +2,7 @@ package restwars.storage.scenario.impl;
 
 import restwars.model.building.BuildingType;
 import restwars.model.building.ConstructionSite;
+import restwars.model.resource.Resources;
 import restwars.storage.scenario.AbstractFreemarkerScenario;
 
 import java.util.Arrays;
@@ -13,8 +14,8 @@ public class ConstructionSiteScenario extends AbstractFreemarkerScenario<Constru
         public static class Planet1 {
             public static ConstructionSite CONSTRUCTION_SITE = new ConstructionSite(
                     UUID.fromString("9841dec0-a730-11e4-bcd8-0800200c9a66"), BuildingType.TELESCOPE, 1, BasicScenario.Player1.Planet1.PLANET.getId(),
-                    BasicScenario.Player1.PLAYER.getId(), 1, 2
-            );
+                    BasicScenario.Player1.PLAYER.getId(), 1, 2,
+                    new Resources(1, 2, 3));
         }
 
     }

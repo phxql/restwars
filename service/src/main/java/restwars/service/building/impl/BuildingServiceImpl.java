@@ -122,7 +122,7 @@ public class BuildingServiceImpl implements BuildingService {
         UUID id = uuidFactory.create();
         long buildTime = calculateBuildTime(type, level, technologies, buildings);
         long currentRound = roundService.getCurrentRound();
-        ConstructionSite constructionSite = new ConstructionSite(id, type, level, updatedPlanet.getId(), updatedPlanet.getOwnerId(), currentRound, currentRound + buildTime);
+        ConstructionSite constructionSite = new ConstructionSite(id, type, level, updatedPlanet.getId(), updatedPlanet.getOwnerId(), currentRound, currentRound + buildTime, buildCost);
 
         LOGGER.debug("Creating construction site {} on planet {}", constructionSite, updatedPlanet);
 

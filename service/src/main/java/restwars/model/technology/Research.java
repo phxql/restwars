@@ -2,6 +2,7 @@ package restwars.model.technology;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import restwars.model.resource.Resources;
 
 import java.util.UUID;
 
@@ -18,9 +19,11 @@ public class Research {
 
     private final UUID planetId;
 
+    private final Resources researchCost;
+
     private final UUID playerId;
 
-    public Research(UUID id, TechnologyType type, int level, long started, long done, UUID planetId, UUID playerId) {
+    public Research(UUID id, TechnologyType type, int level, long started, long done, UUID planetId, UUID playerId, Resources researchCost) {
         Preconditions.checkArgument(level > 0, "level must be > 0");
         Preconditions.checkArgument(started > 0, "started must be > 0");
         Preconditions.checkArgument(done > 0, "done must be > 0");
@@ -32,6 +35,7 @@ public class Research {
         this.done = done;
         this.planetId = Preconditions.checkNotNull(planetId, "planetId");
         this.playerId = Preconditions.checkNotNull(playerId, "playerId");
+        this.researchCost = Preconditions.checkNotNull(researchCost, "researchCost");
     }
 
     public UUID getId() {
@@ -62,6 +66,9 @@ public class Research {
         return playerId;
     }
 
+    public Resources getResearchCost() {
+        return researchCost;
+    }
 
     @Override
     public String toString() {
@@ -72,6 +79,7 @@ public class Research {
                 .add("started", started)
                 .add("done", done)
                 .add("planetId", planetId)
+                .add("researchCost", researchCost)
                 .add("playerId", playerId)
                 .toString();
     }
@@ -89,12 +97,13 @@ public class Research {
                 Objects.equal(this.started, that.started) &&
                 Objects.equal(this.done, that.done) &&
                 Objects.equal(this.planetId, that.planetId) &&
+                Objects.equal(this.researchCost, that.researchCost) &&
                 Objects.equal(this.playerId, that.playerId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(id, type, level, started, done, planetId,
-                playerId);
+                researchCost, playerId);
     }
 }

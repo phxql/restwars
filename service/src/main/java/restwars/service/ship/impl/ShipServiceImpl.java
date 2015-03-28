@@ -112,7 +112,7 @@ public class ShipServiceImpl implements ShipService {
         long buildTime = Math.max(MathExt.floorLong(shipMechanics.getBuildTime(type) * speedup), 1);
 
         long currentRound = roundService.getCurrentRound();
-        ShipInConstruction shipInConstruction = new ShipInConstruction(uuidFactory.create(), type, planet.getId(), player.getId(), currentRound, currentRound + buildTime);
+        ShipInConstruction shipInConstruction = new ShipInConstruction(uuidFactory.create(), type, planet.getId(), player.getId(), currentRound, currentRound + buildTime, buildCost);
         shipInConstructionDAO.insert(shipInConstruction);
 
         return shipInConstruction;

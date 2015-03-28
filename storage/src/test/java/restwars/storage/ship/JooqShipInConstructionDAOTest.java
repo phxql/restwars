@@ -2,6 +2,7 @@ package restwars.storage.ship;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import restwars.model.resource.Resources;
 import restwars.model.ship.ShipInConstruction;
 import restwars.model.ship.ShipType;
 import restwars.storage.DatabaseTest;
@@ -32,7 +33,7 @@ public class JooqShipInConstructionDAOTest extends DatabaseTest {
     @Test
     public void testInsert() throws Exception {
         ShipInConstruction shipInConstruction = new ShipInConstruction(UUID.fromString("3c67aef2-9ff0-470e-acda-b26bc0a5fa4c"),
-                ShipType.COLONY, BasicScenario.Player1.Planet1.PLANET.getId(), BasicScenario.Player1.PLAYER.getId(), 1, 2);
+                ShipType.COLONY, BasicScenario.Player1.Planet1.PLANET.getId(), BasicScenario.Player1.PLAYER.getId(), 1, 2, new Resources(1, 2, 3));
 
         sut.insert(shipInConstruction);
 
@@ -49,6 +50,9 @@ public class JooqShipInConstructionDAOTest extends DatabaseTest {
         assertThat(row.get("planet_id"), is(shipInConstruction.getPlanetId()));
         assertThat(row.get("player_id"), is(shipInConstruction.getPlayerId()));
         assertThat(row.get("started"), is(shipInConstruction.getStarted()));
+        assertThat(row.get("build_cost_crystals"), is(shipInConstruction.getBuildCost().getCrystals()));
+        assertThat(row.get("build_cost_gas"), is(shipInConstruction.getBuildCost().getGas()));
+        assertThat(row.get("build_cost_energy"), is(shipInConstruction.getBuildCost().getEnergy()));
     }
 
     @Test

@@ -2,6 +2,7 @@ package restwars.model.ship;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import restwars.model.resource.Resources;
 
 import java.util.UUID;
 
@@ -18,7 +19,9 @@ public class ShipInConstruction {
 
     private final long done;
 
-    public ShipInConstruction(UUID id, ShipType type, UUID planetId, UUID playerId, long started, long done) {
+    private final Resources buildCost;
+
+    public ShipInConstruction(UUID id, ShipType type, UUID planetId, UUID playerId, long started, long done, Resources buildCost) {
         Preconditions.checkArgument(started > 0, "started must be > 0");
         Preconditions.checkArgument(done > 0, "done must be > 0");
 
@@ -28,6 +31,7 @@ public class ShipInConstruction {
         this.playerId = Preconditions.checkNotNull(playerId, "playerId");
         this.started = started;
         this.done = done;
+        this.buildCost = Preconditions.checkNotNull(buildCost, "buildCost");
     }
 
     public UUID getId() {
@@ -54,6 +58,10 @@ public class ShipInConstruction {
         return done;
     }
 
+    public Resources getBuildCost() {
+        return buildCost;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -63,6 +71,7 @@ public class ShipInConstruction {
                 .add("playerId", playerId)
                 .add("started", started)
                 .add("done", done)
+                .add("buildCost", buildCost)
                 .toString();
     }
 
@@ -78,11 +87,13 @@ public class ShipInConstruction {
                 Objects.equal(this.planetId, that.planetId) &&
                 Objects.equal(this.playerId, that.playerId) &&
                 Objects.equal(this.started, that.started) &&
-                Objects.equal(this.done, that.done);
+                Objects.equal(this.done, that.done) &&
+                Objects.equal(this.buildCost, that.buildCost);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, type, planetId, playerId, started, done);
+        return Objects.hashCode(id, type, planetId, playerId, started, done,
+                buildCost);
     }
 }

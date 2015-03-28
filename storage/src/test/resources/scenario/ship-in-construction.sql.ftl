@@ -2,6 +2,6 @@
 
 <#list shipsInConstruction as sic>
 INSERT INTO ship_in_construction VALUES (
-'${sic.id}', ${sic.type.id}, '${sic.planetId}', '${sic.playerId}', ${sic.started}, ${sic.done}
+'${sic.id}', ${sic.type.id}, '${sic.planetId}', '${sic.playerId}', ${sic.started}, ${sic.done}, ${sic.buildCost.crystals}, ${sic.buildCost.gas}, ${sic.buildCost.energy}
 );
 </#list>
