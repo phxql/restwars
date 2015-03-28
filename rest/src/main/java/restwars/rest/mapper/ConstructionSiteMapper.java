@@ -14,6 +14,9 @@ public final class ConstructionSiteMapper {
     public static ConstructionSiteResponse fromConstructionSite(ConstructionSite constructionSite) {
         Preconditions.checkNotNull(constructionSite, "constructionSite");
 
-        return new ConstructionSiteResponse(constructionSite.getType().toString(), constructionSite.getLevel(), constructionSite.getStarted(), constructionSite.getDone());
+        return new ConstructionSiteResponse(
+                constructionSite.getType().toString(), constructionSite.getLevel(), constructionSite.getStarted(),
+                constructionSite.getDone(), ResourcesMapper.fromResources(constructionSite.getBuildCost())
+        );
     }
 }
