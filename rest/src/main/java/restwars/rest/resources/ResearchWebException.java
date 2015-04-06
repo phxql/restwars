@@ -19,7 +19,7 @@ public class ResearchWebException extends WebApplicationException {
         }
     }
 
-    public ResearchWebException(ResearchException.Reason reason) {
-        super(Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
+    public ResearchWebException(Throwable cause, ResearchException.Reason reason) {
+        super(cause, Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
     }
 }

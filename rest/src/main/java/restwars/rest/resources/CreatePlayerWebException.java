@@ -25,7 +25,7 @@ public class CreatePlayerWebException extends WebApplicationException {
         }
     }
 
-    public CreatePlayerWebException(CreatePlayerException.Reason reason) {
-        super(Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
+    public CreatePlayerWebException(Throwable cause, CreatePlayerException.Reason reason) {
+        super(cause, Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
     }
 }

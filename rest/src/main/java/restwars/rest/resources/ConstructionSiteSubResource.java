@@ -88,7 +88,7 @@ public class ConstructionSiteSubResource {
 
             return ConstructionSiteMapper.fromConstructionSite(constructionSite);
         } catch (BuildingException e) {
-            throw new BuildingWebException(e.getReason());
+            throw new BuildingWebException(e, e.getReason());
         }
     }
 }

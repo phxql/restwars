@@ -5,7 +5,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class TechnologyTypeNotFoundWebException extends WebApplicationException {
-    public static enum Reason {
+    public enum Reason {
         INVALID_TECHNOLOGY_TYPE
     }
 

@@ -25,7 +25,7 @@ public class FlightWebException extends WebApplicationException {
         }
     }
 
-    public FlightWebException(FlightException.Reason reason) {
-        super(Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
+    public FlightWebException(Throwable cause, FlightException.Reason reason) {
+        super(cause, Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
     }
 }

@@ -25,7 +25,7 @@ public class BuildingWebException extends WebApplicationException {
         }
     }
 
-    public BuildingWebException(BuildingException.Reason reason) {
-        super(Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
+    public BuildingWebException(Throwable cause, BuildingException.Reason reason) {
+        super(cause, Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
     }
 }

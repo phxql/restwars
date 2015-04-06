@@ -5,7 +5,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class ShipTypeNotFoundWebException extends WebApplicationException {
-    public static enum Reason {
+    public enum Reason {
         INVALID_SHIP_TYPE
     }
 
