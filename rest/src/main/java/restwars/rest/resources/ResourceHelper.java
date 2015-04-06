@@ -46,7 +46,7 @@ public final class ResourceHelper {
         try {
             return BuildingType.valueOf(value);
         } catch (IllegalArgumentException e) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }
 
@@ -56,7 +56,7 @@ public final class ResourceHelper {
         try {
             return TechnologyType.valueOf(value);
         } catch (IllegalArgumentException e) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }
 }

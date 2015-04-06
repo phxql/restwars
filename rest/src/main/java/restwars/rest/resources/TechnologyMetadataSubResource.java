@@ -55,7 +55,7 @@ public class TechnologyMetadataSubResource {
 
             return getMetadata(technologyType, sanitizedLevel);
         } catch (IllegalArgumentException e) {
-            throw new TechnologyTypeNotFoundWebException();
+            throw new TechnologyTypeNotFoundWebException(e);
         }
     }
 
@@ -78,7 +78,7 @@ public class TechnologyMetadataSubResource {
         try {
             technologyType = TechnologyType.valueOf(type);
         } catch (IllegalArgumentException e) {
-            throw new TechnologyTypeNotFoundWebException();
+            throw new TechnologyTypeNotFoundWebException(e);
         }
 
         List<TechnologyMetadataResponse> result = IntStream.range(sanitizedLevelFrom, sanitizedLevelTo + 1).

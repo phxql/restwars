@@ -24,7 +24,7 @@ public class TechnologyTypeNotFoundWebException extends WebApplicationException 
         }
     }
 
-    public TechnologyTypeNotFoundWebException() {
-        super(Response.status(Response.Status.NOT_FOUND).type(MediaType.APPLICATION_JSON).entity(new Body(Reason.INVALID_TECHNOLOGY_TYPE)).build());
+    public TechnologyTypeNotFoundWebException(Throwable cause) {
+        super(cause, Response.status(Response.Status.NOT_FOUND).type(MediaType.APPLICATION_JSON).entity(new Body(Reason.INVALID_TECHNOLOGY_TYPE)).build());
     }
 }

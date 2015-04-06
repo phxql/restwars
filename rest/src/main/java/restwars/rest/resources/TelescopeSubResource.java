@@ -47,7 +47,7 @@ public class TelescopeSubResource {
                     Functional.mapToList(telescopeService.scan(planet), PlanetMapper::fromPlanetWithOwner)
             );
         } catch (ScanException e) {
-            throw new ScanWebException(e.getReason());
+            throw new ScanWebException(e, e.getReason());
         }
     }
 }

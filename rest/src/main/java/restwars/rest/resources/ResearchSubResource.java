@@ -70,7 +70,7 @@ public class ResearchSubResource {
             Research research = technologyService.researchTechnology(player, planet, type);
             return ResearchMapper.fromResearch(research);
         } catch (ResearchException e) {
-            throw new ResearchWebException(e.getReason());
+            throw new ResearchWebException(e, e.getReason());
         }
     }
 }
