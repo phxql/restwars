@@ -79,7 +79,8 @@ public class RestwarsApplication extends Application<RestwarsConfiguration> {
                 debugOptions.isSpeedUpFlights(), debugOptions.isSpeedUpResearches(), debugOptions.isSpeedUpBuildingConstructions(),
                 debugOptions.isSpeedUpShipConstructions(), debugOptions.isFreeShips(), debugOptions.isFreeResearches(),
                 debugOptions.isFreeBuildings(), debugOptions.isFreeFlights(), debugOptions.isNoBuildingPrerequisites(),
-                debugOptions.isNoShipPrerequisites(), debugOptions.isNoResearchPrerequisites()
+                debugOptions.isNoShipPrerequisites(), debugOptions.isNoResearchPrerequisites(),
+                configuration.getCalculatePointsEvery()
         );
 
         ObjectGraph objectGraph = ObjectGraph.create(new RestWarsModule(universeConfiguration, dataSource, configuration.getPasswordIterations(), CacheBuilderSpec.parse(configuration.getPasswordCache()), environment.metrics(), REALM));

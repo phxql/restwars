@@ -76,6 +76,8 @@ public class PointsServiceImpl implements PointsService {
 
     @Override
     public void calculatePointsForAllPlayers() {
+        LOGGER.debug("Calculating points for all players");
+
         for (Player player : playerDAO.findAll()) {
             LOGGER.debug("Calculating points for player {}", player.getUsername());
 

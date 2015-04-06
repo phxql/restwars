@@ -111,7 +111,9 @@ public class Clock implements Managed, Runnable {
                 flightService.finishFlights();
                 telescopeService.detectFlights();
 
-                // TODO: Calculate points
+                if (round % universeConfiguration.getCalculatePointsEvery() == 0) {
+                    pointsService.calculatePointsForAllPlayers();
+                }
 
                 unitOfWorkService.commit();
             } catch (Exception e) {

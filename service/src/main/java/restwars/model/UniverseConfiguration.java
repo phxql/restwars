@@ -56,7 +56,22 @@ public class UniverseConfiguration {
      */
     private final boolean noResearchPrerequisites;
 
-    public UniverseConfiguration(int galaxyCount, int solarSystemsPerGalaxy, int planetsPerSolarSystem, Resources startingResources, int roundTimeInSeconds, boolean speedUpFlights, boolean speedUpResearches, boolean speedUpBuildingConstructions, boolean speedUpShipConstructions, boolean freeShips, boolean freeResearches, boolean freeBuildings, boolean freeFlights, boolean noBuildingPrerequisites, boolean noShipPrerequisites, boolean noResearchPrerequisites) {
+    /**
+     * Points are calculated every X rounds.
+     */
+    private final int calculatePointsEvery;
+
+    public UniverseConfiguration(int galaxyCount, int solarSystemsPerGalaxy, int planetsPerSolarSystem, Resources startingResources, int roundTimeInSeconds, boolean speedUpFlights, boolean speedUpResearches, boolean speedUpBuildingConstructions, boolean speedUpShipConstructions, boolean freeShips, boolean freeResearches, boolean freeBuildings, boolean freeFlights, boolean noBuildingPrerequisites, boolean noShipPrerequisites, boolean noResearchPrerequisites, int calculatePointsEvery) {
+        Preconditions.checkNotNull(startingResources, "startingResources");
+        Preconditions.checkArgument(startingResources.getCrystals() >= 0, "Starting crystals must be >= 0");
+        Preconditions.checkArgument(startingResources.getGas() >= 0, "Starting gas must be >= 0");
+        Preconditions.checkArgument(startingResources.getEnergy() >= 0, "Starting energy must be >= 0");
+        Preconditions.checkArgument(galaxyCount > 0, "galaxyCount must be > 0");
+        Preconditions.checkArgument(solarSystemsPerGalaxy > 0, "solarSystemsPerGalaxy must be > 0");
+        Preconditions.checkArgument(planetsPerSolarSystem > 0, "planetsPerSolarSystem must be > 0");
+        Preconditions.checkArgument(roundTimeInSeconds > 0, "roundTimeInSeconds must be > 0");
+        Preconditions.checkArgument(calculatePointsEvery > 0, "calculatePointsEvery must be > 0");
+
         this.speedUpFlights = speedUpFlights;
         this.speedUpResearches = speedUpResearches;
         this.speedUpBuildingConstructions = speedUpBuildingConstructions;
@@ -68,15 +83,7 @@ public class UniverseConfiguration {
         this.noBuildingPrerequisites = noBuildingPrerequisites;
         this.noShipPrerequisites = noShipPrerequisites;
         this.noResearchPrerequisites = noResearchPrerequisites;
-        Preconditions.checkNotNull(startingResources, "startingResources");
-        Preconditions.checkArgument(startingResources.getCrystals() >= 0, "Starting crystals must be >= 0");
-        Preconditions.checkArgument(startingResources.getGas() >= 0, "Starting gas must be >= 0");
-        Preconditions.checkArgument(startingResources.getEnergy() >= 0, "Starting energy must be >= 0");
-        Preconditions.checkArgument(galaxyCount > 0, "galaxyCount must be > 0");
-        Preconditions.checkArgument(solarSystemsPerGalaxy > 0, "solarSystemsPerGalaxy must be > 0");
-        Preconditions.checkArgument(planetsPerSolarSystem > 0, "planetsPerSolarSystem must be > 0");
-        Preconditions.checkArgument(roundTimeInSeconds > 0, "roundTimeInSeconds must be > 0");
-
+        this.calculatePointsEvery = calculatePointsEvery;
         this.galaxyCount = galaxyCount;
         this.solarSystemsPerGalaxy = solarSystemsPerGalaxy;
         this.planetsPerSolarSystem = planetsPerSolarSystem;
@@ -146,6 +153,10 @@ public class UniverseConfiguration {
 
     public boolean isNoResearchPrerequisites() {
         return noResearchPrerequisites;
+    }
+
+    public int getCalculatePointsEvery() {
+        return calculatePointsEvery;
     }
 
     public boolean isDebugOptionEnabled() {
