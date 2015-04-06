@@ -196,4 +196,9 @@ public class ShipMechanicsImpl implements ShipMechanics {
                 throw new IllegalArgumentException("Unknown ship " + type);
         }
     }
+
+    @Override
+    public long calculatePointsForShip(ShipType type) {
+        return 0; // TODO: Implement!
+    }
 }

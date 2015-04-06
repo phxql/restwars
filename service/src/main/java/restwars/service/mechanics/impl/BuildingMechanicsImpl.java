@@ -209,6 +209,11 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
     }
 
     @Override
+    public long calculatePointsForBuilding(BuildingType type, int level) {
+        return 0; // TODO: Implement!
+    }
+
+    @Override
     public double calculateFleetSizeVariance(int level) {
         Preconditions.checkArgument(level >= 0, "level must be >= 0");
 

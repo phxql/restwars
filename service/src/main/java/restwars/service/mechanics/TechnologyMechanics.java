@@ -49,4 +49,13 @@ public interface TechnologyMechanics {
      * @return Flight cost reduction.
      */
     double calculateCombustionFlightCostReduction(int level);
+
+    /**
+     * Calculates the points for the given technology.
+     *
+     * @param type  Type of technology.
+     * @param level Technology level.
+     * @return Points.
+     */
+    long calculatePointsForTechnology(TechnologyType type, int level);
 }

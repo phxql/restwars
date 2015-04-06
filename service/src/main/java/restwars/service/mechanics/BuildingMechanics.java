@@ -117,4 +117,13 @@ public interface BuildingMechanics {
      * @return Prerequisites.
      */
     Prerequisites getPrerequisites(BuildingType type);
+
+    /**
+     * Calculates the points for the given building.
+     *
+     * @param type  Type of building.
+     * @param level Building level.
+     * @return Points.
+     */
+    long calculatePointsForBuilding(BuildingType type, int level);
 }

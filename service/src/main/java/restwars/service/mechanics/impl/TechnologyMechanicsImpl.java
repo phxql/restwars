@@ -73,4 +73,9 @@ public class TechnologyMechanicsImpl implements TechnologyMechanics {
 
         return Math.min(1, level * 0.02);
     }
+
+    @Override
+    public long calculatePointsForTechnology(TechnologyType type, int level) {
+        return 0; // TODO: Implement!
+    }
 }

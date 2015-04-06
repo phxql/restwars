@@ -71,4 +71,12 @@ public interface ShipMechanics {
      * @return Prerequisites.
      */
     Prerequisites getPrerequisites(ShipType type);
+
+    /**
+     * Calculates the points for the given ship.
+     *
+     * @param type Type of ship.
+     * @return Points.
+     */
+    long calculatePointsForShip(ShipType type);
 }

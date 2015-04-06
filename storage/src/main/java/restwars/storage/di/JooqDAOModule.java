@@ -11,6 +11,7 @@ import restwars.service.flight.FlightDAO;
 import restwars.service.infrastructure.RoundDAO;
 import restwars.service.planet.PlanetDAO;
 import restwars.service.player.PlayerDAO;
+import restwars.service.points.PointsDAO;
 import restwars.service.ship.HangarDAO;
 import restwars.service.ship.ShipInConstructionDAO;
 import restwars.service.technology.ResearchDAO;
@@ -23,6 +24,7 @@ import restwars.storage.jooq.JooqUnitOfWorkFactory;
 import restwars.storage.jooq.impl.JooqUnitOfWorkFactoryImpl;
 import restwars.storage.planet.JooqPlanetDAO;
 import restwars.storage.player.JooqPlayerDAO;
+import restwars.storage.points.JooqPointsDAO;
 import restwars.storage.round.JooqRoundDAO;
 import restwars.storage.ship.JooqDetectedFlightDAO;
 import restwars.storage.ship.JooqFlightDAO;
@@ -109,5 +111,11 @@ public class JooqDAOModule {
     @Singleton
     DetectedFlightDAO providesDetectedFlightDAO(JooqDetectedFlightDAO jooqDetectedFlightDAO) {
         return jooqDetectedFlightDAO;
+    }
+
+    @Provides
+    @Singleton
+    PointsDAO providesPointsDAO(JooqPointsDAO jooqPointsDAO) {
+        return jooqPointsDAO;
     }
 }

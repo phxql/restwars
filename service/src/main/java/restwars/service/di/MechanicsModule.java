@@ -3,10 +3,7 @@ package restwars.service.di;
 import dagger.Module;
 import dagger.Provides;
 import restwars.model.UniverseConfiguration;
-import restwars.service.mechanics.BuildingMechanics;
-import restwars.service.mechanics.PlanetMechanics;
-import restwars.service.mechanics.ShipMechanics;
-import restwars.service.mechanics.TechnologyMechanics;
+import restwars.service.mechanics.*;
 import restwars.service.mechanics.impl.*;
 
 /**
@@ -50,5 +47,10 @@ public class MechanicsModule {
         }
 
         return mechanics;
+    }
+
+    @Provides
+    ResourcesMechanics providesResourcesMechanics() {
+        return new ResourcesMechanicsImpl();
     }
 }
