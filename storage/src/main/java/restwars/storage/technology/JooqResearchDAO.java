@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.model.resource.Resources;
 import restwars.model.technology.Research;
 import restwars.model.technology.TechnologyType;
 import restwars.service.technology.ResearchDAO;
@@ -35,11 +36,14 @@ public class JooqResearchDAO extends AbstractJooqDAO implements ResearchDAO {
         context()
                 .insertInto(
                         RESEARCH, RESEARCH.ID, RESEARCH.TYPE, RESEARCH.LEVEL, RESEARCH.STARTED, RESEARCH.DONE,
-                        RESEARCH.PLANET_ID, RESEARCH.PLAYER_ID
+                        RESEARCH.PLANET_ID, RESEARCH.PLAYER_ID, RESEARCH.RESEARCH_COST_CRYSTALS,
+                        RESEARCH.RESEARCH_COST_GAS, RESEARCH.RESEARCH_COST_ENERGY
                 )
                 .values(
                         research.getId(), research.getType().getId(), research.getLevel(), research.getStarted(),
-                        research.getDone(), research.getPlanetId(), research.getPlayerId()
+                        research.getDone(), research.getPlanetId(), research.getPlayerId(),
+                        research.getResearchCost().getCrystals(), research.getResearchCost().getGas(),
+                        research.getResearchCost().getEnergy()
                 )
                 .execute();
     }
@@ -57,7 +61,8 @@ public class JooqResearchDAO extends AbstractJooqDAO implements ResearchDAO {
 
         return new Research(
                 record.getId(), TechnologyType.fromId(record.getType()), record.getLevel(), record.getStarted(),
-                record.getDone(), record.getPlanetId(), record.getPlayerId()
+                record.getDone(), record.getPlanetId(), record.getPlayerId(),
+                new Resources(record.getResearchCostCrystals(), record.getResearchCostGas(), record.getResearchCostEnergy())
         );
     }
 

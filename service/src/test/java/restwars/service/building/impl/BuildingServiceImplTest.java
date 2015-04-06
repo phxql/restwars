@@ -35,6 +35,9 @@ import static org.testng.Assert.fail;
 
 public class BuildingServiceImplTest {
 
+    public static final Resources BUILD_COST_COMMAND_CENTER_1 = new Resources(5, 10, 15);
+    public static final Resources BUILD_COST_CRYSTAL_MINE_1 = new Resources(5, 10, 15);
+    public static final Resources BUILD_COST_COMMAND_CENTER_2 = new Resources(10, 20, 30);
     private BuildingServiceImpl sut;
     private UUIDFactory uuidFactory;
     private BuildingDAO buildingDAO;
@@ -60,13 +63,13 @@ public class BuildingServiceImplTest {
 
         // Prerequisites, build cost and build time for command center
         when(buildingMechanics.getPrerequisites(BuildingType.COMMAND_CENTER)).thenReturn(Prerequisites.NONE);
-        when(buildingMechanics.calculateBuildCost(BuildingType.COMMAND_CENTER, 1)).thenReturn(new Resources(5, 10, 15));
-        when(buildingMechanics.calculateBuildCost(BuildingType.COMMAND_CENTER, 2)).thenReturn(new Resources(10, 20, 30));
+        when(buildingMechanics.calculateBuildCost(BuildingType.COMMAND_CENTER, 1)).thenReturn(BUILD_COST_COMMAND_CENTER_1);
+        when(buildingMechanics.calculateBuildCost(BuildingType.COMMAND_CENTER, 2)).thenReturn(BUILD_COST_COMMAND_CENTER_2);
         when(buildingMechanics.calculateBuildTime(BuildingType.COMMAND_CENTER, 1)).thenReturn(1);
         when(buildingMechanics.calculateBuildTime(BuildingType.COMMAND_CENTER, 2)).thenReturn(2);
         // Prerequisites, build cost and build time for crystal mine
         when(buildingMechanics.getPrerequisites(BuildingType.CRYSTAL_MINE)).thenReturn(Prerequisites.NONE);
-        when(buildingMechanics.calculateBuildCost(BuildingType.CRYSTAL_MINE, 1)).thenReturn(new Resources(5, 10, 15));
+        when(buildingMechanics.calculateBuildCost(BuildingType.CRYSTAL_MINE, 1)).thenReturn(BUILD_COST_CRYSTAL_MINE_1);
         when(buildingMechanics.calculateBuildCost(BuildingType.CRYSTAL_MINE, 2)).thenReturn(new Resources(10, 20, 30));
         when(buildingMechanics.calculateBuildTime(BuildingType.CRYSTAL_MINE, 1)).thenReturn(1);
         when(buildingMechanics.calculateBuildTime(BuildingType.CRYSTAL_MINE, 2)).thenReturn(2);
@@ -114,7 +117,7 @@ public class BuildingServiceImplTest {
         UUID id = UUID.randomUUID();
         when(uuidFactory.create()).thenReturn(id);
 
-        ConstructionSite expected = new ConstructionSite(id, BuildingType.CRYSTAL_MINE, 1, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 2);
+        ConstructionSite expected = new ConstructionSite(id, BuildingType.CRYSTAL_MINE, 1, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 2, BUILD_COST_CRYSTAL_MINE_1);
         ConstructionSite actual = sut.constructBuilding(Data.Player1.Planet1.PLANET, BuildingType.CRYSTAL_MINE);
 
         verify(planetDAO).update(Data.Player1.Planet1.PLANET.withResources(new Resources(5, 10, 15)));
@@ -167,7 +170,7 @@ public class BuildingServiceImplTest {
         UUID id = UUID.randomUUID();
         when(uuidFactory.create()).thenReturn(id);
 
-        ConstructionSite expected = new ConstructionSite(id, BuildingType.COMMAND_CENTER, 2, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 3);
+        ConstructionSite expected = new ConstructionSite(id, BuildingType.COMMAND_CENTER, 2, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 3, BUILD_COST_COMMAND_CENTER_2);
         ConstructionSite actual = sut.upgradeBuilding(Data.Player1.Planet1.PLANET, BuildingType.COMMAND_CENTER);
 
         verify(planetDAO).update(Data.Player1.Planet1.PLANET.withResources(new Resources(0, 0, 0)));
@@ -181,7 +184,7 @@ public class BuildingServiceImplTest {
         UUID id = UUID.randomUUID();
         when(uuidFactory.create()).thenReturn(id);
 
-        ConstructionSite expected = new ConstructionSite(id, BuildingType.CRYSTAL_MINE, 1, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 2);
+        ConstructionSite expected = new ConstructionSite(id, BuildingType.CRYSTAL_MINE, 1, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 2, BUILD_COST_CRYSTAL_MINE_1);
         ConstructionSite actual = sut.constructOrUpgradeBuilding(Data.Player1.Planet1.PLANET, BuildingType.CRYSTAL_MINE);
 
         verify(planetDAO).update(Data.Player1.Planet1.PLANET.withResources(new Resources(5, 10, 15)));
@@ -195,7 +198,7 @@ public class BuildingServiceImplTest {
         UUID id = UUID.randomUUID();
         when(uuidFactory.create()).thenReturn(id);
 
-        ConstructionSite expected = new ConstructionSite(id, BuildingType.COMMAND_CENTER, 2, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 3);
+        ConstructionSite expected = new ConstructionSite(id, BuildingType.COMMAND_CENTER, 2, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 3, BUILD_COST_COMMAND_CENTER_2);
         ConstructionSite actual = sut.constructOrUpgradeBuilding(Data.Player1.Planet1.PLANET, BuildingType.COMMAND_CENTER);
 
         verify(planetDAO).update(Data.Player1.Planet1.PLANET.withResources(new Resources(0, 0, 0)));
@@ -229,7 +232,7 @@ public class BuildingServiceImplTest {
     public void testFinishConstructionSites2() throws Exception {
         UUID id = UUID.randomUUID();
         when(uuidFactory.create()).thenReturn(id);
-        ConstructionSite constructionSite = new ConstructionSite(UUID.randomUUID(), BuildingType.COMMAND_CENTER, 2, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 1);
+        ConstructionSite constructionSite = new ConstructionSite(UUID.randomUUID(), BuildingType.COMMAND_CENTER, 2, Data.Player1.Planet1.PLANET.getId(), Data.Player1.PLAYER.getId(), 1, 1, new Resources(1, 2, 3));
         when(constructionSiteDAO.findWithDone(1)).thenReturn(Arrays.asList(constructionSite));
 
         sut.finishConstructionSites();

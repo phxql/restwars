@@ -1,9 +1,9 @@
 package restwars.restapi.dto.technology;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import restwars.restapi.dto.ResourcesResponse;
 
 @ApiModel(description = "Research")
 public class ResearchResponse {
@@ -19,14 +19,18 @@ public class ResearchResponse {
     @ApiModelProperty(value = "Round done", required = true)
     private long done;
 
+    @ApiModelProperty(value = "Build cost", required = true)
+    private ResourcesResponse researchCost;
+
     public ResearchResponse() {
     }
 
-    public ResearchResponse(String type, int level, long started, long done) {
-        this.type = Preconditions.checkNotNull(type, "type");
+    public ResearchResponse(String type, int level, long started, long done, ResourcesResponse researchCost) {
+        this.type = type;
         this.level = level;
         this.started = started;
         this.done = done;
+        this.researchCost = researchCost;
     }
 
     public String getType() {
@@ -61,6 +65,14 @@ public class ResearchResponse {
         this.done = done;
     }
 
+    public ResourcesResponse getResearchCost() {
+        return researchCost;
+    }
+
+    public void setResearchCost(ResourcesResponse researchCost) {
+        this.researchCost = researchCost;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -68,6 +80,7 @@ public class ResearchResponse {
                 .add("level", level)
                 .add("started", started)
                 .add("done", done)
+                .add("researchCost", researchCost)
                 .toString();
     }
 }

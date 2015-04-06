@@ -151,7 +151,7 @@ public class TechnologyServiceImpl implements TechnologyService {
 
         long researchTime = calculateResearchTime(technology, levelToResearch, buildings);
         long currentRound = roundService.getCurrentRound();
-        Research research = new Research(uuidFactory.create(), technology, levelToResearch, currentRound, currentRound + researchTime, updatedPlanet.getId(), player.getId());
+        Research research = new Research(uuidFactory.create(), technology, levelToResearch, currentRound, currentRound + researchTime, updatedPlanet.getId(), player.getId(), researchCost);
 
         LOGGER.debug("Creating research {} on planet {}", research, updatedPlanet);
         researchDAO.insert(research);
