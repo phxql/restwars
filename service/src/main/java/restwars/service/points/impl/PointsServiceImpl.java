@@ -1,5 +1,6 @@
 package restwars.service.points.impl;
 
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.model.building.Building;
@@ -105,6 +106,13 @@ public class PointsServiceImpl implements PointsService {
 
             calculatePointsForPlayer(player);
         }
+    }
+
+    @Override
+    public long getPointsForPlayer(Player player) {
+        Preconditions.checkNotNull(player, "player");
+
+        return pointsDAO.findMostRecentPointsWithPlayerId(player.getId()).orElse(0L);
     }
 
     private void calculatePointsForPlayer(Player player) {

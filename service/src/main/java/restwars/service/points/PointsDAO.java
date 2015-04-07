@@ -2,6 +2,9 @@ package restwars.service.points;
 
 import restwars.model.points.Points;
 
+import java.util.Optional;
+import java.util.UUID;
+
 /**
  * DAO for points.
  */
@@ -12,4 +15,12 @@ public interface PointsDAO {
      * @param points Points entity.
      */
     void insert(Points points);
+
+    /**
+     * Finds the most recent points for the player with the given id.
+     *
+     * @param playerId Id of the player.
+     * @return Points.
+     */
+    Optional<Long> findMostRecentPointsWithPlayerId(UUID playerId);
 }

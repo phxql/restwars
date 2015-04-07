@@ -15,6 +15,7 @@ import restwars.restapi.dto.player.RegisterPlayerRequest;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.CreatePlayerException;
 import restwars.service.player.PlayerService;
+import restwars.service.points.PointsService;
 import restwars.util.Functional;
 
 import javax.inject.Inject;
@@ -33,16 +34,18 @@ import java.util.List;
 public class PlayerResource {
     private final PlayerService playerService;
     private final PlanetService planetService;
+    private final PointsService pointsService;
     private final PlayerAuthenticationCache playerAuthenticationCache;
 
     @Context
     private UriInfo uriInfo;
 
     @Inject
-    public PlayerResource(PlayerService playerService, PlanetService planetService, PlayerAuthenticationCache playerAuthenticationCache) {
+    public PlayerResource(PlayerService playerService, PlanetService planetService, PlayerAuthenticationCache playerAuthenticationCache, PointsService pointsService) {
         this.playerAuthenticationCache = Preconditions.checkNotNull(playerAuthenticationCache, "playerAuthenticationCache");
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.playerService = Preconditions.checkNotNull(playerService, "playerService");
+        this.pointsService = Preconditions.checkNotNull(pointsService, "pointsService");
     }
 
     @GET
@@ -51,8 +54,9 @@ public class PlayerResource {
     })
     public PlayerResponse me(@Auth @ApiParam(access = "internal") Player player) {
         List<Planet> planets = planetService.findWithOwner(player);
+        long points = pointsService.getPointsForPlayer(player);
 
-        return new PlayerResponse(player.getUsername(), Functional.mapToList(planets, PlanetMapper::fromPlanet));
+        return new PlayerResponse(player.getUsername(), Functional.mapToList(planets, PlanetMapper::fromPlanet), points);
     }
 
     @POST

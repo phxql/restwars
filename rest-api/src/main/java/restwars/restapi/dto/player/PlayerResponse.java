@@ -1,7 +1,6 @@
 package restwars.restapi.dto.player;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import restwars.restapi.dto.planet.PlanetResponse;
@@ -16,12 +15,16 @@ public class PlayerResponse {
     @ApiModelProperty(value = "Owned planets", required = true)
     private List<PlanetResponse> planets;
 
+    @ApiModelProperty(value = "Points", required = true)
+    private long points;
+
     public PlayerResponse() {
     }
 
-    public PlayerResponse(String username, List<PlanetResponse> planets) {
-        this.username = Preconditions.checkNotNull(username, "planets");
-        this.planets = Preconditions.checkNotNull(planets, "planets");
+    public PlayerResponse(String username, List<PlanetResponse> planets, long points) {
+        this.username = username;
+        this.planets = planets;
+        this.points = points;
     }
 
     public String getUsername() {
@@ -40,11 +43,20 @@ public class PlayerResponse {
         this.planets = planets;
     }
 
+    public long getPoints() {
+        return points;
+    }
+
+    public void setPoints(long points) {
+        this.points = points;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("username", username)
                 .add("planets", planets)
+                .add("points", points)
                 .toString();
     }
 }
