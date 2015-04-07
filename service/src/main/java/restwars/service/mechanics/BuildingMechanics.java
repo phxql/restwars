@@ -126,4 +126,13 @@ public interface BuildingMechanics {
      * @return Points.
      */
     long calculatePointsForBuilding(BuildingType type, int level);
+
+    /**
+     * Calculates the points for the given construction site.
+     *
+     * @param type  Type of construction site.
+     * @param level Building level.
+     * @return Points.
+     */
+    long calculatePointsForConstructionSite(BuildingType type, int level);
 }

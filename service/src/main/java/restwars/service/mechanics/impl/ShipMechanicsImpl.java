@@ -208,6 +208,11 @@ public class ShipMechanicsImpl implements ShipMechanics {
     }
 
     @Override
+    public long calculatePointsForShipInConstruction(ShipType type) {
+        return calculatePointsForShip(type);
+    }
+
+    @Override
     public long calculatePointsForShip(ShipType type) {
         Preconditions.checkNotNull(type, "type");
 

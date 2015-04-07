@@ -58,4 +58,13 @@ public interface TechnologyMechanics {
      * @return Points.
      */
     long calculatePointsForTechnology(TechnologyType type, int level);
+
+    /**
+     * Calculates the points for the given research.
+     *
+     * @param type  Type of research.
+     * @param level Technology level.
+     * @return Points.
+     */
+    long calculatePointsForResearch(TechnologyType type, int level);
 }

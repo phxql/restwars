@@ -57,6 +57,11 @@ public class DebugTechnologyMechanicsImpl implements TechnologyMechanics {
     }
 
     @Override
+    public long calculatePointsForResearch(TechnologyType type, int level) {
+        return delegate.calculatePointsForResearch(type, level);
+    }
+
+    @Override
     public long calculatePointsForTechnology(TechnologyType type, int level) {
         return delegate.calculatePointsForTechnology(type, level);
     }

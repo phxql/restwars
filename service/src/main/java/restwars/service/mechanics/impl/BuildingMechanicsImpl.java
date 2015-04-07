@@ -222,6 +222,11 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
     }
 
     @Override
+    public long calculatePointsForConstructionSite(BuildingType type, int level) {
+        return calculatePointsForBuilding(type, level);
+    }
+
+    @Override
     public long calculatePointsForBuilding(BuildingType type, int level) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");

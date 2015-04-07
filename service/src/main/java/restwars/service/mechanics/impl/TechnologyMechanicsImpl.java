@@ -85,6 +85,11 @@ public class TechnologyMechanicsImpl implements TechnologyMechanics {
     }
 
     @Override
+    public long calculatePointsForResearch(TechnologyType type, int level) {
+        return calculatePointsForTechnology(type, level);
+    }
+
+    @Override
     public long calculatePointsForTechnology(TechnologyType type, int level) {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0, "level must be > 0");

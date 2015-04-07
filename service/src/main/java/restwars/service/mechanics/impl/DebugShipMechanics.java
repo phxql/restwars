@@ -80,6 +80,11 @@ public class DebugShipMechanics implements ShipMechanics {
     }
 
     @Override
+    public long calculatePointsForShipInConstruction(ShipType type) {
+        return delegate.calculatePointsForShipInConstruction(type);
+    }
+
+    @Override
     public long calculatePointsForShip(ShipType type) {
         return delegate.calculatePointsForShip(type);
     }
