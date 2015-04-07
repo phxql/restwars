@@ -71,7 +71,7 @@ public class ShipInConstructionSubResource {
             ShipInConstruction shipInConstruction = shipService.buildShip(player, planet, ShipType.valueOf(data.getType()));
             return ShipInConstructionMapper.fromShipInConstruction(shipInConstruction);
         } catch (BuildShipException e) {
-            throw new BuildShipWebException(e.getReason());
+            throw new BuildShipWebException(e, e.getReason());
         }
     }
 }

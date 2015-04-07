@@ -19,7 +19,7 @@ public class ScanWebException extends WebApplicationException {
         }
     }
 
-    public ScanWebException(ScanException.Reason reason) {
-        super(Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason.name())).build());
+    public ScanWebException(Throwable cause, ScanException.Reason reason) {
+        super(cause, Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason.name())).build());
     }
 }

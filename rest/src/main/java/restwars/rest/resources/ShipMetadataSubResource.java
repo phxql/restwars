@@ -45,7 +45,7 @@ public class ShipMetadataSubResource {
 
             return getMetadata(shipType);
         } catch (IllegalArgumentException e) {
-            throw new ShipTypeNotFoundWebException();
+            throw new ShipTypeNotFoundWebException(e);
         }
     }
 

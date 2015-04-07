@@ -14,6 +14,9 @@ public final class ShipInConstructionMapper {
     public static ShipInConstructionResponse fromShipInConstruction(ShipInConstruction shipInConstruction) {
         Preconditions.checkNotNull(shipInConstruction, "shipInConstruction");
 
-        return new ShipInConstructionResponse(shipInConstruction.getType().toString(), shipInConstruction.getStarted(), shipInConstruction.getDone());
+        return new ShipInConstructionResponse(
+                shipInConstruction.getType().toString(), shipInConstruction.getStarted(), shipInConstruction.getDone(),
+                ResourcesMapper.fromResources(shipInConstruction.getBuildCost())
+        );
     }
 }

@@ -66,7 +66,7 @@ public class PlayerResource {
 
             return Response.created(uriInfo.getAbsolutePathBuilder().path("/").build()).build();
         } catch (CreatePlayerException e) {
-            throw new CreatePlayerWebException(e.getReason());
+            throw new CreatePlayerWebException(e, e.getReason());
         }
     }
 }

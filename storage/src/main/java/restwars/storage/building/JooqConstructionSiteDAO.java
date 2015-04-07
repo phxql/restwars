@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.model.building.BuildingType;
 import restwars.model.building.ConstructionSite;
+import restwars.model.resource.Resources;
 import restwars.service.building.ConstructionSiteDAO;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
@@ -35,10 +36,14 @@ public class JooqConstructionSiteDAO extends AbstractJooqDAO implements Construc
         context()
                 .insertInto(
                         CONSTRUCTION_SITE, CONSTRUCTION_SITE.ID, CONSTRUCTION_SITE.TYPE, CONSTRUCTION_SITE.LEVEL,
-                        CONSTRUCTION_SITE.PLANET_ID, CONSTRUCTION_SITE.PLAYER_ID, CONSTRUCTION_SITE.STARTED, CONSTRUCTION_SITE.DONE)
+                        CONSTRUCTION_SITE.PLANET_ID, CONSTRUCTION_SITE.PLAYER_ID, CONSTRUCTION_SITE.STARTED, CONSTRUCTION_SITE.DONE,
+                        CONSTRUCTION_SITE.BUILD_COST_CRYSTALS, CONSTRUCTION_SITE.BUILD_COST_GAS, CONSTRUCTION_SITE.BUILD_COST_ENERGY
+                )
                 .values(
                         constructionSite.getId(), constructionSite.getType().getId(), constructionSite.getLevel(),
-                        constructionSite.getPlanetId(), constructionSite.getPlayerId(), constructionSite.getStarted(), constructionSite.getDone()
+                        constructionSite.getPlanetId(), constructionSite.getPlayerId(), constructionSite.getStarted(),
+                        constructionSite.getDone(), constructionSite.getBuildCost().getCrystals(),
+                        constructionSite.getBuildCost().getGas(), constructionSite.getBuildCost().getEnergy()
                 ).execute();
     }
 
@@ -78,7 +83,8 @@ public class JooqConstructionSiteDAO extends AbstractJooqDAO implements Construc
 
         return new ConstructionSite(
                 record.getId(), BuildingType.fromId(record.getType()), record.getLevel(), record.getPlanetId(),
-                record.getPlayerId(), record.getStarted(), record.getDone()
+                record.getPlayerId(), record.getStarted(), record.getDone(),
+                new Resources(record.getBuildCostCrystals(), record.getBuildCostGas(), record.getBuildCostEnergy())
         );
     }
 }

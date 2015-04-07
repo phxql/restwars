@@ -4,6 +4,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import restwars.model.building.BuildingType;
 import restwars.model.building.ConstructionSite;
+import restwars.model.resource.Resources;
 import restwars.storage.DatabaseTest;
 import restwars.storage.scenario.MultipleScenarios;
 import restwars.storage.scenario.Scenario;
@@ -32,7 +33,7 @@ public class JooqConstructionSiteDAOTest extends DatabaseTest {
     @Test
     public void testInsert() throws Exception {
         ConstructionSite constructionSite = new ConstructionSite(UUID.fromString("aaafe2ad-fa33-464f-a6c4-57fab40d5d8a"), BuildingType.SOLAR_PANELS, 2,
-                BasicScenario.Player1.Planet1.PLANET.getId(), BasicScenario.Player1.PLAYER.getId(), 1, 2);
+                BasicScenario.Player1.Planet1.PLANET.getId(), BasicScenario.Player1.PLAYER.getId(), 1, 2, new Resources(1, 2, 3));
         sut.insert(constructionSite);
 
         List<Map<String, Object>> result = select("SELECT * FROM construction_site WHERE id = ?", constructionSite.getId());
@@ -49,6 +50,9 @@ public class JooqConstructionSiteDAOTest extends DatabaseTest {
         assertThat(row.get("level"), is(constructionSite.getLevel()));
         assertThat(row.get("planet_id"), is(constructionSite.getPlanetId()));
         assertThat(row.get("player_id"), is(constructionSite.getPlayerId()));
+        assertThat(row.get("build_cost_crystals"), is(constructionSite.getBuildCost().getCrystals()));
+        assertThat(row.get("build_cost_gas"), is(constructionSite.getBuildCost().getGas()));
+        assertThat(row.get("build_cost_energy"), is(constructionSite.getBuildCost().getEnergy()));
     }
 
     @Test

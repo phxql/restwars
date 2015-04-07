@@ -5,7 +5,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class ShipTypeNotFoundWebException extends WebApplicationException {
-    public static enum Reason {
+    public enum Reason {
         INVALID_SHIP_TYPE
     }
 
@@ -24,7 +24,7 @@ public class ShipTypeNotFoundWebException extends WebApplicationException {
         }
     }
 
-    public ShipTypeNotFoundWebException() {
-        super(Response.status(Response.Status.NOT_FOUND).type(MediaType.APPLICATION_JSON).entity(new Body(Reason.INVALID_SHIP_TYPE)).build());
+    public ShipTypeNotFoundWebException(Throwable cause) {
+        super(cause, Response.status(Response.Status.NOT_FOUND).type(MediaType.APPLICATION_JSON).entity(new Body(Reason.INVALID_SHIP_TYPE)).build());
     }
 }

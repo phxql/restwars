@@ -23,7 +23,8 @@ public final class FlightMapper {
                 flight.getStart().toString(),
                 flight.getDestination().toString(), flight.getStartedInRound(), flight.getArrivalInRound(),
                 Functional.mapToList(flight.getShips().asList(), ShipMapper::fromShip), flight.getType().toString(),
-                flight.getDirection().toString(), ResourcesMapper.fromResources(flight.getCargo())
+                flight.getDirection().toString(), ResourcesMapper.fromResources(flight.getCargo()),
+                flight.getEnergyNeeded()
         );
     }
 

@@ -3,6 +3,7 @@ package restwars.restapi.dto.building;
 import com.google.common.base.Objects;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import restwars.restapi.dto.ResourcesResponse;
 
 @ApiModel(description = "Construction site")
 public class ConstructionSiteResponse {
@@ -18,14 +19,18 @@ public class ConstructionSiteResponse {
     @ApiModelProperty(value = "Round done", required = true)
     private long done;
 
+    @ApiModelProperty(value = "Build cost", required = true)
+    private ResourcesResponse buildCost;
+
     public ConstructionSiteResponse() {
     }
 
-    public ConstructionSiteResponse(String type, int level, long started, long done) {
+    public ConstructionSiteResponse(String type, int level, long started, long done, ResourcesResponse buildCost) {
         this.type = type;
         this.level = level;
         this.started = started;
         this.done = done;
+        this.buildCost = buildCost;
     }
 
     public String getType() {
@@ -60,6 +65,14 @@ public class ConstructionSiteResponse {
         this.done = done;
     }
 
+    public ResourcesResponse getBuildCost() {
+        return buildCost;
+    }
+
+    public void setBuildCost(ResourcesResponse buildCost) {
+        this.buildCost = buildCost;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -67,6 +80,7 @@ public class ConstructionSiteResponse {
                 .add("level", level)
                 .add("started", started)
                 .add("done", done)
+                .add("buildCost", buildCost)
                 .toString();
     }
 }

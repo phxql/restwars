@@ -98,7 +98,7 @@ public class FlightSubResource {
 
             return FlightMapper.fromFlight(flight);
         } catch (FlightException e) {
-            throw new FlightWebException(e.getReason());
+            throw new FlightWebException(e, e.getReason());
         }
     }
 

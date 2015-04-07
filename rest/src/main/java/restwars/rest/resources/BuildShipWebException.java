@@ -25,7 +25,7 @@ public class BuildShipWebException extends WebApplicationException {
         }
     }
 
-    public BuildShipWebException(BuildShipException.Reason reason) {
-        super(Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
+    public BuildShipWebException(Throwable cause, BuildShipException.Reason reason) {
+        super(cause, Response.status(Response.Status.PRECONDITION_FAILED).type(MediaType.APPLICATION_JSON).entity(new Body(reason)).build());
     }
 }

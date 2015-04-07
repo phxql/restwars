@@ -99,7 +99,7 @@ public class BuildingMetadataSubResource {
 
             return getMetadata(buildingType, sanitizedLevel);
         } catch (IllegalArgumentException e) {
-            throw new BuildingTypeNotFoundWebException();
+            throw new BuildingTypeNotFoundWebException(e);
         }
     }
 
@@ -122,7 +122,7 @@ public class BuildingMetadataSubResource {
         try {
             buildingType = BuildingType.valueOf(type);
         } catch (IllegalArgumentException e) {
-            throw new BuildingTypeNotFoundWebException();
+            throw new BuildingTypeNotFoundWebException(e);
         }
 
         List<BuildingMetadataResponse> result = IntStream.range(sanitizedLevelFrom, sanitizedLevelTo + 1).

@@ -22,7 +22,7 @@ public final class Data {
 
             public static final Building COMMAND_CENTER = new Building(UUID.fromString("20e91b69-ae0f-4054-9a9f-0076de37b1d9"), BuildingType.COMMAND_CENTER, 1, PLANET.getId());
 
-            public static final ConstructionSite CONSTRUCTION_SITE = new ConstructionSite(UUID.fromString("854017e3-872c-4caf-a2d9-26e42a623344"), BuildingType.SHIPYARD, 1, PLANET.getId(), PLAYER.getId(), 1, 2);
+            public static final ConstructionSite CONSTRUCTION_SITE = new ConstructionSite(UUID.fromString("854017e3-872c-4caf-a2d9-26e42a623344"), BuildingType.SHIPYARD, 1, PLANET.getId(), PLAYER.getId(), 1, 2, new Resources(1, 2, 3));
         }
     }
 
