@@ -159,6 +159,7 @@ public class PointsServiceImpl implements PointsService {
 
         long points = 0;
 
+        // Buildings
         Buildings buildings = buildingDAO.findWithPlanetId(planet.getId());
         for (Building building : buildings) {
             points += buildingMechanics.calculatePointsForBuilding(building.getType(), building.getLevel());
@@ -168,6 +169,7 @@ public class PointsServiceImpl implements PointsService {
             points += buildingMechanics.calculatePointsForConstructionSite(constructionSite.getType(), constructionSite.getLevel());
         }
 
+        // Ships
         Optional<Hangar> hangar = hangarDAO.findWithPlanetId(planet.getId());
         if (hangar.isPresent()) {
             for (Ship ship : hangar.get().getShips()) {
@@ -179,6 +181,7 @@ public class PointsServiceImpl implements PointsService {
             points += shipMechanics.calculatePointsForShipInConstruction(shipInConstruction.getType());
         }
 
+        // Researches
         List<Research> researches = researchDAO.findWithPlanetId(planet.getId());
         for (Research research : researches) {
             points += technologyMechanics.calculatePointsForResearch(research.getType(), research.getLevel());
