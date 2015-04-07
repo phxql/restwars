@@ -17,36 +17,30 @@ public class MechanicsModule {
     }
 
     @Provides
-    BuildingMechanics provideBuildingMechanics(UniverseConfiguration universeConfiguration) {
-        BuildingMechanicsImpl mechanics = new BuildingMechanicsImpl();
-
+    BuildingMechanics provideBuildingMechanics(UniverseConfiguration universeConfiguration, BuildingMechanicsImpl buildingMechanics) {
         if (universeConfiguration.isDebugOptionEnabled()) {
-            return new DebugBuildingMechanicsImpl(universeConfiguration, mechanics);
+            return new DebugBuildingMechanicsImpl(universeConfiguration, buildingMechanics);
         }
 
-        return mechanics;
+        return buildingMechanics;
     }
 
     @Provides
-    ShipMechanics provideShipMechanics(UniverseConfiguration universeConfiguration) {
-        ShipMechanicsImpl mechanics = new ShipMechanicsImpl();
-
+    ShipMechanics provideShipMechanics(UniverseConfiguration universeConfiguration, ShipMechanicsImpl shipMechanics) {
         if (universeConfiguration.isDebugOptionEnabled()) {
-            return new DebugShipMechanics(universeConfiguration, mechanics);
+            return new DebugShipMechanics(universeConfiguration, shipMechanics);
         }
 
-        return mechanics;
+        return shipMechanics;
     }
 
     @Provides
-    TechnologyMechanics providesTechnologyMechanics(UniverseConfiguration universeConfiguration) {
-        TechnologyMechanicsImpl mechanics = new TechnologyMechanicsImpl();
-
+    TechnologyMechanics providesTechnologyMechanics(UniverseConfiguration universeConfiguration, TechnologyMechanicsImpl technologyMechanics) {
         if (universeConfiguration.isDebugOptionEnabled()) {
-            return new DebugTechnologyMechanicsImpl(universeConfiguration, mechanics);
+            return new DebugTechnologyMechanicsImpl(universeConfiguration, technologyMechanics);
         }
 
-        return mechanics;
+        return technologyMechanics;
     }
 
     @Provides

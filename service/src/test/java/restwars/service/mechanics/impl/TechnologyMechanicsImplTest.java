@@ -8,7 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class TechnologyMechanicsImplTest {
-    private final TechnologyMechanicsImpl sut = new TechnologyMechanicsImpl();
+    private final TechnologyMechanicsImpl sut = new TechnologyMechanicsImpl(new ResourcesMechanicsImpl());
 
     @Test
     public void testAllTechnologiesAreSupported() throws Exception {
