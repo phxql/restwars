@@ -1,17 +1,21 @@
 package restwars.storage.points;
 
 import com.google.common.base.Preconditions;
-import org.jooq.Record1;
+import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restwars.model.points.Points;
 import restwars.service.points.PointsDAO;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
+import restwars.storage.jooq.tables.records.PointsRecord;
+import restwars.storage.mapper.PointsMapper;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static restwars.storage.jooq.Tables.POINTS;
 
@@ -47,13 +51,28 @@ public class JooqPointsDAO extends AbstractJooqDAO implements PointsDAO {
     }
 
     @Override
-    public Optional<Long> findMostRecentPointsWithPlayerId(UUID playerId) {
+    public List<Points> findPointsWithPlayerId(UUID playerId, int max) {
+        Preconditions.checkNotNull(playerId, "playerId");
+
+        LOGGER.debug("Finding max {} points for player {}", max, playerId);
+
+        Result<PointsRecord> records = context().selectFrom(POINTS)
+                .where(POINTS.PLAYER_ID.eq(playerId))
+                .orderBy(POINTS.ROUND.desc())
+                .limit(max)
+                .fetch();
+
+        return records.stream().map(PointsMapper::fromRecord).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Points> findMostRecentPointsWithPlayerId(UUID playerId) {
         Preconditions.checkNotNull(playerId, "playerId");
 
         LOGGER.debug("Finding most recent points for player {}", playerId);
 
-        Record1<Long> record = context().select(POINTS.POINTS_)
-                .from(POINTS).where(POINTS.PLAYER_ID.eq(playerId))
+        PointsRecord record = context().selectFrom(POINTS)
+                .where(POINTS.PLAYER_ID.eq(playerId))
                 .orderBy(POINTS.ROUND.desc()).limit(1)
                 .fetchOne();
 
@@ -61,6 +80,6 @@ public class JooqPointsDAO extends AbstractJooqDAO implements PointsDAO {
             return Optional.empty();
         }
 
-        return Optional.of(record.value1());
+        return Optional.of(PointsMapper.fromRecord(record));
     }
 }

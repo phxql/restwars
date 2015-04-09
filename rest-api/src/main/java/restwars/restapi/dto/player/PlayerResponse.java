@@ -16,12 +16,12 @@ public class PlayerResponse {
     private List<PlanetResponse> planets;
 
     @ApiModelProperty(value = "Points", required = true)
-    private long points;
+    private PointResponse points;
 
     public PlayerResponse() {
     }
 
-    public PlayerResponse(String username, List<PlanetResponse> planets, long points) {
+    public PlayerResponse(String username, List<PlanetResponse> planets, PointResponse points) {
         this.username = username;
         this.planets = planets;
         this.points = points;
@@ -43,11 +43,11 @@ public class PlayerResponse {
         this.planets = planets;
     }
 
-    public long getPoints() {
+    public PointResponse getPoints() {
         return points;
     }
 
-    public void setPoints(long points) {
+    public void setPoints(PointResponse points) {
         this.points = points;
     }
 

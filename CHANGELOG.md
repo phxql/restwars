@@ -12,6 +12,8 @@
 - Webservice: Added build cost to ships in construction and construction sites.
 - Webservice: Added research cost to researches.
 - Webservice: Added flight cost to flights.
+- Webservice: Added current player points to `/v1/player` response.
+- Webservice: Added endpoint to get the points history for the current player, `/v1/player/points`.
 - Configuration: Added new debug configuration options which allow fine tuning debug mechanics like free ships, instant flights and more.
 - Configuration: Added the config option `speedUpEverything`. When set to `true`, every building / research / ship takes 1 round to complete, needs no resources and all prerequisites are disabled.
 - JVM client: Added long-polling websocket method to get the round.

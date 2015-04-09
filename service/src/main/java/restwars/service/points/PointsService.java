@@ -1,6 +1,10 @@
 package restwars.service.points;
 
 import restwars.model.player.Player;
+import restwars.model.points.Points;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Service for points.
@@ -17,5 +21,14 @@ public interface PointsService {
      * @param player Player.
      * @return Points.
      */
-    long getPointsForPlayer(Player player);
+    Optional<Points> getPointsForPlayer(Player player);
+
+    /**
+     * Returns the points history for the given player.
+     *
+     * @param player Player.
+     * @param max    Maximum number of points.
+     * @return Points history.
+     */
+    List<Points> getPointsHistoryForPlayer(Player player, int max);
 }

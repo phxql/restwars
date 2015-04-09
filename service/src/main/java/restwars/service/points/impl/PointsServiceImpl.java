@@ -109,10 +109,17 @@ public class PointsServiceImpl implements PointsService {
     }
 
     @Override
-    public long getPointsForPlayer(Player player) {
+    public Optional<Points> getPointsForPlayer(Player player) {
         Preconditions.checkNotNull(player, "player");
 
-        return pointsDAO.findMostRecentPointsWithPlayerId(player.getId()).orElse(0L);
+        return pointsDAO.findMostRecentPointsWithPlayerId(player.getId());
+    }
+
+    @Override
+    public List<Points> getPointsHistoryForPlayer(Player player, int max) {
+        Preconditions.checkNotNull(player, "player");
+
+        return pointsDAO.findPointsWithPlayerId(player.getId(), max);
     }
 
     private void calculatePointsForPlayer(Player player) {
