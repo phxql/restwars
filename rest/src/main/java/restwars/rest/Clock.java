@@ -10,6 +10,7 @@ import restwars.service.building.BuildingService;
 import restwars.service.flight.FlightService;
 import restwars.service.infrastructure.LockService;
 import restwars.service.infrastructure.RoundService;
+import restwars.service.points.PointsService;
 import restwars.service.resource.ResourceService;
 import restwars.service.ship.ShipService;
 import restwars.service.technology.TechnologyService;
@@ -27,7 +28,7 @@ public class Clock implements Managed, Runnable {
     /**
      * Callback for the next round handler.
      */
-    public static interface NextRoundCallback {
+    public interface NextRoundCallback {
         /**
          * Is called when the next round has been started.
          *
@@ -49,13 +50,15 @@ public class Clock implements Managed, Runnable {
 
     private final LockService lockService;
     private final UnitOfWorkService unitOfWorkService;
+    private final PointsService pointsService;
     private Optional<NextRoundCallback> nextRoundCallback = Optional.empty();
 
     @Nullable
     private ScheduledExecutorService scheduledExecutorService;
 
     @Inject
-    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService, TechnologyService technologyService, ShipService shipService, UnitOfWorkService unitOfWorkService, TelescopeService telescopeService, FlightService flightService, LockService lockService) {
+    public Clock(BuildingService buildingService, RoundService roundService, UniverseConfiguration universeConfiguration, ResourceService resourceService, TechnologyService technologyService, ShipService shipService, UnitOfWorkService unitOfWorkService, TelescopeService telescopeService, FlightService flightService, LockService lockService, PointsService pointsService) {
+        this.pointsService = Preconditions.checkNotNull(pointsService, "pointsService");
         this.lockService = Preconditions.checkNotNull(lockService, "lockService");
         this.flightService = Preconditions.checkNotNull(flightService, "flightService");
         this.unitOfWorkService = Preconditions.checkNotNull(unitOfWorkService, "unitOfWorkService");
@@ -107,6 +110,10 @@ public class Clock implements Managed, Runnable {
                 resourceService.gatherResourcesOnAllPlanets();
                 flightService.finishFlights();
                 telescopeService.detectFlights();
+
+                if (round % universeConfiguration.getCalculatePointsEvery() == 0) {
+                    pointsService.calculatePointsForAllPlayers();
+                }
 
                 unitOfWorkService.commit();
             } catch (Exception e) {

@@ -2,6 +2,7 @@ package restwars.service.player;
 
 import restwars.model.player.Player;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,4 +23,11 @@ public interface PlayerDAO {
      * @return Player if found.
      */
     Optional<Player> findWithUsername(String username);
+
+    /**
+     * Returns all players.
+     *
+     * @return All players.
+     */
+    List<Player> findAll();
 }

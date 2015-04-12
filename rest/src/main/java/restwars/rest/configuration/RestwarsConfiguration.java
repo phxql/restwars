@@ -65,6 +65,12 @@ public class RestwarsConfiguration extends Configuration {
     private int roundTime;
 
     /**
+     * Points are calculated every X rounds.
+     */
+    @Min(1)
+    private int calculatePointsEvery;
+
+    /**
      * Debug options.
      */
     @JsonProperty("debug")
@@ -144,5 +150,13 @@ public class RestwarsConfiguration extends Configuration {
 
     public void setDebugOptions(DebugOptions debugOptions) {
         this.debugOptions = debugOptions;
+    }
+
+    public int getCalculatePointsEvery() {
+        return calculatePointsEvery;
+    }
+
+    public void setCalculatePointsEvery(int calculatePointsEvery) {
+        this.calculatePointsEvery = calculatePointsEvery;
     }
 }

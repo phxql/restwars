@@ -5,9 +5,19 @@ import restwars.model.building.BuildingType;
 import restwars.model.resource.Resources;
 import restwars.model.technology.TechnologyType;
 import restwars.model.techtree.Prerequisites;
+import restwars.service.mechanics.ResourcesMechanics;
 import restwars.service.mechanics.TechnologyMechanics;
 
+import javax.inject.Inject;
+
 public class TechnologyMechanicsImpl implements TechnologyMechanics {
+    private final ResourcesMechanics resourcesMechanics;
+
+    @Inject
+    public TechnologyMechanicsImpl(ResourcesMechanics resourcesMechanics) {
+        this.resourcesMechanics = Preconditions.checkNotNull(resourcesMechanics, "resourcesMechanics");
+    }
+
     @Override
     public Resources calculateResearchCost(TechnologyType type, int level) {
         Preconditions.checkNotNull(type, "type");
@@ -72,5 +82,23 @@ public class TechnologyMechanicsImpl implements TechnologyMechanics {
         Preconditions.checkArgument(level >= 0, "level must be >= 0");
 
         return Math.min(1, level * 0.02);
+    }
+
+    @Override
+    public long calculatePointsForResearch(TechnologyType type, int level) {
+        return calculatePointsForTechnology(type, level);
+    }
+
+    @Override
+    public long calculatePointsForTechnology(TechnologyType type, int level) {
+        Preconditions.checkNotNull(type, "type");
+        Preconditions.checkArgument(level > 0, "level must be > 0");
+
+        long cost = 0;
+        for (int i = 1; i <= level; i++) {
+            cost += resourcesMechanics.calculatePointsForResources(calculateResearchCost(type, level));
+        }
+
+        return cost;
     }
 }

@@ -11,7 +11,9 @@ import restwars.storage.jooq.AbstractJooqDAO;
 import restwars.storage.mapper.PlayerMapper;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static restwars.storage.jooq.Tables.PLAYER;
 
@@ -33,6 +35,13 @@ public class JooqPlayerDAO extends AbstractJooqDAO implements PlayerDAO {
                 .values(player.getId(), player.getUsername(), player.getPassword())
                 .execute();
 
+    }
+
+    @Override
+    public List<Player> findAll() {
+        LOGGER.debug("Finding all players");
+
+        return context().selectFrom(PLAYER).fetch().stream().map(PlayerMapper::fromRecord).collect(Collectors.toList());
     }
 
     @Override

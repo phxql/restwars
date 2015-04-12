@@ -8,13 +8,18 @@ import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
+import restwars.model.points.Points;
 import restwars.rest.integration.authentication.PlayerAuthenticationCache;
 import restwars.rest.mapper.PlanetMapper;
+import restwars.rest.mapper.PointsMapper;
 import restwars.restapi.dto.player.PlayerResponse;
+import restwars.restapi.dto.player.PointResponse;
+import restwars.restapi.dto.player.PointsResponse;
 import restwars.restapi.dto.player.RegisterPlayerRequest;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.CreatePlayerException;
 import restwars.service.player.PlayerService;
+import restwars.service.points.PointsService;
 import restwars.util.Functional;
 
 import javax.inject.Inject;
@@ -25,24 +30,29 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
+import java.util.Optional;
 
 @Path("/v1/player")
 @Api(value = "/v1/player", description = "Player management")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class PlayerResource {
+    private static final int MAX_POINTS_HISTORY = 100;
+
     private final PlayerService playerService;
     private final PlanetService planetService;
+    private final PointsService pointsService;
     private final PlayerAuthenticationCache playerAuthenticationCache;
 
     @Context
     private UriInfo uriInfo;
 
     @Inject
-    public PlayerResource(PlayerService playerService, PlanetService planetService, PlayerAuthenticationCache playerAuthenticationCache) {
+    public PlayerResource(PlayerService playerService, PlanetService planetService, PlayerAuthenticationCache playerAuthenticationCache, PointsService pointsService) {
         this.playerAuthenticationCache = Preconditions.checkNotNull(playerAuthenticationCache, "playerAuthenticationCache");
         this.planetService = Preconditions.checkNotNull(planetService, "planetService");
         this.playerService = Preconditions.checkNotNull(playerService, "playerService");
+        this.pointsService = Preconditions.checkNotNull(pointsService, "pointsService");
     }
 
     @GET
@@ -51,8 +61,12 @@ public class PlayerResource {
     })
     public PlayerResponse me(@Auth @ApiParam(access = "internal") Player player) {
         List<Planet> planets = planetService.findWithOwner(player);
+        Optional<Points> points = pointsService.getPointsForPlayer(player);
 
-        return new PlayerResponse(player.getUsername(), Functional.mapToList(planets, PlanetMapper::fromPlanet));
+        return new PlayerResponse(
+                player.getUsername(), Functional.mapToList(planets, PlanetMapper::fromPlanet),
+                points.map(PointsMapper::fromPoints).orElse(new PointResponse(0, 0))
+        );
     }
 
     @POST
@@ -68,5 +82,16 @@ public class PlayerResource {
         } catch (CreatePlayerException e) {
             throw new CreatePlayerWebException(e, e.getReason());
         }
+    }
+
+    @GET
+    @Path("/points")
+    @ApiOperation(value = "Returns points over time for the current player", authorizations = {
+            @Authorization("basicAuth")
+    })
+    public PointsResponse points(@Auth @ApiParam(access = "internal") Player player) {
+        List<Points> points = pointsService.getPointsHistoryForPlayer(player, MAX_POINTS_HISTORY);
+
+        return new PointsResponse(Functional.mapToList(points, PointsMapper::fromPoints));
     }
 }

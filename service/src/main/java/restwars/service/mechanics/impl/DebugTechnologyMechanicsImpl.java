@@ -55,4 +55,14 @@ public class DebugTechnologyMechanicsImpl implements TechnologyMechanics {
     public double calculateCombustionFlightCostReduction(int level) {
         return delegate.calculateCombustionFlightCostReduction(level);
     }
+
+    @Override
+    public long calculatePointsForResearch(TechnologyType type, int level) {
+        return delegate.calculatePointsForResearch(type, level);
+    }
+
+    @Override
+    public long calculatePointsForTechnology(TechnologyType type, int level) {
+        return delegate.calculatePointsForTechnology(type, level);
+    }
 }

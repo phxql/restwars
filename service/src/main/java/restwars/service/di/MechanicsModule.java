@@ -3,10 +3,7 @@ package restwars.service.di;
 import dagger.Module;
 import dagger.Provides;
 import restwars.model.UniverseConfiguration;
-import restwars.service.mechanics.BuildingMechanics;
-import restwars.service.mechanics.PlanetMechanics;
-import restwars.service.mechanics.ShipMechanics;
-import restwars.service.mechanics.TechnologyMechanics;
+import restwars.service.mechanics.*;
 import restwars.service.mechanics.impl.*;
 
 /**
@@ -20,35 +17,34 @@ public class MechanicsModule {
     }
 
     @Provides
-    BuildingMechanics provideBuildingMechanics(UniverseConfiguration universeConfiguration) {
-        BuildingMechanicsImpl mechanics = new BuildingMechanicsImpl();
-
+    BuildingMechanics provideBuildingMechanics(UniverseConfiguration universeConfiguration, BuildingMechanicsImpl buildingMechanics) {
         if (universeConfiguration.isDebugOptionEnabled()) {
-            return new DebugBuildingMechanicsImpl(universeConfiguration, mechanics);
+            return new DebugBuildingMechanicsImpl(universeConfiguration, buildingMechanics);
         }
 
-        return mechanics;
+        return buildingMechanics;
     }
 
     @Provides
-    ShipMechanics provideShipMechanics(UniverseConfiguration universeConfiguration) {
-        ShipMechanicsImpl mechanics = new ShipMechanicsImpl();
-
+    ShipMechanics provideShipMechanics(UniverseConfiguration universeConfiguration, ShipMechanicsImpl shipMechanics) {
         if (universeConfiguration.isDebugOptionEnabled()) {
-            return new DebugShipMechanics(universeConfiguration, mechanics);
+            return new DebugShipMechanics(universeConfiguration, shipMechanics);
         }
 
-        return mechanics;
+        return shipMechanics;
     }
 
     @Provides
-    TechnologyMechanics providesTechnologyMechanics(UniverseConfiguration universeConfiguration) {
-        TechnologyMechanicsImpl mechanics = new TechnologyMechanicsImpl();
-
+    TechnologyMechanics providesTechnologyMechanics(UniverseConfiguration universeConfiguration, TechnologyMechanicsImpl technologyMechanics) {
         if (universeConfiguration.isDebugOptionEnabled()) {
-            return new DebugTechnologyMechanicsImpl(universeConfiguration, mechanics);
+            return new DebugTechnologyMechanicsImpl(universeConfiguration, technologyMechanics);
         }
 
-        return mechanics;
+        return technologyMechanics;
+    }
+
+    @Provides
+    ResourcesMechanics providesResourcesMechanics() {
+        return new ResourcesMechanicsImpl();
     }
 }

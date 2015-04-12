@@ -18,6 +18,8 @@ import restwars.service.planet.PlanetService;
 import restwars.service.planet.impl.PlanetServiceImpl;
 import restwars.service.player.PlayerService;
 import restwars.service.player.impl.PlayerServiceImpl;
+import restwars.service.points.PointsService;
+import restwars.service.points.impl.PointsServiceImpl;
 import restwars.service.resource.ResourceService;
 import restwars.service.resource.impl.ResourceServiceImpl;
 import restwars.service.security.PasswordService;
@@ -120,5 +122,10 @@ public class ServiceModule {
     @Provides
     DateTimeProvider providesDateTimeProvider() {
         return new CurrentDateTimeProvider();
+    }
+
+    @Provides
+    PointsService providesPointsService(PointsServiceImpl pointsService) {
+        return pointsService;
     }
 }

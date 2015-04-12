@@ -19,6 +19,9 @@ planets: 10
 # Round time in seconds
 roundTime: 10
 
+# Calculate points every X rounds
+calculatePointsEvery: 10
+
 # Debug options
 debug:
     # If true all flights take 1 round to reach destination

@@ -95,4 +95,14 @@ public class DebugBuildingMechanicsImpl implements BuildingMechanics {
             return delegate.getPrerequisites(type);
         }
     }
+
+    @Override
+    public long calculatePointsForConstructionSite(BuildingType type, int level) {
+        return delegate.calculatePointsForConstructionSite(type, level);
+    }
+
+    @Override
+    public long calculatePointsForBuilding(BuildingType type, int level) {
+        return delegate.calculatePointsForBuilding(type, level);
+    }
 }

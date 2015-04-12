@@ -7,16 +7,19 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import restwars.Data;
+import restwars.model.points.Points;
 import restwars.rest.integration.authentication.PlayerAuthenticationCache;
 import restwars.restapi.dto.planet.PlanetResponse;
 import restwars.restapi.dto.player.PlayerResponse;
 import restwars.restapi.dto.player.RegisterPlayerRequest;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.PlayerService;
+import restwars.service.points.PointsService;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -27,11 +30,12 @@ public class PlayerResourceTest extends AbstractResourceTest {
     public static final String URL = "/v1/player";
     private static PlayerService playerService = mock(PlayerService.class);
     private static PlanetService planetService = mock(PlanetService.class);
+    private static PointsService pointsService = mock(PointsService.class);
     private static PlayerAuthenticationCache playerAuthenticationCache = mock(PlayerAuthenticationCache.class);
 
     @ClassRule
     public static final ResourceTestRule resources = createRule()
-            .addResource(new PlayerResource(playerService, planetService, playerAuthenticationCache))
+            .addResource(new PlayerResource(playerService, planetService, playerAuthenticationCache, pointsService))
             .build();
 
     @BeforeClass
@@ -43,6 +47,7 @@ public class PlayerResourceTest extends AbstractResourceTest {
     public void setUp() throws Exception {
         reset(playerService);
         reset(planetService);
+        reset(pointsService);
         reset(playerAuthenticationCache);
     }
 
@@ -65,7 +70,8 @@ public class PlayerResourceTest extends AbstractResourceTest {
 
     @Test
     public void testMe() throws Exception {
-        when(planetService.findWithOwner(Data.Player1.PLAYER)).thenReturn(Arrays.asList(Data.Player1.Planet1.PLANET));
+        when(planetService.findWithOwner(Data.Player1.PLAYER)).thenReturn(Collections.singletonList(Data.Player1.Planet1.PLANET));
+        when(pointsService.getPointsForPlayer(Data.Player1.PLAYER)).thenReturn(Optional.<Points>empty());
 
         PlayerResponse response = request(resources, URL).get(PlayerResponse.class);
 

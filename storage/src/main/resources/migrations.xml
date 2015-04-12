@@ -348,5 +348,20 @@
                 <constraints nullable="true" references="fight(id)" foreignKeyName="event_fight_id"/>
             </column>
         </createTable>
+
+        <createTable tableName="points">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="player_id" type="uuid">
+                <constraints nullable="false" references="player(id)" foreignKeyName="points_player_id"/>
+            </column>
+            <column name="round" type="long">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

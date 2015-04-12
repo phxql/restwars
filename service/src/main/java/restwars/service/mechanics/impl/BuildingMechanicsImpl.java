@@ -5,9 +5,22 @@ import restwars.model.building.BuildingType;
 import restwars.model.resource.Resources;
 import restwars.model.techtree.Prerequisites;
 import restwars.service.mechanics.BuildingMechanics;
+import restwars.service.mechanics.ResourcesMechanics;
 import restwars.util.MathExt;
 
+import javax.inject.Inject;
+
+/**
+ * Default implementation of {@link BuildingMechanics}.
+ */
 public class BuildingMechanicsImpl implements BuildingMechanics {
+    private final ResourcesMechanics resourcesMechanics;
+
+    @Inject
+    public BuildingMechanicsImpl(ResourcesMechanics resourcesMechanics) {
+        this.resourcesMechanics = resourcesMechanics;
+    }
+
     @Override
     public Resources calculateCommandCenterResourcesGathered(int level) {
         return new Resources(2, 1, 8);
@@ -206,6 +219,24 @@ public class BuildingMechanicsImpl implements BuildingMechanics {
             default:
                 throw new IllegalArgumentException("Unknown building type " + type);
         }
+    }
+
+    @Override
+    public long calculatePointsForConstructionSite(BuildingType type, int level) {
+        return calculatePointsForBuilding(type, level);
+    }
+
+    @Override
+    public long calculatePointsForBuilding(BuildingType type, int level) {
+        Preconditions.checkNotNull(type, "type");
+        Preconditions.checkArgument(level > 0, "level must be > 0");
+
+        long cost = 0;
+        for (int i = 1; i <= level; i++) {
+            cost += resourcesMechanics.calculatePointsForResources(calculateBuildCost(type, level));
+        }
+
+        return cost;
     }
 
     @Override

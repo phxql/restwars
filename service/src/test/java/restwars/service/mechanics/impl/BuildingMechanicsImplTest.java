@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.is;
 
 public class BuildingMechanicsImplTest {
 
-    private final BuildingMechanicsImpl sut = new BuildingMechanicsImpl();
+    private final BuildingMechanicsImpl sut = new BuildingMechanicsImpl(new ResourcesMechanicsImpl());
 
     @Test
     public void testCalculateFleetSizeVariance() throws Exception {

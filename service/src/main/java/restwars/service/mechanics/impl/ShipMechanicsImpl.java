@@ -6,9 +6,19 @@ import restwars.model.resource.Resources;
 import restwars.model.ship.ShipType;
 import restwars.model.technology.TechnologyType;
 import restwars.model.techtree.Prerequisites;
+import restwars.service.mechanics.ResourcesMechanics;
 import restwars.service.mechanics.ShipMechanics;
 
+import javax.inject.Inject;
+
 public class ShipMechanicsImpl implements ShipMechanics {
+    private final ResourcesMechanics resourcesMechanics;
+
+    @Inject
+    public ShipMechanicsImpl(ResourcesMechanics resourcesMechanics) {
+        this.resourcesMechanics = Preconditions.checkNotNull(resourcesMechanics, "resourcesMechanics");
+    }
+
     @Override
     public Resources getBuildCost(ShipType type) {
         Preconditions.checkNotNull(type, "type");
@@ -195,5 +205,17 @@ public class ShipMechanicsImpl implements ShipMechanics {
             default:
                 throw new IllegalArgumentException("Unknown ship " + type);
         }
+    }
+
+    @Override
+    public long calculatePointsForShipInConstruction(ShipType type) {
+        return calculatePointsForShip(type);
+    }
+
+    @Override
+    public long calculatePointsForShip(ShipType type) {
+        Preconditions.checkNotNull(type, "type");
+
+        return resourcesMechanics.calculatePointsForResources(getBuildCost(type));
     }
 }
