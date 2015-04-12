@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import restwars.Data;
+import restwars.model.points.Points;
 import restwars.rest.integration.authentication.PlayerAuthenticationCache;
 import restwars.restapi.dto.planet.PlanetResponse;
 import restwars.restapi.dto.player.PlayerResponse;
@@ -18,6 +19,7 @@ import restwars.service.points.PointsService;
 import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -69,6 +71,7 @@ public class PlayerResourceTest extends AbstractResourceTest {
     @Test
     public void testMe() throws Exception {
         when(planetService.findWithOwner(Data.Player1.PLAYER)).thenReturn(Collections.singletonList(Data.Player1.Planet1.PLANET));
+        when(pointsService.getPointsForPlayer(Data.Player1.PLAYER)).thenReturn(Optional.<Points>empty());
 
         PlayerResponse response = request(resources, URL).get(PlayerResponse.class);
 
