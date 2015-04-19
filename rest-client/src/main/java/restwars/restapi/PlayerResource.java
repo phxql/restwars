@@ -1,6 +1,8 @@
 package restwars.restapi;
 
+import restwars.restapi.dto.player.PlayerRankingResponse;
 import restwars.restapi.dto.player.PlayerResponse;
+import restwars.restapi.dto.player.PointsResponse;
 import restwars.restapi.dto.player.RegisterPlayerRequest;
 
 import javax.ws.rs.*;
@@ -16,4 +18,12 @@ public interface PlayerResource {
 
     @POST
     Response register(RegisterPlayerRequest registration);
+
+    @GET
+    @Path("/points")
+    PointsResponse points();
+
+    @GET
+    @Path("/ranking")
+    PlayerRankingResponse playerRanking(int max);
 }
