@@ -9,6 +9,7 @@ import restwars.model.building.ConstructionSite;
 import restwars.model.flight.Flight;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
+import restwars.model.points.PlayerWithPoints;
 import restwars.model.points.Points;
 import restwars.model.ship.Hangar;
 import restwars.model.ship.Ship;
@@ -113,6 +114,11 @@ public class PointsServiceImpl implements PointsService {
         Preconditions.checkNotNull(player, "player");
 
         return pointsDAO.findMostRecentPointsWithPlayerId(player.getId());
+    }
+
+    @Override
+    public List<PlayerWithPoints> fetchPlayerRanking(int max) {
+        return pointsDAO.fetchPlayerRanking(max);
     }
 
     @Override

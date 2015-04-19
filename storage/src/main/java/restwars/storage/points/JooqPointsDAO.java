@@ -1,14 +1,17 @@
 package restwars.storage.points;
 
 import com.google.common.base.Preconditions;
+import org.jooq.Record;
 import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restwars.model.points.PlayerWithPoints;
 import restwars.model.points.Points;
 import restwars.service.points.PointsDAO;
 import restwars.service.unitofwork.UnitOfWorkService;
 import restwars.storage.jooq.AbstractJooqDAO;
 import restwars.storage.jooq.tables.records.PointsRecord;
+import restwars.storage.mapper.PlayerMapper;
 import restwars.storage.mapper.PointsMapper;
 
 import javax.inject.Inject;
@@ -17,6 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static restwars.storage.jooq.Tables.PLAYER;
 import static restwars.storage.jooq.Tables.POINTS;
 
 /**
@@ -63,6 +67,20 @@ public class JooqPointsDAO extends AbstractJooqDAO implements PointsDAO {
                 .fetch();
 
         return records.stream().map(PointsMapper::fromRecord).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PlayerWithPoints> fetchPlayerRanking(int max) {
+        Preconditions.checkArgument(max >= 0, "max must be >= 0");
+
+        LOGGER.debug("Fetching player ranking");
+
+        Result<Record> result = context().select().from(POINTS).join(PLAYER).on(PLAYER.ID.eq(POINTS.PLAYER_ID))
+                .where(POINTS.ROUND.eq(context().select(POINTS.ROUND.max()).from(POINTS)))
+                .orderBy(POINTS.POINTS_.desc()).limit(max)
+                .fetch();
+
+        return result.stream().map(r -> new PlayerWithPoints(PlayerMapper.fromRecord(r), r.getValue(POINTS.POINTS_))).collect(Collectors.toList());
     }
 
     @Override

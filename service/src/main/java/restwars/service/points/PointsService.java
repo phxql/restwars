@@ -1,6 +1,7 @@
 package restwars.service.points;
 
 import restwars.model.player.Player;
+import restwars.model.points.PlayerWithPoints;
 import restwars.model.points.Points;
 
 import java.util.List;
@@ -31,4 +32,12 @@ public interface PointsService {
      * @return Points history.
      */
     List<Points> getPointsHistoryForPlayer(Player player, int max);
+
+    /**
+     * Fetches the player ranking.
+     *
+     * @param max Maximum number of points.
+     * @return Player ranking.
+     */
+    List<PlayerWithPoints> fetchPlayerRanking(int max);
 }

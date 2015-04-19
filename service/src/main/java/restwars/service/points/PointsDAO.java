@@ -1,5 +1,6 @@
 package restwars.service.points;
 
+import restwars.model.points.PlayerWithPoints;
 import restwars.model.points.Points;
 
 import java.util.List;
@@ -33,4 +34,12 @@ public interface PointsDAO {
      * @return Points.
      */
     List<Points> findPointsWithPlayerId(UUID playerId, int max);
+
+    /**
+     * Fetches the player ranking.
+     *
+     * @param max Maximum number of ranking entries.
+     * @return Player ranking.
+     */
+    List<PlayerWithPoints> fetchPlayerRanking(int max);
 }

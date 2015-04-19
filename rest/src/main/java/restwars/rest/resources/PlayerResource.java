@@ -8,14 +8,12 @@ import com.wordnik.swagger.annotations.Authorization;
 import io.dropwizard.auth.Auth;
 import restwars.model.planet.Planet;
 import restwars.model.player.Player;
+import restwars.model.points.PlayerWithPoints;
 import restwars.model.points.Points;
 import restwars.rest.integration.authentication.PlayerAuthenticationCache;
 import restwars.rest.mapper.PlanetMapper;
 import restwars.rest.mapper.PointsMapper;
-import restwars.restapi.dto.player.PlayerResponse;
-import restwars.restapi.dto.player.PointResponse;
-import restwars.restapi.dto.player.PointsResponse;
-import restwars.restapi.dto.player.RegisterPlayerRequest;
+import restwars.restapi.dto.player.*;
 import restwars.service.planet.PlanetService;
 import restwars.service.player.CreatePlayerException;
 import restwars.service.player.PlayerService;
@@ -93,5 +91,20 @@ public class PlayerResource {
         List<Points> points = pointsService.getPointsHistoryForPlayer(player, MAX_POINTS_HISTORY);
 
         return new PointsResponse(Functional.mapToList(points, PointsMapper::fromPoints));
+    }
+
+    @GET
+    @Path("/ranking")
+    @ApiOperation(value = "Returns the player ranking")
+    public PlayerRankingResponse playerRanking(@QueryParam("max") @DefaultValue("100") int max) {
+        if (max <= 0) {
+            throw new ParameterValueWebException("Max must be > 0");
+        }
+
+        List<PlayerWithPoints> playerRanking = pointsService.fetchPlayerRanking(max);
+
+        return new PlayerRankingResponse(Functional.mapToList(playerRanking,
+                r -> new PlayerRankingEntryResponse(r.getPlayer().getUsername(), r.getPoints()))
+        );
     }
 }

@@ -17,7 +17,7 @@ solarSystems: 10
 planets: 10
 
 # Round time in seconds
-roundTime: 10
+roundTime: 1
 
 # Calculate points every X rounds
 calculatePointsEvery: 10
