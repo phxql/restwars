@@ -15,7 +15,7 @@ public class ShipUtils {
         Preconditions.checkNotNull(ships, "ships");
         Preconditions.checkNotNull(shipMechanics, "shipMechanics");
 
-        return ships.stream().mapToLong(s -> shipMechanics.getCargoSpace(s.getType())).sum();
+        return ships.stream().mapToLong(s -> shipMechanics.getCargoSpace(s.getType())*s.getAmount()).sum();
     }
 
     /**
