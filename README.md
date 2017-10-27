@@ -10,12 +10,12 @@ An online game (like the good old browsergames) which can be played via a REST i
 * [Changelog](https://github.com/phxql/restwars/blob/master/CHANGELOG.md)
 
 ## Universe
-The game takes place in a universe. The universe consists of galaxies which consists of solar systems which consists of planets.
+The game takes place in a universe. The universe consists of galaxies which consist of solar systems which consist of planets.
 
-Each planet is identified with a set of coordinates: [g].[s].[p] where [g] is the number of the galaxy, [s] is the number of the solar system inside the galaxy and [p] is the number of the planet inside the solar system.
+Each planet is identified with a set of coordinates: `[g].[s].[p]` where `[g]` is the number of the galaxy, `[s]` is the number of the solar system inside the galaxy and `[p]` is the number of the planet inside the solar system.
 
 ## New players 
-A new player start with one planet in a randomized location in the universe.
+New players start with one planet in a randomized location in the universe.
 
 ## Resources
 ### Crystal
@@ -32,7 +32,7 @@ Energy is needed for every building, ship and research. Energy is also consumed 
 Allows the construction of other buildings. Upgrading the command center speeds up the construction of buildings.
 
 ### Crystal mine
-Generates crystals. Upgrading the mine increases up the generation rate.
+Generates crystals. Upgrading the mine increases the generation rate.
 
 ### Gas refinery
 Generates gas. Upgrading the refinery increases the generation rate.
